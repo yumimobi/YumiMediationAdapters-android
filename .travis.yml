@@ -39,7 +39,7 @@ deploy:
     skip_cleanup: true
     script: ./gradlew bintrayUpload
     on:
-      branch: release
+      branch: master
 
 notifications:
   slack:
