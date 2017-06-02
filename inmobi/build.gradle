@@ -25,6 +25,14 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.inmobi.monetization:inmobi-ads:6.2.0'
     compile 'com.yumimobi.ads:mediation:0.3.0'
+    compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:recyclerview-v7:25.0.0'
+
+
+
+
 }
 
 String version = project.properties['inmobi.version']
