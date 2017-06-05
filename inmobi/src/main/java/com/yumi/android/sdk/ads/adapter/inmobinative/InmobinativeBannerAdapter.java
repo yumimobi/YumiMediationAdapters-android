@@ -1,7 +1,7 @@
-package inmobinative;
+package com.yumi.android.sdk.ads.adapter.inmobinative;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Activity;
+import android.view.View;
 
 import com.inmobi.ads.InMobiAdRequestStatus;
 import com.inmobi.ads.InMobiAdRequestStatus.StatusCode;
@@ -14,8 +14,8 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import android.app.Activity;
-import android.view.View;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter
 {

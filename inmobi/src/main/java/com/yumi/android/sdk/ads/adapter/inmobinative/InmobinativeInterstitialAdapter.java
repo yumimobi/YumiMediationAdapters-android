@@ -1,7 +1,7 @@
-package inmobinative;
+package com.yumi.android.sdk.ads.adapter.inmobinative;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import android.app.Activity;
+import android.webkit.WebView;
 
 import com.inmobi.ads.InMobiAdRequestStatus;
 import com.inmobi.ads.InMobiAdRequestStatus.StatusCode;
@@ -13,10 +13,9 @@ import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 
-import android.app.Activity;
-import android.webkit.WebView;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 {

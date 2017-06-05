@@ -1,4 +1,4 @@
-package inmobi;
+package com.yumi.android.sdk.ads.adapter.inmobi;
 
 public class Main {
 
