@@ -1,1 +1,1 @@
-include ':gdt', ':inmobi'
+include ':gdt', ':inmobi', ':baidu'

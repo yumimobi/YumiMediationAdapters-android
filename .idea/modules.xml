@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YumiMediationAdapters-android.iml" filepath="$PROJECT_DIR$/YumiMediationAdapters-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baidu/baidu.iml" filepath="$PROJECT_DIR$/baidu/baidu.iml" />
       <module fileurl="file://$PROJECT_DIR$/gdt/gdt.iml" filepath="$PROJECT_DIR$/gdt/gdt.iml" />
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
     </modules>
