@@ -42,3 +42,7 @@ ext {
     siteUrl = 'https://answers.chartboost.com/hc/en-us/articles/201219545-Download-Integrate-the-Chartboost-SDK-for-Android?mobile_site=true'
     gitUrl = 'https://answers.chartboost.com/hc/en-us/articles/201219545-Download-Integrate-the-Chartboost-SDK-for-Android?mobile_site=true'
 }
+
+if (version) {
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+}
