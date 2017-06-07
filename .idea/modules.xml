@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YumiMediationAdapters-android.iml" filepath="$PROJECT_DIR$/YumiMediationAdapters-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/admob/admob.iml" filepath="$PROJECT_DIR$/admob/admob.iml" />
       <module fileurl="file://$PROJECT_DIR$/applovin/applovin.iml" filepath="$PROJECT_DIR$/applovin/applovin.iml" />
       <module fileurl="file://$PROJECT_DIR$/baidu/baidu.iml" filepath="$PROJECT_DIR$/baidu/baidu.iml" />
       <module fileurl="file://$PROJECT_DIR$/chartboost/chartboost.iml" filepath="$PROJECT_DIR$/chartboost/chartboost.iml" />
