@@ -27,7 +27,7 @@ dependencies {
     compile 'com.yumimobi.ads:mediation:0.3.0'
 }
 
-String version = project.properties['unity.version']
+String version = project.properties['vungle.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -37,10 +37,10 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Unity Adapter'
+    libraryDescription = 'Yumi Mediation Vungle Adapter'
 
-    siteUrl = 'https://github.com/Unity-Technologies/unity-ads-android'
-    gitUrl = 'https://github.com/Unity-Technologies/unity-ads-android'
+    siteUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
+    gitUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
 }
 
 if (version) {
