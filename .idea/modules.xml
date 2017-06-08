@@ -12,6 +12,7 @@
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
       <module fileurl="file://$PROJECT_DIR$/vungle/vungle.iml" filepath="$PROJECT_DIR$/vungle/vungle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xiaomi/xiaomi.iml" filepath="$PROJECT_DIR$/xiaomi/xiaomi.iml" />
     </modules>
   </component>
 </project>
