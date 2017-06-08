@@ -11,6 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vungle/vungle.iml" filepath="$PROJECT_DIR$/vungle/vungle.iml" />
     </modules>
   </component>
 </project>
