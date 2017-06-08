@@ -10,6 +10,7 @@
       <module fileurl="file://$PROJECT_DIR$/gdt/gdt.iml" filepath="$PROJECT_DIR$/gdt/gdt.iml" />
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
     </modules>
   </component>
 </project>
