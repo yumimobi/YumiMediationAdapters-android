@@ -1,1 +1,1 @@
-include ':gdt', ':inmobi', ':baidu', ':applovin', ':startapp', ':admob', ':unity', ':vungle', ':xiaomi', 'chartboost','adcolony'
+include ':gdt', ':inmobi', ':baidu', ':applovin', ':startapp', ':admob', ':unity', ':vungle', ':xiaomi', 'chartboost','adcolony','facebook'
