@@ -31,7 +31,9 @@
                 <action android:name="com.inmobi.share.id"/>
             </intent-filter>
         </receiver>
-
+        <service
+            android:name="com.inmobi.signals.activityrecognition.ActivityRecognitionManager"
+            android:enabled="true"/>
 
     </application>
 
