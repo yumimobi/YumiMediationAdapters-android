@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 
     package="com.yumi.android.sdk.ads.adapter.xiaomi">
-    <uses-permission android:name= " android.permission.GET_TASKS" />
+    <uses-permission android:name= "android.permission.GET_TASKS"/>
     <application>
         <activity android:name= "com.xiaomi.ad.AdActivity"
             android:configChanges= "keyboard|keyboardHidden|orientation|screenSize"
