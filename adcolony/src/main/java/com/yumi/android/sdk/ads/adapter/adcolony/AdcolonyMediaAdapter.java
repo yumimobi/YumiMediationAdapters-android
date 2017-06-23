@@ -7,11 +7,9 @@ import com.adcolony.sdk.AdColonyInterstitial;
 import com.adcolony.sdk.AdColonyInterstitialListener;
 import com.adcolony.sdk.AdColonyReward;
 import com.adcolony.sdk.AdColonyRewardListener;
-import com.adcolony.sdk.AdColonyUserMetadata;
 import com.adcolony.sdk.AdColonyZone;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
@@ -36,14 +34,9 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 		// 配置广告以及请求广告，保证只有一次
 		AdColony.configure(getActivity(), app_options, getProvider().getKey1(),
 				getProvider().getKey2());
-
 		/** Ad specific options to be sent with request */
-		ad_options = new AdColonyAdOptions().enableConfirmationDialog(false)// 控制
-				.enableResultsDialog(false);
-
+		ad_options = new AdColonyAdOptions().enableConfirmationDialog(false).enableResultsDialog(false);// 控制dialog
 		AdColony.setRewardListener(rewardListennr);
-		
-
 	}
 
 	private void createListeners() {
@@ -62,15 +55,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			@Override
 			public void onRequestNotFilled(AdColonyZone zone) {
 				zone.getZoneType();
-				ZplayDebug.d(TAG, "onRequestNotFilled" + zone.getZoneType(),
-						onoff);
-//				if (ad == null || ad.isExpired()) {
-//					ZplayDebug.d(TAG, "adcolony media get media", onoff);
-//					// 去容器中拿视频物料
-//					AdColony.requestInterstitial(getProvider().getKey2(), listener,
-//							ad_options);
-//				}
-				
+				ZplayDebug.d(TAG, "onRequestNotFilled" + zone.getZoneType(), onoff);
 			}
 
 			/** Ad opened, reset UI to reflect state change */
@@ -119,8 +104,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onPrepareMedia() {
 		ZplayDebug.d(TAG, "adcolony request new media", onoff);
-		AdColony.requestInterstitial(getProvider().getKey2(), listener,
-				ad_options);
+		AdColony.requestInterstitial(getProvider().getKey2(), listener, ad_options);
 	}
 
 	@Override
@@ -152,16 +136,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onRequestNonResponse() {
 		super.onRequestNonResponse();
-		// if (ad != null) {
-		// if (ad.isExpired()) {
-		// ZplayDebug.d(TAG, "adconlony media prepared", onoff);
-		// layerPrepared();
-		// }else {
-		//
-		// // ad.show();
-		//
-		// }
-		// }
 	}
 
 }
