@@ -3,18 +3,32 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/YumiMediationAdapters-android.iml" filepath="$PROJECT_DIR$/YumiMediationAdapters-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/YumiMediationAdapters-android.iml" filepath="$PROJECT_DIR$/YumiMediationAdapters-android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/adcolony/adcolony.iml" filepath="$PROJECT_DIR$/adcolony/adcolony.iml" />
       <module fileurl="file://$PROJECT_DIR$/adcolony/adcolony.iml" filepath="$PROJECT_DIR$/adcolony/adcolony.iml" />
       <module fileurl="file://$PROJECT_DIR$/admob/admob.iml" filepath="$PROJECT_DIR$/admob/admob.iml" />
+      <module fileurl="file://$PROJECT_DIR$/admob/admob.iml" filepath="$PROJECT_DIR$/admob/admob.iml" />
+      <module fileurl="file://$PROJECT_DIR$/applovin/applovin.iml" filepath="$PROJECT_DIR$/applovin/applovin.iml" />
       <module fileurl="file://$PROJECT_DIR$/applovin/applovin.iml" filepath="$PROJECT_DIR$/applovin/applovin.iml" />
       <module fileurl="file://$PROJECT_DIR$/baidu/baidu.iml" filepath="$PROJECT_DIR$/baidu/baidu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/baidu/baidu.iml" filepath="$PROJECT_DIR$/baidu/baidu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/chartboost/chartboost.iml" filepath="$PROJECT_DIR$/chartboost/chartboost.iml" />
       <module fileurl="file://$PROJECT_DIR$/chartboost/chartboost.iml" filepath="$PROJECT_DIR$/chartboost/chartboost.iml" />
       <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gdt/gdt.iml" filepath="$PROJECT_DIR$/gdt/gdt.iml" />
       <module fileurl="file://$PROJECT_DIR$/gdt/gdt.iml" filepath="$PROJECT_DIR$/gdt/gdt.iml" />
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
+      <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/toutiao/toutiao.iml" filepath="$PROJECT_DIR$/toutiao/toutiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/toutiao/toutiao.iml" filepath="$PROJECT_DIR$/toutiao/toutiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
       <module fileurl="file://$PROJECT_DIR$/vungle/vungle.iml" filepath="$PROJECT_DIR$/vungle/vungle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vungle/vungle.iml" filepath="$PROJECT_DIR$/vungle/vungle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xiaomi/xiaomi.iml" filepath="$PROJECT_DIR$/xiaomi/xiaomi.iml" />
       <module fileurl="file://$PROJECT_DIR$/xiaomi/xiaomi.iml" filepath="$PROJECT_DIR$/xiaomi/xiaomi.iml" />
     </modules>
   </component>
