@@ -31,7 +31,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 		createListeners();
 		AdColonyAppOptions app_options = new AdColonyAppOptions()
 				.setUserID(CLIENT_OPTIONS);
-		// 配置广告以及请求广告，保证只有一次
 		AdColony.configure(getActivity(), app_options, getProvider().getKey1(),
 				getProvider().getKey2());
 		/** Ad specific options to be sent with request */
@@ -76,7 +75,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
 			@Override
 			public void onReward(AdColonyReward arg0) {
-				// 新版的SDK去掉了视频播放完成的回调，他们奖励回调是在视频播放完成以后给的回调
 				ZplayDebug.d(TAG, "adcolony media closed", onoff);
 				layerMediaEnd();
 				ZplayDebug.d(TAG, "adcolony media get reward", onoff);
