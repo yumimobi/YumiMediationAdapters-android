@@ -1,4 +1,4 @@
-package com.yumi.android.sdk.ads.adapter.facebook.facebook;
+package com.yumi.android.sdk.ads.adapter.facebook;
 
 import android.app.Activity;
 

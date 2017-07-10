@@ -1,4 +1,4 @@
-package com.yumi.android.sdk.ads.adapter.facebook.facebooknative;
+package com.yumi.android.sdk.ads.adapter.facebooknative;
 
 import android.app.Activity;
 import android.util.Log;
@@ -12,7 +12,8 @@ import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.NativeAd;
-import com.yumi.android.sdk.ads.adapter.facebook.R;
+
+import com.yumi.android.sdk.ads.adapter.R;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;

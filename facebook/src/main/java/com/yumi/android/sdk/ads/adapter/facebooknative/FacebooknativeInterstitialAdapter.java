@@ -1,4 +1,4 @@
-package com.yumi.android.sdk.ads.adapter.facebook.facebooknative;
+package com.yumi.android.sdk.ads.adapter.facebooknative;
 
 import android.app.Activity;
 import android.util.DisplayMetrics;

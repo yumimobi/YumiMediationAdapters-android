@@ -1,24 +1,24 @@
-package com.yumi.android.sdk.ads.adapter.facebook.facebook;
+package com.yumi.android.sdk.ads.adapter.facebook;
 
 import android.app.Activity;
 
-import com.facebook.ads.Ad;
-import com.facebook.ads.AdError;
-import com.facebook.ads.AdListener;
-import com.facebook.ads.AdSize;
-import com.facebook.ads.AdView;
+import com.com.yumi.android.sdk.ads.ads.Ad;
+import com.com.yumi.android.sdk.ads.ads.AdError;
+import com.com.yumi.android.sdk.ads.ads.AdListener;
+import com.com.yumi.android.sdk.ads.ads.AdSize;
+import com.com.yumi.android.sdk.ads.ads.AdView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
+public class com.yumi.android.sdk.adsBannerAdapter extends YumiCustomerBannerAdapter {
 
-	private static final String TAG = "FacebooknativeBannerAdapter";
+	private static final String TAG = "com.yumi.android.sdk.adsnativeBannerAdapter";
 	private AdView banner;
 	private AdListener bannerListener;
 
-	protected FacebookBannerAdapter(Activity activity, YumiProviderBean provider) {
+	protected com.yumi.android.sdk.adsBannerAdapter(Activity activity, YumiProviderBean provider) {
 		super(activity, provider);
 	}
 
@@ -40,7 +40,7 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
 	@Override
 	protected void onPrepareBannerLayer() {
 		
-		ZplayDebug.d(TAG, "facebook request new banner", onoff);
+		ZplayDebug.d(TAG, "com.yumi.android.sdk.ads request new banner", onoff);
 		banner = new AdView(getContext(), getProvider().getKey1(), calculateBannerSize());
 		banner.setAdListener(bannerListener);
 		banner.loadAd();
@@ -58,19 +58,19 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
 
 				@Override
 				public void onError(Ad arg0, AdError arg1) {
-					ZplayDebug.d(TAG, "facebook banner failed " + arg1.getErrorMessage(), onoff);
+					ZplayDebug.d(TAG, "com.yumi.android.sdk.ads banner failed " + arg1.getErrorMessage(), onoff);
 					layerPreparedFailed(decodeErrorCode(arg1));
 				}
 
 				@Override
 				public void onAdLoaded(Ad arg0) {
-					ZplayDebug.d(TAG, "facebook banner prepared", onoff);
+					ZplayDebug.d(TAG, "com.yumi.android.sdk.ads banner prepared", onoff);
 					layerPrepared(banner, true);
 				}
 
 				@Override
 				public void onAdClicked(Ad arg0) {
-					ZplayDebug.d(TAG, "facebook banner clicked", onoff);
+					ZplayDebug.d(TAG, "com.yumi.android.sdk.ads banner clicked", onoff);
 					layerClicked(-99f, -99f);
 				}
 
