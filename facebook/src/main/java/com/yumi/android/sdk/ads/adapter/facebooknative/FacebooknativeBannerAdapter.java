@@ -12,12 +12,12 @@ import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.NativeAd;
-
-import com.yumi.android.sdk.ads.adapter.R;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.facebooknative.R.*;
 
 
 public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
@@ -43,11 +43,11 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         Log.e("sss", "FacebooknativeBannerAdapter init");
         try {
-            bannerView = getActivity().getLayoutInflater().inflate(R.layout.ad_banner_layout, null, false);
-            nativeAdContainer = (RelativeLayout) bannerView.findViewById(R.id.ll_header);
-            iconView = (ImageView) bannerView.findViewById(R.id.native_ad_icon);
-            titleView = (TextView) bannerView.findViewById(R.id.native_ad_title);
-            descView = (TextView) bannerView.findViewById(R.id.sponsored_label);
+            bannerView = getActivity().getLayoutInflater().inflate(layout.ad_banner_layout, null, false);
+            nativeAdContainer = (RelativeLayout) bannerView.findViewById(id.ll_header);
+            iconView = (ImageView) bannerView.findViewById(id.native_ad_icon);
+            titleView = (TextView) bannerView.findViewById(id.native_ad_title);
+            descView = (TextView) bannerView.findViewById(id.sponsored_label);
             createBannerListener();
         } catch (Exception e) {
             e.printStackTrace();
@@ -105,7 +105,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
         NativeAd.Image adIcon = nativeAd.getAdIcon();
         NativeAd.downloadAndDisplayImage(adIcon, iconView);
         if (adChoicesView == null) {
-            RelativeLayout adChoicesContainer = (RelativeLayout) bannerView.findViewById(R.id.ad_choices_container);
+            RelativeLayout adChoicesContainer = (RelativeLayout) bannerView.findViewById(id.ad_choices_container);
             adChoicesView = new AdChoicesView(getContext(), nativeAd, true);
             adChoicesContainer.addView(adChoicesView);
         }
