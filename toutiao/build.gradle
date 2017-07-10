@@ -27,7 +27,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads.thirdparty:toutiao:1.1.0.3'
-    compile 'com.yumimobi.ads:mediation:3.0.0.2'
+    compile 'com.yumimobi.ads:mediation:3.0.0.3'
 }
 
 String version = project.properties['toutiao.version']
