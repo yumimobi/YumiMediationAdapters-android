@@ -19,11 +19,12 @@ import com.facebook.ads.MediaView;
 import com.facebook.ads.MediaViewListener;
 import com.facebook.ads.NativeAd;
 
-import com.yumi.android.sdk.ads.adapter.R;
+
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeAdvancedIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import static com.yumi.android.sdk.ads.adapter.facebooknative.R.*;
 
 public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersititalAdapter {
     private String TAG = "FacebooknativeInterstitialAdapter";
@@ -73,7 +74,7 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
             String key1 = getProvider().getKey1();
             ZplayDebug.d(TAG, "key1:" + key1, onoff);
             LayoutInflater inflater = LayoutInflater.from(activity);
-            adView = (LinearLayout) inflater.inflate(R.layout.ad_unit_banner_new, null, false);
+            adView = (LinearLayout) inflater.inflate(layout.ad_unit_banner_new, null, false);
             createBannerListener();
 
         } catch (Exception e) {
@@ -126,10 +127,10 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
 
     private void inflateAd(NativeAd nativeAd, LinearLayout adView) {
         // Create native UI using the ad metadata.
-        ImageView nativeAdIcon = (ImageView) adView.findViewById(R.id.native_ad_icon);
-        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.native_ad_title);
-        TextView nativeAdBody = (TextView) adView.findViewById(R.id.native_ad_body);
-        MediaView nativeAdMedia = (MediaView) adView.findViewById(R.id.native_ad_media);
+        ImageView nativeAdIcon = (ImageView) adView.findViewById(id.native_ad_icon);
+        TextView nativeAdTitle = (TextView) adView.findViewById(id.native_ad_title);
+        TextView nativeAdBody = (TextView) adView.findViewById(id.native_ad_body);
+        MediaView nativeAdMedia = (MediaView) adView.findViewById(id.native_ad_media);
         nativeAdMedia.setListener(new MediaViewListener() {
             @Override
             public void onVolumeChange(MediaView mediaView, float volume) {
@@ -166,15 +167,15 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
         nativeAdMedia.setAutoplay(AdSettings.isVideoAutoplay());
         nativeAdMedia.setAutoplayOnMobile(AdSettings.isVideoAutoplayOnMobile());
         TextView nativeAdSocialContext =
-                (TextView) adView.findViewById(R.id.native_ad_social_context);
-        Button nativeAdCallToAction = (Button) adView.findViewById(R.id.native_ad_call_to_action);
+                (TextView) adView.findViewById(id.native_ad_social_context);
+        Button nativeAdCallToAction = (Button) adView.findViewById(id.native_ad_call_to_action);
 
         // Setting the Text
         NativeAd.Image adIcon = nativeAd.getAdIcon();
         NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
         nativeAdTitle.setText(nativeAd.getAdTitle());
         if (adChoicesView == null) {
-            LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(R.id.ad_choices_container);
+            LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(id.ad_choices_container);
             adChoicesView = new AdChoicesView(getContext(), nativeAd, true);
             adChoicesContainer.addView(adChoicesView);
         }
