@@ -18,7 +18,8 @@ import com.facebook.ads.AdSettings;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.MediaViewListener;
 import com.facebook.ads.NativeAd;
-import com.yumi.android.sdk.ads.adapter.facebook.R;
+
+import com.yumi.android.sdk.ads.adapter.R;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeAdvancedIntersititalAdapter;
