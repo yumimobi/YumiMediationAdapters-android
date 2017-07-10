@@ -58,7 +58,7 @@ public class TTBannerAdapter extends YumiCustomerBannerAdapter{
                 if (ttBannerAd == null) {
                     return;
                 }
-                ZplayDebug.d(TAG, "facebook banner prepared", onoff);
+                ZplayDebug.d(TAG, "TTBanner prepared", onoff);
                 View bannerView = ttBannerAd.getBannerView();
                 layerPrepared(bannerView, true);
                 ttBannerAd.setOnBannerClickListener(new TTBannerAd.BannerAdClickListener() {
