@@ -27,7 +27,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads.thirdparty:xiaomi:17.3.1.2'
-    compile 'com.yumimobi.ads:mediation:3.0.0.6'
+    compile 'com.yumimobi.ads:mediation:3.0.0.+'
 }
 
 String version = project.properties['xiaomi.version']
