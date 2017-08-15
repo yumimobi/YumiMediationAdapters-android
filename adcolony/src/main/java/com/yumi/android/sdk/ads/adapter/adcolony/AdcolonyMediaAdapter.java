@@ -10,6 +10,7 @@ import com.adcolony.sdk.AdColonyRewardListener;
 import com.adcolony.sdk.AdColonyZone;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
@@ -53,8 +54,9 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			/** Ad request was not filled */
 			@Override
 			public void onRequestNotFilled(AdColonyZone zone) {
-				zone.getZoneType();
+				layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
 				ZplayDebug.d(TAG, "onRequestNotFilled" + zone.getZoneType(), onoff);
+
 			}
 
 			/** Ad opened, reset UI to reflect state change */
