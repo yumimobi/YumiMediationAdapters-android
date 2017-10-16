@@ -44,6 +44,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
+                ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
             }
 
             @Override
