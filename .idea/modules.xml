@@ -11,7 +11,7 @@
       <module fileurl="file://$PROJECT_DIR$/facebook/facebook.iml" filepath="$PROJECT_DIR$/facebook/facebook.iml" />
       <module fileurl="file://$PROJECT_DIR$/gdt/gdt.iml" filepath="$PROJECT_DIR$/gdt/gdt.iml" />
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
-      <module fileurl="file://$PROJECT_DIR$/palyableads/palyableads.iml" filepath="$PROJECT_DIR$/palyableads/palyableads.iml" />
+      <module fileurl="file://$PROJECT_DIR$/playableads/playableads.iml" filepath="$PROJECT_DIR$/playableads/playableads.iml" />
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/toutiao/toutiao.iml" filepath="$PROJECT_DIR$/toutiao/toutiao.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
