@@ -2,9 +2,8 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-    enforceUniquePackageName=false
-    packageBuildConfig=false
+    buildToolsVersion "26.0.0"
+
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
@@ -14,12 +13,9 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
-    lintOptions {
-        abortOnError false
-    }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -27,15 +23,16 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.inmobi.monetization:inmobi-ads:6.2.0'
-    compile 'com.yumimobi.ads:mediation:3.0.4.+'
-    compile 'com.google.android.gms:play-services:10.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.yumimobi.ads:mediation:3.0.4.+'
+    compile 'com.playableads:playableads:1.0.7'
 }
 
-String version = project.properties['inmobi.version']
+String version = project.properties['playableads.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -45,7 +42,7 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Inmobi Adapter'
+    libraryDescription = 'Yumi Mediation Playableads Adapter'
 
     siteUrl = ''
     gitUrl = ''
