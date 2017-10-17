@@ -69,7 +69,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                 for (final NativeADDataRef item : arg0)
                 {
                     NativeContent content = new NativeContent();
-                    content.setContentType(1);
                     content.setIcon_url(item.getIconUrl());
                     content.setImg_url(item.getImgUrl());
                     content.setDesc(item.getDesc());
@@ -80,19 +79,18 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                     content.setReportShowRunnable(new NativeReportRunnable()
                     {
                         @Override
-                        public void run(ViewGroup view)
+                        public void run(ViewGroup view,NativeContent nativeContent)
                         {
                             layerExposure();
                             item.onExposured(view);
                         }
                     });
-                    content.setReportClickRunnable(new NativeReportRunnable()
-                    {
+                    content.setReportClickRunnable(new NativeReportRunnable() {
                         @Override
-                        public void run(ViewGroup view)
-                        {
+                        public void run(ViewGroup viewGroup, NativeContent nativeContent) {
+
                             layerClicked(-99f, -99f);
-                            item.onClicked(view);
+                            item.onClicked(viewGroup);
                         }
                     });
                     list.add(content);
