@@ -114,7 +114,7 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter
 			try
 			{
 				YumiProviderBean provider = getProvider();
-				provider.setUseTemplateMode(0);
+				provider.setUseTemplateMode("0");
 				JSONObject content = new JSONObject((String) inMobiNative.getAdContent());
 				String html = null;
 				String banner_landingURL = content.getString("landingURL");

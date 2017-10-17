@@ -140,7 +140,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 		{
 			try
 			{
-				getProvider().setUseTemplateMode(0);
+				getProvider().setUseTemplateMode("0");
 				JSONObject content = new JSONObject((String) inMobiNative.getAdContent());
 				
 //				String iconUrl = content.getJSONObject("icon").getString("url");String title = content.getString("title");
