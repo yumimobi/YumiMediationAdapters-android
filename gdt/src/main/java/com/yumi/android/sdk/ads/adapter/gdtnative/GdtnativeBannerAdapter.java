@@ -113,7 +113,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 		{
 			if (arg0.size() > 0)
 			{
-				getProvider().setUseTemplateMode(0);
+				getProvider().setUseTemplateMode("0");
                 adItem = arg0.get(0);
                 //html = NativeAdsBuild.getImageTextAdHtml(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity());
                 html = NativeAdsBuild.getTemplateBanner(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity(), getProvider());

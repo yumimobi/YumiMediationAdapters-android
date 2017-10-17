@@ -138,7 +138,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 		{
 			if (arg0.size() > 0)
 			{
-				getProvider().setUseTemplateMode(0);
+				getProvider().setUseTemplateMode("0");
 				adItem = arg0.get(0);
 				//html = NativeAdsBuild.getImageAdHtml(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0);				
 				html = NativeAdsBuild.getTemplateInterstitial(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0, getProvider());				
