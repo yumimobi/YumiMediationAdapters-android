@@ -49,6 +49,6 @@ ext {
 }
 
 if (version) {
-    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
-//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
 }
