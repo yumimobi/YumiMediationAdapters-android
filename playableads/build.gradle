@@ -29,7 +29,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
     compile 'com.yumimobi.ads:mediation:3.0.4.+'
-    compile 'com.playableads:playableads:1.1.0'
+    compile 'com.playableads:playableads:1.1.4'
 }
 
 String version = project.properties['playableads.version']
