@@ -1,18 +1,20 @@
 package com.yumi.android.sdk.ads.adapter.gdtnative;
 
-import java.util.List;
+import android.app.Activity;
+import android.view.View;
 
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import android.app.Activity;
-import android.view.View;
+import java.util.List;
 
 public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 
@@ -96,10 +98,10 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 	{
 
 		@Override
-		public void onNoAD(int arg0)
+		public void onNoAD(AdError adError)
 		{
-			ZplayDebug.d(TAG, "GDT nativead banner no ad:"+arg0, onoff);
-			layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+			ZplayDebug.d(TAG, "GDT nativead banner onNoAD ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
 		}
 		
 		@Override
@@ -107,7 +109,13 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 		{
 			ZplayDebug.d(TAG, "GDT nativead banner onADStatusChanged", onoff);
 		}
-		
+
+		@Override
+		public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+			ZplayDebug.d(TAG, "GDT nativead banner onADError ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+		}
+
 		@Override
 		public void onADLoaded(List<NativeADDataRef> arg0)
 		{
@@ -133,13 +141,6 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 			}
 		}
 
-		@Override
-		public void onADError(NativeADDataRef arg0, int arg1)
-		{
-			layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-			ZplayDebug.d(TAG, "GDT nativead banner PreparedFailed "+arg1, onoff);
-		}
-		
 	}
-	
+
 }

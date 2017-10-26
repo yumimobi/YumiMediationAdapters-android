@@ -1,6 +1,5 @@
 package com.yumi.android.sdk.ads.adapter.gdtnative;
 
-import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
@@ -10,11 +9,15 @@ import android.webkit.WebView;
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import java.util.List;
 
 public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 {
@@ -121,10 +124,10 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 	{
 
 		@Override
-		public void onNoAD(int arg0)
+		public void onNoAD(AdError adError)
 		{
-			ZplayDebug.d(TAG, "GDT nativead interstitial no ad:"+arg0, onoff);
-			layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+			ZplayDebug.d(TAG, "GDT nativead interstitial onNoAD ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
 		}
 		
 		@Override
@@ -132,7 +135,14 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 		{
 			ZplayDebug.d(TAG, "GDT nativead interstitial onADStatusChanged", onoff);
 		}
-		
+
+		@Override
+		public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+
+			ZplayDebug.d(TAG, "GDT nativead interstitial onADError ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+		}
+
 		@Override
 		public void onADLoaded(List<NativeADDataRef> arg0)
 		{
@@ -164,15 +174,8 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 			}
 		}
 
-		@Override
-		public void onADError(NativeADDataRef arg0, int arg1)
-		{
-			layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-			ZplayDebug.d(TAG, "GDT nativead interstitial PreparedFailed " + arg1, onoff);
-		}
-		
 	}
-	
+
 	@SuppressLint("NewApi")
 	public static final int[] getRealSize(Activity activity)
 	{

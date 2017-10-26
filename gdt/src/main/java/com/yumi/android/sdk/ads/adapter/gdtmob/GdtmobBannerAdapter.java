@@ -1,14 +1,15 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
+import android.app.Activity;
+
 import com.qq.e.ads.banner.ADSize;
 import com.qq.e.ads.banner.BannerADListener;
 import com.qq.e.ads.banner.BannerView;
+import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-
-import android.app.Activity;
 
 public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -55,9 +56,9 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 		bannerListener = new BannerADListener() {
 			
 			@Override
-			public void onNoAD(int arg0) {
-				ZplayDebug.d(TAG, "gdt banner failed " + arg0, onoff);
-				layerPreparedFailed(decodeErrorCode(arg0));				
+			public void onNoAD(AdError arg0) {
+				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + arg0.getErrorCode()+" ErrorMessage:"+arg0.getErrorMsg(), onoff);
+				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(arg0.getErrorCode()));
 			}
 			
 			@Override
@@ -102,18 +103,5 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 				layerClicked(-99f, -99f);				
 			}
 		};
-	}
-
-	private LayerErrorCode decodeErrorCode(int arg0) {
-		if (arg0 == 500) {
-			return LayerErrorCode.ERROR_INVALID;
-		}
-		if (arg0 == 501) {
-			return LayerErrorCode.ERROR_NO_FILL;
-		}
-		if (arg0 >= 400 && arg0 < 500) {
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		}
-		return LayerErrorCode.ERROR_INTERNAL;
 	}
 }
