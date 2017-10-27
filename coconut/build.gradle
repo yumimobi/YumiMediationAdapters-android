@@ -6,15 +6,12 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-    }
-    lintOptions {
-        abortOnError false
     }
     buildTypes {
         release {
@@ -26,11 +23,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.yumimobi.ads.thirdparty:baidu:5.6.0.1'
     compile 'com.yumimobi.ads:mediation:3.3.0.+'
+    compile 'com.yumimobi.ads.thirdparty:coconut:1.3.3.1'
 }
 
-String version = project.properties['baidu.version']
+String version = project.properties['chartboost.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -40,13 +37,13 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Baidu Adapter'
+    libraryDescription = 'Yumi Mediation Coconut Adapter'
 
     siteUrl = ''
     gitUrl = ''
 }
 
 if (version) {
-    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
 }
-
