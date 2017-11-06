@@ -3,7 +3,8 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
-
+    enforceUniquePackageName=false
+    packageBuildConfig=false
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
@@ -11,7 +12,9 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -23,16 +26,11 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    testCompile 'junit:junit:4.12'
     compile 'com.yumimobi.ads:mediation:3.3.0.+'
-    compile 'com.playableads:playableads:1.1.4'
+    compile 'com.yumimobi.ads.thirdparty:centrixlink:2.4.2.+'
 }
 
-String version = project.properties['playableads.version']
+String version = project.properties['centrixlink.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -42,13 +40,13 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Playableads Adapter'
+    libraryDescription = 'Yumi Mediation Centrixlink Adapter'
 
     siteUrl = ''
     gitUrl = ''
 }
 
 if (version) {
-    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
-//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
 }
