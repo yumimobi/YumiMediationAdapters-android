@@ -30,7 +30,7 @@ dependencies {
     compile 'com.yumimobi.ads.thirdparty:centrixlink:2.4.2.+'
 }
 
-String version = project.properties['gdt.version']
+String version = project.properties['centrixlink.version']
 
 ext {
     bintrayRepo = 'ads'
