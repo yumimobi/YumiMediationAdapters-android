@@ -1,4 +1,4 @@
-package test.mydrag.android.com.centrixlink;
+package com.yumi.android.sdk.ads.adapter.centrixlink;
 
 import android.app.Activity;
 
