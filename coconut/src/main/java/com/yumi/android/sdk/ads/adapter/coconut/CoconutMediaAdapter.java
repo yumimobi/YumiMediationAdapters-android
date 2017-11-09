@@ -18,6 +18,7 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
     private String TAG = "CoconutMediaAdapter";
     private Activity activity;
     private AdEventListener listener;
+    private boolean isReady = false;
     protected CoconutMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
@@ -39,7 +40,7 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
 
     @Override
     protected boolean isMediaReady() {
-        return false;
+        return isReady;
     }
 
     @Override
@@ -54,6 +55,7 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
         listener = new AdEventListener() {
             @Override
             public void onAdExist(boolean isAdExist, long code) {
+                isReady = isAdExist;
                 if (isAdExist) {
                     layerPrepared();
                 } else {
@@ -104,7 +106,7 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
             public void onLandingPageClose(boolean status) {
                 //直接关闭为false，点击下载按钮关闭为true
                 layerClosed();
-                layerIncentived();//依赖三方SDK的光比落地页给出奖励？？？？
+                layerIncentived();//依赖三方SDK的关闭落地页给出奖励？？？？
 
             }
 

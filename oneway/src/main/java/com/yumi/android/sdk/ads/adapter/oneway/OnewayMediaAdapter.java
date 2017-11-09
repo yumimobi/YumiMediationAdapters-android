@@ -20,6 +20,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private String TAG = "OnewayMediaAdapter";
     private Activity activity;
     private OnewaySdkListener listener;
+    private boolean isReady = false;
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
@@ -37,7 +38,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        return false;
+        return isReady;
     }
 
     @Override
@@ -51,6 +52,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdReady(String placementID) {
                 ZplayDebug.d(TAG, "Oneway media prepared", onoff);
+                isReady = true;
                 layerPrepared();
             }
 
