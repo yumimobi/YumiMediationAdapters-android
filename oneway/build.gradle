@@ -27,7 +27,7 @@ dependencies {
     compile 'com.yumimobi.ads.thirdparty:oneway:3.2.9.1'
 }
 
-String version = project.properties['chartboost.version']
+String version = project.properties['oneway.version']
 
 ext {
     bintrayRepo = 'ads'

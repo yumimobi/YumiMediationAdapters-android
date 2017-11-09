@@ -27,7 +27,7 @@ dependencies {
     compile 'com.yumimobi.ads.thirdparty:coconut:1.3.3.1'
 }
 
-String version = project.properties['chartboost.version']
+String version = project.properties['coconut.version']
 
 ext {
     bintrayRepo = 'ads'
