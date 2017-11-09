@@ -1,6 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.playableads;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 
 import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
@@ -20,15 +22,32 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsMediaAdapter";
 
+    private static final int REQUEST_NEXT_MEDIA = 0x001;
+
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
         this.provoder = yumiProviderBean;
     }
 
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REQUEST_NEXT_MEDIA:
+                    ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
+                    if (playable != null && listener != null) {
+                        playable.requestPlayableAds(listener);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        };
+    };
+
     @Override
     protected void onPrepareMedia() {
-        requestAD();
+        requestAD(1);
     }
 
     @Override
@@ -39,13 +58,14 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
                 ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
                 layerIncentived();
+                requestAD(1);
             }
 
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
-                requestAD();
+                requestAD(30);
             }
 
             @Override
@@ -54,7 +74,6 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
                 layerMediaEnd();
                 layerClosed();
-                requestAD();
             }
 
             @Override
@@ -96,7 +115,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                     } else if (erroCode == 400) {
                         layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     }
-                    requestAD();
+                    requestAD(30);
                 }
             };
         }catch (Exception e)
@@ -108,11 +127,14 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     /***
      * 可玩SDK不会从新请求广告，需要手动重新请求
      */
-    private void requestAD()
+    private void requestAD(int delaySecond)
     {
-        if (playable != null && listener != null) {
+        try {
             ZplayDebug.d(TAG, "Playable media Video requestAD ", onoff);
-            playable.requestPlayableAds(listener);
+            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media requestAD error ",e, onoff);
         }
     }
 
