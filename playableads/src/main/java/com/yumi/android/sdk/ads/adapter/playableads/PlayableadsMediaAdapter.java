@@ -2,7 +2,6 @@ package com.yumi.android.sdk.ads.adapter.playableads;
 
 import android.app.Activity;
 
-import com.playableads.PlayLoadingListener;
 import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
@@ -29,7 +28,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-
+        requestAD();
     }
 
     @Override
@@ -38,6 +37,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
+                ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
                 layerIncentived();
             }
 
@@ -45,6 +45,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                requestAD();
             }
 
             @Override
@@ -53,6 +54,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
                 layerMediaEnd();
                 layerClosed();
+                requestAD();
             }
 
             @Override
@@ -77,30 +79,47 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
-        playable.requestPlayableAds(new PlayPreloadingListener() {
-            @Override
-            public void onLoadFinished() {
-                ZplayDebug.d(TAG, "Playable media Ready ", onoff);
-                layerPrepared();
-            }
-
-            @Override
-            public void onLoadFailed(int erroCode, String s) {
-                if(erroCode ==204){
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-
-                }else if(erroCode ==400){
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+        try {
+            playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
+            listener = new PlayPreloadingListener() {
+                @Override
+                public void onLoadFinished() {
+                    ZplayDebug.d(TAG, "Playable media Ready ", onoff);
+                    layerPrepared();
                 }
+                @Override
+                public void onLoadFailed(int erroCode, String s) {
+                    ZplayDebug.d(TAG, "Playable media onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
+                    if (erroCode == 204) {
+                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
 
-            }
-        });
+                    } else if (erroCode == 400) {
+                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    }
+                    requestAD();
+                }
+            };
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media init error ",e, onoff);
+        }
+    }
+
+    /***
+     * 可玩SDK不会从新请求广告，需要手动重新请求
+     */
+    private void requestAD()
+    {
+        if (playable != null && listener != null) {
+            playable.requestPlayableAds(listener);
+        }
     }
 
     @Override
     protected void callOnActivityDestroy() {
-
+        if(playable!=null) {
+            playable.onDestroy();
+        }
     }
 
     @Override
