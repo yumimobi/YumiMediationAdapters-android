@@ -111,14 +111,21 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private void requestAD()
     {
         if (playable != null && listener != null) {
+            ZplayDebug.d(TAG, "Playable media Video requestAD ", onoff);
             playable.requestPlayableAds(listener);
         }
     }
 
     @Override
     protected void callOnActivityDestroy() {
-        if(playable!=null) {
-            playable.onDestroy();
+        try {
+            if (playable != null) {
+                ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);
+                playable.onDestroy();
+            }
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ",e, onoff);
         }
     }
 
