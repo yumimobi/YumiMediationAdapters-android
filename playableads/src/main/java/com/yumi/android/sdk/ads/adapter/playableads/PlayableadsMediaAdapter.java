@@ -1,8 +1,9 @@
 package com.yumi.android.sdk.ads.adapter.playableads;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 
-import com.playableads.PlayLoadingListener;
 import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
@@ -21,15 +22,32 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsMediaAdapter";
 
+    private static final int REQUEST_NEXT_MEDIA = 0x001;
+
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
         this.provoder = yumiProviderBean;
     }
 
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REQUEST_NEXT_MEDIA:
+                    ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
+                    if (playable != null && listener != null) {
+                        playable.requestPlayableAds(listener);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        };
+    };
+
     @Override
     protected void onPrepareMedia() {
-
+        requestAD(1);
     }
 
     @Override
@@ -38,13 +56,16 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
+                ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
                 layerIncentived();
+                requestAD(1);
             }
 
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                requestAD(30);
             }
 
             @Override
@@ -77,30 +98,57 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
-        playable.requestPlayableAds(new PlayPreloadingListener() {
-            @Override
-            public void onLoadFinished() {
-                ZplayDebug.d(TAG, "Playable media Ready ", onoff);
-                layerPrepared();
-            }
-
-            @Override
-            public void onLoadFailed(int erroCode, String s) {
-                if(erroCode ==204){
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-
-                }else if(erroCode ==400){
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+        try {
+            playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
+            listener = new PlayPreloadingListener() {
+                @Override
+                public void onLoadFinished() {
+                    ZplayDebug.d(TAG, "Playable media Ready ", onoff);
+                    layerPrepared();
                 }
+                @Override
+                public void onLoadFailed(int erroCode, String s) {
+                    ZplayDebug.d(TAG, "Playable media onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
+                    if (erroCode == 204) {
+                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
 
-            }
-        });
+                    } else if (erroCode == 400) {
+                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    }
+                    requestAD(30);
+                }
+            };
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media init error ",e, onoff);
+        }
+    }
+
+    /***
+     * 可玩SDK不会从新请求广告，需要手动重新请求
+     */
+    private void requestAD(int delaySecond)
+    {
+        try {
+            ZplayDebug.d(TAG, "Playable media Video requestAD ", onoff);
+            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media requestAD error ",e, onoff);
+        }
     }
 
     @Override
     protected void callOnActivityDestroy() {
-
+        try {
+            if (playable != null) {
+                ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);
+                playable.onDestroy();
+            }
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ",e, onoff);
+        }
     }
 
     @Override
