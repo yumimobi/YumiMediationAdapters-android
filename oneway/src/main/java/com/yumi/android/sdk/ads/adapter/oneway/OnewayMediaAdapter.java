@@ -3,6 +3,7 @@ package com.yumi.android.sdk.ads.adapter.oneway;
 import android.app.Activity;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.YumiDebug;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -44,7 +45,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         creatListener();
-        OnewaySdk.init(activity,getProvider().getKey1(),listener);
+        OnewaySdk.init(activity,getProvider().getKey1(),listener, YumiDebug.isDebugMode());
     }
 
     private void creatListener() {
@@ -65,7 +66,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdFinish(String placementID, OnewayVideoFinishType onewayVideoFinishType) {
-                ZplayDebug.d(TAG, "chartboost media closed", onoff);
+                ZplayDebug.d(TAG, "Oneway media closed", onoff);
                 layerMediaEnd();
                 layerClosed();
                 layerIncentived();
