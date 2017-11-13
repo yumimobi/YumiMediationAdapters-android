@@ -24,7 +24,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads:mediation:3.3.0.+'
-    compile 'com.yumimobi.ads.thirdparty:oneway:3.2.9.1'
+    compile 'com.yumimobi.ads.thirdparty:oneway:3.2.9.2'
 }
 
 String version = project.properties['oneway.version']
