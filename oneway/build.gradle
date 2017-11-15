@@ -24,7 +24,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads:mediation:3.3.0.+'
-    compile 'com.yumimobi.ads.thirdparty:oneway:3.2.9.2'
+    compile 'com.yumimobi.ads.thirdparty:oneway:1.3.5.0'
 }
 
 String version = project.properties['oneway.version']
@@ -37,7 +37,7 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Oneway Adapter'
+    libraryDescription = 'Oneway Mediation Oneway Adapter'
 
     siteUrl = ''
     gitUrl = ''
