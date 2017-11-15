@@ -55,10 +55,12 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
         listener = new AdEventListener() {
             @Override
             public void onAdExist(boolean isAdExist, long code) {
-                isReady = isAdExist;
                 if (isAdExist) {
+                    ZplayDebug.d(TAG, "椰子视频有广告"+code, onoff);
+                    isReady = isAdExist;
                     layerPrepared();
                 } else {
+                    ZplayDebug.d(TAG, "椰子视频没有广告"+code, onoff);
                 }
             }
 
@@ -90,7 +92,7 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
 
             @Override
             public void onVideoClose(int currentPosition) {
-                layerClosed();
+//                layerClosed();
             }
 
             @Override
