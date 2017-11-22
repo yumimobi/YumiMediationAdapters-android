@@ -6,11 +6,12 @@ import android.view.ViewGroup;
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.NativeReportRunnable;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -48,14 +49,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
     protected void init() {
         nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeAdListener()
         {
-
-            @Override
-            public void onNoAD(int arg0)
-            {
-                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                ZplayDebug.w(TAG, "onNoAD code = "+arg0, onoff);
-            }
-
             @Override
             public void onADStatusChanged(NativeADDataRef arg0)
             {
@@ -100,10 +93,16 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
             }
 
             @Override
-            public void onADError(NativeADDataRef arg0, int arg1)
+            public void onNoAD(AdError adError) {
+                ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+            }
+
+            @Override
+            public void onADError(NativeADDataRef nativeADDataRef, AdError adError)
             {
-                layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                ZplayDebug.e(TAG, "error code = "+arg1, onoff);
+                ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
         });
     }
