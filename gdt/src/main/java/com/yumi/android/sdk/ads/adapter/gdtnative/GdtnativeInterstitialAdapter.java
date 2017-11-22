@@ -1,6 +1,5 @@
 package com.yumi.android.sdk.ads.adapter.gdtnative;
 
-import java.util.List;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Point;
@@ -10,23 +9,27 @@ import android.webkit.WebView;
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import java.util.List;
+
 public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 {
 
 	private static final String TAG = "GdtnativeInterstitialAdapter";
-	
+
 	private NativeAD nativeAD;
 	private NativeADDataRef adItem;
 	private String html;
 
 	private WebView wv_interstitial;
-	
+
 	protected GdtnativeInterstitialAdapter(Activity activity, YumiProviderBean provider)
 	{
 		super(activity, provider);
@@ -35,7 +38,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 	@Override
 	public void onActivityPause()
 	{
-		
+
 	}
 
 	@Override
@@ -90,7 +93,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 	@Override
 	protected void calculateRequestSize()
 	{
-		
+
 	}
 
 	@Override
@@ -114,25 +117,32 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 	@Override
 	protected void callOnActivityDestroy()
 	{
-		
+
 	}
-	
+
 	private class MyNativeAdListener implements NativeAdListener
 	{
 
 		@Override
-		public void onNoAD(int arg0)
+		public void onNoAD(AdError adError)
 		{
-			ZplayDebug.d(TAG, "GDT nativead interstitial no ad:"+arg0, onoff);
-			layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+			ZplayDebug.d(TAG, "GDT nativead interstitial onNoAD ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
 		}
-		
+
 		@Override
 		public void onADStatusChanged(NativeADDataRef arg0)
 		{
 			ZplayDebug.d(TAG, "GDT nativead interstitial onADStatusChanged", onoff);
 		}
-		
+
+		@Override
+		public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+
+			ZplayDebug.d(TAG, "GDT nativead interstitial onADError ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+		}
+
 		@Override
 		public void onADLoaded(List<NativeADDataRef> arg0)
 		{
@@ -140,18 +150,18 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 			{
 				getProvider().setUseTemplateMode("0");
 				adItem = arg0.get(0);
-				//html = NativeAdsBuild.getImageAdHtml(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0);				
-				html = NativeAdsBuild.getTemplateInterstitial(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0, getProvider());				
+				//html = NativeAdsBuild.getImageAdHtml(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0);
+				html = NativeAdsBuild.getTemplateInterstitial(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0, getProvider());
 				ZplayDebug.d(TAG, "GDT nativead interstitial request success!", onoff);
 				if (html!=null && !"".equals(html) && !"null".equals(html))
 				{
-				    haveStroke=false;
+					haveStroke=false;
 //					calculateWebSize(1280, 720);
-	                int[] screen = getRealSize(getActivity());
-	                calculateWebSize(screen[0], screen[1]);
-	                
-	                ZplayDebug.d(TAG, "GDT nativead interstitial Width="+screen[0]+" || Height="+screen[1], onoff);
-	                
+					int[] screen = getRealSize(getActivity());
+					calculateWebSize(screen[0], screen[1]);
+
+					ZplayDebug.d(TAG, "GDT nativead interstitial Width="+screen[0]+" || Height="+screen[1], onoff);
+
 					createWebview(null);
 					loadData(html);
 				}else{
@@ -164,15 +174,8 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 			}
 		}
 
-		@Override
-		public void onADError(NativeADDataRef arg0, int arg1)
-		{
-			layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-			ZplayDebug.d(TAG, "GDT nativead interstitial PreparedFailed " + arg1, onoff);
-		}
-		
 	}
-	
+
 	@SuppressLint("NewApi")
 	public static final int[] getRealSize(Activity activity)
 	{
@@ -184,13 +187,13 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 				Point point = new Point();
 				activity.getWindowManager().getDefaultDisplay().getRealSize(point);
 				int[] realSize = new int[]
-				{ point.x, point.y };
+						{ point.x, point.y };
 				return realSize;
 			} else
 			{
 				Display display = activity.getWindowManager().getDefaultDisplay();
 				int[] realSize = new int[]
-				{ display.getWidth(), display.getHeight() };
+						{ display.getWidth(), display.getHeight() };
 				return realSize;
 			}
 		} catch (Exception e)
@@ -198,13 +201,13 @@ public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 			ZplayDebug.e(TAG, "GDT nativead interstitial getRealSize error  ", e, onoff);
 		}
 		return new int[]
-		{ 1280, 720 };
+				{ 1280, 720 };
 
 	}
 
 	/**
 	 * 获取android版本号int
-	 * 
+	 *
 	 * @return
 	 */
 	public static int getAndroidSDK()
