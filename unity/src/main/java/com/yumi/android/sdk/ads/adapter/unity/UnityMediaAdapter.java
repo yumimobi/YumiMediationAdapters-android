@@ -81,7 +81,9 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void onUnityAdsReady(String zoneId) {
 					ZplayDebug.d(TAG, "unity media onUnityAdsReady zoneId : "+zoneId, onoff);
-					layerPrepared();
+					if (getProvider().getKey2().equals(zoneId)) {
+						layerPrepared();
+					}
 				}
 
 				@Override

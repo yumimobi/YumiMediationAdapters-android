@@ -86,9 +86,9 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 }
 
                 @Override
-                public void onUnityAdsReady(String arg0) {
-                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsReady isPrepared="+isPrepared, onoff);
-                    if (!isPrepared) {
+                public void onUnityAdsReady(String zoneId) {
+                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsReady isPrepared="+isPrepared+"   zoneId=zoneI"+zoneId, onoff);
+                    if (!isPrepared && getProvider().getKey2().equals(zoneId)) {
                         callLayerPrepared();
                     }
                 }
