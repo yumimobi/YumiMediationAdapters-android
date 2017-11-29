@@ -111,7 +111,7 @@ public class CentrixlinkMediaAdapter extends YumiCustomerMediaAdapter {
                     if ("101".equals(errorCode)) {
                         layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                     } else {
-                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     }
                 }catch (Exception e){
                     ZplayDebug.v(TAG, "Centrixlink media centrixLinkVideoADShowFail try error:" + e, onoff);

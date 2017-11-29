@@ -2,8 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.yumi.android.sdk.ads.adapter.centrixlink">
 
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:supportsRtl="true">
+    <application>
         <!-- 广告 Activity -->
         <activity android:name="com.centrixlink.SDK.FullScreenADActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
