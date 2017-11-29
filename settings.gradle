@@ -1,1 +1,1 @@
-include ':gdt', ':inmobi', ':baidu', ':applovin', ':startapp', ':admob', ':unity', ':vungle', ':xiaomi', ':toutiao', ':coconut', ':oneway', ':centrixlink', ':mraid', 'chartboost', 'adcolony', 'facebook', ':playableads'
+include ':gdt', ':inmobi', ':baidu', ':applovin', ':startapp', ':admob', ':unity', ':vungle', ':xiaomi', ':toutiao', ':coconut', ':oneway', ':centrixlink', ':mraid', ':mobvista', 'chartboost', 'adcolony', 'facebook', ':playableads'
