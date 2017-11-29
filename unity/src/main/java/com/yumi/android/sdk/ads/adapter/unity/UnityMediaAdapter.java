@@ -71,17 +71,22 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void onUnityAdsFinish(String zoneId, FinishState result) {
 					ZplayDebug.d(TAG, "unity media onUnityAdsFinish zoneId : "+zoneId+ "  FinishState : "+result, onoff);
-					if(result==FinishState.COMPLETED){
-						layerIncentived();
+					if (getProvider().getKey2().equals(zoneId)) {
+						if (result == FinishState.COMPLETED) {
+							layerIncentived();
+							ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerIncentived ", onoff);
+						}
+						layerMediaEnd();
+						layerClosed();
+						ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 					}
-					layerMediaEnd();
-					layerClosed();
 				}
 
 				@Override
 				public void onUnityAdsReady(String zoneId) {
 					ZplayDebug.d(TAG, "unity media onUnityAdsReady zoneId : "+zoneId, onoff);
                     if(getProvider().getKey2().equals(zoneId)) {
+						ZplayDebug.d(TAG, "unity media onUnityAdsReady layerPrepared", onoff);
                         layerPrepared();
                     }
 				}
@@ -89,8 +94,11 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void onUnityAdsStart(String zoneId) {
 					ZplayDebug.d(TAG, "unity media onUnityAdsStart zoneId : "+zoneId, onoff);
-					layerExposure();
-					layerMediaStart();
+					if (getProvider().getKey2().equals(zoneId)) {
+						ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
+						layerExposure();
+						layerMediaStart();
+					}
 				}
 			};
 			UnityAds.initialize(getActivity(), getProvider().getKey1(), unityAdsListener,isDebugMode);

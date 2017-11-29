@@ -73,30 +73,37 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             unityAdsListener = new IUnityAdsListener() {
 
                 @Override
-                public void onUnityAdsError(UnityAdsError arg0, String arg1) {
-                    ZplayDebug.d(TAG, "unity Interstitial prepared failed UnityAdsError:"+arg0+" || arg1:"+arg1, onoff);
+                public void onUnityAdsError(UnityAdsError error, String message) {
+                    ZplayDebug.d(TAG, "unity Interstitial prepared failed UnityAdsError:"+error+" || message:"+message, onoff);
                     layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                 }
 
                 @Override
-                public void onUnityAdsFinish(String arg0, FinishState arg1) {
-                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish", onoff);
-                    layerClosed();
-                    layerMediaEnd();
+                public void onUnityAdsFinish(String zoneId, FinishState finishState) {
+                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish zoneId:"+zoneId+"  finishState:"+finishState, onoff);
+                    if (getProvider().getKey2().equals(zoneId)) {
+                        ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerClosed layerMediaEnd", onoff);
+                        layerClosed();
+                        layerMediaEnd();
+                    }
                 }
 
                 @Override
                 public void onUnityAdsReady(String zoneId) {
                     ZplayDebug.d(TAG, "unity Interstitial onUnityAdsReady isPrepared="+isPrepared+"   zoneId=zoneI"+zoneId, onoff);
                     if (!isPrepared && getProvider().getKey2().equals(zoneId)) {
+                        ZplayDebug.d(TAG, "unity Interstitial onUnityAdsReady callLayerPrepared", onoff);
                         callLayerPrepared();
                     }
                 }
 
                 @Override
-                public void onUnityAdsStart(String arg0) {
-                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsStart", onoff);
-                    layerExposure();
+                public void onUnityAdsStart(String zoneId) {
+                    ZplayDebug.d(TAG, "unity Interstitial onUnityAdsStart zoneId:"+zoneId, onoff);
+                    if (getProvider().getKey2().equals(zoneId)) {
+                        ZplayDebug.d(TAG, "unity Interstitial onUnityAdsStart layerExposure", onoff);
+                        layerExposure();
+                    }
                 }
 
             };
