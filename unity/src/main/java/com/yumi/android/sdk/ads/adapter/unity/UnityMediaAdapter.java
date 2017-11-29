@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.unity;
 import android.app.Activity;
 
-import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
@@ -14,7 +13,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private static final String TAG = "UnityMediaAdapter";
-	private IUnityAdsListener unityAdsListener;
+	private IMyUnityAdsListener unityAdsListener;
 	
 	private static final boolean isDebugMode=false; //测试模式 正式发部需要该成false
 	
@@ -30,16 +29,14 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	public void onActivityResume() {
 		ZplayDebug.d(TAG, "unity media changeActivity", onoff);
-		
-		UnityAds.setListener(unityAdsListener);
-		
+		UnityListenerFactory.setMyMediaUnityAdsListener(unityAdsListener);
+		UnityAds.setListener(UnityListenerFactory.getUnityAdsListenerInstance());
 	}
 
 	@Override
 	protected void onPrepareMedia() {
 		ZplayDebug.d(TAG, "unity media request new media", onoff);
 		UnityAds.setDebugMode(isDebugMode); //测试
-		
 		if (UnityAds.isReady(getProvider().getKey2())) {
 			layerPrepared();
 			return;
@@ -59,49 +56,55 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
 	@Override
 	protected void init() {
-		ZplayDebug.i(TAG, "gameid : "+ getProvider().getKey1(), onoff);
-		if (unityAdsListener == null) {
-			unityAdsListener = new IUnityAdsListener() {
-				@Override
-				public void onUnityAdsError(UnityAdsError error, String message) {
-					ZplayDebug.d(TAG, "unity media prepared failed UnityAdsError : "+error+" || message : "+message, onoff);
-					layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-				}
+		try {
+			ZplayDebug.i(TAG, "gameid : " + getProvider().getKey1(), onoff);
+			if (unityAdsListener == null) {
+				unityAdsListener = new IMyUnityAdsListener() {
+					@Override
+					public void onUnityAdsError(UnityAdsError error, String message) {
+						ZplayDebug.d(TAG, "unity media prepared failed UnityAdsError : " + error + " || message : " + message, onoff);
+						layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+					}
 
-				@Override
-				public void onUnityAdsFinish(String zoneId, FinishState result) {
-					ZplayDebug.d(TAG, "unity media onUnityAdsFinish zoneId : "+zoneId+ "  FinishState : "+result, onoff);
-					if (getProvider().getKey2().equals(zoneId)) {
-						if (result == FinishState.COMPLETED) {
-							layerIncentived();
-							ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerIncentived ", onoff);
+					@Override
+					public void onUnityAdsFinish(String zoneId, FinishState result) {
+						ZplayDebug.d(TAG, "unity media onUnityAdsFinish zoneId : " + zoneId + "  FinishState : " + result, onoff);
+						if (getProvider().getKey2().equals(zoneId)) {
+							if (result == FinishState.COMPLETED) {
+								layerIncentived();
+								ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerIncentived ", onoff);
+							}
+							layerMediaEnd();
+							layerClosed();
+							ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 						}
-						layerMediaEnd();
-						layerClosed();
-						ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 					}
-				}
 
-				@Override
-				public void onUnityAdsReady(String zoneId) {
-					ZplayDebug.d(TAG, "unity media onUnityAdsReady zoneId : "+zoneId, onoff);
-                    if(getProvider().getKey2().equals(zoneId)) {
-						ZplayDebug.d(TAG, "unity media onUnityAdsReady layerPrepared", onoff);
-                        layerPrepared();
-                    }
-				}
-
-				@Override
-				public void onUnityAdsStart(String zoneId) {
-					ZplayDebug.d(TAG, "unity media onUnityAdsStart zoneId : "+zoneId, onoff);
-					if (getProvider().getKey2().equals(zoneId)) {
-						ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
-						layerExposure();
-						layerMediaStart();
+					@Override
+					public void onUnityAdsReady(String zoneId) {
+						ZplayDebug.d(TAG, "unity media onUnityAdsReady zoneId : " + zoneId, onoff);
+						if (getProvider().getKey2().equals(zoneId)) {
+							ZplayDebug.d(TAG, "unity media onUnityAdsReady layerPrepared", onoff);
+							layerPrepared();
+						}
 					}
-				}
-			};
-			UnityAds.initialize(getActivity(), getProvider().getKey1(), unityAdsListener,isDebugMode);
+
+					@Override
+					public void onUnityAdsStart(String zoneId) {
+						ZplayDebug.d(TAG, "unity media onUnityAdsStart zoneId : " + zoneId, onoff);
+						if (getProvider().getKey2().equals(zoneId)) {
+							ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
+							layerExposure();
+							layerMediaStart();
+						}
+					}
+				};
+				UnityListenerFactory.setMyMediaUnityAdsListener(unityAdsListener);
+				UnityAds.initialize(getActivity(), getProvider().getKey1(), UnityListenerFactory.getUnityAdsListenerInstance(), isDebugMode);
+			}
+		}catch (Exception e)
+		{
+			ZplayDebug.e(TAG, "unity media init error ",e, onoff);
 		}
 	}
 
