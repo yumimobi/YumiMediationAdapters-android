@@ -1,6 +1,8 @@
-package com.yumi.android.sdk.ads.adapter;
+package com.yumi.android.sdk.ads.adapter.mobvista;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 
 import com.mobvista.msdk.MobVistaSDK;
 import com.mobvista.msdk.out.MVRewardVideoHandler;
@@ -19,12 +21,25 @@ import java.util.Map;
 public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "MobvistaMediaAdapter";
-
+    private static final int REQUEST_NEXT_MEDIA = 0x001;
     private MVRewardVideoHandler mMvRewardVideoHandler;
 
     protected MobvistaMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
     }
+
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REQUEST_NEXT_MEDIA:
+                    ZplayDebug.d(TAG, "Mobvista media Video REQUEST_NEXT_MEDIA ", onoff);
+                    onPrepareMedia();
+                    break;
+                default:
+                    break;
+            }
+        };
+    };
 
     @Override
     protected void onPrepareMedia() {
@@ -113,13 +128,14 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 @Override
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:"+errorMsg, onoff);
-
+                    afreshRequestAD(30);
                 }
 
                 @Override
                 public void onShowFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onShowFail errorMsg:"+errorMsg, onoff);
                     layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                    afreshRequestAD(15);
                 }
 
                 @Override
@@ -149,6 +165,21 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
             });
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media initHandler error:", e, onoff);
+        }
+    }
+
+    /***
+     * Mobvista SDK 延时从新请求广告，（请求失败和展示失败时需要手动重新请求）
+     * @param delaySecond  延迟时间，单位秒
+     */
+    private void afreshRequestAD(int delaySecond)
+    {
+        try {
+            ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond"+delaySecond, onoff);
+            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+        }catch (Exception e)
+        {
+            ZplayDebug.e(TAG, "Mobvista media requestAD error ",e, onoff);
         }
     }
 }
