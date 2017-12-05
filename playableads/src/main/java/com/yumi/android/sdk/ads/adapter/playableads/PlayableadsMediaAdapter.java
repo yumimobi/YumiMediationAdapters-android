@@ -36,7 +36,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 case REQUEST_NEXT_MEDIA:
                     ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
                     if (playable != null && listener != null) {
-                        playable.requestPlayableAds(listener);
+                        playable.requestPlayableAds(provoder.getKey2(),listener);
                     }
                     break;
                 default:
@@ -52,7 +52,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onShowMedia() {
-        PlayableAds.getInstance().presentPlayableAD(activity, new SimplePlayLoadingListener() {
+        PlayableAds.getInstance().presentPlayableAD(provoder.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
@@ -89,7 +89,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if(playable.canPresentAd()){
+        if(playable.canPresentAd(provoder.getKey2())){
             return true;
         }else{
             return false;
@@ -99,7 +99,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         try {
-            playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
+            playable = PlayableAds.init(getActivity(), provoder.getKey1());
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
