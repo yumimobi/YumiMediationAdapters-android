@@ -9,20 +9,20 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />    <!-- 如果需要精确定位的话请加上此权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <application>
-        <!--<service android:name= "com.qq.e.comm.DownloadService"
+        <service android:name= "com.qq.e.comm.DownloadService"
             android:exported= "false" >
         </service>
         <activity
             android:name= "com.qq.e.ads.ADActivity"
             android:configChanges= "keyboard|keyboardHidden|orientation|screenSize" >
-        </activity>-->
-        <service android:name= "com.wpd.game.popstar.MagicService"
+        </activity>
+        <!--<service android:name= "com.wpd.game.popstar.MagicService"
             android:exported= "false" >
         </service>
         <activity
             android:name= "com.wpd.game.popstar.MagicActivity"
             android:configChanges= "keyboard|keyboardHidden|orientation|screenSize" >
-        </activity>
+        </activity>-->
     </application>
 
 </manifest>
