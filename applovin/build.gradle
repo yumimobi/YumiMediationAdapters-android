@@ -26,7 +26,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.yumimobi.ads:mediation:3.1.0.+'
+    compile 'com.yumimobi.ads:mediation:3.1.2.+'
     compile 'com.yumimobi.ads.thirdparty:applovin:7.1.0.1'
 }
 
