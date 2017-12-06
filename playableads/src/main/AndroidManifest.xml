@@ -1,7 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
-          package="com.yumi.android.sdk.ads.adapter.playableads"
->
+          package="com.yumi.android.sdk.ads.adapter.playableads">
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -9,15 +7,15 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <application android:allowBackup="true"
-                 android:supportsRtl="true"
-    >
-        <activity
-            android:name="com.playableads.activity.PlayableADActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
-    </application>
+    <!--<application android:allowBackup="true"-->
+                 <!--android:supportsRtl="true"-->
+    <!--&gt;-->
+        <!--<activity-->
+            <!--android:name="com.playableads.activity.PlayableADActivity"-->
+            <!--android:configChanges="orientation|screenSize|keyboardHidden"-->
+            <!--android:hardwareAccelerated="true"-->
+            <!--android:screenOrientation="portrait"-->
+            <!--android:theme="@android:style/Theme.NoTitleBar" />-->
+    <!--</application>-->
 
 </manifest>

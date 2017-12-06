@@ -34,9 +34,9 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case REQUEST_NEXT_MEDIA:
-                    ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
                     if (playable != null && listener != null) {
-                        playable.requestPlayableAds(listener);
+                        ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
+                        playable.requestPlayableAds(provoder.getKey2(),listener);
                     }
                     break;
                 default:
@@ -47,12 +47,13 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
+        ZplayDebug.d(TAG, "Playable media Video onPrepareMedia: ", onoff);
         requestAD(1);
     }
 
     @Override
     protected void onShowMedia() {
-        PlayableAds.getInstance().presentPlayableAD(activity, new SimplePlayLoadingListener() {
+        PlayableAds.getInstance().presentPlayableAD(provoder.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
@@ -89,7 +90,8 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if(playable.canPresentAd()){
+        if(playable.canPresentAd(provoder.getKey2())){
+            ZplayDebug.d(TAG, "Playable media Video isMediaReady true", onoff);
             return true;
         }else{
             return false;
@@ -99,7 +101,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         try {
-            playable = PlayableAds.init(getActivity(), provoder.getKey1(), provoder.getKey2());
+            playable = PlayableAds.init(getActivity(), provoder.getKey1());
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
@@ -115,7 +117,9 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                     } else if (erroCode == 400) {
                         layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     }
-                    requestAD(30);
+                    if (erroCode!= 2004) {   // erroCode：2004   s:ads has filled
+                        requestAD(30);
+                    }
                 }
             };
         }catch (Exception e)
@@ -130,7 +134,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private void requestAD(int delaySecond)
     {
         try {
-            ZplayDebug.d(TAG, "Playable media Video requestAD ", onoff);
+            ZplayDebug.d(TAG, "Playable media Video requestAD delaySecond"+delaySecond, onoff);
             mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
         }catch (Exception e)
         {
