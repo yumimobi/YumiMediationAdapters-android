@@ -27,7 +27,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads:mediation:3.3.0.+'
-    compile 'com.yumimobi.ads.thirdparty:gdtrename:1.0.0.1'
+//    compile 'com.yumimobi.ads.thirdparty:gdtrename:1.0.0.1'
+    compile 'com.yumimobi.ads.thirdparty:gdt:4.9.544.1'
 }
 
 String version = project.properties['gdt.version']
