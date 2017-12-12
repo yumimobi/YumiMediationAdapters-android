@@ -1,19 +1,25 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.yumi.android.sdk.ads.adapter.vungle">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="18" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- Optional permissions to enable better geo-targeting of ads (recommended) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application>
-        <uses-permission android:name="android.permission.INTERNET"/>
-        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-        <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+        <activity android:name="com.vungle.publisher.VideoFullScreenAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
 
-            <activity android:name="com.vungle.publisher.VideoFullScreenAdActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-                android:theme="@android:style/Theme.NoTitleBar.Fullscreen"/>
+        <activity android:name="com.vungle.publisher.MraidFullScreenAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
 
-            <activity android:name="com.vungle.publisher.MraidFullScreenAdActivity"
-                android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
-                android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+        <activity android:name="com.vungle.publisher.FlexViewAdActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
     </application>
 
 </manifest>
