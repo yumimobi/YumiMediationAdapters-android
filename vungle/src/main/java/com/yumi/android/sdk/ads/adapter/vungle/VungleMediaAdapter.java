@@ -53,7 +53,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
         try {
             ZplayDebug.d(TAG, "vungle request new media", onoff);
             vungle = VungleInstantiate.getInstantiate().getVunglePub();
-            if (vungle.isAdPlayable(getProvider().getKey2())) {
+            if (vungle.isAdPlayable(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle media prapared", onoff);
                 layerPrepared();
             }
@@ -65,8 +65,8 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onShowMedia() {
         try {
-            if (!vungle.isAdPlayable(getProvider().getKey2())) {
-                vungle.playAd(getProvider().getKey2(), null);
+            if (!vungle.isAdPlayable(getProvider().getKey3())) {
+                vungle.playAd(getProvider().getKey3(), null);
                 ZplayDebug.d(TAG, "vungle media onShowMedia true", onoff);
             } else {
                 ZplayDebug.d(TAG, "vungle media onShowMedia false", onoff);
@@ -79,7 +79,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected boolean isMediaReady() {
         try {
-            if (vungle != null && vungle.isAdPlayable(getProvider().getKey2())) {
+            if (vungle != null && vungle.isAdPlayable(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle media isMediaReady true", onoff);
                 return true;
             }
@@ -107,7 +107,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdEnd(@NonNull String placementReferenceId, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
                 ZplayDebug.d(TAG, "vungle media onAdEnd placementReferenceId:" + placementReferenceId + "   wasSuccessfulView:" + wasSuccessfulView + "   wasCallToActionClicked" + wasCallToActionClicked, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     // 当用户离开广告，控制转回至您的应用程序时调用
                     // 如果 wasSuccessfulView 为 true，表示用户观看了广告，应获得奖励
                     //（如果是奖励广告）。
@@ -130,7 +130,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdStart(@NonNull String placementReferenceId) {
                 ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     layerExposure();
                     layerMediaStart();
                 }
@@ -139,7 +139,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onUnableToPlayAd(@NonNull String placementReferenceId, String reason) {
                 ZplayDebug.d(TAG, "vungle media onUnableToPlayAd placementReferenceId:" + placementReferenceId + "   reason:" + reason, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -152,7 +152,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdAvailabilityUpdate(@NonNull String placementReferenceId, boolean isAdAvailable) {
                 ZplayDebug.d(TAG, "vungle media onAdAvailabilityUpdate placementReferenceId:" + placementReferenceId + "   isAdAvailable:" + isAdAvailable, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId) && isAdAvailable) {
+                if (getProvider().getKey3().equals(placementReferenceId) && isAdAvailable) {
                     layerPrepared();
                 }
             }
@@ -161,7 +161,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void initVungleSDK() {
-        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), new String[]{getProvider().getKey2(), getProvider().getKey3()});
+        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getKey3());
     }
 
     @Override
