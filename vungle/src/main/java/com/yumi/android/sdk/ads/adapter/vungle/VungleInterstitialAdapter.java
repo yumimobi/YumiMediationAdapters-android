@@ -163,6 +163,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
 
     private void initVungleSDK() {
-        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), new String[]{getProvider().getKey2(), getProvider().getKey3()});
+        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getKey3());
     }
 }
