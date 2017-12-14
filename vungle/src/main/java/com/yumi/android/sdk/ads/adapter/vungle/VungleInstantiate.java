@@ -24,12 +24,11 @@ public class VungleInstantiate {
 	}
 
 	private final VunglePub vungle = VunglePub.getInstance();
-	private boolean hasInitVungle;
 
 	public void initVungle(Activity activity, String appid, String placementId1, String placementId2) {
 		try {
-			if (!hasInitVungle) {
-				hasInitVungle = true;
+			if (!vungle.isInitialized()) {
+				ZplayDebug.d(TAG, "vungle initVungle appid:" + appid + "  placementId1:" + placementId1 + "  placementId2:" + placementId2, onoff);
 				vungle.init(activity, appid, placementIdFilter(placementId1, placementId2), new VungleInitListener() {
 					@Override
 					public void onSuccess() {
@@ -66,10 +65,6 @@ public class VungleInstantiate {
 	public VunglePub getVunglePub()
 	{
 		return vungle;
-	}
-	
-	void onDestroy(){
-		hasInitVungle = false;
 	}
 	
 }
