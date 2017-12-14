@@ -50,9 +50,11 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void onPrepareInterstitial() {
         try {
             ZplayDebug.d(TAG, "vungle request new media", onoff);
-            vungle = VungleInstantiate.getInstantiate().getVunglePub();
+            if(vungle==null) {
+                vungle = VungleInstantiate.getInstantiate().getVunglePub();
+            }
             if (vungle.isAdPlayable(getProvider().getKey2())) {
-                ZplayDebug.d(TAG, "vungle media prapared", onoff);
+                ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);
                 layerPrepared();
                 isPrepared = true;
             }else{
@@ -66,11 +68,11 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
         try {
-            if (!vungle.isAdPlayable(getProvider().getKey2())) {
+            if (vungle.isAdPlayable(getProvider().getKey2())) {
                 vungle.playAd(getProvider().getKey2(), null);
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer true", onoff);
+                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer true placementId:"+getProvider().getKey2(), onoff);
             } else {
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer false", onoff);
+                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer false placementId:"+getProvider().getKey2(), onoff);
             }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "vungle onShowInterstitialLayer error:", e, onoff);
@@ -93,9 +95,16 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        createVungleListener();
-        initVungleSDK();
+        try {
+            ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
+            if(vungle==null) {
+                vungle = VungleInstantiate.getInstantiate().getVunglePub();
+            }
+            initVungleSDK();
+            createVungleListener();
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "vungle Interstitial init error:", e, onoff);
+        }
     }
 
     @Override
@@ -164,5 +173,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private void initVungleSDK() {
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getKey3());
+        vungle.loadAd(getProvider().getKey2());
     }
 }
