@@ -53,7 +53,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             if(vungle==null) {
                 vungle = VungleInstantiate.getInstantiate().getVunglePub();
             }
-            if (vungle.isAdPlayable(getProvider().getKey2())) {
+            if (vungle.isAdPlayable(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);
                 layerPrepared();
                 isPrepared = true;
@@ -68,11 +68,11 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
         try {
-            if (vungle.isAdPlayable(getProvider().getKey2())) {
-                vungle.playAd(getProvider().getKey2(), null);
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer true placementId:"+getProvider().getKey2(), onoff);
+            if (vungle.isAdPlayable(getProvider().getKey3())) {
+                vungle.playAd(getProvider().getKey3(), null);
+                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer true placementId:"+getProvider().getKey3(), onoff);
             } else {
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer false placementId:"+getProvider().getKey2(), onoff);
+                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer false placementId:"+getProvider().getKey3(), onoff);
             }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "vungle onShowInterstitialLayer error:", e, onoff);
@@ -82,7 +82,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected boolean isInterstitialLayerReady() {
         try {
-            if (vungle != null && vungle.isAdPlayable(getProvider().getKey2())) {
+            if (vungle != null && vungle.isAdPlayable(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle Interstitial isInterstitialLayerReady true", onoff);
                 return true;
             }
@@ -122,7 +122,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onAdEnd(@NonNull String placementReferenceId, boolean wasSuccessfulView, boolean wasCallToActionClicked) {
                 ZplayDebug.d(TAG, "vungle Interstitial onAdEnd placementReferenceId:" + placementReferenceId + "   wasSuccessfulView:" + wasSuccessfulView + "   wasCallToActionClicked" + wasCallToActionClicked, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     // 当用户离开广告，控制转回至您的应用程序时调用
                     // 如果 wasSuccessfulView 为 true，表示用户观看了广告，应获得奖励
                     //（如果是奖励广告）。
@@ -141,7 +141,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onAdStart(@NonNull String placementReferenceId) {
                 ZplayDebug.d(TAG, "vungle Interstitial onAdStart placementReferenceId:" + placementReferenceId, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     layerExposure();
                 }
             }
@@ -149,7 +149,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onUnableToPlayAd(@NonNull String placementReferenceId, String reason) {
                 ZplayDebug.d(TAG, "vungle Interstitial onUnableToPlayAd placementReferenceId:" + placementReferenceId + "   reason:" + reason, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
+                if (getProvider().getKey3().equals(placementReferenceId)) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -162,7 +162,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onAdAvailabilityUpdate(@NonNull String placementReferenceId, boolean isAdAvailable) {
                 ZplayDebug.d(TAG, "vungle Interstitial onAdAvailabilityUpdate placementReferenceId:" + placementReferenceId + "   isAdAvailable:" + isAdAvailable, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId) && isAdAvailable && !isPrepared) {
+                if (getProvider().getKey3().equals(placementReferenceId) && isAdAvailable && !isPrepared) {
                     layerPrepared();
                 }
             }
@@ -173,6 +173,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private void initVungleSDK() {
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getKey3());
-        vungle.loadAd(getProvider().getKey2());
+        vungle.loadAd(getProvider().getKey3());
     }
 }
