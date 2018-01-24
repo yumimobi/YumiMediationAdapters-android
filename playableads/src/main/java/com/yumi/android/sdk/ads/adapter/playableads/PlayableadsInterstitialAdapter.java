@@ -1,13 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.playableads;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -15,7 +14,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 /**
  * Created by syj on 2017/10/12.
  */
-public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
+public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private PlayPreloadingListener listener;
     private PlayableAds playable;
     private Activity activity;
@@ -24,29 +23,29 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final int REQUEST_NEXT_MEDIA = 0x001;
 
-    protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
+    protected PlayableadsInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
         this.provoder = yumiProviderBean;
     }
 
     @Override
-    protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "Playable media Video onPrepareMedia: ", onoff);
+    protected void onPrepareInterstitial() {
+        ZplayDebug.d(TAG, "Playable Interstitial onPrepareMedia: ", onoff);
         if (playable != null && listener != null) {
-            ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
+            ZplayDebug.d(TAG, "Playable Interstitial REQUEST_NEXT_MEDIA ", onoff);
             playable.requestPlayableAds(provoder.getKey2(),listener);
         }
     }
 
     @Override
-    protected void onShowMedia() {
+    protected void onShowInterstitialLayer(Activity activity) {
         PlayableAds.getInstance().presentPlayableAD(provoder.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
                 ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
-                layerIncentived();
+//                layerIncentived();
             }
 
             @Override
@@ -58,7 +57,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoFinished() {
                 super.onVideoFinished();
-                ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
+                ZplayDebug.d(TAG, "Playable Interstitial Finish: ", onoff);
                 layerMediaEnd();
                 layerClosed();
             }
@@ -66,34 +65,36 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoStart() {
                 super.onVideoStart();
-                ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
+                ZplayDebug.d(TAG, "Playable Interstitial Start: ", onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override
             public void onLandingPageInstallBtnClicked() {
-                layerClicked();
+                layerClicked(-99f,-99f);
                 super.onLandingPageInstallBtnClicked();
             }
         });
-
     }
 
     @Override
-    protected boolean isMediaReady() {
+    protected boolean isInterstitialLayerReady() {
         if(playable.canPresentAd(provoder.getKey2())){
-            ZplayDebug.d(TAG, "Playable media Video isMediaReady true", onoff);
+            ZplayDebug.d(TAG, "Playable Interstitial isMediaReady true", onoff);
             return true;
         }else{
             return false;
         }
     }
 
+
+
+
     @Override
     protected void init() {
         try {
             playable = PlayableAds.init(getActivity(), provoder.getKey1());
+            PlayableAds.getInstance().setAutoLoadAd(false);
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
@@ -113,7 +114,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             };
         }catch (Exception e)
         {
-            ZplayDebug.e(TAG, "Playable media init error ",e, onoff);
+            ZplayDebug.e(TAG, "Playable Interstitial init error ",e, onoff);
         }
     }
 
@@ -121,12 +122,12 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     protected void callOnActivityDestroy() {
         try {
             if (playable != null) {
-                ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);
+                ZplayDebug.d(TAG, "Playable Interstitial onDestroy ", onoff);
                 playable.onDestroy();
             }
         }catch (Exception e)
         {
-            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ",e, onoff);
+            ZplayDebug.e(TAG, "Playable Interstitial callOnActivityDestroy error : ",e, onoff);
         }
     }
 
@@ -138,5 +139,10 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public boolean onActivityBackPressed() {
+        return false;
     }
 }
