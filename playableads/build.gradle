@@ -13,6 +13,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
+    lintOptions {
+        abortOnError false
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -29,7 +33,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:25.3.1'
     testCompile 'junit:junit:4.12'
     compile 'com.yumimobi.ads:mediation:3.3.2.+'
-    compile 'com.playableads:playableads:1.2.9'
+    compile 'com.playableads:playableads:2.0.1'
 }
 
 String version = project.properties['playableads.version']
