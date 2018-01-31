@@ -7,7 +7,6 @@ import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
@@ -59,7 +58,6 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable Interstitial Finish: ", onoff);
                 layerMediaEnd();
-                layerClosed();
             }
 
             @Override
@@ -73,6 +71,13 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
             public void onLandingPageInstallBtnClicked() {
                 layerClicked(-99f,-99f);
                 super.onLandingPageInstallBtnClicked();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                ZplayDebug.d(TAG, "Playable Interstitial AdClosed: ", onoff);
+                layerClosed();
             }
         });
     }
