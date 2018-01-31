@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.playableads;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
@@ -60,7 +58,6 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
                 layerMediaEnd();
-                layerClosed();
             }
 
             @Override
@@ -69,6 +66,13 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
                 layerExposure();
                 layerMediaStart();
+            }
+
+            @Override
+            public void onAdClosed() {
+                super.onAdClosed();
+                ZplayDebug.d(TAG, "Playable media Video AdClosed: ", onoff);
+                layerClosed();
             }
 
             @Override
