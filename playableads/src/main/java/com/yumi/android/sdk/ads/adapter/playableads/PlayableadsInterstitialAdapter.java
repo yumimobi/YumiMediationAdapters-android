@@ -103,16 +103,18 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
-                    ZplayDebug.d(TAG, "Playable media Ready ", onoff);
+                    ZplayDebug.d(TAG, "Playable Interstitial Ready ", onoff);
                     layerPrepared();
                 }
                 @Override
                 public void onLoadFailed(int erroCode, String s) {
-                    ZplayDebug.d(TAG, "Playable media onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
-                    if (erroCode == 204) {
+                    ZplayDebug.d(TAG, "Playable Interstitial onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
+                    if (erroCode == 2004) { //ads has filled
+                        layerPrepared();
+                        ZplayDebug.d(TAG, "Playable Interstitial Ready onLoadFailed", onoff);
+                    } else if (erroCode == 2005) { //no ad
                         layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-
-                    } else if (erroCode == 400) {
+                    } else {
                         layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     }
                 }
