@@ -107,10 +107,12 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 @Override
                 public void onLoadFailed(int erroCode, String s) {
                     ZplayDebug.d(TAG, "Playable media onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
-                    if (erroCode == 204) {
+                    if (erroCode == 2004) { //ads has filled
+                        layerPrepared();
+                        ZplayDebug.d(TAG, "Playable media Ready onLoadFailed", onoff);
+                    } else if (erroCode == 2005) { //no ad
                         layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-
-                    } else if (erroCode == 400) {
+                    } else {
                         layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     }
                 }
