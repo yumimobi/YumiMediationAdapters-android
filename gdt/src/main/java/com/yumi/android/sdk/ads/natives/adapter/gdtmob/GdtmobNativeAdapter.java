@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.NativeReportRunnable;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -93,12 +94,22 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
 
             @Override
             public void onNoAD(AdError adError) {
+                if (adError == null){
+                    ZplayDebug.d(TAG, "GDT nativead onNoAD adError = null", onoff);
+                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    return;
+                }
                 ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
                 layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
 
             @Override
             public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+                if (adError == null){
+                    ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
+                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    return;
+                }
                 ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
                 layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
