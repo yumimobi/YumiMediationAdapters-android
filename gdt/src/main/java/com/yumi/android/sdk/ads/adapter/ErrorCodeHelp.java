@@ -8,14 +8,11 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 public class ErrorCodeHelp {
     public static LayerErrorCode decodeErrorCode(int arg0) {
-        if (arg0 == 500) {
+        if (arg0 == 4003) {
             return LayerErrorCode.ERROR_INVALID;
         }
-        if (arg0 == 501) {
+        if (arg0 == 5004) {
             return LayerErrorCode.ERROR_NO_FILL;
-        }
-        if (arg0 >= 400 && arg0 < 500) {
-            return LayerErrorCode.ERROR_NETWORK_ERROR;
         }
         return LayerErrorCode.ERROR_INTERNAL;
     }

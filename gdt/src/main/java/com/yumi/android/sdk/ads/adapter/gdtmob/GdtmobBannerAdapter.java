@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.qq.e.ads.banner.ADSize;
 import com.qq.e.ads.banner.BannerADListener;
 import com.qq.e.ads.banner.BannerView;
+import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
@@ -60,10 +61,16 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 //				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(arg0.getErrorCode()));
 //			}
 
+//			@Override
+//			public void onNoAD(int errorCode) {
+//				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + errorCode, onoff);
+//				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+//			}
+
 			@Override
-			public void onNoAD(int errorCode) {
-				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + errorCode, onoff);
-				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+			public void onNoAD(AdError adError) {
+				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
 			}
 
 			@Override

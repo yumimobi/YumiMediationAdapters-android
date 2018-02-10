@@ -6,6 +6,7 @@ import android.os.Message;
 
 import com.qq.e.ads.interstitial.InterstitialAD;
 import com.qq.e.ads.interstitial.InterstitialADListener;
+import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -49,7 +50,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected final void callOnActivityDestroy() {
         if (interstitial != null) {
             interstitial.closePopupWindow();
-            interstitial.destory();
+            interstitial.destroy();
         }
     }
 
@@ -95,10 +96,16 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 //				ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + arg0.getErrorCode()+" ErrorMessage:"+arg0.getErrorMsg(), onoff);
 //				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(arg0.getErrorCode()));
 //			}
+//            @Override
+//            public void onNoAD(int errorCode) {
+//                ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + errorCode, onoff);
+//                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+//            }
+
             @Override
-            public void onNoAD(int errorCode) {
-                ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + errorCode, onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+            public void onNoAD(AdError adError) {
+                ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
 
             @Override
@@ -127,7 +134,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onADClosed() {
                 if (interstitial != null) {
-                    interstitial.destory();
+                    interstitial.destroy();
                 }
                 ZplayDebug.d(TAG, "gdt interstitial closed", onoff);
                 layerClosed();

@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
@@ -91,31 +92,16 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
             }
 
             @Override
-            public void onNoAD(int errorCode) {
-
-                ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + errorCode, onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+            public void onNoAD(AdError adError) {
+                ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
-
 
             @Override
-            public void onADError(NativeADDataRef nativeADDataRef, int errorCode) {
-                ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + errorCode, onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(errorCode));
+            public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+                ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
             }
-
-//            @Override
-//            public void onNoAD(AdError adError) {
-//                ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
-//                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
-//            }
-
-//            @Override
-//            public void onADError(NativeADDataRef nativeADDataRef, AdError adError)
-//            {
-//                ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode()+" ErrorMessage:"+adError.getErrorMsg(), onoff);
-//                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
-//            }
         });
     }
 
