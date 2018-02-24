@@ -53,6 +53,8 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             if(vungle==null) {
                 vungle = VungleInstantiate.getInstantiate().getVunglePub();
             }
+            vungle.loadAd(getProvider().getKey3());
+            ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:"+getProvider().getKey3(), onoff);
             if (vungle.isAdPlayable(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);
                 layerPrepared();

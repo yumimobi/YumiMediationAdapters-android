@@ -55,6 +55,8 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             if(vungle==null) {
                 vungle = VungleInstantiate.getInstantiate().getVunglePub();
             }
+            vungle.loadAd(getProvider().getKey2());
+            ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:"+getProvider().getKey2(), onoff);
             if (vungle.isAdPlayable(getProvider().getKey2())) {
                 ZplayDebug.d(TAG, "vungle media prapared", onoff);
                 layerPrepared();
