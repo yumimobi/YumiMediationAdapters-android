@@ -56,7 +56,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 vungle = VungleInstantiate.getInstantiate().getVunglePub();
             }
             vungle.loadAd(getProvider().getKey2());
-            ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:"+getProvider().getKey2(), onoff);
+            ZplayDebug.d(TAG, "vungle onPrepareMedia loadAd:"+getProvider().getKey2(), onoff);
             if (vungle.isAdPlayable(getProvider().getKey2())) {
                 ZplayDebug.d(TAG, "vungle media prapared", onoff);
                 layerPrepared();
@@ -119,17 +119,28 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     //（如果是奖励广告）。
                     // 如果 wasCallToActionClicked 为 true，表示用户点击了广告中的
                     // 行动号召按钮。
-                    if (wasCallToActionClicked) {
-                        ZplayDebug.d(TAG, "vungle media clicked", onoff);
-                        layerClicked();
-                    }
-                    if (wasSuccessfulView) {
-                        ZplayDebug.d(TAG, "vungle media get reward", onoff);
-                        layerIncentived();
-                    }
-                    ZplayDebug.d(TAG, "vungle media closed", onoff);
-                    layerMediaEnd();
-                    layerClosed();
+                    final boolean clicked = wasCallToActionClicked;
+                    final boolean incentived = wasSuccessfulView;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (clicked) {
+                                    ZplayDebug.d(TAG, "vungle media clicked", onoff);
+                                    layerClicked();
+                                }
+                                if (incentived) {
+                                    ZplayDebug.d(TAG, "vungle media get reward", onoff);
+                                    layerIncentived();
+                                }
+                                ZplayDebug.d(TAG, "vungle media closed", onoff);
+                                layerMediaEnd();
+                                layerClosed();
+                            } catch (Exception e) {
+                                ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
+                            }
+                        }
+                    });
                 }
             }
 
