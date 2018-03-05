@@ -25,7 +25,7 @@ public class VungleInstantiate {
 
 	private final VunglePub vungle = VunglePub.getInstance();
 
-	public void initVungle(Activity activity, String appid, String placementId1, String placementId2) {
+	public void initVungle(Activity activity, String appid, final String placementId1,final String placementId2) {
 		try {
 			if (!vungle.isInitialized()) {
 				ZplayDebug.d(TAG, "vungle initVungle appid:" + appid + "  placementId1:" + placementId1 + "  placementId2:" + placementId2, onoff);
@@ -36,6 +36,12 @@ public class VungleInstantiate {
 						overrideConfig.setSoundEnabled(true);
 						overrideConfig.setOrientation(Orientation.autoRotate);
 						ZplayDebug.d(TAG, "vungle initVungleSDK onSuccess()", onoff);
+						if (placementId1 != null && "".equals(placementId1)) {
+							vungle.loadAd(placementId1);
+						}
+						if (placementId2 != null && "".equals(placementId2)) {
+							vungle.loadAd(placementId2);
+						}
 					}
 					@Override
 					public void onFailure(Throwable e) {
