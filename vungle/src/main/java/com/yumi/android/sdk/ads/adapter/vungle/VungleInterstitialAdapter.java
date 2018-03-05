@@ -128,13 +128,23 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     //（如果是奖励广告）。
                     // 如果 wasCallToActionClicked 为 true，表示用户点击了广告中的
                     // 行动号召按钮。
-                    if (wasCallToActionClicked) {
-                        ZplayDebug.d(TAG, "vungle Interstitial clicked", onoff);
-                        layerClicked(-99f, -99f);
-                    }
-                    ZplayDebug.d(TAG, "vungle Interstitial closed", onoff);
-                    layerMediaEnd();
-                    layerClosed();
+                    final boolean clicked=wasCallToActionClicked;
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                if (clicked) {
+                                    ZplayDebug.d(TAG, "vungle Interstitial clicked", onoff);
+                                    layerClicked(-99f, -99f);
+                                }
+                                ZplayDebug.d(TAG, "vungle Interstitial closed", onoff);
+                                layerMediaEnd();
+                                layerClosed();
+                            } catch (Exception e) {
+                                ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
+                            }
+                        }
+                    });
                 }
             }
 
