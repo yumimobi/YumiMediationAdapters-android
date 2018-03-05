@@ -27,7 +27,7 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.yumimobi.ads:mediation:3.3.2.+'
-    compile 'com.yumimobi.ads.thirdparty:mobvista:8.7.4.+'
+    compile 'com.yumimobi.ads.thirdparty:mobvista:8.7.4.1'
 }
 
 String version = project.properties['mobvista.version']
