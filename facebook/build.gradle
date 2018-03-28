@@ -27,7 +27,8 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.facebook.android:audience-network-sdk:4.26.1'
-    compile 'com.yumimobi.ads:mediation:3.3.4.+'
+//    compile 'com.yumimobi.ads:mediation:3.3.4.+'
+    compile YUMI_MEDIATION_COMPILE
 }
 
 String version = project.properties['facebook.version']
