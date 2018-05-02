@@ -1,5 +1,4 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.yumi.android.sdk.ads.adapter.xiaomi">
     <!--<uses-permission android:name= "android.permission.GET_TASKS"/>-->
     <application>
