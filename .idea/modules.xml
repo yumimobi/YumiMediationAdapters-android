@@ -16,6 +16,7 @@
       <module fileurl="file://$PROJECT_DIR$/mobvista/mobvista.iml" filepath="$PROJECT_DIR$/mobvista/mobvista.iml" />
       <module fileurl="file://$PROJECT_DIR$/mraid/mraid.iml" filepath="$PROJECT_DIR$/mraid/mraid.iml" />
       <module fileurl="file://$PROJECT_DIR$/oneway/oneway.iml" filepath="$PROJECT_DIR$/oneway/oneway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/playableads/playableads.iml" filepath="$PROJECT_DIR$/playableads/playableads.iml" />
       <module fileurl="file://$PROJECT_DIR$/startapp/startapp.iml" filepath="$PROJECT_DIR$/startapp/startapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/toutiao/toutiao.iml" filepath="$PROJECT_DIR$/toutiao/toutiao.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />

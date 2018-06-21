@@ -99,7 +99,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     protected void init() {
         try {
             playable = PlayableAds.init(getActivity(), provoder.getKey1());
-            PlayableAds.getInstance().setAutoLoadAd(false);
+//            PlayableAds.getInstance().setAutoLoadAd(false);
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
