@@ -111,11 +111,13 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Interstitial init  sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
-        createAppLovinListener();
-        interstitialAd = AppLovinInterstitialAd.create(appLovinSDK, getActivity());
-        interstitialAd.setAdClickListener(adClickListener);
-        interstitialAd.setAdDisplayListener(adDisplayListener);
-        interstitialAd.setAdVideoPlaybackListener(adVideoPlaybackListener);
+        if(appLovinSDK!=null) {
+            createAppLovinListener();
+            interstitialAd = AppLovinInterstitialAd.create(appLovinSDK, getActivity());
+            interstitialAd.setAdClickListener(adClickListener);
+            interstitialAd.setAdDisplayListener(adDisplayListener);
+            interstitialAd.setAdVideoPlaybackListener(adVideoPlaybackListener);
+        }
     }
 
     private void createAppLovinListener() {
