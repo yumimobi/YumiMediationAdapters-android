@@ -92,9 +92,11 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Media init sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
-        createMediaListener();
-        mediaAd = AppLovinIncentivizedInterstitial.create(getProvider().getKey2(), appLovinSDK);
-        preloadAd();
+        if(appLovinSDK!=null) {
+            createMediaListener();
+            mediaAd = AppLovinIncentivizedInterstitial.create(getProvider().getKey2(), appLovinSDK);
+            preloadAd();
+        }
     }
 
     private void preloadAd() {
