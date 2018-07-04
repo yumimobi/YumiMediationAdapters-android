@@ -54,13 +54,13 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "AppLovin request new interstitial ", onoff);
         isFirstClick = false;
-        if (appLovinSDK != null) {
-            if(isPrepared && currentAd!=null)
-            {
+        String zoneId = getProvider().getKey2();
+        if (appLovinSDK != null && zoneId != null && !"".equals(zoneId)) {
+            if (isPrepared && currentAd != null) {
                 layerPrepared();
             }
-            ZplayDebug.d(TAG, "AppLovin loadNextAdForZoneId ZoneId : " + getProvider().getKey2(), onoff);
-            appLovinSDK.getAdService().loadNextAdForZoneId(getProvider().getKey2(), new AppLovinAdLoadListener() {
+            ZplayDebug.d(TAG, "AppLovin loadNextAdForZoneId ZoneId : " + zoneId, onoff);
+            appLovinSDK.getAdService().loadNextAdForZoneId(zoneId, new AppLovinAdLoadListener() {
                 @Override
                 public void adReceived(AppLovinAd ad) {
                     ZplayDebug.i(TAG, "AppLovin Interstitial adReceived :" + getProvider().getKey2(), onoff);
@@ -111,7 +111,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Interstitial init  sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
-        if(appLovinSDK!=null) {
+        if (appLovinSDK != null) {
             createAppLovinListener();
             interstitialAd = AppLovinInterstitialAd.create(appLovinSDK, getActivity());
             interstitialAd.setAdClickListener(adClickListener);
