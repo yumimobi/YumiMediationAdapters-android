@@ -92,9 +92,10 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Media init sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
-        if(appLovinSDK!=null) {
+        String zoneId = getProvider().getKey2();
+        if (appLovinSDK != null && zoneId != null && !"".equals(zoneId)) {
             createMediaListener();
-            mediaAd = AppLovinIncentivizedInterstitial.create(getProvider().getKey2(), appLovinSDK);
+            mediaAd = AppLovinIncentivizedInterstitial.create(zoneId, appLovinSDK);
             preloadAd();
         }
     }
@@ -199,8 +200,8 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     private void requestAD(int delaySecond) {
         try {
             ZplayDebug.d(TAG, "AppLovin media requestAD delaySecond : " + delaySecond, onoff);
-            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA))
-            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA))
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
         } catch (Exception e) {
             ZplayDebug.e(TAG, "AppLovin media requestAD error ", e, onoff);
         }
