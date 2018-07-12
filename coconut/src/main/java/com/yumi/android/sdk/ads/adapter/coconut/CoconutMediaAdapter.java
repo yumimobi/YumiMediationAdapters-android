@@ -107,8 +107,8 @@ public class CoconutMediaAdapter extends YumiCustomerMediaAdapter{
             @Override
             public void onLandingPageClose(boolean status) {
                 //直接关闭为false，点击下载按钮关闭为true
+                layerIncentived();
                 layerClosed();
-                layerIncentived();//依赖三方SDK的关闭落地页给出奖励？？？？
 
             }
 
