@@ -22,6 +22,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private Activity activity;
     private OnewaySdkListener listener;
     private boolean isReady = false;
+
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
@@ -45,7 +46,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         creatListener();
-        OnewaySdk.init(activity,getProvider().getKey1(),listener, YumiDebug.isDebugMode());
+        OnewaySdk.init(activity, getProvider().getKey1(), listener, YumiDebug.isDebugMode());
     }
 
     private void creatListener() {
@@ -62,6 +63,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "Oneway media shown", onoff);
                 layerExposure();
                 layerMediaStart();
+                isReady = false;
             }
 
             @Override
@@ -74,13 +76,14 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onSdkError(OnewaySdkError onewaySdkError, String s) {
+                ZplayDebug.d(TAG, "Oneway media onSdkError onewaySdkError : " + onewaySdkError + "    s : " + s, onoff);
                 layerPreparedFailed(decodeError(onewaySdkError));
             }
         };
     }
 
     private LayerErrorCode decodeError(OnewaySdkError onewaySdkError) {
-        if(onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)){
+        if (onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)) {
             return LayerErrorCode.ERROR_NO_FILL;
         }
         if (onewaySdkError.equals(OnewaySdkError.INITIALIZE_FAILED)) {
