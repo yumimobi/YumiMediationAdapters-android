@@ -18,7 +18,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     private PlayableAds playable;
     private Activity activity;
     private YumiProviderBean provoder;
-    private String TAG = "PlayableadsMediaAdapter";
+    private String TAG = "PlayableadsInterstitialAdapter";
 
     private static final int REQUEST_NEXT_MEDIA = 0x001;
 

@@ -21,7 +21,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private String TAG = "OnewayMediaAdapter";
     private Activity activity;
     private OnewaySdkListener listener;
-    private boolean isReady = false;
+
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
@@ -39,13 +39,13 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        return isReady;
+        return OnewaySdk.isPlacementAdPlayable();
     }
 
     @Override
     protected void init() {
         creatListener();
-        OnewaySdk.init(activity,getProvider().getKey1(),listener, YumiDebug.isDebugMode());
+        OnewaySdk.init(activity, getProvider().getKey1(), listener, YumiDebug.isDebugMode());
     }
 
     private void creatListener() {
@@ -53,7 +53,6 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdReady(String placementID) {
                 ZplayDebug.d(TAG, "Oneway media prepared", onoff);
-                isReady = true;
                 layerPrepared();
             }
 
@@ -68,19 +67,22 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdFinish(String placementID, OnewayVideoFinishType onewayVideoFinishType) {
                 ZplayDebug.d(TAG, "Oneway media closed", onoff);
                 layerMediaEnd();
+                if (onewayVideoFinishType == OnewayVideoFinishType.COMPLETED) {
+                    layerIncentived();
+                }
                 layerClosed();
-                layerIncentived();
             }
 
             @Override
             public void onSdkError(OnewaySdkError onewaySdkError, String s) {
+                ZplayDebug.d(TAG, "Oneway media onSdkError onewaySdkError : " + onewaySdkError + "    s : " + s, onoff);
                 layerPreparedFailed(decodeError(onewaySdkError));
             }
         };
     }
 
     private LayerErrorCode decodeError(OnewaySdkError onewaySdkError) {
-        if(onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)){
+        if (onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)) {
             return LayerErrorCode.ERROR_NO_FILL;
         }
         if (onewaySdkError.equals(OnewaySdkError.INITIALIZE_FAILED)) {
