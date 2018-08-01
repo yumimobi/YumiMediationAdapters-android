@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.applovin;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.applovin.adview.AppLovinIncentivizedInterstitial;
 import com.applovin.sdk.AppLovinAd;
@@ -34,20 +32,6 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     private AppLovinAdClickListener adClickListener;
 
     private boolean isFirstClick = false;
-
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    preloadAd();
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        ;
-    };
 
     protected ApplovinMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -192,19 +176,8 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
                 } else {
                     layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                 }
-                requestAD(15);
             }
         };
-    }
-
-    private void requestAD(int delaySecond) {
-        try {
-            ZplayDebug.d(TAG, "AppLovin media requestAD delaySecond : " + delaySecond, onoff);
-            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA))
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "AppLovin media requestAD error ", e, onoff);
-        }
     }
 
     @Override
@@ -212,7 +185,6 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         ApplovinExtraHolder.destroyHolder();
         appLovinSDK = null;
         mediaAd = null;
-        mHandler.removeMessages(REQUEST_NEXT_MEDIA);
     }
 
 }
