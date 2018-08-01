@@ -2,5 +2,6 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/adcolony/src/main/java/com/yumi/android/sdk/ads/adapter/adcolony/AdcolonyMediaAdapter.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/ksyun/libs/ksc_sdk_v403.aar" charset="US-ASCII" />
   </component>
 </project>
