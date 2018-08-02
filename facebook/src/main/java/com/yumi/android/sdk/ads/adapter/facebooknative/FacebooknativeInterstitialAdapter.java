@@ -142,6 +142,7 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
 
         // Add the AdChoices icon
         LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(R.id.ad_choices_container);
+        adChoicesContainer.removeAllViews();
         AdChoicesView adChoicesView = new AdChoicesView(getActivity(), nativeAd, true);
         adChoicesContainer.addView(adChoicesView, 0);
 
