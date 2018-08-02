@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
-import com.mobvista.msdk.MobVistaSDK;
-import com.mobvista.msdk.out.MVRewardVideoHandler;
-import com.mobvista.msdk.out.MobVistaSDKFactory;
-import com.mobvista.msdk.out.RewardVideoListener;
+import com.mintegral.msdk.MIntegralSDK;
+import com.mintegral.msdk.out.MIntegralSDKFactory;
+import com.mintegral.msdk.out.MTGRewardVideoHandler;
+import com.mintegral.msdk.out.RewardVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
@@ -22,7 +22,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "MobvistaMediaAdapter";
     private static final int REQUEST_NEXT_MEDIA = 0x001;
-    private MVRewardVideoHandler mMvRewardVideoHandler;
+    private MTGRewardVideoHandler mMvRewardVideoHandler;
 
     protected MobvistaMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -38,7 +38,9 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 default:
                     break;
             }
-        };
+        }
+
+        ;
     };
 
     @Override
@@ -52,8 +54,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 initHandler();
                 mMvRewardVideoHandler.load();
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media onPrepareMedia error:", e, onoff);
         }
     }
@@ -64,21 +65,20 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
             if (mMvRewardVideoHandler != null) {
                 if (mMvRewardVideoHandler.isReady()) {
                     mMvRewardVideoHandler.show(getProvider().getKey4());//"rewardid"
-                    ZplayDebug.d(TAG, "Mobvista media onShowMedia true", onoff);
+                    ZplayDebug.d(TAG, "Mobvista media onShowMedia true : " + getProvider().getKey4(), onoff);
                 } else {
                     mMvRewardVideoHandler.load();
                     ZplayDebug.d(TAG, "Mobvista media onShowMedia false", onoff);
                 }
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media onShowMedia error:", e, onoff);
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-        if(mMvRewardVideoHandler!=null) {
+        if (mMvRewardVideoHandler != null) {
             ZplayDebug.d(TAG, "Mobvista media isMediaReady true", onoff);
             return mMvRewardVideoHandler.isReady();
         }
@@ -89,12 +89,12 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         try {
-            MobVistaSDK sdk = MobVistaSDKFactory.getMobVistaSDK();
-            Map<String, String> map = sdk.getMVConfigurationMap(getProvider().getKey1(), getProvider().getKey2()); //appId, appKey
+            ZplayDebug.d(TAG, "Mobvista media init appId : " + getProvider().getKey1() + "   || appKey : " + getProvider().getKey2(), onoff);
+            MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
+            Map<String, String> map = sdk.getMTGConfigurationMap(getProvider().getKey1(), getProvider().getKey2()); //appId, appKey
             sdk.init(map, getContext());
             initHandler();
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media init error:", e, onoff);
         }
     }
@@ -116,25 +116,25 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
     private void initHandler() {
         try {
-            mMvRewardVideoHandler = new MVRewardVideoHandler(getActivity(), getProvider().getKey3()); //UnitId
+            mMvRewardVideoHandler = new MTGRewardVideoHandler(getActivity(), getProvider().getKey3()); //UnitId
             mMvRewardVideoHandler.setRewardVideoListener(new RewardVideoListener() {
 
                 @Override
                 public void onVideoLoadSuccess(String unitId) {
-                    ZplayDebug.d(TAG, "Mobvista media onVideoLoadSuccess unitId:"+unitId, onoff);
+                    ZplayDebug.d(TAG, "Mobvista media onVideoLoadSuccess unitId:" + unitId, onoff);
                     layerPrepared();
                 }
 
                 @Override
                 public void onVideoLoadFail(String errorMsg) {
-                    ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:"+errorMsg, onoff);
+                    ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
+                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                     afreshRequestAD(30);
                 }
 
                 @Override
                 public void onShowFail(String errorMsg) {
-                    ZplayDebug.d(TAG, "Mobvista media onShowFail errorMsg:"+errorMsg, onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                    ZplayDebug.d(TAG, "Mobvista media onShowFail errorMsg:" + errorMsg, onoff);
                     afreshRequestAD(15);
                 }
 
@@ -148,8 +148,8 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 @Override
                 public void onAdClose(boolean isCompleteView, String RewardName, float RewardAmout) {
                     //三个参数为：是否播放完，奖励名，奖励积分
-                    ZplayDebug.d(TAG, "Mobvista media onAdClose isCompleteView :" +isCompleteView+ "   RewardName:" + RewardName + "   RewardAmout:" + RewardAmout, onoff);
-                    if(isCompleteView){
+                    ZplayDebug.d(TAG, "Mobvista media onAdClose isCompleteView :" + isCompleteView + "   RewardName:" + RewardName + "   RewardAmout:" + RewardAmout, onoff);
+                    if (isCompleteView) {
                         layerIncentived();
                         layerMediaEnd();
                     }
@@ -158,7 +158,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
                 @Override
                 public void onVideoAdClicked(String unitId) {
-                    ZplayDebug.d(TAG, "Mobvista media onVideoAdClicked unitId:"+unitId, onoff);
+                    ZplayDebug.d(TAG, "Mobvista media onVideoAdClicked unitId:" + unitId, onoff);
                     layerClicked();
                 }
 
@@ -172,14 +172,12 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
      * Mobvista SDK 延时从新请求广告，（请求失败和展示失败时需要手动重新请求）
      * @param delaySecond  延迟时间，单位秒
      */
-    private void afreshRequestAD(int delaySecond)
-    {
+    private void afreshRequestAD(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond"+delaySecond, onoff);
+            ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond" + delaySecond, onoff);
             mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "Mobvista media requestAD error ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "Mobvista media requestAD error ", e, onoff);
         }
     }
 }
