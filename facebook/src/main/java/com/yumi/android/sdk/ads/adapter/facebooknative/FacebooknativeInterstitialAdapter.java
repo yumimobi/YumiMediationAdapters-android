@@ -77,13 +77,13 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
             ZplayDebug.d(TAG, "facebook native Interstitial init", onoff);
             LayoutInflater inflater = LayoutInflater.from(activity);
             adView = (LinearLayout) inflater.inflate(R.layout.ad_interstitial_layout, null, false);
-            createBannerListener();
+            createListener();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook native Interstitial init error :", e, false);
         }
     }
 
-    private void createBannerListener() {
+    private void createListener() {
         linstener = new NativeAdListener() {
             @Override
             public void onMediaDownloaded(Ad ad) {
