@@ -125,8 +125,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
         clickableViews.add(nativeAdTitle);
         clickableViews.add(nativeAdCallToAction);
         nativeBannerAd.registerViewForInteraction(adView, nativeAdIconView, clickableViews);
-
-        sendChangeViewBeforePrepared(adView);
+        layerPrepared(adView, true);
     }
 
     @Override
