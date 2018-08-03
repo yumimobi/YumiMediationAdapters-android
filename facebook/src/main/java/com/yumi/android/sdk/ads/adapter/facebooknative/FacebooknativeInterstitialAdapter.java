@@ -1,34 +1,30 @@
 package com.yumi.android.sdk.ads.adapter.facebooknative;
 
 import android.app.Activity;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
-import com.facebook.ads.AdListener;
-import com.facebook.ads.AdSettings;
+import com.facebook.ads.AdIconView;
 import com.facebook.ads.MediaView;
-import com.facebook.ads.MediaViewListener;
 import com.facebook.ads.NativeAd;
-
-
+import com.facebook.ads.NativeAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeAdvancedIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-import static com.yumi.android.sdk.ads.adapter.facebooknative.R.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersititalAdapter {
     private String TAG = "FacebooknativeInterstitialAdapter";
-    private AdListener linstener;
+    private NativeAdListener linstener;
     private NativeAd nativeAd;
     private Activity activity;
     private LinearLayout adView;
@@ -37,33 +33,40 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     protected FacebooknativeInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
         this.activity = activity;
-        Log.e("sss", "FacebooknativeInterstitialAdapter in");
     }
 
     @Override
     protected void onPreparedNativeInterstitial() {
-        nativeAd = new NativeAd(getContext(), getProvider().getKey1());
-        nativeAd.setAdListener(linstener);
-        nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
+        try {
+            nativeAd = new NativeAd(getContext(), getProvider().getKey1());
+            nativeAd.setAdListener(linstener);
+            nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "facebook native Interstitial onPreparedNativeInterstitial error :", e, false);
+        }
     }
 
     @Override
     protected void NativeLayerPrepared(View view) {
+        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerPrepared", onoff);
         layerPrepared();
     }
 
     @Override
     protected void NativeLayerOnShow() {
+        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerOnShow", onoff);
         layerExposure();
     }
 
     @Override
     protected void calculateRequestSize() {
+        ZplayDebug.d(TAG, "facebook native Interstitial calculateRequestSize", onoff);
 
     }
 
     @Override
     protected void NativeLayerDismiss() {
+        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerDismiss", onoff);
         layerClosed();
     }
 
@@ -71,138 +74,108 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     @Override
     protected void init() {
         try {
-            String key1 = getProvider().getKey1();
-            ZplayDebug.d(TAG, "key1:" + key1, onoff);
+            ZplayDebug.d(TAG, "facebook native Interstitial init", onoff);
             LayoutInflater inflater = LayoutInflater.from(activity);
-            adView = (LinearLayout) inflater.inflate(layout.ad_unit_banner_new, null, false);
-            createBannerListener();
-
+            adView = (LinearLayout) inflater.inflate(R.layout.ad_interstitial_layout, null, false);
+            createListener();
         } catch (Exception e) {
-            e.printStackTrace();
-            ZplayDebug.e(TAG, "Init FacebooknativeInterstitial Faild", false);
+            ZplayDebug.e(TAG, "facebook native Interstitial init error :", e, false);
         }
     }
 
-    private void createBannerListener() {
-        linstener = new AdListener() {
+    private void createListener() {
+        linstener = new NativeAdListener() {
             @Override
-            public void onError(Ad ad, AdError adError) {
-                ZplayDebug.d(TAG, "FacebooknativeInterstitial  request failed :" + adError.getErrorMessage(), onoff);
-                decodeErrorCode(adError);
+            public void onMediaDownloaded(Ad ad) {
+                ZplayDebug.d(TAG, "facebook native Interstitial onMediaDownloaded", onoff);
+
             }
 
-            private LayerErrorCode decodeErrorCode(AdError arg1) {
-                if (arg1.equals(AdError.NETWORK_ERROR)) {
-                    return LayerErrorCode.ERROR_NETWORK_ERROR;
-                }
-                if (arg1.equals(AdError.NO_FILL)) {
-                    return LayerErrorCode.ERROR_NO_FILL;
-                }
-                return LayerErrorCode.ERROR_INTERNAL;
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                ZplayDebug.d(TAG, "facebook native Interstitial onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage(), onoff);
+                decodeErrorCode(adError);
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
+                ZplayDebug.d(TAG, "facebook native Interstitial onAdLoaded", onoff);
                 if (nativeAd == null || nativeAd != ad) {
                     // Race condition, load() called again before last ad was displayed
                     return;
                 }
                 // Unregister last ad
                 nativeAd.unregisterView();
-                inflateAd(nativeAd, adView);
+//                inflateAd(nativeAd, adView);
+                inflateAd(nativeAd);
             }
 
             @Override
             public void onAdClicked(Ad ad) {
-            //  requestSystemBrowser(nativeAd.getAdChoicesLinkUrl());
+                ZplayDebug.d(TAG, "facebook native Interstitial onAdClicked", onoff);
+                //  requestSystemBrowser(nativeAd.getAdChoicesLinkUrl());
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-            //Called immediately before an impression is logged.
+                ZplayDebug.d(TAG, "facebook native Interstitial onLoggingImpression", onoff);
+                //Called immediately before an impression is logged.
             }
         };
     }
 
-    private void inflateAd(NativeAd nativeAd, LinearLayout adView) {
-        // Create native UI using the ad metadata.
-        ImageView nativeAdIcon = (ImageView) adView.findViewById(id.native_ad_icon);
-        TextView nativeAdTitle = (TextView) adView.findViewById(id.native_ad_title);
-        TextView nativeAdBody = (TextView) adView.findViewById(id.native_ad_body);
-        MediaView nativeAdMedia = (MediaView) adView.findViewById(id.native_ad_media);
-        nativeAdMedia.setListener(new MediaViewListener() {
-            @Override
-            public void onVolumeChange(MediaView mediaView, float volume) {
-            }
-
-            @Override
-            public void onPause(MediaView mediaView) {
-            }
-
-            @Override
-            public void onPlay(MediaView mediaView) {
-            }
-
-            @Override
-            public void onFullscreenBackground(MediaView mediaView) {
-            }
-
-            @Override
-            public void onFullscreenForeground(MediaView mediaView) {
-            }
-
-            @Override
-            public void onExitFullscreen(MediaView mediaView) {
-            }
-
-            @Override
-            public void onEnterFullscreen(MediaView mediaView) {
-            }
-
-            @Override
-            public void onComplete(MediaView mediaView) {
-            }
-        });
-        nativeAdMedia.setAutoplay(AdSettings.isVideoAutoplay());
-        nativeAdMedia.setAutoplayOnMobile(AdSettings.isVideoAutoplayOnMobile());
-        TextView nativeAdSocialContext =
-                (TextView) adView.findViewById(id.native_ad_social_context);
-        Button nativeAdCallToAction = (Button) adView.findViewById(id.native_ad_call_to_action);
-
-        // Setting the Text
-        NativeAd.Image adIcon = nativeAd.getAdIcon();
-        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
-        nativeAdTitle.setText(nativeAd.getAdTitle());
-        if (adChoicesView == null) {
-            LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(id.ad_choices_container);
-            adChoicesView = new AdChoicesView(getContext(), nativeAd, true);
-            adChoicesContainer.addView(adChoicesView);
+    private LayerErrorCode decodeErrorCode(AdError arg1) {
+        if (arg1.equals(AdError.NETWORK_ERROR)) {
+            return LayerErrorCode.ERROR_NETWORK_ERROR;
         }
-        nativeAdBody.setText(nativeAd.getAdBody());
+        if (arg1.equals(AdError.NO_FILL)) {
+            return LayerErrorCode.ERROR_NO_FILL;
+        }
+        return LayerErrorCode.ERROR_INTERNAL;
+    }
+
+    private void inflateAd(NativeAd nativeAd) {
+        nativeAd.unregisterView();
+        // Add the Ad view into the ad container.
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+
+        // Add the AdChoices icon
+        LinearLayout adChoicesContainer = (LinearLayout) adView.findViewById(R.id.ad_choices_container);
+        adChoicesContainer.removeAllViews();
+        AdChoicesView adChoicesView = new AdChoicesView(getActivity(), nativeAd, true);
+        adChoicesContainer.addView(adChoicesView, 0);
+
+        // Create native UI using the ad metadata.
+        AdIconView nativeAdIcon = (AdIconView) adView.findViewById(R.id.native_ad_icon);
+        TextView nativeAdTitle = (TextView) adView.findViewById(R.id.native_ad_title);
+        MediaView nativeAdMedia = (MediaView) adView.findViewById(R.id.native_ad_media);
+        TextView nativeAdSocialContext = (TextView) adView.findViewById(R.id.native_ad_social_context);
+        TextView nativeAdBody = (TextView) adView.findViewById(R.id.native_ad_body);
+        TextView sponsoredLabel = (TextView) adView.findViewById(R.id.native_ad_sponsored_label);
+        Button nativeAdCallToAction = (Button) adView.findViewById(R.id.native_ad_call_to_action);
+
+        // Set the Text.
+        nativeAdTitle.setText(nativeAd.getAdvertiserName());
+        nativeAdBody.setText(nativeAd.getAdBodyText());
         nativeAdSocialContext.setText(nativeAd.getAdSocialContext());
+        nativeAdCallToAction.setVisibility(nativeAd.hasCallToAction() ? View.VISIBLE : View.INVISIBLE);
         nativeAdCallToAction.setText(nativeAd.getAdCallToAction());
-        nativeAdCallToAction.setVisibility(View.VISIBLE);
-        // Downloading and setting the cover image.
-        NativeAd.Image adCoverImage = nativeAd.getAdCoverImage();
-        Log.e("sss", "nativeAd.getAdCoverImage()" + nativeAd.getAdCoverImage().getUrl());
-        int bannerWidth = adCoverImage.getWidth();
-        int bannerHeight = adCoverImage.getHeight();
-        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
-        int mediaWidth = adView.getWidth() > 0 ? adView.getWidth() : metrics.widthPixels;
-        nativeAdMedia.setLayoutParams(new LinearLayout.LayoutParams(
-                mediaWidth,
-                Math.min(
-                        (int) (((double) mediaWidth / (double) bannerWidth) * bannerHeight),
-                        metrics.heightPixels / 3)));
+        sponsoredLabel.setText(nativeAd.getSponsoredTranslation());
 
-        nativeAdMedia.setNativeAd(nativeAd);
+        // Create a list of clickable views
+        List<View> clickableViews = new ArrayList<>();
+        clickableViews.add(nativeAdTitle);
+        clickableViews.add(nativeAdCallToAction);
 
-        // Wire up the View with the native ad, the whole nativeAdContainer will be clickable.
-        nativeAd.registerViewForInteraction(adView);
-//		calculateViewSize(mediaWidth,);
+        // Register the Title and CTA button to listen for clicks.
+        nativeAd.registerViewForInteraction(
+                adView,
+                nativeAdMedia,
+                nativeAdIcon,
+                clickableViews);
+
         loadData(adView);
-
     }
 
     @Override
