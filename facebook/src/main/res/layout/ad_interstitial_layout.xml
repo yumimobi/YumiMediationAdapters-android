@@ -1,69 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/native_ad_unit"
+    android:id="@+id/ad_unit"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp">
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
 
     <LinearLayout
-        android:id="@+id/ll_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:paddingBottom="10dp"
-        android:paddingTop="10dp">
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp">
 
-        <ImageView
+        <com.facebook.ads.AdIconView
             android:id="@+id/native_ad_icon"
             android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center_vertical"/>
+            android:layout_height="35dp" />
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_weight="11"
-            android:paddingLeft="5dp">
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp">
 
             <TextView
                 android:id="@+id/native_ad_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:maxLines="2"
+                android:lines="1"
                 android:textColor="@android:color/black"
-                android:textSize="15sp"/>
+                android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/sponsored_label"
+                android:id="@+id/native_ad_sponsored_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="Sponsored"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"/>
+                android:textSize="12sp" />
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/ad_choices_container"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="right"
-            android:layout_weight="1"
-            android:orientation="horizontal"
-            />
+            android:layout_marginRight="20dp"
+            android:gravity="end"
+            android:orientation="horizontal" />
+
     </LinearLayout>
 
     <com.facebook.ads.MediaView
         android:id="@+id/native_ad_media"
-        android:layout_width="wrap_content"
-        android:layout_height="100dp"
-        android:gravity="center"/>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,19 +73,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="3"
-            android:orientation="vertical"
-            android:paddingRight="10dp">
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/native_ad_social_context"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:lines="2"
-                android:paddingRight="5dp"
+                android:lines="1"
                 android:textColor="@android:color/darker_gray"
-                android:textSize="10sp"/>
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/native_ad_body"
@@ -97,7 +92,8 @@
                 android:gravity="center_vertical"
                 android:lines="2"
                 android:textColor="@android:color/black"
-                android:textSize="10sp"/>
+                android:textSize="12sp" />
+
         </LinearLayout>
 
         <Button
@@ -107,10 +103,12 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:background="#4286F4"
-            android:gravity="center"
             android:paddingLeft="3dp"
             android:paddingRight="3dp"
             android:textColor="@android:color/white"
-            android:textSize="11sp"/>
+            android:textSize="12sp"
+            android:visibility="gone" />
+
     </LinearLayout>
+
 </LinearLayout>
