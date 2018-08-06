@@ -68,7 +68,8 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
         createMediaListener();
         //设置SDK请求环境为线上环境。SDK的init初始化方法，如果不设置config，默认则为沙盒环境
         KsyunAdSdkConfig config = new KsyunAdSdkConfig();
-        config.setSdkEnvironment(KsyunAdSdkConfig.RELEASE_ENV);
+        config.setSdkEnvironment(KsyunAdSdkConfig.RELEASE_ENV); //正式环境
+//        config.setSdkEnvironment(KsyunAdSdkConfig.SANDBOX_ENV);  //测试环境
         //设置奖励视频展示过程中，允许出现关闭按钮
         config.setShowCloseBtnOfRewardVideo(false);
         //设置奖励视频展示过程中，出现关闭按钮的时间点
@@ -80,6 +81,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                 //SDK初始化成功，设置事件监听
                 KsyunAdSdk.getInstance().setAdListener(adListener);
                 KsyunAdSdk.getInstance().setRewardVideoAdListener(rewardVideoAdListener);
+                loadAd();
             }
 
             @Override
@@ -90,7 +92,8 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void loadAd() {
-        KsyunAdSdk.getInstance().loadAd(new IKsyunAdLoadListener() {
+        ZplayDebug.i(TAG, "Ksyun Media loadAd "+getProvider().getKey2(), onoff);
+        KsyunAdSdk.getInstance().loadAd(getProvider().getKey2(),new IKsyunAdLoadListener() {
             @Override
             public void onAdInfoSuccess() {
                 ZplayDebug.i(TAG, "Ksyun Media onAdInfoSuccess", onoff);
@@ -98,7 +101,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdInfoFailed(int erroCode, String erroMsg) {
-                ZplayDebug.i(TAG, "Ksyun Media onShowSuccess  erroCode: " + erroCode + "   erroMsg: " + erroMsg, onoff);
+                ZplayDebug.i(TAG, "Ksyun Media onAdInfoFailed  erroCode: " + erroCode + "   erroMsg: " + erroMsg, onoff);
                 if (erroCode == 2001) {
                     layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                 } else {
