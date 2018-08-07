@@ -14,9 +14,9 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AdIconView;
 import com.facebook.ads.NativeAdListener;
 import com.facebook.ads.NativeBannerAd;
+import com.yumi.android.sdk.ads.adapter.facebook.FacebookAdErrorHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.d(TAG, "facebook native banner onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage(), onoff);
-                layerPreparedFailed(decodeErrorCode(adError));
+                layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError));
             }
 
             @Override
@@ -81,16 +81,6 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
                 //Called immediately before an impression is logged.
             }
         };
-    }
-
-    private LayerErrorCode decodeErrorCode(AdError arg1) {
-        if (arg1.equals(AdError.NETWORK_ERROR)) {
-            return LayerErrorCode.ERROR_NETWORK_ERROR;
-        }
-        if (arg1.equals(AdError.NO_FILL)) {
-            return LayerErrorCode.ERROR_NO_FILL;
-        }
-        return LayerErrorCode.ERROR_INTERNAL;
     }
 
     private void inflateAd(NativeBannerAd nativeBannerAd) {
