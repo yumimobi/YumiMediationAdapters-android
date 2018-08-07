@@ -8,7 +8,6 @@ import com.facebook.ads.InterstitialAd;
 import com.facebook.ads.InterstitialAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 public class FacebookInterstitialAdapter extends
@@ -80,7 +79,7 @@ public class FacebookInterstitialAdapter extends
 				public void onError(Ad arg0, AdError arg1) {
 					ZplayDebug.d(TAG, "facebook interstitial failed " + arg1.getErrorMessage(), onoff);
 					
-					layerPreparedFailed(decodeErrorCode(arg1));
+					layerPreparedFailed(FacebookAdErrorHolder.decodeError(arg1));
 				}
 
 				@Override
@@ -114,15 +113,4 @@ public class FacebookInterstitialAdapter extends
 			};
 		}
 	}
-
-	protected LayerErrorCode decodeErrorCode(AdError arg1) {
-		if (arg1.equals(AdError.NETWORK_ERROR)) {
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		}
-		if (arg1.equals(AdError.NO_FILL)) {
-			return LayerErrorCode.ERROR_NO_FILL;
-		}
-		return LayerErrorCode.ERROR_INTERNAL;
-	}
-
 }

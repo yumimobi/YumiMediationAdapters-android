@@ -10,7 +10,6 @@ import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.S2SRewardedVideoAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 /**
@@ -36,7 +35,9 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
                 default:
                     break;
             }
-        };
+        }
+
+        ;
     };
 
     protected FacebookMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -89,8 +90,9 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "facebook media init", onoff);
         createListener();
     }
+
     private void createListener() {
-        listener=new S2SRewardedVideoAdListener() {
+        listener = new S2SRewardedVideoAdListener() {
             @Override
             public void onRewardServerFailed() {
                 ZplayDebug.i(TAG, "facebook media onRewardServerFailed", onoff);
@@ -124,18 +126,14 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                ZplayDebug.i(TAG, "facebook media onError ErrorCode : "+adError.getErrorCode()+"  || ErrorMessage : "+adError.getErrorMessage(), onoff);
-                if (adError.getErrorCode() == 1001) {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                }
+                ZplayDebug.i(TAG, "facebook media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
+                layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError));
                 requestAD(30);
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                ZplayDebug.i(TAG, "facebook media onAdLoaded PlacementId:"+ad.getPlacementId(), onoff);
+                ZplayDebug.i(TAG, "facebook media onAdLoaded PlacementId:" + ad.getPlacementId(), onoff);
                 layerPrepared();
             }
 
@@ -148,14 +146,12 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
 
-    private void requestAD(int delaySecond)
-    {
+    private void requestAD(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond"+delaySecond, onoff);
+            ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond" + delaySecond, onoff);
             mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "facebook media requestAD error ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "facebook media requestAD error ", e, onoff);
         }
     }
 
