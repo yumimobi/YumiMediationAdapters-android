@@ -62,6 +62,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdOpened() {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdOpened ", onoff);
                 layerExposure();
+                layerMediaStart();
             }
 
             /*Invoked when the RewardedVideo ad view is about to be closed.
@@ -69,6 +70,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdClosed() {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClosed ", onoff);
+                layerMediaEnd();
                 layerClosed();
             }
 
@@ -95,14 +97,12 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdStarted() {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdStarted ", onoff);
-                layerMediaStart();
             }
 
             /* Invoked when the video ad finishes plating. */
             @Override
             public void onRewardedVideoAdEnded() {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdEnded ", onoff);
-                layerMediaEnd();
             }
 
             /**
