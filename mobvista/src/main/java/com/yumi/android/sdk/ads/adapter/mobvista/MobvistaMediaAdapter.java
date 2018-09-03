@@ -129,7 +129,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
                     layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                    afreshRequestAD(30);
+//                    afreshRequestAD(30);
                 }
 
                 @Override

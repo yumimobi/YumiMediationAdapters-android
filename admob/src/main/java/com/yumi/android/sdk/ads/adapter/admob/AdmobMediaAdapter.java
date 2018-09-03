@@ -61,9 +61,9 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
         if (mAd.isLoaded()) {
            return true;
         }
-        if(isPreparedFailed) {
-            loadRewardedVideoAd();
-        }
+//        if(isPreparedFailed) {
+//            loadRewardedVideoAd();
+//        }
         return false;
     }
 
