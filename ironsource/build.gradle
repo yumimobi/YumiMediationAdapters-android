@@ -30,8 +30,8 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.yumimobi.ads.thirdparty:ironsource:6.7.10.0'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.yumimobi.ads.thirdparty:ironsource:6.7.10.0'
     compile YUMI_MEDIATION_COMPILE
 }
 
