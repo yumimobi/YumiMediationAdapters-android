@@ -69,16 +69,22 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onShowMedia() {
-        if (mAd.isLoaded()) {
-            mAd.show();
+        if(mAd!=null) {
+            if (mAd.isLoaded()) {
+                mAd.show();
+            }
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-        if (mAd.isLoaded()) {
-            return true;
+        if(mAd!=null) {
+            if (mAd.isLoaded()) {
+                ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
+                return true;
+            }
         }
+        ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
         return false;
     }
 
