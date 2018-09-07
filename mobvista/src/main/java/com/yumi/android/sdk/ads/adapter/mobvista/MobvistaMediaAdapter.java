@@ -102,6 +102,9 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void callOnActivityDestroy() {
         mMvRewardVideoHandler = null;
+        if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+            mHandler.removeMessages(REQUEST_NEXT_MEDIA);
+        }
     }
 
     @Override
@@ -129,7 +132,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
                     layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-//                    afreshRequestAD(30);
+                    afreshRequestAD(getProvider().getNextRequestInterval());
                 }
 
                 @Override
