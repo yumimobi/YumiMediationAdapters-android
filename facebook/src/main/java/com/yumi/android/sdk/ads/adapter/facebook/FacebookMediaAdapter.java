@@ -146,8 +146,10 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
 
     private void requestAD(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond" + delaySecond, onoff);
-            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook media requestAD error ", e, onoff);
         }
