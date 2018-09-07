@@ -79,10 +79,11 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected boolean isMediaReady() {
         if (mMvRewardVideoHandler != null) {
-            ZplayDebug.d(TAG, "Mobvista media isMediaReady true", onoff);
-            return mMvRewardVideoHandler.isReady();
+            boolean isReady= mMvRewardVideoHandler.isReady();
+            ZplayDebug.d(TAG, "Mobvista media isMediaReady "+isReady, onoff);
+            return isReady;
         }
-        ZplayDebug.d(TAG, "Mobvista media isMediaReady false", onoff);
+        ZplayDebug.d(TAG, "Mobvista media isMediaReady mMvRewardVideoHandler is null", onoff);
         return false;
     }
 
@@ -177,8 +178,10 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
      */
     private void afreshRequestAD(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond" + delaySecond, onoff);
-            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media requestAD error ", e, onoff);
         }

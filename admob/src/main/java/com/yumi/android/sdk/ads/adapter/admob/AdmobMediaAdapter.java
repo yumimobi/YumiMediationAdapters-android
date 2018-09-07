@@ -69,16 +69,22 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onShowMedia() {
-        if (mAd.isLoaded()) {
-            mAd.show();
+        if(mAd!=null) {
+            if (mAd.isLoaded()) {
+                mAd.show();
+            }
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-        if (mAd.isLoaded()) {
-            return true;
+        if(mAd!=null) {
+            if (mAd.isLoaded()) {
+                ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
+                return true;
+            }
         }
+        ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
         return false;
     }
 
@@ -150,8 +156,10 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     private void loadRewardedVideoAd(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "admob media Video requestAD delaySecond" + delaySecond, onoff);
-            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "admob media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "admob media requestAD error ", e, onoff);
         }
