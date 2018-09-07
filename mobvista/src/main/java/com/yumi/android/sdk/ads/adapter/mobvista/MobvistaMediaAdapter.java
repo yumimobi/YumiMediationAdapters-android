@@ -177,8 +177,10 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
      */
     private void afreshRequestAD(int delaySecond) {
         try {
-            ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond" + delaySecond, onoff);
-            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "Mobvista media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media requestAD error ", e, onoff);
         }
