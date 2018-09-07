@@ -35,9 +35,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
                 default:
                     break;
             }
-        }
-
-        ;
+        };
     };
 
     protected FacebookMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -128,7 +126,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.i(TAG, "facebook media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
                 layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError));
-//                requestAD(30);
+                requestAD(getProvider().getNextRequestInterval());
             }
 
             @Override
@@ -161,6 +159,9 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             if (rewardedVideoAd != null) {
                 rewardedVideoAd.destroy();
                 rewardedVideoAd = null;
+            }
+            if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                mHandler.removeMessages(REQUEST_NEXT_MEDIA);
             }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook media callOnActivityDestroy error ", e, onoff);

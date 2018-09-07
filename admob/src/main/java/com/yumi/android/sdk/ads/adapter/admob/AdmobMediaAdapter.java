@@ -1,6 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -21,8 +23,24 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "AdmobMediaAdapter";
     private RewardedVideoAd mAd;
     private RewardedVideoAdListener mediaListener;
-    private boolean isPreparedFailed=false;
 
+    private static final int REQUEST_NEXT_MEDIA = 0x001;
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REQUEST_NEXT_MEDIA:
+                    if (mAd != null && !mAd.isLoaded()) {
+                        ZplayDebug.d(TAG, "admob media loadRewardedVideoAd loadAd", onoff);
+                        mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
     //王雪提供
 //    private static final String AD_UNIT_ID = "ca-app-pub-1755510051935997/3006338664";
 //    private static final String APP_ID = "ca-app-pub-1755510051935997~6407649864";
@@ -46,7 +64,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        loadRewardedVideoAd();
+        loadRewardedVideoAd(1);
     }
 
     @Override
@@ -59,11 +77,8 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected boolean isMediaReady() {
         if (mAd.isLoaded()) {
-           return true;
+            return true;
         }
-//        if(isPreparedFailed) {
-//            loadRewardedVideoAd();
-//        }
         return false;
     }
 
@@ -76,7 +91,9 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-
+        if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+            mHandler.removeMessages(REQUEST_NEXT_MEDIA);
+        }
     }
 
     private void createMediaListener() {
@@ -89,7 +106,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdOpened() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked" , onoff);
+                ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked", onoff);
                 layerClicked();
             }
 
@@ -104,7 +121,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdClosed", onoff);
                 layerMediaEnd();
                 layerClosed();
-                loadRewardedVideoAd();
+                loadRewardedVideoAd(1);
             }
 
             @Override
@@ -121,23 +138,22 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
-                if ( AdRequest.ERROR_CODE_NO_FILL == errorCode) {
+                if (AdRequest.ERROR_CODE_NO_FILL == errorCode) {
                     layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                }else {
+                } else {
                     layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                 }
-                isPreparedFailed=true;
+                loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
         };
     }
-    private void loadRewardedVideoAd() {
-        ZplayDebug.d(TAG, "admob media loadRewardedVideoAd", onoff);
-        if (mAd != null) {
-            if (!mAd.isLoaded()) {
-                ZplayDebug.d(TAG, "admob media loadRewardedVideoAd loadAd", onoff);
-                isPreparedFailed=false;
-                mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
-            }
+
+    private void loadRewardedVideoAd(int delaySecond) {
+        try {
+            ZplayDebug.d(TAG, "admob media Video requestAD delaySecond" + delaySecond, onoff);
+            mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "admob media requestAD error ", e, onoff);
         }
     }
 }
