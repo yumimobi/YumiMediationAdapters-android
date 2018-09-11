@@ -1,0 +1,53 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    lintOptions {
+        abortOnError false
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.yumimobi.ads.thirdparty:vungle:6.3.17.0'
+//    compile 'com.yumimobi.ads:mediation:3.3.4.+'
+    compile YUMI_MEDIATION_COMPILE
+}
+
+String version = project.properties['vungle-china.version']
+
+ext {
+    bintrayRepo = 'ads'
+    bintrayName = project.name
+
+    publishedGroupId = 'com.yumimobi.ads.mediation'
+    artifactId = project.name
+    libraryVersion = version
+    libraryName = project.name
+    libraryDescription = 'Yumi Mediation vungle-china Adapter'
+
+    siteUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
+    gitUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
+}
+
+if (version) {
+//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+}
