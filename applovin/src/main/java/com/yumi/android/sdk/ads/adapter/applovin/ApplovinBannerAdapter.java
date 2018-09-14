@@ -34,11 +34,15 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
-        if (adView == null) {
-            init();
+        try {
+            ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
+            if (adView == null) {
+                init();
+            }
+            adView.loadNextAd();
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "AppLovin banner onPrepareBannerLayer error", e, onoff);
         }
-        adView.loadNextAd();
     }
 
     @Override
@@ -126,8 +130,12 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-        if (adView != null) {
-            adView.destroy();
+        try {
+            if (adView != null) {
+                adView.destroy();
+            }
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "AppLovin banner callOnActivityDestroy error ", e, onoff);
         }
     }
 
