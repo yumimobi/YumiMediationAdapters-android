@@ -15,9 +15,6 @@ public class VungleInstantiate {
     private static final String TAG = "VungleExtra";
     private static final boolean onoff = true;
 
-    public static final int ADTYPE_INTERSTITIAL = 1;
-    public static final int ADTYPE_MEDIA = 2;
-
     private static InitCallback interstittalInitCallback;
     private static InitCallback mediaInitCallback;
 
@@ -29,7 +26,7 @@ public class VungleInstantiate {
         return VungleInstantiateHolder.instantiate;
     }
 
-    public synchronized void initVungle(Activity activity, final String appid, final int adType) {
+    public synchronized void initVungle(Activity activity, String appid) {
         try {
             if (!Vungle.isInitialized()) {
                 ZplayDebug.d(TAG, "vungle initVungle appid:" + appid, onoff);
@@ -48,11 +45,6 @@ public class VungleInstantiate {
                     @Override
                     public void onError(Throwable throwable) {
                         try {
-                            if (adType == ADTYPE_INTERSTITIAL && interstittalInitCallback != null) {
-                                interstittalInitCallback.onError(throwable);
-                            } else if (adType == ADTYPE_MEDIA && mediaInitCallback != null) {
-                                mediaInitCallback.onError(throwable);
-                            }
                             VungleException ex = (VungleException) throwable;
                             ZplayDebug.e(TAG, "vungle init onError Throwable ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
                         } catch (Exception cex) {
@@ -68,14 +60,10 @@ public class VungleInstantiate {
                 });
                 ZplayDebug.d(TAG, "vungle initVungleSDK vungle.init", onoff);
             } else {
-                if (adType == ADTYPE_INTERSTITIAL && interstittalInitCallback != null) {
-                    interstittalInitCallback.onSuccess();
-                } else if (adType == ADTYPE_MEDIA && mediaInitCallback != null) {
-                    mediaInitCallback.onSuccess();
-                }
                 ZplayDebug.d(TAG, "vungle initVungleSDK vungle initialized", onoff);
             }
         } catch (Exception e) {
+
             ZplayDebug.e(TAG, "vungle initVungle error:", e, onoff);
         }
     }
