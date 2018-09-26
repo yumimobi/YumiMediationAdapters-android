@@ -1,1 +1,1 @@
-include ':gdt', ':inmobi', ':baidu', ':applovin', ':admob', ':unity', ':vungle', ':oneway', ':mraid', ':mobvista', ':ksyun', ':ironsource', 'chartboost', 'adcolony', 'facebook','playableads'
+include ':gdt', ':inmobi', ':baidu', ':applovin', ':admob', ':unity', ':vungle', ':oneway', ':mraid', ':mobvista', ':ksyun', ':ironsource', ':vungle-china', ':unity-china', ':mintegral', ':mintegral-china', 'chartboost', 'adcolony', 'facebook','playableads'

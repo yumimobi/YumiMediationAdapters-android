@@ -13,12 +13,16 @@
       <module fileurl="file://$PROJECT_DIR$/inmobi/inmobi.iml" filepath="$PROJECT_DIR$/inmobi/inmobi.iml" />
       <module fileurl="file://$PROJECT_DIR$/ironsource/ironsource.iml" filepath="$PROJECT_DIR$/ironsource/ironsource.iml" />
       <module fileurl="file://$PROJECT_DIR$/ksyun/ksyun.iml" filepath="$PROJECT_DIR$/ksyun/ksyun.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mintegral/mintegral.iml" filepath="$PROJECT_DIR$/mintegral/mintegral.iml" />
+      <module fileurl="file://$PROJECT_DIR$/mintegral-china/mintegral-china.iml" filepath="$PROJECT_DIR$/mintegral-china/mintegral-china.iml" />
       <module fileurl="file://$PROJECT_DIR$/mobvista/mobvista.iml" filepath="$PROJECT_DIR$/mobvista/mobvista.iml" />
       <module fileurl="file://$PROJECT_DIR$/mraid/mraid.iml" filepath="$PROJECT_DIR$/mraid/mraid.iml" />
       <module fileurl="file://$PROJECT_DIR$/oneway/oneway.iml" filepath="$PROJECT_DIR$/oneway/oneway.iml" />
       <module fileurl="file://$PROJECT_DIR$/playableads/playableads.iml" filepath="$PROJECT_DIR$/playableads/playableads.iml" />
       <module fileurl="file://$PROJECT_DIR$/unity/unity.iml" filepath="$PROJECT_DIR$/unity/unity.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unity-china/unity-china.iml" filepath="$PROJECT_DIR$/unity-china/unity-china.iml" />
       <module fileurl="file://$PROJECT_DIR$/vungle/vungle.iml" filepath="$PROJECT_DIR$/vungle/vungle.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vungle-china/vungle-china.iml" filepath="$PROJECT_DIR$/vungle-china/vungle-china.iml" />
     </modules>
   </component>
 </project>

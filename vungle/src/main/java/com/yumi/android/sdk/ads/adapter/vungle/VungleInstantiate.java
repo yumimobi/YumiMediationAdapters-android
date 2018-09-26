@@ -2,75 +2,89 @@ package com.yumi.android.sdk.ads.adapter.vungle;
 
 import android.app.Activity;
 
-import com.vungle.publisher.AdConfig;
-import com.vungle.publisher.Orientation;
-import com.vungle.publisher.VungleInitListener;
-import com.vungle.publisher.VunglePub;
+import com.vungle.warren.InitCallback;
+import com.vungle.warren.Vungle;
+import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 /**
- *vungle 获取对象和初始化类
+ * vungle 获取对象和初始化类
  */
 public class VungleInstantiate {
 
-	private static final String TAG = "VungleExtra";
-	private static final boolean onoff = true;
+    private static final String TAG = "VungleExtra";
+    private static final boolean onoff = true;
 
-	private static class VungleInstantiateHolder {
-		private static final VungleInstantiate instantiate = new VungleInstantiate();
-	}
-	static final VungleInstantiate getInstantiate(){
-		return VungleInstantiateHolder.instantiate;
-	}
+    public static final int ADTYPE_INTERSTITIAL = 1;
+    public static final int ADTYPE_MEDIA = 2;
 
-	private final VunglePub vungle = VunglePub.getInstance();
+    private static InitCallback interstittalInitCallback;
+    private static InitCallback mediaInitCallback;
 
-	public void initVungle(Activity activity, String appid, final String placementId1,final String placementId2) {
-		try {
-			if (!vungle.isInitialized()) {
-				ZplayDebug.d(TAG, "vungle initVungle appid:" + appid + "  placementId1:" + placementId1 + "  placementId2:" + placementId2, onoff);
-				vungle.init(activity, appid, placementIdFilter(placementId1, placementId2), new VungleInitListener() {
-					@Override
-					public void onSuccess() {
-						AdConfig overrideConfig = vungle.getGlobalAdConfig();
-						overrideConfig.setSoundEnabled(true);
-						overrideConfig.setOrientation(Orientation.autoRotate);
-						ZplayDebug.d(TAG, "vungle initVungleSDK onSuccess()", onoff);
-						if (placementId1 != null && "".equals(placementId1)) {
-							vungle.loadAd(placementId1);
-						}
-						if (placementId2 != null && "".equals(placementId2)) {
-							vungle.loadAd(placementId2);
-						}
-					}
-					@Override
-					public void onFailure(Throwable e) {
-						ZplayDebug.d(TAG, "vungle initVungleSDK onFailure() Throwable Message : " + e.getMessage(), onoff);
-					}
-				});
-				ZplayDebug.d(TAG, "vungle initVungleSDK vungle.init", onoff);
-			} else {
-				ZplayDebug.d(TAG, "vungle initVungleSDK vungle initialized", onoff);
-			}
-		} catch (Exception e) {
+    private static class VungleInstantiateHolder {
+        private static final VungleInstantiate instantiate = new VungleInstantiate();
+    }
 
-			ZplayDebug.e(TAG, "vungle initVungle error:", e, onoff);
-		}
-	}
+    static final VungleInstantiate getInstantiate() {
+        return VungleInstantiateHolder.instantiate;
+    }
 
-	private String[] placementIdFilter(final String placementId1,final String placementId2) {
-		if (placementId1 != null && placementId1.trim().length() > 0 && placementId2 != null && placementId2.trim().length() > 0) {
-			return new String[]{placementId1, placementId2};
-		} else if (placementId1 != null && placementId1.trim().length() > 0) {
-			return new String[]{placementId1};
-		} else{ //(placementId2 != null && placementId2.trim().length() > 0)
-			return new String[]{placementId2};
-		}
-	}
+    public synchronized void initVungle(Activity activity, final String appid, final int adType) {
+        try {
+            if (!Vungle.isInitialized()) {
+                ZplayDebug.d(TAG, "vungle initVungle appid:" + appid, onoff);
+                Vungle.init(appid, activity.getApplicationContext(), new InitCallback() {
+                    @Override
+                    public void onSuccess() {
+                        ZplayDebug.d(TAG, "vungle initVungleSDK onSuccess()", onoff);
+                        if (interstittalInitCallback != null) {
+                            interstittalInitCallback.onSuccess();
+                        }
+                        if (mediaInitCallback != null) {
+                            mediaInitCallback.onSuccess();
+                        }
+                    }
 
-	public VunglePub getVunglePub()
-	{
-		return vungle;
-	}
-	
+                    @Override
+                    public void onError(Throwable throwable) {
+                        try {
+                            if (adType == ADTYPE_INTERSTITIAL && interstittalInitCallback != null) {
+                                interstittalInitCallback.onError(throwable);
+                            } else if (adType == ADTYPE_MEDIA && mediaInitCallback != null) {
+                                mediaInitCallback.onError(throwable);
+                            }
+                            VungleException ex = (VungleException) throwable;
+                            ZplayDebug.e(TAG, "vungle init onError Throwable ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
+                        } catch (Exception cex) {
+                            ZplayDebug.e(TAG, "vungle init onError try error", cex, onoff);
+                        }
+                    }
+
+                    @Override
+                    public void onAutoCacheAdAvailable(String placementReferenceId) {
+                        ZplayDebug.d(TAG, "vungle initVungleSDK onAutoCacheAdAvailable placementReferenceId:" + placementReferenceId, onoff);
+
+                    }
+                });
+                ZplayDebug.d(TAG, "vungle initVungleSDK vungle.init", onoff);
+            } else {
+                if (adType == ADTYPE_INTERSTITIAL && interstittalInitCallback != null) {
+                    interstittalInitCallback.onSuccess();
+                } else if (adType == ADTYPE_MEDIA && mediaInitCallback != null) {
+                    mediaInitCallback.onSuccess();
+                }
+                ZplayDebug.d(TAG, "vungle initVungleSDK vungle initialized", onoff);
+            }
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "vungle initVungle error:", e, onoff);
+        }
+    }
+
+    public static void setInterstittalInitCallback(InitCallback initCallback) {
+        interstittalInitCallback = initCallback;
+    }
+
+    public static void setMeidaInitCallback(InitCallback initCallback) {
+        mediaInitCallback = initCallback;
+    }
 }
