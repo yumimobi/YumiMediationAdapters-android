@@ -1,192 +1,226 @@
 package com.yumi.android.sdk.ads.adapter.gdtnative;
 
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
-import android.util.DisplayMetrics;
-import android.view.View;
+import android.graphics.Point;
+import android.view.Display;
+import android.webkit.WebView;
 
-import com.qq.e.ads.nativ.ADSize;
-import com.qq.e.ads.nativ.NativeExpressAD;
-import com.qq.e.ads.nativ.NativeExpressADView;
+import com.qq.e.ads.nativ.NativeAD;
+import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
+import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
-import com.yumi.android.sdk.ads.publish.nativead.YumiNativeExpressIntersititalAdapter;
+import com.yumi.android.sdk.ads.publish.nativead.YumiNativeIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.List;
 
-public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalAdapter {
+public class GdtnativeInterstitialAdapter extends YumiNativeIntersititalAdapter
+{
+
 	private static final String TAG = "GdtnativeInterstitialAdapter";
-	private NativeExpressAD nativeExpressAD;
-	private NativeExpressADView nativeExpressADView;
-	private Activity mActivity;
-	private static int width;
-	private static int height;
+	
+	private NativeAD nativeAD;
+	private NativeADDataRef adItem;
+	private String html;
 
-	protected GdtnativeInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
-		super(activity, yumiProviderBean);
-		mActivity=activity;
+	private WebView wv_interstitial;
+	
+	protected GdtnativeInterstitialAdapter(Activity activity, YumiProviderBean provider)
+	{
+		super(activity, provider);
 	}
 
 	@Override
-	protected void onPreparedNativeInterstitial() {
-		ZplayDebug.d(TAG, "appId : " + getProvider().getKey1(), onoff);
-		ZplayDebug.d(TAG, "pId : " + getProvider().getKey2(), onoff);
-		ZplayDebug.d(TAG, "GDT nativead Interstitial init", onoff);
-		nativeExpressAD = new NativeExpressAD(getActivity(), calculateInterstitialSize(),
-				getProvider().getKey1(),getProvider().getKey2(),new MyNativeExpressADListener());
-		nativeExpressAD.loadAD(1);
+	public void onActivityPause()
+	{
+		
 	}
 
 	@Override
-	protected void NativeLayerPrepared(View view) {
-		ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerPrepared", onoff);
-		layerPrepared();
-	}
-
-	@Override
-	protected void NativeLayerOnShow() {
-		ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerOnShow", onoff);
-	}
-
-	@Override
-	protected void calculateRequestSize() {
-		ZplayDebug.d(TAG, "gdt native Interstitial calculateRequestSize", onoff);
-	}
-
-	@Override
-	protected void NativeLayerDismiss() {
-		ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerDismiss", onoff);
-		layerClosed();
-		if (nativeExpressADView != null) {
-			nativeExpressADView.destroy();
-		}
-	}
-
-	@Override
-	protected void init() {
-
-	}
-	private class MyNativeExpressADListener implements NativeExpressAD.NativeExpressADListener {
-
-		@Override
-		public void onNoAD(AdError adError) {
-			if (adError == null){
-				ZplayDebug.d(TAG, "GDT nativead Interstitial onNoAD adError = null", onoff);
-				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-				return;
-			}
-			ZplayDebug.d(TAG, "GDT nativead Interstitial onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
-		}
-
-		@Override
-		public void onADLoaded(List<NativeExpressADView> list) {
-			ZplayDebug.d(TAG, "GDT native Interstitial loaded"+list.size(), onoff);
-			if (list.size() > 0) {
-				nativeExpressADView = list.get(0);
-				nativeExpressADView.render();
-			}else{
-				layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-			}
-		}
-
-		@Override
-		public void onRenderFail(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial render fail", onoff);
-			layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-		}
-
-		@Override
-		public void onRenderSuccess(NativeExpressADView adView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial renderSuccess"+adView.getHeight()+","+adView.getWidth(), onoff);
-			loadData(adView, false);
-		}
-
-		@Override
-		public void onADExposure(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial shown", onoff);
-			layerExposure();
-		}
-
-		@Override
-		public void onADClicked(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial Clicked", onoff);
-			layerClicked(-99f, -99f);
-		}
-
-		@Override
-		public void onADClosed(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial closed", onoff);
-			closeOnResume();
-		}
-
-		@Override
-		public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial onADLeftApplication", onoff);
-		}
-
-		@Override
-		public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial onADOpenOverlay", onoff);
-		}
-
-		@Override
-		public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
-			ZplayDebug.d(TAG, "GDT native Interstitial onADCloseOverlay", onoff);
-		}
-	}
-	@Override
-	protected void callOnActivityDestroy() {
-		ZplayDebug.d(TAG, "gdt native Interstitial callOnActivityDestroy", onoff);
-		if (nativeExpressADView != null) {
-			nativeExpressADView.destroy();
-		}
-	}
-
-	@Override
-	public void onActivityPause() {
-
-	}
-	private ADSize calculateInterstitialSize() {
-		if(isPortrait(mActivity))
-		{
-			return new ADSize(ADSize.FULL_WIDTH,ADSize.AUTO_HEIGHT);
-		}
-		else{
-			int adWeight = width * 2/3;
-			int adHeight = adWeight * 950/1230;
-			if(adHeight>height){
-				adHeight = height;
-			}
-			return new ADSize(adWeight,adHeight);
-		}
-	}
-
-
-	private static final boolean isPortrait(Context context){
-		try {
-			DisplayMetrics dm = context.getResources().getDisplayMetrics();
-			float density = dm.density;
-			width = (int)(dm.widthPixels/density);
-			height = (int)(dm.heightPixels/density);
-			if (dm.widthPixels <= dm.heightPixels) {
-				return true;
-			}
-		} catch (Exception e) {
-		}
-		return false;
-	}
-	@Override
-	public void onActivityResume() {
+	public void onActivityResume()
+	{
 		closeOnResume();
 	}
 
 	@Override
-	public boolean onActivityBackPressed() {
+	public boolean onActivityBackPressed()
+	{
 		return false;
 	}
+
+	@Override
+	protected void onPreparedWebInterstitial()
+	{
+		if (nativeAD!=null)
+		{
+			nativeAD.loadAD(1);
+		}
+	}
+
+	@Override
+	protected void webLayerClickedAndRequestBrowser(String url)
+	{
+		if (adItem!=null)
+		{
+			adItem.onClicked(wv_interstitial);
+		}
+		layerClicked(upPoint[0], upPoint[1]);
+	}
+
+	@Override
+	protected void webLayerPrepared(WebView view)
+	{
+		this.wv_interstitial = view;
+		ZplayDebug.d(TAG, "GDT navitead interstitial prapared", onoff);
+		layerPrepared();
+	}
+
+	@Override
+	protected void webLayerOnShow()
+	{
+		if (adItem!=null)
+		{
+			adItem.onExposured(wv_interstitial);
+		}
+		layerExposure();
+	}
+
+	@Override
+	protected void calculateRequestSize()
+	{
+		
+	}
+
+	@Override
+	protected void webLayerDismiss()
+	{
+		layerClosed();
+	}
+
+	@Override
+	protected void init()
+	{
+		ZplayDebug.d(TAG, "appId : " + getProvider().getKey1(), onoff);
+		ZplayDebug.d(TAG, "pId : " + getProvider().getKey2(), onoff);
+		ZplayDebug.d(TAG, "GDT nativead init", onoff);
+		if (nativeAD == null)
+		{
+			nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new MyNativeAdListener());
+		}
+	}
+
+	@Override
+	protected void callOnActivityDestroy()
+	{
+		
+	}
+	
+	private class MyNativeAdListener implements NativeAdListener
+	{
+
+		@Override
+		public void onADStatusChanged(NativeADDataRef arg0)
+		{
+			ZplayDebug.d(TAG, "GDT nativead interstitial onADStatusChanged", onoff);
+		}
+
+		@Override
+		public void onNoAD(AdError adError) {
+			if (adError == null){
+				ZplayDebug.d(TAG, "GDT nativead interstitial onNoAD adError = null", onoff);
+				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+				return;
+			}
+			ZplayDebug.d(TAG, "GDT nativead interstitial onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+		}
+
+		@Override
+		public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
+			if (adError == null){
+				ZplayDebug.d(TAG, "GDT nativead interstitial onADError adError = null", onoff);
+				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+				return;
+			}
+			ZplayDebug.d(TAG, "GDT nativead interstitial onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+		}
+
+		@Override
+		public void onADLoaded(List<NativeADDataRef> arg0)
+		{
+			if (arg0.size() > 0)
+			{
+				getProvider().setUseTemplateMode("0");
+				adItem = arg0.get(0);
+				//html = NativeAdsBuild.getImageAdHtml(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0);				
+				html = NativeAdsBuild.getTemplateInterstitial(getActivity(),adItem.getTitle(),adItem.getDesc(),adItem.getIconUrl(), adItem.getImgUrl(), getaTagUrl(),adItem.getAPPScore(),0, getProvider());				
+				ZplayDebug.d(TAG, "GDT nativead interstitial request success!", onoff);
+				if (html!=null && !"".equals(html) && !"null".equals(html))
+				{
+				    haveStroke=false;
+//					calculateWebSize(1280, 720);
+	                int[] screen = getRealSize(getActivity());
+	                calculateWebSize(screen[0], screen[1]);
+	                
+	                ZplayDebug.d(TAG, "GDT nativead interstitial Width="+screen[0]+" || Height="+screen[1], onoff);
+	                
+					createWebview(null);
+					loadData(html);
+				}else{
+					layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+				}
+			}else
+			{
+				layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+				ZplayDebug.d(TAG, "GDT nativead interstitial PreparedFailed ERROR_NO_FILL", onoff);
+			}
+		}
+
+	}
+
+	@SuppressLint("NewApi")
+	public static final int[] getRealSize(Activity activity)
+	{
+		try
+		{
+			// TODO 增加系统版本判断
+			if (getAndroidSDK() >= 17)
+			{
+				Point point = new Point();
+				activity.getWindowManager().getDefaultDisplay().getRealSize(point);
+				int[] realSize = new int[]
+				{ point.x, point.y };
+				return realSize;
+			} else
+			{
+				Display display = activity.getWindowManager().getDefaultDisplay();
+				int[] realSize = new int[]
+				{ display.getWidth(), display.getHeight() };
+				return realSize;
+			}
+		} catch (Exception e)
+		{
+			ZplayDebug.e(TAG, "GDT nativead interstitial getRealSize error  ", e, onoff);
+		}
+		return new int[]
+		{ 1280, 720 };
+
+	}
+
+	/**
+	 * 获取android版本号int
+	 * 
+	 * @return
+	 */
+	public static int getAndroidSDK()
+	{
+		return android.os.Build.VERSION.SDK_INT;
+	}
+
 }
