@@ -76,7 +76,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "facebookbid media init", onoff);
+        ZplayDebug.d(TAG, "facebookbid media init payload：" + getProvider().getPayload(), onoff);
         createListener();
     }
 
