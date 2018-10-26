@@ -46,7 +46,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
             layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL, getProvider().getErrMessage());
             return;
         }
-        banner = new AdView(getContext(), getProvider().getKey1(), calculateBannerSize());
+        banner = new AdView(getContext(), getProvider().getKey1(), AdSize.BANNER_HEIGHT_50);
         banner.setAdListener(bannerListener);
         banner.loadAdFromBid(getProvider().getPayload());
     }
