@@ -1,40 +1,15 @@
-apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-    enforceUniquePackageName=false
-    packageBuildConfig=false
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-    lintOptions {
-        abortOnError false
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+apply from: '../shared-build.gradle'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.inmobi.monetization:inmobi-ads:7.0.4'
-    compile 'com.yumimobi.ads.thirdparty:inmobi:6.2.0.1'
-//    compile 'com.yumimobi.ads:mediation:3.3.4.+'
-    compile 'com.google.android.gms:play-services:10.0.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile YUMI_MEDIATION_COMPILE
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation 'com.inmobi.monetization:inmobi-ads:7.0.4'
+    implementation 'com.yumimobi.ads.thirdparty:inmobi:6.2.0.1'
+//    implementation 'com.yumimobi.ads:mediation:3.3.4.+'
+    implementation 'com.google.android.gms:play-services:10.0.1'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
+    implementation "com.android.support:recyclerview-v7:$SUPOORT_LIBRAY_VERSION"
+    implementation YUMI_MEDIATION_COMPILE
 }
 
 String version = project.properties['inmobi.version']

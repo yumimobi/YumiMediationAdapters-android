@@ -1,34 +1,11 @@
-apply plugin: 'com.android.library'
-
-android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.3"
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-    lintOptions {
-        abortOnError false
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+apply from: '../shared-build.gradle'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.firebase:firebase-ads:10.0.1'
-//    compile 'com.yumimobi.ads:mediation:3.3.4.+'
-    compile 'com.google.android.gms:play-services-ads:10.0.1'
-    compile YUMI_MEDIATION_COMPILE
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.firebase:firebase-ads:10.0.1'
+//    implementation 'com.yumimobi.ads:mediation:3.3.4.+'
+    implementation 'com.google.android.gms:play-services-ads:10.0.1'
+    implementation YUMI_MEDIATION_COMPILE
 }
 
 String version = project.properties['admob.version']
