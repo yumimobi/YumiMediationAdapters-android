@@ -1,10 +1,10 @@
 apply from: '../shared-build.gradle'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-//    compile 'com.yumimobi.ads:mediation:3.3.4.+'
-    compile 'com.yumimobi.ads.thirdparty:oneway:1.3.5.0'
-    compile YUMI_MEDIATION_COMPILE
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation 'com.yumimobi.ads:mediation:3.3.4.+'
+    implementation 'com.yumimobi.ads.thirdparty:oneway:1.3.5.0'
+    implementation YUMI_MEDIATION_COMPILE
 }
 
 String version = project.properties['oneway.version']
