@@ -2,6 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.android.support:support-v4:$SUPOORT_LIBRAY_VERSION"
     implementation YUMI_MEDIATION
 }
 
