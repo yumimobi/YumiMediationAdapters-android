@@ -3,7 +3,7 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.yumimobi.ads.thirdparty:ironsource:6.7.10.0'
-    implementation YUMI_MEDIATION_COMPILE
+    implementation YUMI_MEDIATION
 }
 
 String version = project.properties['ironsource.version']

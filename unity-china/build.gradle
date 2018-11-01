@@ -3,8 +3,7 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.yumimobi.ads.thirdparty:unity:2.3.0.0-china'
-//    implementation 'com.yumimobi.ads:mediation:3.3.4.+'
-    implementation YUMI_MEDIATION_COMPILE
+    implementation YUMI_MEDIATION
 }
 
 String version = project.properties['unity-china.version']
