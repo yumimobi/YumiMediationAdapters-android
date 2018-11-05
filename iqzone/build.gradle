@@ -1,0 +1,27 @@
+apply from: '../shared-build.gradle'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+
+    implementation "com.android.support:support-v4:$SUPOORT_LIBRAY_VERSION"
+    implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
+    implementation "com.android.support:recyclerview-v7:$SUPOORT_LIBRAY_VERSION"
+    implementation 'com.google.code.gson:gson:2.8.4'
+
+    implementation YUMI_MEDIATION
+
+    implementation files('libs/iqps-core-android.aar')
+    implementation files('libs/HyprMX-SDK-4.3.1.aar')
+    implementation files('libs/ia-sdk-core-release-7.1.6.aar')
+    implementation files('libs/ia-mraid-kit-release-7.1.6.aar')
+    implementation files('libs/ia-video-kit-release-7.1.6.aar')
+    implementation files('libs/ia-native-kit-release-7.1.6.aar')
+    implementation files('libs/SOMAAndroid-8.0.1-release.aar')
+    implementation files('libs/presage-moat-3.0.22-moat-3.0.13.aar')
+
+    implementation 'com.inmobi.monetization:inmobi-ads:7.1.0'
+}
