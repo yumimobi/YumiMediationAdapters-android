@@ -3,7 +3,7 @@ package com.yumi.android.sdk.ads.adapter.playableads;
 import android.app.Activity;
 
 import com.playableads.PlayPreloadingListener;
-import com.playableads.PlayableAds;
+import com.playableads.PlayableInterstitial;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -15,7 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
  */
 public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private PlayPreloadingListener listener;
-    private PlayableAds playable;
+    private PlayableInterstitial playable;
     private Activity activity;
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsInterstitialAdapter";
@@ -39,7 +39,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        PlayableAds.getInstance().presentPlayableAD(provoder.getKey2(), new SimplePlayLoadingListener() {
+        playable.presentPlayableAd(provoder.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
@@ -98,8 +98,8 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     @Override
     protected void init() {
         try {
-            playable = PlayableAds.init(getActivity(), provoder.getKey1());
-//            PlayableAds.getInstance().setAutoLoadAd(false);
+            playable = PlayableInterstitial.init(getActivity(), provoder.getKey1());
+            playable.setAutoload(false);
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
@@ -130,7 +130,6 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
         try {
             if (playable != null) {
                 ZplayDebug.d(TAG, "Playable Interstitial onDestroy ", onoff);
-                playable.onDestroy();
             }
         }catch (Exception e)
         {

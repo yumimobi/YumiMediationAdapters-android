@@ -7,7 +7,7 @@ dependencies {
     })
     implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
     testImplementation 'junit:junit:4.12'
-    implementation 'com.playableads:playableads:2.1.1'
+    implementation 'com.playableads:playableads:2.3.0'
     implementation YUMI_MEDIATION
 }
 
