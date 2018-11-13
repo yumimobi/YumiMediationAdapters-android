@@ -10,6 +10,8 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 
 public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -18,6 +20,22 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 	private InMobiInterstitial.InterstitialAdListener mediaListener;
 	private boolean isCallbackInExposure = false;
 
+	private static final int REQUEST_NEXT_MEDIA = 0x001;
+	private final Handler mHandler = new Handler() {
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+				case REQUEST_NEXT_MEDIA:
+					if (media != null && mediaListener != null) {
+						ZplayDebug.d(TAG, "inmobi media Video REQUEST_NEXT_MEDIA ", onoff);
+						layerNWRequestReport();
+						media.load();
+					}
+					break;
+				default:
+					break;
+			}
+		};
+	};
 	protected InmobiMediaAdapter(Activity activity, YumiProviderBean provider) {
 		super(activity, provider);
 	}
@@ -92,6 +110,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					Map<Object, Object> arg1) {
 				ZplayDebug.d(TAG, "inmobi media get incentived", onoff);
 				layerIncentived();
+				layerMediaEnd();
 			}
 
 			@Override
@@ -109,6 +128,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					ZplayDebug.d(TAG, "inmobi media load failed " + arg1.getStatusCode(), onoff);
 					layerPreparedFailed(InmobiExtraHolder.decodeError(arg1.getStatusCode()));
 				}
+				requestAD(getProvider().getNextRequestInterval());
 			}
 
 			@Override
@@ -120,14 +140,26 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 			public void onAdDisplayed(InMobiInterstitial arg0) {
 				ZplayDebug.d(TAG, "inmobi media exposure", onoff);
 				layerExposure();
+				layerMediaStart();
 			}
 
 			@Override
 			public void onAdDismissed(InMobiInterstitial arg0) {
 				ZplayDebug.d(TAG, "inmobi media closed", onoff);
 				layerClosed();
+				requestAD(2);
 			}
 		};
 	}
 
+	private void requestAD(int delaySecond) {
+		try {
+			if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+				ZplayDebug.d(TAG, "inmobi media Video requestAD delaySecond" + delaySecond, onoff);
+				mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+			}
+		} catch (Exception e) {
+			ZplayDebug.e(TAG, "inmobi media requestAD error ", e, onoff);
+		}
+	}
 }

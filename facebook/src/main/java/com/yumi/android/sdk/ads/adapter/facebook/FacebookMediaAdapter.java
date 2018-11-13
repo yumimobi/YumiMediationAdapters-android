@@ -29,6 +29,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
                 case REQUEST_NEXT_MEDIA:
                     if (rewardedVideoAd != null && listener != null) {
                         ZplayDebug.d(TAG, "Facebook media Video REQUEST_NEXT_MEDIA ", onoff);
+                        layerNWRequestReport();
                         rewardedVideoAd.loadAd(false);
                     }
                     break;

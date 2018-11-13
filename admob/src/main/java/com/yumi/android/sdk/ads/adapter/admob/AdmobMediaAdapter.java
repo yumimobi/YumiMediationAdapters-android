@@ -31,6 +31,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 case REQUEST_NEXT_MEDIA:
                     if (mAd != null && !mAd.isLoaded()) {
                         ZplayDebug.d(TAG, "admob media loadRewardedVideoAd loadAd", onoff);
+                        layerNWRequestReport();
                         mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
                     }
                     break;

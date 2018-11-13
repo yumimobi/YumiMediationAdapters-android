@@ -11,6 +11,8 @@ import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinErrorCodes;
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkSettings;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
@@ -22,6 +24,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
     private static final String TAG = "ApplovinBannerAdapter";
+    private AppLovinSdk appLovinSdk;
     private AppLovinAdView adView;
     private AppLovinAdLoadListener adLovinAdLoadListener;
     private AppLovinAdClickListener adClickListener;
@@ -36,10 +39,10 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     protected void onPrepareBannerLayer() {
         try {
             ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
-            if (adView == null) {
+            if (appLovinSdk == null) {
                 init();
             }
-            adView.loadNextAd();
+            appLovinSdk.getAdService().loadNextAdForZoneId(getProvider().getKey2(), adLovinAdLoadListener);
         } catch (Exception e) {
             ZplayDebug.e(TAG, "AppLovin banner onPrepareBannerLayer error", e, onoff);
         }
@@ -49,11 +52,11 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "AppLovin banner init", onoff);
         try {
-            if (adView == null) {
-                adView = new AppLovinAdView(AppLovinAdSize.BANNER, getProvider().getKey2(), getActivity());
+            if (appLovinSdk== null || adView == null) {
+                appLovinSdk = AppLovinSdk.getInstance(getProvider().getKey1(),new AppLovinSdkSettings(),getContext());
+                adView = new AppLovinAdView(appLovinSdk,AppLovinAdSize.BANNER, getActivity());
             }
             createAppLovinListener();
-            adView.setAdLoadListener(adLovinAdLoadListener);
             adView.setAdClickListener(adClickListener);
             adView.setAdDisplayListener(adDisplayListener);
             adView.setAdViewEventListener(adViewEventListener);
