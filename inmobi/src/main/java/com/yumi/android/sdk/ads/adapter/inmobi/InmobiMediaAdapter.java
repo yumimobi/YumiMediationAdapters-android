@@ -50,7 +50,14 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
 	@Override
 	protected final void callOnActivityDestroy() {
-		InmobiExtraHolder.onDestroy();
+		try {
+			InmobiExtraHolder.onDestroy();
+			if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+				mHandler.removeMessages(REQUEST_NEXT_MEDIA);
+			}
+		} catch (Exception e) {
+			ZplayDebug.e(TAG, "inmobi media callOnActivityDestroy error ", e, onoff);
+		}
 	}
 
 	@Override
