@@ -65,7 +65,10 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        loadRewardedVideoAd(1);
+        if (mAd != null && !mAd.isLoaded()) {
+            ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
+            mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
+        }
     }
 
     @Override

@@ -39,7 +39,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     protected void onPrepareBannerLayer() {
         try {
             ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
-            if (appLovinSdk == null) {
+            if (appLovinSdk == null || adView == null) {
                 init();
             }
             appLovinSdk.getAdService().loadNextAdForZoneId(getProvider().getKey2(), adLovinAdLoadListener);
@@ -50,11 +50,11 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "AppLovin banner init", onoff);
+        ZplayDebug.d(TAG, "AppLovin banner init key1: " + getProvider().getKey1() + ", key2:" + getProvider().getKey2(), onoff);
         try {
-            if (appLovinSdk== null || adView == null) {
-                appLovinSdk = AppLovinSdk.getInstance(getProvider().getKey1(),new AppLovinSdkSettings(),getContext());
-                adView = new AppLovinAdView(appLovinSdk,AppLovinAdSize.BANNER, getActivity());
+            if (appLovinSdk == null || adView == null) {
+                appLovinSdk = AppLovinSdk.getInstance(getProvider().getKey1(), new AppLovinSdkSettings(), getContext());
+                adView = new AppLovinAdView(appLovinSdk, AppLovinAdSize.BANNER, getActivity());
             }
             createAppLovinListener();
             adView.setAdClickListener(adClickListener);
@@ -70,6 +70,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adReceived(AppLovinAd appLovinAd) {
                 ZplayDebug.d(TAG, "AppLovin banner adReceived", onoff);
+                adView.renderAd(appLovinAd);
                 layerPrepared(adView, false);
             }
 
