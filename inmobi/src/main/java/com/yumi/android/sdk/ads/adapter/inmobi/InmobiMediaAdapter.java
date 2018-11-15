@@ -28,6 +28,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					if (media != null && mediaListener != null) {
 						ZplayDebug.d(TAG, "inmobi media Video REQUEST_NEXT_MEDIA ", onoff);
 						layerNWRequestReport();
+						isCallbackInExposure = false;
 						media.load();
 					}
 					break;
