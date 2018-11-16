@@ -23,6 +23,6 @@ android {
 
 ext {
     SUPOORT_LIBRAY_VERSION = '26.1.0'
-    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:3.4.0-alpha2'
+    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:3.4.+'
 //    YUMI_MEDIATION = project(':mediation')
 }
