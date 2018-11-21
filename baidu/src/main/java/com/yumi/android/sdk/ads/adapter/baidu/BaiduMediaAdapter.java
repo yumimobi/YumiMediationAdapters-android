@@ -87,7 +87,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onVideoDownloadFailed() {
-                ZplayDebug.i(TAG, "baidu media onRewardServerSuccess", onoff);
+                ZplayDebug.i(TAG, "baidu media onVideoDownloadFailed", onoff);
                 layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                 requestAD(getProvider().getNextRequestInterval());
             }
