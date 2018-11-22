@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import com.baidu.mobad.video.XAdManager;
 import com.baidu.mobads.interfaces.IXAdConstants4PDK;
 import com.baidu.mobads.rewardvideo.RewardVideoAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
@@ -33,6 +34,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                     break;
             }
         }
+
         ;
     };
 
@@ -66,6 +68,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.i(TAG, "baidu key1 : " + getProvider().getKey1(), onoff);
         ZplayDebug.i(TAG, "baidu key2 : " + getProvider().getKey2(), onoff);
         createrListener();
+        XAdManager.getInstance(getActivity()).setAppSid(getProvider().getKey1());
         rewardVideoAd = new RewardVideoAd(getActivity(), getProvider().getKey2(), rewardVideoAdListener);
     }
 
