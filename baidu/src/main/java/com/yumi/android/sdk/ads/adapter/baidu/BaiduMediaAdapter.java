@@ -1,6 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -14,11 +15,13 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.io.File;
+import java.io.IOException;
 
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
     private RewardVideoAd rewardVideoAd;
     private RewardVideoAd.RewardVideoAdListener rewardVideoAdListener;
+    private DeleteCallback deleteCallback;
     private boolean adLoaded = false;
     private static final int REQUEST_NEXT_MEDIA = 0x001;
 
@@ -30,16 +33,13 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                         ZplayDebug.d(TAG, "baidu media Video REQUEST_NEXT_MEDIA ", onoff);
                         layerNWRequestReport();
                         adLoaded = false;
-                        deleteBaiDuFile();
-                        rewardVideoAd.load();
+                        deleteBaiDuFile(deleteCallback);
                     }
                     break;
                 default:
                     break;
             }
         }
-
-        ;
     };
 
     protected BaiduMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -51,8 +51,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         if (rewardVideoAd != null && rewardVideoAdListener != null) {
             adLoaded = false;
-            deleteBaiDuFile();
-            rewardVideoAd.load();
+            deleteBaiDuFile(deleteCallback);
         }
     }
 
@@ -124,6 +123,13 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                 requestAD(getProvider().getNextRequestInterval());
             }
         };
+
+       deleteCallback = new DeleteCallback() {
+            @Override
+            public void onDeleted() {
+                rewardVideoAd.load();
+            }
+        };
     }
 
     private void requestAD(int delaySecond) {
@@ -162,34 +168,46 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
         }
     }
 
-    private void deleteBaiDuFile(){
+
+    private static void deleteBaiDuFile(final DeleteCallback cb) {
         try {
-        File file = new File(getSDPath()+"/bddownload");
-        if (!file.exists()) {
-            ZplayDebug.i(TAG, "baidu file not exists :"+ getSDPath()+"/bddownload", onoff);
-            return ;
-        }
-        recursionDeleteFile(file);
-        }catch (Exception e) {
+            new AsyncTask<Void, Void, Void>(){
+                @Override
+                protected Void doInBackground(Void... voids) {
+                    File file = new File(getSDPath() + "/bddownload");
+                    if (!file.exists()) {
+                        ZplayDebug.i(TAG, "baidu file not exists :" + getSDPath() + "/bddownload", onoff);
+                        return null;
+                    }
+                    recursionDeleteFile(file);
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void aVoid) {
+                    if(cb != null){
+                        cb.onDeleted();
+                    }
+                }
+            }.execute();
+
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "baidu deleteBaiDuFile error", e, onoff);
         }
     }
 
+    interface DeleteCallback {
+        void onDeleted();
+    }
 
-    public String getSDPath(){
-        try {
-            File sdDir = null;
-            boolean sdCardExist = Environment.getExternalStorageState()
-                    .equals(android.os.Environment.MEDIA_MOUNTED);
-            if(sdCardExist)
-            {
-                sdDir = Environment.getExternalStorageDirectory();
-            }
-            return sdDir.toString();
-        }catch (Exception e) {
-            ZplayDebug.e(TAG, "baidu getSDPath error", e, onoff);
+    private static String getSDPath() {
+        File sdDir = null;
+        boolean sdCardExist = Environment.getExternalStorageState()
+                .equals(android.os.Environment.MEDIA_MOUNTED);
+        if (sdCardExist) {
+            sdDir = Environment.getExternalStorageDirectory();
         }
-        return "";
+        return sdDir == null ? "" : sdDir.toString();
     }
 
     /**
@@ -197,26 +215,22 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
      *
      * @param file
      */
-    public static void recursionDeleteFile(final File file) {
-        try {
-            ZplayDebug.i(TAG, "baidu RecursionDeleteFile  file:"+ file.toString(), onoff);
-            if (file.isFile()) {
+    private static void recursionDeleteFile(final File file) {
+        ZplayDebug.i(TAG, "baidu RecursionDeleteFile  file:" + file.toString(), onoff);
+        if (file.isFile()) {
+            file.delete();
+            return;
+        }
+        if (file.isDirectory()) {
+            File[] childFile = file.listFiles();
+            if (childFile == null || childFile.length == 0) {
                 file.delete();
                 return;
             }
-            if (file.isDirectory()) {
-                File[] childFile = file.listFiles();
-                if (childFile == null || childFile.length == 0) {
-                    file.delete();
-                    return;
-                }
-                for (File f : childFile) {
-                    recursionDeleteFile(f);
-                }
-                file.delete();
+            for (File f : childFile) {
+                recursionDeleteFile(f);
             }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "baidu RecursionDeleteFile error", e, onoff);
+            file.delete();
         }
     }
 }
