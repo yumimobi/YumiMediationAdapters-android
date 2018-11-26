@@ -15,13 +15,11 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.io.File;
-import java.io.IOException;
 
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
     private RewardVideoAd rewardVideoAd;
     private RewardVideoAd.RewardVideoAdListener rewardVideoAdListener;
-    private DeleteCallback deleteCallback;
     private boolean adLoaded = false;
     private static final int REQUEST_NEXT_MEDIA = 0x001;
 
@@ -33,7 +31,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                         ZplayDebug.d(TAG, "baidu media Video REQUEST_NEXT_MEDIA ", onoff);
                         layerNWRequestReport();
                         adLoaded = false;
-                        deleteBaiDuFile(deleteCallback);
+                        deleteBaiDuFile(newDeleteCallback());
                     }
                     break;
                 default:
@@ -47,12 +45,21 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
 
     }
 
+    private DeleteCallback newDeleteCallback() {
+        return new DeleteCallback() {
+            @Override
+            public void onDeleted() {
+                if (rewardVideoAd != null && rewardVideoAdListener != null) {
+                    rewardVideoAd.load();
+                }
+            }
+        };
+    }
+
     @Override
     protected void onPrepareMedia() {
-        if (rewardVideoAd != null && rewardVideoAdListener != null) {
-            adLoaded = false;
-            deleteBaiDuFile(deleteCallback);
-        }
+        adLoaded = false;
+        deleteBaiDuFile(newDeleteCallback());
     }
 
     @Override
@@ -124,12 +131,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             }
         };
 
-       deleteCallback = new DeleteCallback() {
-            @Override
-            public void onDeleted() {
-                rewardVideoAd.load();
-            }
-        };
     }
 
     private void requestAD(int delaySecond) {
@@ -171,7 +172,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static void deleteBaiDuFile(final DeleteCallback cb) {
         try {
-            new AsyncTask<Void, Void, Void>(){
+            new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... voids) {
                     File file = new File(getSDPath() + "/bddownload");
@@ -185,7 +186,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
 
                 @Override
                 protected void onPostExecute(Void aVoid) {
-                    if(cb != null){
+                    if (cb != null) {
                         cb.onDeleted();
                     }
                 }
