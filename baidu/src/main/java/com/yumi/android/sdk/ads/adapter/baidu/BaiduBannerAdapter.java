@@ -17,6 +17,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 	private static final String TAG = "BaiduBannerAdapter";
 	private AdView banner;
 	private AdViewListener bannerListener;
+	private boolean isLoad = true;
 
 	protected BaiduBannerAdapter(Activity activity, YumiProviderBean provider) {
 		super(activity, provider);
@@ -38,6 +39,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 	@Override
 	protected void onPrepareBannerLayer() {
 		ZplayDebug.d(TAG, "baidu request new banner", onoff);
+		isLoad = true;
 		banner = new AdView(getActivity(), AdSize.Banner, getProvider().getKey2());
 		banner.setListener(bannerListener);
 		sendChangeViewBeforePrepared(banner);
@@ -62,7 +64,10 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onAdShow(JSONObject arg0) {
 				ZplayDebug.d(TAG, "baidu banner shown", onoff);
-				layerExposure();				
+				if (isLoad){
+					isLoad = false;
+					layerExposure();
+				}
 			}
 			
 			@Override
