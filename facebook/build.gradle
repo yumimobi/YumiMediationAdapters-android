@@ -1,9 +1,9 @@
 apply from: '../shared-build.gradle'
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
-    api 'com.facebook.android:audience-network-sdk:4.99.3'
-    api YUMI_MEDIATION
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.facebook.android:audience-network-sdk:4.99.3'
+    implementation YUMI_MEDIATION
 }
 
 String version = project.properties['facebook.version']
