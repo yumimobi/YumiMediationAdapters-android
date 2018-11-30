@@ -155,6 +155,11 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 }
                 loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+                ZplayDebug.d("AdmobMediaAdapter", "admob media onRewardedVideoCompleted", true);
+            }
         };
     }
 
