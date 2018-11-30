@@ -2,8 +2,8 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.google.firebase:firebase-ads:10.0.1'
-    compile 'com.google.android.gms:play-services-ads:10.0.1'
+    compile 'com.google.firebase:firebase-ads:15.0.1'
+    compile 'com.google.android.gms:play-services-ads:15.0.1'
     implementation YUMI_MEDIATION
 }
 
