@@ -3,9 +3,14 @@ package com.yumi.android.sdk.ads.adapter.vungle;
 import android.app.Activity;
 
 import com.vungle.warren.InitCallback;
+import com.vungle.warren.LoadAdCallback;
+import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * vungle 获取对象和初始化类
@@ -20,6 +25,12 @@ public class VungleInstantiate {
 
     private static InitCallback interstittalInitCallback;
     private static InitCallback mediaInitCallback;
+
+    private static LoadAdCallback mediaLoadAdCallback;
+    private static PlayAdCallback mediaPlayAdCallback;
+
+    private static Map<String, LoadAdCallback> myVungleMediaLoadAdListener;
+    private static Map<String, PlayAdCallback> myVungleMediaPlayAdListener;
 
     private static class VungleInstantiateHolder {
         private static final VungleInstantiate instantiate = new VungleInstantiate();
@@ -87,4 +98,89 @@ public class VungleInstantiate {
     public static void setMeidaInitCallback(InitCallback initCallback) {
         mediaInitCallback = initCallback;
     }
+
+    public static LoadAdCallback createVungleMediaLoadListener() {
+        if (mediaLoadAdCallback == null) {
+            mediaLoadAdCallback = new LoadAdCallback() {
+                @Override
+                public void onAdLoad(String placementReferenceId) {
+                    ZplayDebug.d(TAG, "vungle media LoadAdCallback onAdLoad placementReferenceId:" + placementReferenceId, onoff);
+                    if (myVungleMediaLoadAdListener != null) {
+                        LoadAdCallback ml = myVungleMediaLoadAdListener.get(placementReferenceId);
+                        if (ml != null) {
+                            ml.onAdLoad(placementReferenceId);
+                        }
+                    }
+                }
+
+                @Override
+                public void onError(String placementReferenceId, Throwable throwable) {
+                    ZplayDebug.e(TAG, "vungle media LoadAdCallback onError   placementReferenceId:" + placementReferenceId + "  error:" + throwable.getLocalizedMessage(), onoff);
+                    if (myVungleMediaLoadAdListener != null) {
+                        LoadAdCallback ml = myVungleMediaLoadAdListener.get(placementReferenceId);
+                        if (ml != null) {
+                            ml.onError(placementReferenceId, throwable);
+                        }
+                    }
+                }
+            };
+        }
+        return mediaLoadAdCallback;
+    }
+
+
+    public static PlayAdCallback createVungleMediaPlayListener() {
+        if (mediaPlayAdCallback == null) {
+            mediaPlayAdCallback = new PlayAdCallback() {
+                @Override
+                public void onAdStart(String placementReferenceId) {
+                    ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
+                    if (myVungleMediaPlayAdListener != null) {
+                        PlayAdCallback mp = myVungleMediaPlayAdListener.get(placementReferenceId);
+                        if (mp != null) {
+                            mp.onAdStart(placementReferenceId);
+                        }
+                    }
+                }
+
+                @Override
+                public void onAdEnd(String placementReferenceId, final boolean completed, final boolean isCTAClicked) {
+                    ZplayDebug.d(TAG, "vungle media onAdEnd placementReferenceId:" + placementReferenceId + "   completed:" + completed + "   isCTAClicked" + isCTAClicked, onoff);
+                    if (myVungleMediaPlayAdListener != null) {
+                        PlayAdCallback mp = myVungleMediaPlayAdListener.get(placementReferenceId);
+                        if (mp != null) {
+                            mp.onAdEnd(placementReferenceId, completed, isCTAClicked);
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onError(String placementReferenceId, Throwable throwable) {
+                    if (myVungleMediaPlayAdListener != null) {
+                        PlayAdCallback mp = myVungleMediaPlayAdListener.get(placementReferenceId);
+                        if (mp != null) {
+                            mp.onError(placementReferenceId, throwable);
+                        }
+                    }
+                }
+            };
+        }
+        return mediaPlayAdCallback;
+    }
+
+    public static void setMediaLoadAdCallback(String key2, LoadAdCallback ml) {
+        if (myVungleMediaLoadAdListener == null) {
+            myVungleMediaLoadAdListener = new HashMap<String, LoadAdCallback>();
+        }
+        myVungleMediaLoadAdListener.put(key2, ml);
+    }
+
+    public static void setMediaPlayAdCallback(String key2, PlayAdCallback mp) {
+        if (myVungleMediaPlayAdListener == null) {
+            myVungleMediaPlayAdListener = new HashMap<String, PlayAdCallback>();
+        }
+        myVungleMediaPlayAdListener.put(key2, mp);
+    }
+
 }

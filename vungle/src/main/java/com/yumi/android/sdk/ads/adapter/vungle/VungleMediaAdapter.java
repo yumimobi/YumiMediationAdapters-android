@@ -22,12 +22,27 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     private static PlayAdCallback mPlayAdCallback;
 
     private static final int RESTART_INIT = 0x001;
+
+    private static final int REQUEST_NEXT_MEDIA = 0x003;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case RESTART_INIT:
                     ZplayDebug.d(TAG, "vungle media restart init", onoff);
                     VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+                    break;
+                case REQUEST_NEXT_MEDIA:
+                    ZplayDebug.d(TAG, "vungle media Video REQUEST_NEXT_MEDIA ", onoff);
+                    if (Vungle.canPlayAd(getProvider().getKey2())) {
+                        ZplayDebug.d(TAG, "vungle media prapared", onoff);
+                        layerPrepared();
+                    } else {
+                        if (Vungle.isInitialized()) {
+                            layerNWRequestReport();
+                            Vungle.loadAd(getProvider().getKey2(), VungleInstantiate.createVungleMediaLoadListener());
+                        }
+                        ZplayDebug.d(TAG, "vungle onPrepareMedia loadAd:" + getProvider().getKey2(), onoff);
+                    }
                     break;
                 default:
                     break;
@@ -63,7 +78,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPrepared();
             } else {
                 if (Vungle.isInitialized()) {
-                    Vungle.loadAd(getProvider().getKey2(), mLoadAdCallback);
+                    Vungle.loadAd(getProvider().getKey2(), VungleInstantiate.createVungleMediaLoadListener());
                 }
                 ZplayDebug.d(TAG, "vungle onPrepareMedia loadAd:" + getProvider().getKey2(), onoff);
             }
@@ -79,7 +94,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 AdConfig adConfig = new AdConfig();
                 adConfig.setAutoRotate(true);
                 adConfig.setMuted(true);
-                Vungle.playAd(getProvider().getKey2(), adConfig, mPlayAdCallback);
+                Vungle.playAd(getProvider().getKey2(), adConfig, VungleInstantiate.createVungleMediaPlayListener());
                 ZplayDebug.d(TAG, "vungle media onShowMedia true placementId:" + getProvider().getKey2(), onoff);
             } else {
                 ZplayDebug.d(TAG, "vungle media onShowMedia false placementId:" + getProvider().getKey2(), onoff);
@@ -171,6 +186,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                                 ZplayDebug.d(TAG, "vungle media closed", onoff);
                                 layerMediaEnd();
                                 layerClosed();
+                                requestAD(10);
                             } catch (Exception e) {
                                 ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
                             }
@@ -189,9 +205,13 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError try error", cex, onoff);
+
                 }
             }
         };
+
+        VungleInstantiate.getInstantiate().setMediaLoadAdCallback(getProvider().getKey2(), mLoadAdCallback);
+        VungleInstantiate.getInstantiate().setMediaPlayAdCallback(getProvider().getKey2(), mPlayAdCallback);
     }
 
     private void initVungleSDK() {
@@ -209,10 +229,21 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAutoCacheAdAvailable(String s) {
-
+                ZplayDebug.d(TAG, "vungle media onAutoCacheAdAvailable : " + s, onoff);
             }
         });
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+    }
+
+    private void requestAD(int delaySecond) {
+        try {
+            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "vungle media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "vungle media requestAD error ", e, onoff);
+        }
     }
 
     @Override
