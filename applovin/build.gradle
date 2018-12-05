@@ -18,11 +18,19 @@ ext {
     libraryName = project.name
     libraryDescription = 'Yumi Mediation Applovin Adapter'
 
+    // publish aar to in-house(remember change the value of inHouseVersion):
+    // Call ./gradlew artifactoryPublish to publish
+    inHouseVersion = "${project.versionName}-dev"
+
     siteUrl = 'https://www.applovin.com/'
     gitUrl = 'https://www.applovin.com/'
 }
 
 if (version) {
     apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+}
+
+if (inHouseVersion) {
+    apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
 }
 
