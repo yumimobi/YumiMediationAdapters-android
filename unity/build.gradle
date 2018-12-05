@@ -1,8 +1,8 @@
 apply from: '../shared-build.gradle'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.yumimobi.ads.thirdparty:unity:2.3.0.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.yumimobi.ads.thirdparty:unity:2.3.0.0'
     implementation YUMI_MEDIATION
 }
 

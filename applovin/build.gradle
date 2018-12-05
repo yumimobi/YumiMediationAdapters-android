@@ -1,8 +1,8 @@
 apply from: '../shared-build.gradle'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.yumimobi.ads.thirdparty:applovin:8.0.2.0'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.yumimobi.ads.thirdparty:applovin:8.0.2.0'
     implementation YUMI_MEDIATION
 }
 
