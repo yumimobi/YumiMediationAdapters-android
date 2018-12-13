@@ -25,7 +25,7 @@ ext {
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
-    inHouseVersion = "${project.versionName}-dev"
+//    inHouseVersion = "${project.versionName}-dev"
 
     siteUrl = ''
     gitUrl = ''

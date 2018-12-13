@@ -20,7 +20,7 @@ ext {
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
-    inHouseVersion = "${project.versionName}-dev"
+//    inHouseVersion = "${project.versionName}-dev"
 
     siteUrl = 'https://answers.chartboost.com/hc/en-us/articles/201219545-Download-Integrate-the-Chartboost-SDK-for-Android?mobile_site=true'
     gitUrl = 'https://answers.chartboost.com/hc/en-us/articles/201219545-Download-Integrate-the-Chartboost-SDK-for-Android?mobile_site=true'
