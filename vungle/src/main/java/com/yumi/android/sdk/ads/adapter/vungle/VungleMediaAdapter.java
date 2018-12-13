@@ -72,6 +72,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 if (Vungle.isInitialized()) {
                     Vungle.loadAd(getProvider().getKey2(), VungleInstantiate.createVungleMediaLoadListener());
                 } else {
+                    ZplayDebug.d(TAG, "vungle media init fail", onoff);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
