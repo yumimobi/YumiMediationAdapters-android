@@ -31,9 +31,9 @@ allprojects {
             name 'Google'
         }
 
-        maven {
-            url 'http://10.10.30.146:8081/artifactory/gradle-dev-local'
-        }
+//        maven {
+//            url 'http://10.10.30.146:8081/artifactory/gradle-dev-local'
+//        }
     }
 }
 
