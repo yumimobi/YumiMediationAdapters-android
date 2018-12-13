@@ -20,7 +20,7 @@ ext {
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
-//    inHouseVersion = "${project.versionName}-dev"
+    inHouseVersion = ""
 
     siteUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
     gitUrl = 'https://support.vungle.com/hc/zh-cn/articles/204222794-Get-started-with-Vungle-Android-SDK'
