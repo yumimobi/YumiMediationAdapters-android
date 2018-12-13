@@ -21,7 +21,7 @@ ext {
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
-    inHouseVersion = "${project.versionName}-dev"
+//    inHouseVersion = "${project.versionName}-dev"
 
     siteUrl = 'https://firebase.google.com/docs/admob/android/banner?hl=zh-cn'
     gitUrl = 'https://firebase.google.com/docs/admob/android/banner?hl=zh-cn'
