@@ -20,7 +20,7 @@ ext {
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
-//    inHouseVersion = "${project.versionName}-dev"
+    inHouseVersion = ""
 
     siteUrl = 'https://www.applovin.com/'
     gitUrl = 'https://www.applovin.com/'
