@@ -65,6 +65,13 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             } else {
                 if (Vungle.isInitialized()) {
                     Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
+                } else {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                        }
+                    });
                 }
                 isPrepared = false;
                 ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:" + getProvider().getKey3(), onoff);
@@ -205,8 +212,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         VungleInstantiate.setInterstittalInitCallback(new InitCallback() {
             @Override
             public void onSuccess() {
-                ZplayDebug.d(TAG, "vungle Interstitial loadAd", onoff);
-                Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
+                ZplayDebug.d(TAG, "vungle Interstitial init onSuccess", onoff);
             }
 
             @Override
