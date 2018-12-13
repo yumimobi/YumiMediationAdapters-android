@@ -66,6 +66,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 if (Vungle.isInitialized()) {
                     Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
                 } else {
+                    ZplayDebug.d(TAG, "vungle Interstitial init fail", onoff);
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
