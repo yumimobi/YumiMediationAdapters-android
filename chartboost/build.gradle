@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.yumimobi.ads.thirdparty:chartboost:6.6.3.2'
+    implementation 'com.yumimobi.ads.thirdparty:chartboost:7.3.1.0'
     implementation YUMI_MEDIATION
 }
 
