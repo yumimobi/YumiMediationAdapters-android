@@ -5,7 +5,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import com.yumi.android.sdk.ads.self.ads.i.IntersititialAD;
+import com.yumi.android.sdk.ads.self.ads.i.InterstitialAD;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.lang.reflect.Constructor;
@@ -28,13 +28,13 @@ public class IntersititialMraidCreater {
     };
 
     private Activity activity;
-    private IntersititialAD intersititialAD;
+    private InterstitialAD intersititialAD;
     private String adm;
     private FrameLayout intersititialDialogHouse;
 
     private Object obj_MRAIDView;
 
-    public IntersititialMraidCreater(Activity activity, IntersititialAD intersititialAD, String adm, FrameLayout intersititialDialogHouse) {
+    public IntersititialMraidCreater(Activity activity, InterstitialAD intersititialAD, String adm, FrameLayout intersititialDialogHouse) {
         this.activity = activity;
         this.intersititialAD = intersititialAD;
         this.adm = adm;
@@ -45,7 +45,7 @@ public class IntersititialMraidCreater {
         try {
             String classname_MyIntersititialMraidiListener = "com.yumi.android.sdk.ads.mraid.MyIntersititialMraidiListener";
             Class<?> class_MyIntersititialMraidiListener = Class.forName(classname_MyIntersititialMraidiListener);
-            Constructor<?> constructor_MyIntersititialMraidiListener = class_MyIntersititialMraidiListener.getConstructor(IntersititialAD.class);
+            Constructor<?> constructor_MyIntersititialMraidiListener = class_MyIntersititialMraidiListener.getConstructor(InterstitialAD.class);
             Object obj_MyIntersititialMraidiListener = constructor_MyIntersititialMraidiListener.newInstance(intersititialAD);
 
             String classname_MyMRAIDNativeFeatureListener = "com.yumi.android.sdk.ads.mraid.MyMRAIDNativeFeatureListener";
