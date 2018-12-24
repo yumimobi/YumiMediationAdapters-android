@@ -1,6 +1,9 @@
 package com.yumi.android.sdk.ads.adapter.inmobi;
 
-import java.util.Map;
+import android.app.Activity;
+import android.content.Context;
+import android.view.Gravity;
+import android.widget.FrameLayout;
 
 import com.inmobi.ads.InMobiAdRequestStatus;
 import com.inmobi.ads.InMobiBanner;
@@ -9,69 +12,66 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import android.app.Activity;
-import android.content.Context;
-import android.view.Gravity;
-import android.widget.FrameLayout;
+import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
 
 public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
-	private static final String TAG = "InmobiBannerAdapter";
-	private InMobiBanner banner;
-	private InMobiBanner.BannerAdListener bannerListener;
-	private FrameLayout container;
-	private int bannerHeight;
-	private int bannerWidth;
-	
-	protected InmobiBannerAdapter(Activity activity, YumiProviderBean provider) {
-		super(activity, provider);
-	}
+    private static final String TAG = "InmobiBannerAdapter";
+    private InMobiBanner banner;
+    private InMobiBanner.BannerAdListener bannerListener;
+    private FrameLayout container;
+    private int bannerHeight;
+    private int bannerWidth;
 
-	@Override
-	public void onActivityPause() {
-	}
+    protected InmobiBannerAdapter(Activity activity, YumiProviderBean provider) {
+        super(activity, provider);
+    }
 
-	@Override
-	public void onActivityResume() {
-	}
+    @Override
+    public void onActivityPause() {
+    }
 
-	@Override
-	protected final void callOnActivityDestroy() {
-		InmobiExtraHolder.onDestroy();
-	}
+    @Override
+    public void onActivityResume() {
+    }
 
-	@Override
-	protected void onPrepareBannerLayer() {
-		calculateBannerSize();
-		ZplayDebug.d(TAG, "inmobi request new banner", onoff);
-		String key2 = getProvider().getKey2();
-		long placementID = 0L;
-		if (key2 != null && key2.length() > 0) {
-			try {
-				placementID = Long.valueOf(key2);
-			} catch (NumberFormatException e) {
-				ZplayDebug.e(TAG, "", e, onoff);
-				layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
-				return ;
-			}
-		}else {
-			layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
-			return;
-		}
-		container = new FrameLayout(getActivity());
-		
-		banner = new InMobiBanner(getActivity(), placementID);
-		banner.setListener(bannerListener);
-		banner.setEnableAutoRefresh(false);
-		container.addView(banner, new FrameLayout.LayoutParams(bannerWidth,bannerHeight, Gravity.CENTER));
-		sendChangeViewBeforePrepared(container);
-		banner.load();
-	}
+    @Override
+    protected final void callOnActivityDestroy() {
+        InmobiExtraHolder.onDestroy();
+    }
 
-	private void calculateBannerSize() {
+    @Override
+    protected void onPrepareBannerLayer() {
+        calculateBannerSize();
+        ZplayDebug.d(TAG, "inmobi request new banner", onoff);
+        String key2 = getProvider().getKey2();
+        long placementID = 0L;
+        if (key2 != null && key2.length() > 0) {
+            try {
+                placementID = Long.valueOf(key2);
+            } catch (NumberFormatException e) {
+                ZplayDebug.e(TAG, "", e, onoff);
+                layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+                return;
+            }
+        } else {
+            layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+            return;
+        }
+        container = new FrameLayout(getActivity());
+
+        banner = new InMobiBanner(getActivity(), placementID);
+        banner.setListener(bannerListener);
+        banner.setEnableAutoRefresh(false);
+        container.addView(banner, new FrameLayout.LayoutParams(bannerWidth, bannerHeight, Gravity.CENTER));
+        sendChangeViewBeforePrepared(container);
+        banner.load();
+    }
+
+    private void calculateBannerSize() {
         if (isMatchWindowWidth && calculateLayerSize != null) {
             if (calculateLayerSize[0] > 0 && calculateLayerSize[1] > 0) {
                 bannerWidth = calculateLayerSize[0];
@@ -99,53 +99,52 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
             bannerWidth = dip2px(getContext(), bannerWidth);
             bannerHeight = dip2px(getContext(), bannerHeight);
         }
-	}
+    }
 
-	@Override
-	protected void init() {
-		ZplayDebug.i(TAG, "accounID : " + getProvider().getKey1(), onoff);
-		ZplayDebug.i(TAG, "placementID : " + getProvider().getKey2(), onoff);
-		InmobiExtraHolder.initInmobiSDK(getActivity(), getProvider().getKey1());
-		bannerListener = new InMobiBanner.BannerAdListener() {
-			
-			@Override
-			public void onUserLeftApplication(InMobiBanner arg0) {
-				ZplayDebug.d(TAG, "inmobi banner left application", onoff);
-				layerClicked(-99f, -99f);
-			}
-			
-			@Override
-			public void onAdRewardActionCompleted(InMobiBanner arg0,
-					Map<Object, Object> arg1) {
-			}
-			
-			@Override
-			public void onAdLoadSucceeded(InMobiBanner arg0) {
-				ZplayDebug.d(TAG, "inmobi banner load successed", onoff);
-				layerPrepared(container, true);
-			}
-			
-			@Override
-			public void onAdLoadFailed(InMobiBanner arg0, InMobiAdRequestStatus arg1) {
-				ZplayDebug.d(TAG, "inmobi banner load failed " + arg1.getStatusCode(), onoff);
-				layerPreparedFailed(recodeError(arg1));
-			}
-			
-			@Override
-			public void onAdInteraction(InMobiBanner arg0, Map<Object, Object> arg1) {
-			}
-			
-			@Override
-			public void onAdDisplayed(InMobiBanner arg0) {
-			}
-			
-			@Override
-			public void onAdDismissed(InMobiBanner arg0) {
-			}
-		};
-		
-		
-		
+    @Override
+    protected void init() {
+        ZplayDebug.i(TAG, "accounID : " + getProvider().getKey1(), onoff);
+        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey2(), onoff);
+        InmobiExtraHolder.initInmobiSDK(getActivity(), getProvider().getKey1());
+        bannerListener = new InMobiBanner.BannerAdListener() {
+
+            @Override
+            public void onUserLeftApplication(InMobiBanner arg0) {
+                ZplayDebug.d(TAG, "inmobi banner left application", onoff);
+                layerClicked(-99f, -99f);
+            }
+
+            @Override
+            public void onAdRewardActionCompleted(InMobiBanner arg0,
+                                                  Map<Object, Object> arg1) {
+            }
+
+            @Override
+            public void onAdLoadSucceeded(InMobiBanner arg0) {
+                ZplayDebug.d(TAG, "inmobi banner load successed", onoff);
+                layerPrepared(container, true);
+            }
+
+            @Override
+            public void onAdLoadFailed(InMobiBanner arg0, InMobiAdRequestStatus arg1) {
+                ZplayDebug.d(TAG, "inmobi banner load failed " + arg1.getStatusCode(), onoff);
+                layerPreparedFailed(recodeError(arg1));
+            }
+
+            @Override
+            public void onAdInteraction(InMobiBanner arg0, Map<Object, Object> arg1) {
+            }
+
+            @Override
+            public void onAdDisplayed(InMobiBanner arg0) {
+            }
+
+            @Override
+            public void onAdDismissed(InMobiBanner arg0) {
+            }
+        };
+
+
 //		bannerListener = new IMBannerListener() {
 //
 //			@Override
@@ -184,10 +183,10 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 //
 //			}
 //		};
-	}
+    }
 
-	private final int dip2px(Context context, int dp){
-		float scale = context.getResources().getDisplayMetrics().density;
-		return ((int)(dp * scale +0.5f));
-	}
+    private final int dip2px(Context context, int dp) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return ((int) (dp * scale + 0.5f));
+    }
 }
