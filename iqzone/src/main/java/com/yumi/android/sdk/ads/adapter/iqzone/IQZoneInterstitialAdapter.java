@@ -16,7 +16,7 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.CODE_FAIL
  * Created by lgd on 2018/11/2.
  */
 public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
-    private static final String TAG = "IQZoneMediaAdapter";
+    private static final String TAG = "IQZoneInterstitialAdapter";
     private IQzoneInterstitialAdManager imdInterstitialAdManager;
     private boolean isReady;
 
@@ -26,13 +26,13 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Video onPrepareMedia", onoff);
+        ZplayDebug.d(TAG, "Video onPrepareInterstitial", onoff);
         imdInterstitialAdManager.loadInterstitial();
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        ZplayDebug.d(TAG, "Video onShowMedia", onoff);
+        ZplayDebug.d(TAG, "Video onShowInterstitialLayer", onoff);
         imdInterstitialAdManager.showInterstitial();
     }
 
@@ -43,6 +43,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
+        ZplayDebug.d(TAG, "init", onoff);
         imdInterstitialAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
     }
 
@@ -93,11 +94,13 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     public void onActivityPause() {
+        ZplayDebug.d(TAG, "onActivityPause", onoff);
         imdInterstitialAdManager.onDetached();
     }
 
     @Override
     public void onActivityResume() {
+        ZplayDebug.d(TAG, "onActivityResume", onoff);
         imdInterstitialAdManager.onAttached(getActivity());
     }
 

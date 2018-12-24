@@ -1,6 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
 import android.app.Activity;
+import android.util.Log;
 
 import com.iqzone.android.AdEventsListener;
 import com.iqzone.android.IQzoneInterstitialAdManager;
@@ -43,6 +44,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
+        ZplayDebug.d(TAG, "init", onoff);
         imdRewardedVideoAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
     }
 
@@ -95,11 +97,13 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     public void onActivityPause() {
+        ZplayDebug.d(TAG, "onActivityPause", onoff);
         imdRewardedVideoAdManager.onDetached();
     }
 
     @Override
     public void onActivityResume() {
+        ZplayDebug.d(TAG, "onActivityResume", onoff);
         imdRewardedVideoAdManager.onAttached(getActivity());
     }
 }
