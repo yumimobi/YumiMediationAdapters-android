@@ -6,6 +6,7 @@ import com.iqzone.android.AdEventsListener;
 import com.iqzone.android.IQzoneBannerView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
+import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 
@@ -24,7 +25,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        imdBannerAd = new IQzoneBannerView(getActivity());
+        imdBannerAd.onAttached(getActivity());
         imdBannerAd.loadAd(getProvider().getKey1(), 0, newAdEventListener());
     }
 
@@ -67,19 +68,24 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
+        imdBannerAd = new IQzoneBannerView(getActivity());
     }
 
     @Override
     protected void callOnActivityDestroy() {
+        ZplayDebug.d(TAG, "callOnActivityDestroy", onoff);
+        imdBannerAd.onDetached();
     }
 
     @Override
     public void onActivityPause() {
+        ZplayDebug.d(TAG, "onActivityPause", onoff);
         imdBannerAd.onDetached();
     }
 
     @Override
     public void onActivityResume() {
+        ZplayDebug.d(TAG, "onActivityResume", onoff);
         imdBannerAd.onAttached(getActivity());
     }
 }
