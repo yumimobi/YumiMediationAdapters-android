@@ -91,7 +91,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onAdClose(JSONObject arg0) {
 				// TODO Auto-generated method stub
-				
+				layerClosed();
 			}
 		};
 	}
