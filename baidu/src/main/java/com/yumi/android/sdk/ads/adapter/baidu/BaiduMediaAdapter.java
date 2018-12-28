@@ -149,14 +149,14 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityPause() {
         if (rewardVideoAd != null) {
-            rewardVideoAd.setActivityState(IXAdConstants4PDK.ActivityState.PAUSE);
+            rewardVideoAd.pause();
         }
     }
 
     @Override
     public void onActivityResume() {
         if (rewardVideoAd != null) {
-            rewardVideoAd.setActivityState(IXAdConstants4PDK.ActivityState.RESUME);
+            rewardVideoAd.resume();
         }
     }
 }
