@@ -33,34 +33,34 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
         return new AdEventsListener() {
             @Override
             public void adLoaded() {
-                ZplayDebug.d(TAG, "adLoaded", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner adLoaded", onoff);
                 layerPrepared(imdBannerAd, true);
             }
 
             @Override
             public void adImpression() {
-                ZplayDebug.d(TAG, "adImpression", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner adImpression", onoff);
             }
 
             @Override
             public void adFailedToLoad() {
-                ZplayDebug.d(TAG, "adFailedToLoad", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner adFailedToLoad", onoff);
                 layerPreparedFailed(ERROR_INTERNAL);
             }
 
             @Override
             public void videoStarted() {
-                ZplayDebug.d(TAG, "videoStarted", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner videoStarted", onoff);
             }
 
             @Override
             public void videoCompleted(boolean b) {
-                ZplayDebug.d(TAG, "videoCompleted", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner videoCompleted", onoff);
             }
 
             @Override
             public void adDismissed() {
-                ZplayDebug.d(TAG, "adDismissed", onoff);
+                ZplayDebug.d(TAG, "IQZone Banner adDismissed", onoff);
                 layerClosed();
             }
         };
@@ -73,19 +73,17 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-        ZplayDebug.d(TAG, "callOnActivityDestroy", onoff);
+        ZplayDebug.d(TAG, "IQZone Banner callOnActivityDestroy", onoff);
         imdBannerAd.onDetached();
     }
 
     @Override
     public void onActivityPause() {
-        ZplayDebug.d(TAG, "onActivityPause", onoff);
-        imdBannerAd.onDetached();
+        ZplayDebug.d(TAG, "IQZone Banner onActivityPause", onoff);
     }
 
     @Override
     public void onActivityResume() {
-        ZplayDebug.d(TAG, "onActivityResume", onoff);
-        imdBannerAd.onAttached(getActivity());
+        ZplayDebug.d(TAG, "IQZone Banner onActivityResume", onoff);
     }
 }
