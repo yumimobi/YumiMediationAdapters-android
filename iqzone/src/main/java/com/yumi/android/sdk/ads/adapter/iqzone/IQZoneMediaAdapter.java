@@ -1,6 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.iqzone.android.AdEventsListener;
@@ -21,19 +23,39 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     private IQzoneInterstitialAdManager imdRewardedVideoAdManager;
     private boolean isReady;
 
+    private static final int REQUEST_NEXT_MEDIA = 0x001;
+
+    private final Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case REQUEST_NEXT_MEDIA:
+                    if (imdRewardedVideoAdManager != null) {
+                        ZplayDebug.d(TAG, "IQZone media Video REQUEST_NEXT_MEDIA ", onoff);
+                        layerNWRequestReport();
+                        imdRewardedVideoAdManager.loadInterstitial();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        ;
+    };
+
     protected IQZoneMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
     }
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "Video onPrepareMedia", onoff);
+        ZplayDebug.d(TAG, "IQZone Video onPrepareMedia", onoff);
         imdRewardedVideoAdManager.loadInterstitial();
     }
 
     @Override
     protected void onShowMedia() {
-        ZplayDebug.d(TAG, "Video onShowMedia", onoff);
+        ZplayDebug.d(TAG, "IQZone Video onShowMedia", onoff);
         imdRewardedVideoAdManager.showInterstitial();
     }
 
@@ -44,7 +66,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "init", onoff);
+        ZplayDebug.d(TAG, "IQZone Video init", onoff);
         imdRewardedVideoAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
     }
 
@@ -52,7 +74,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
         return new AdEventsListener() {
             @Override
             public void adLoaded() {
-                ZplayDebug.d(TAG, "Playable Interstitial Ready", onoff);
+                ZplayDebug.d(TAG, "IQZone Video Interstitial Ready", onoff);
                 isReady = true;
                 layerPrepared();
             }
@@ -60,35 +82,49 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adImpression() {
                 isReady = false;
-                ZplayDebug.d(TAG, "adImpression", onoff);
+                ZplayDebug.d(TAG, "IQZone Video adImpression", onoff);
                 layerExposure();
             }
 
             @Override
             public void adDismissed() {
-                ZplayDebug.d(TAG, "adDismissed", onoff);
-                layerIncentived();
-                layerClosed();
+                ZplayDebug.d(TAG, "IQZone Video adDismissed", onoff);
             }
 
             @Override
             public void adFailedToLoad() {
-                ZplayDebug.d(TAG, "adFailedToLoad", onoff);
+                ZplayDebug.d(TAG, "IQZone Video adFailedToLoad", onoff);
                 layerPreparedFailed(CODE_FAILED);
+                requestAD(getProvider().getNextRequestInterval());
             }
 
             @Override
             public void videoStarted() {
-                ZplayDebug.d(TAG, "videoStarted", onoff);
+                ZplayDebug.d(TAG, "IQZone Video videoStarted", onoff);
                 layerMediaStart();
             }
 
             @Override
             public void videoCompleted(boolean skipped) {
-                ZplayDebug.d(TAG, "videoCompleted", onoff);
+                ZplayDebug.d(TAG, "IQZone Video videoCompleted", onoff);
                 layerMediaEnd();
+                layerIncentived();
+                layerClosed();
+                requestAD(5);
             }
         };
+    }
+
+
+    private void requestAD(int delaySecond) {
+        try {
+            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
+                ZplayDebug.d(TAG, "IQZone media Video requestAD delaySecond" + delaySecond, onoff);
+                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
+            }
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "IQZone media requestAD error ", e, onoff);
+        }
     }
 
     @Override
@@ -97,13 +133,13 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     public void onActivityPause() {
-        ZplayDebug.d(TAG, "onActivityPause", onoff);
+        ZplayDebug.d(TAG, "IQZone Video onActivityPause", onoff);
         imdRewardedVideoAdManager.onDetached();
     }
 
     @Override
     public void onActivityResume() {
-        ZplayDebug.d(TAG, "onActivityResume", onoff);
+        ZplayDebug.d(TAG, "IQZone Video onActivityResume", onoff);
         imdRewardedVideoAdManager.onAttached(getActivity());
     }
 }
