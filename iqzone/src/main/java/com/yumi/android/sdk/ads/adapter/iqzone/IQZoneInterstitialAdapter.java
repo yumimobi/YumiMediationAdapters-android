@@ -26,13 +26,13 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Video onPrepareInterstitial", onoff);
+        ZplayDebug.d(TAG, "IQZone Interstitial onPrepareInterstitial", onoff);
         imdInterstitialAdManager.loadInterstitial();
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        ZplayDebug.d(TAG, "Video onShowInterstitialLayer", onoff);
+        ZplayDebug.d(TAG, "IQZone Interstitial onShowInterstitialLayer", onoff);
         imdInterstitialAdManager.showInterstitial();
     }
 
@@ -43,7 +43,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "init", onoff);
+        ZplayDebug.d(TAG, "IQZone Interstitial init", onoff);
         imdInterstitialAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
     }
 
@@ -51,7 +51,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         return new AdEventsListener() {
             @Override
             public void adLoaded() {
-                ZplayDebug.d(TAG, "Playable Interstitial Ready", onoff);
+                ZplayDebug.d(TAG, "IQZone Interstitial Ready", onoff);
                 isReady = true;
                 layerPrepared();
             }
@@ -59,19 +59,19 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void adImpression() {
                 isReady = false;
-                ZplayDebug.d(TAG, "adImpression", onoff);
+                ZplayDebug.d(TAG, "IQZone Interstitial adImpression", onoff);
                 layerExposure();
             }
 
             @Override
             public void adDismissed() {
-                ZplayDebug.d(TAG, "adDismissed", onoff);
+                ZplayDebug.d(TAG, "IQZone Interstitial adDismissed", onoff);
                 layerClosed();
             }
 
             @Override
             public void adFailedToLoad() {
-                ZplayDebug.d(TAG, "adFailedToLoad", onoff);
+                ZplayDebug.d(TAG, "IQZone Interstitial adFailedToLoad", onoff);
                 layerPreparedFailed(CODE_FAILED);
             }
 
@@ -82,7 +82,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void videoCompleted(boolean skipped) {
-                ZplayDebug.d(TAG, "videoCompleted", onoff);
+                ZplayDebug.d(TAG, "IQZone Interstitial videoCompleted", onoff);
                 layerMediaEnd();
             }
         };
@@ -94,13 +94,13 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     public void onActivityPause() {
-        ZplayDebug.d(TAG, "onActivityPause", onoff);
+        ZplayDebug.d(TAG, "IQZone Interstitial onActivityPause", onoff);
         imdInterstitialAdManager.onDetached();
     }
 
     @Override
     public void onActivityResume() {
-        ZplayDebug.d(TAG, "onActivityResume", onoff);
+        ZplayDebug.d(TAG, "IQZone Interstitial onActivityResume", onoff);
         imdInterstitialAdManager.onAttached(getActivity());
     }
 
