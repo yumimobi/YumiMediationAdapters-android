@@ -14,14 +14,14 @@ dependencies {
 
     implementation YUMI_MEDIATION
 
-    implementation files('libs/iqps-core-android.aar')
-    implementation files('libs/HyprMX-SDK-4.3.1.aar')
-    implementation files('libs/ia-sdk-core-release-7.1.6.aar')
-    implementation files('libs/ia-mraid-kit-release-7.1.6.aar')
-    implementation files('libs/ia-video-kit-release-7.1.6.aar')
-    implementation files('libs/ia-native-kit-release-7.1.6.aar')
-    implementation files('libs/SOMAAndroid-8.0.1-release.aar')
-    implementation files('libs/presage-moat-3.0.22-moat-3.0.13.aar')
+    implementation 'com.yumimobi.ads.thirdparty:iqps-core:2.3.2110'
+    implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1'
+    implementation 'com.yumimobi.ads.thirdparty:ia-sdk-core:7.1.6'
+    implementation 'com.yumimobi.ads.thirdparty:ia-video-kit:7.1.6'
+    implementation 'com.yumimobi.ads.thirdparty:ia-mraid-kit:7.1.6'
+    implementation 'com.yumimobi.ads.thirdparty:ia-native-kit:7.1.6'
+    implementation 'com.yumimobi.ads.thirdparty:soma:8.0.1'
+    implementation 'com.yumimobi.ads.thirdparty:presage-moat-3.0.22-moat:3.0.13'
 
     implementation 'com.flurry.android:analytics:10.1.0@aar'
     implementation 'com.flurry.android:ads:10.1.0@aar'
