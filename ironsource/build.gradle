@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.yumimobi.ads.thirdparty:ironsource:6.7.10.0'
+    implementation "com.yumimobi.ads.thirdparty:ironsource:$IRONSOURCE"
     implementation YUMI_MEDIATION
 }
 
