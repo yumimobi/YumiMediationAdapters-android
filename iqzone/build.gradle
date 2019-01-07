@@ -34,14 +34,14 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.7'
 
-    implementation 'com.yumimobi.ads.thirdparty:adcolony:3.3.7.0'
-    implementation 'com.yumimobi.ads.thirdparty:chartboost:7.3.1.0'
-    implementation 'com.inmobi.monetization:inmobi-ads:7.2.0'
-    implementation 'com.yumimobi.ads.thirdparty:ironsource:6.7.10.0'
-    implementation 'com.yumimobi.ads.thirdparty:mobvista:8.13.0.0'
-    implementation 'com.yumimobi.ads.thirdparty:unity:2.3.0.0'
-    implementation 'com.yumimobi.ads.thirdparty:vungle:6.3.17.1'
-    implementation 'com.yumimobi.ads.thirdparty:applovin:8.0.2.0'
+    implementation "com.yumimobi.ads.thirdparty:adcolony:$ADCOLONY"
+    implementation "com.yumimobi.ads.thirdparty:chartboost:$CHARTBOOST"
+    implementation "com.inmobi.monetization:inmobi-ads:$INMOBI"
+    implementation "com.yumimobi.ads.thirdparty:ironsource:$IRONSOURCE"
+    implementation "com.yumimobi.ads.thirdparty:mobvista:$MOBVISTA"
+    implementation "com.yumimobi.ads.thirdparty:unity:$UNITY"
+    implementation "com.yumimobi.ads.thirdparty:vungle:$VUNGLE"
+    implementation "com.yumimobi.ads.thirdparty:applovin:$APPLOVIN"
 
     implementation 'com.google.android.gms:play-services-ads:11.0.4'
 
