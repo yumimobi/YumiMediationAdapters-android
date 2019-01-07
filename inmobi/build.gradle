@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.inmobi.monetization:inmobi-ads:7.2.2"
+    implementation "com.inmobi.monetization:inmobi-ads:$INMOBI"
     implementation "com.android.support:design:$SUPOORT_LIBRAY_VERSION"
     implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPOORT_LIBRAY_VERSION"

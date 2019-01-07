@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.yumimobi.ads.thirdparty:applovin:8.0.2.0'
+    implementation "com.yumimobi.ads.thirdparty:applovin:$APPLOVIN"
     implementation YUMI_MEDIATION
 }
 
