@@ -107,6 +107,7 @@ public class ChartboostInterstitialAdapter extends
 				public void didClickInterstitial(String location) {
 					ZplayDebug.d(TAG, "chartboost interstitial clicked", onoff);
 					layerClicked(-99f, -99f);
+					layerClosed();
 					super.didClickInterstitial(location);
 				}
 
