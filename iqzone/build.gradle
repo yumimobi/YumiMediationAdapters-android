@@ -14,7 +14,7 @@ dependencies {
 
     implementation YUMI_MEDIATION
 
-    implementation 'com.yumimobi.ads.thirdparty:iqps-core:2.3.2110'
+    implementation 'com.yumimobi.ads.thirdparty:iqps-core:2.3.2111@aar'
     implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1'
     implementation 'com.yumimobi.ads.thirdparty:ia-sdk-core:7.1.6'
     implementation 'com.yumimobi.ads.thirdparty:ia-video-kit:7.1.6'

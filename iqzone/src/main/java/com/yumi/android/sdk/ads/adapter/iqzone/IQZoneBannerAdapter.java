@@ -43,6 +43,12 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             }
 
             @Override
+            public void adClicked() {
+                ZplayDebug.d(TAG, "IQZone Banner adClicked", onoff);
+                layerClicked(-99f, -99f);
+            }
+
+            @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Banner adFailedToLoad", onoff);
                 layerPreparedFailed(ERROR_INTERNAL);
