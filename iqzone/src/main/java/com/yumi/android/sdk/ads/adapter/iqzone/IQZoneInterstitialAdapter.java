@@ -64,6 +64,12 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             }
 
             @Override
+            public void adClicked() {
+                ZplayDebug.d(TAG, "IQZone Interstitial adClicked", onoff);
+                layerClicked(-99f, -99f);
+            }
+
+            @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Interstitial adDismissed", onoff);
                 layerClosed();

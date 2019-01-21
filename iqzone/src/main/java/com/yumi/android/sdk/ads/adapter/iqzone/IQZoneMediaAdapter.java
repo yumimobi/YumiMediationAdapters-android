@@ -3,7 +3,6 @@ package com.yumi.android.sdk.ads.adapter.iqzone;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 
 import com.iqzone.android.AdEventsListener;
 import com.iqzone.android.IQzoneInterstitialAdManager;
@@ -87,8 +86,16 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
+            public void adClicked() {
+                ZplayDebug.d(TAG, "IQZone Video adClicked", onoff);
+                layerClicked();
+            }
+
+            @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Video adDismissed", onoff);
+                layerClosed();
+                requestAD(5);
             }
 
             @Override
@@ -109,8 +116,6 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "IQZone Video videoCompleted", onoff);
                 layerMediaEnd();
                 layerIncentived();
-                layerClosed();
-                requestAD(5);
             }
         };
     }
