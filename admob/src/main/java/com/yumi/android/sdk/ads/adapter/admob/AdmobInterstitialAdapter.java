@@ -10,6 +10,8 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdmobBannerAdapter.decodeErrorCode;
+
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
 	private static final String TAG = "AdmobInterstitialAdapter";
@@ -109,21 +111,6 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				super.onAdFailedToLoad(errorCode);
 			}
 		};
-	}
-
-	private LayerErrorCode decodeErrorCode(int errorCode) {
-		switch (errorCode) {
-		case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-			return LayerErrorCode.ERROR_INTERNAL;
-		case AdRequest.ERROR_CODE_INVALID_REQUEST:
-			return LayerErrorCode.ERROR_INVALID;
-		case AdRequest.ERROR_CODE_NO_FILL:
-			return LayerErrorCode.ERROR_NO_FILL;
-		case AdRequest.ERROR_CODE_NETWORK_ERROR:
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		default:
-			return LayerErrorCode.ERROR_INTERNAL;
-		}
 	}
 
 }

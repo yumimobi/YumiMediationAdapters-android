@@ -80,7 +80,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
 				return;
 			}
 			ZplayDebug.d(TAG, "GDT nativead Interstitial onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+			layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
 		}
 
 		@Override

@@ -10,6 +10,8 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableadsInterstitialAdapter.generateLayerErrorCode;
+
 /**
  * Created by syj on 2017/10/12.
  */
@@ -105,16 +107,13 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                     layerPrepared();
                 }
                 @Override
-                public void onLoadFailed(int erroCode, String s) {
-                    ZplayDebug.d(TAG, "Playable media onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
-                    if (erroCode == 2004) { //ads has filled
+                public void onLoadFailed(int errorCode, String s) {
+                    ZplayDebug.d(TAG, "Playable media onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
+                    if (errorCode == 2004) { //ads has filled
                         layerPrepared();
-                        ZplayDebug.d(TAG, "Playable media Ready onLoadFailed", onoff);
-                    } else if (erroCode == 2005) { //no ad
-                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                    } else {
-                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                        return;
                     }
+                    layerPreparedFailed(generateLayerErrorCode(errorCode, s));
                 }
             };
         }catch (Exception e)

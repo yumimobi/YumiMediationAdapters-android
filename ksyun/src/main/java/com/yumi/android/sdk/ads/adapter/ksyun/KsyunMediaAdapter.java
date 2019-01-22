@@ -102,11 +102,14 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdInfoFailed(int erroCode, String erroMsg) {
                 ZplayDebug.i(TAG, "Ksyun Media onAdInfoFailed  erroCode: " + erroCode + "   erroMsg: " + erroMsg, onoff);
+                LayerErrorCode error;
                 if (erroCode == 2001) {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                    error = LayerErrorCode.ERROR_NO_FILL;
                 } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    error = LayerErrorCode.ERROR_INTERNAL;
                 }
+                error.setExtraMsg("Ksyun errorMsg: " + erroMsg);
+                layerPreparedFailed(error);
             }
 
             @Override

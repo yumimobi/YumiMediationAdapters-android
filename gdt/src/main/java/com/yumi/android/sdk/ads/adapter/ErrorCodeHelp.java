@@ -1,5 +1,6 @@
 package com.yumi.android.sdk.ads.adapter;
 
+import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -7,13 +8,20 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  */
 
 public class ErrorCodeHelp {
-    public static LayerErrorCode decodeErrorCode(int arg0) {
-        if (arg0 == 4003) {
-            return LayerErrorCode.ERROR_INVALID;
+    public static LayerErrorCode decodeErrorCode(AdError gdtError) {
+        if (gdtError == null) {
+            return LayerErrorCode.ERROR_INTERNAL;
         }
-        if (arg0 == 5004) {
-            return LayerErrorCode.ERROR_NO_FILL;
+
+        LayerErrorCode error;
+        if (gdtError.getErrorCode() == 4003) {
+            error = LayerErrorCode.ERROR_INVALID;
+        } else if (gdtError.getErrorCode() == 5004) {
+            error = LayerErrorCode.ERROR_NO_FILL;
+        } else {
+            error = LayerErrorCode.ERROR_INTERNAL;
         }
-        return LayerErrorCode.ERROR_INTERNAL;
+        error.setExtraMsg("GAT errorMsg: " + gdtError.getErrorMsg());
+        return error;
     }
 }

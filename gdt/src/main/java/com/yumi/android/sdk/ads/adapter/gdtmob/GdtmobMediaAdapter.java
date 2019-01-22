@@ -152,14 +152,13 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onError(AdError adError) {
-                ZplayDebug.e(TAG, "gdt media onError errorCode:" + adError.getErrorCode() + ",errorMsg" + adError.getErrorMsg(), onoff);
                 if (adError == null) {
                     ZplayDebug.d(TAG, "gdt media failed adError = null", onoff);
                     layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
                     return;
                 }
                 ZplayDebug.d(TAG, "gdt media failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
                 requestAD(getProvider().getNextRequestInterval());
             }
         };

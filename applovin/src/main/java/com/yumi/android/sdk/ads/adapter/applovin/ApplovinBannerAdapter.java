@@ -77,11 +77,8 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void failedToReceiveAd(final int errorCode) {
                 ZplayDebug.d(TAG, "AppLovin banner failedToReceiveAd  errorCode:" + errorCode, onoff);
-                if (errorCode == AppLovinErrorCodes.NO_FILL) {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                }
+
+                layerPreparedFailed(generateLayerErrorCode(errorCode));
             }
         };
 
@@ -130,6 +127,17 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
             }
         };
+    }
+
+    static LayerErrorCode generateLayerErrorCode(int applovinErrorCode) {
+        LayerErrorCode error;
+        if (applovinErrorCode == AppLovinErrorCodes.NO_FILL) {
+            error = LayerErrorCode.ERROR_NO_FILL;
+        } else {
+            error = LayerErrorCode.ERROR_INTERNAL;
+        }
+        error.setExtraMsg("Applovin errorCode: " + applovinErrorCode);
+        return error;
     }
 
     @Override

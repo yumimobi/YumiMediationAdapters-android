@@ -106,7 +106,7 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdLoadFailed(InMobiInterstitial arg0,
 					InMobiAdRequestStatus arg1) {
 				ZplayDebug.d(TAG, "inmobi interstitial load failed " + arg1.getStatusCode(), onoff);
-				layerPreparedFailed(InmobiExtraHolder.decodeError(arg1.getStatusCode()));
+				layerPreparedFailed(InmobiExtraHolder.decodeError(arg1));
 			}
 			
 			@Override

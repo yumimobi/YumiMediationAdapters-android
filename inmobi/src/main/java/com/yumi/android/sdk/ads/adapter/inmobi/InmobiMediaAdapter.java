@@ -134,7 +134,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					InMobiAdRequestStatus arg1) {
 				if (!isCallbackInExposure) {
 					ZplayDebug.d(TAG, "inmobi media load failed " + arg1.getStatusCode(), onoff);
-					layerPreparedFailed(InmobiExtraHolder.decodeError(arg1.getStatusCode()));
+					layerPreparedFailed(InmobiExtraHolder.decodeError(arg1));
 				}
 				requestAD(getProvider().getNextRequestInterval());
 			}

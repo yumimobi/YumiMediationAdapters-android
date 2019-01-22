@@ -100,7 +100,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     return;
                 }
                 ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
             }
 
             @Override

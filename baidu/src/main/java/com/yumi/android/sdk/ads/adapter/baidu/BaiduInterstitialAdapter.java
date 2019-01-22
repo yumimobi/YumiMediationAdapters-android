@@ -93,7 +93,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				@Override
 				public void onAdFailed(String arg0) {
 					ZplayDebug.d(TAG, "baidu interstitial failed " +  arg0, onoff);
-					layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+					layerPreparedFailed(generateLayerErrorCode(arg0));
 				}
 
 				@Override
@@ -109,6 +109,12 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				}
 			};
 		}
+	}
+
+	static LayerErrorCode generateLayerErrorCode(String baiduErrorMes){
+		LayerErrorCode error = LayerErrorCode.ERROR_INTERNAL;
+		error.setExtraMsg("Baidu errorMsg: " + baiduErrorMes);
+		return  error;
 	}
 
 }

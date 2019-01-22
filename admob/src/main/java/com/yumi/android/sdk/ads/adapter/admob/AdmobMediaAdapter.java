@@ -148,11 +148,14 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
+                LayerErrorCode error;
                 if (AdRequest.ERROR_CODE_NO_FILL == errorCode) {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                    error = LayerErrorCode.ERROR_NO_FILL;
                 } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    error = LayerErrorCode.ERROR_INTERNAL;
                 }
+                error.setExtraMsg("AdMob errorCode: " + errorCode);
+                layerPreparedFailed(error);
                 loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
         };

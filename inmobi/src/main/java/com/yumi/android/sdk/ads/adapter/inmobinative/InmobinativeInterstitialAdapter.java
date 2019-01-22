@@ -8,6 +8,7 @@ import com.inmobi.ads.InMobiAdRequestStatus.StatusCode;
 import com.inmobi.ads.InMobiNative;
 import com.inmobi.ads.InMobiNative.NativeAdListener;
 import com.inmobi.sdk.InMobiSdk;
+import com.yumi.android.sdk.ads.adapter.inmobi.InmobiExtraHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
@@ -176,14 +177,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 		public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus)
 		{
 			ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
-			StatusCode statusCode = inMobiAdRequestStatus.getStatusCode();
-			if (statusCode == StatusCode.NO_FILL)
-			{
-				layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-			}else
-			{
-				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-			}
+			layerPreparedFailed(InmobiExtraHolder.decodeError(inMobiAdRequestStatus.getStatusCode()));
 		}
 
 		@Override

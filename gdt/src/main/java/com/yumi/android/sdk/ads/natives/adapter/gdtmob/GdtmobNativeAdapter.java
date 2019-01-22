@@ -100,7 +100,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                     return;
                 }
                 ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
             }
 
             @Override
@@ -111,7 +111,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                     return;
                 }
                 ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
             }
         });
     }

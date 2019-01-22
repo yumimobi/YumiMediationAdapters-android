@@ -78,11 +78,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                 public void onInterstitialAdLoadFailed(String instanceId, IronSourceError error) {
                     ZplayDebug.e(TAG, "IronSource Interstitial onInterstitialAdLoadFailed : " + instanceId + "   getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
                     if (instanceId.equals(getProvider().getKey2())) {
-                        if (error.getErrorCode() == IronSourceError.ERROR_BN_LOAD_NO_FILL) {
-                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                        } else {
-                            layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                        }
+                        layerPreparedFailed(generateLayerErrorCode(error));
                     }
                 }
 
@@ -138,6 +134,21 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
             };
             IronsourceListenerHandler.setMyIronsourceInterstitialListener(adListener);
         }
+    }
+
+    static LayerErrorCode generateLayerErrorCode(IronSourceError ironSourceError){
+        if (ironSourceError == null){
+            return  LayerErrorCode.ERROR_INTERNAL;
+        }
+
+        LayerErrorCode result;
+        if (ironSourceError.getErrorCode() == IronSourceError.ERROR_BN_LOAD_NO_FILL) {
+            result = LayerErrorCode.ERROR_NO_FILL;
+        } else {
+            result = LayerErrorCode.ERROR_INTERNAL;
+        }
+        result.setExtraMsg("IronSource errorMsg: " + ironSourceError.getErrorMessage());
+        return result;
     }
 
     @Override

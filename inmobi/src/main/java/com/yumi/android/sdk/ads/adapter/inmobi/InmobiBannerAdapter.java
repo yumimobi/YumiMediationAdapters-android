@@ -126,7 +126,7 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onAdLoadFailed(InMobiBanner arg0, InMobiAdRequestStatus arg1) {
 				ZplayDebug.d(TAG, "inmobi banner load failed " + arg1.getStatusCode(), onoff);
-				layerPreparedFailed(InmobiExtraHolder.decodeError(arg1.getStatusCode()));
+				layerPreparedFailed(InmobiExtraHolder.decodeError(arg1));
 			}
 			
 			@Override

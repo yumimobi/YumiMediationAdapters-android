@@ -107,22 +107,32 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                     layerPrepared();
                 }
                 @Override
-                public void onLoadFailed(int erroCode, String s) {
-                    ZplayDebug.d(TAG, "Playable Interstitial onLoadFailed erroCode：" + erroCode + "   s:" + s, onoff);
-                    if (erroCode == 2004) { //ads has filled
+                public void onLoadFailed(int errorCode, String s) {
+                    ZplayDebug.d(TAG, "Playable Interstitial onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
+
+                    if (errorCode == 2004) { //ads has filled
                         layerPrepared();
-                        ZplayDebug.d(TAG, "Playable Interstitial Ready onLoadFailed", onoff);
-                    } else if (erroCode == 2005) { //no ad
-                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                    } else {
-                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                        return;
                     }
+
+                    layerPreparedFailed(generateLayerErrorCode(errorCode, s));
                 }
             };
         }catch (Exception e)
         {
             ZplayDebug.e(TAG, "Playable Interstitial init error ",e, onoff);
         }
+    }
+
+    static LayerErrorCode generateLayerErrorCode(int playableadsErrorCode, String playableadsErrorMsg){
+        LayerErrorCode result;
+        if (playableadsErrorCode == 2005) { //no ad
+            result = LayerErrorCode.ERROR_NO_FILL;
+        } else {
+            result = LayerErrorCode.ERROR_INTERNAL;
+        }
+        result.setExtraMsg("PlayableAds errorMsg: " + playableadsErrorMsg);
+        return result;
     }
 
     @Override

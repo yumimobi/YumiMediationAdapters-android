@@ -64,7 +64,7 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
                     return;
                 }
 				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
 			}
 
 			@Override
