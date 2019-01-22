@@ -177,7 +177,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 		public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus)
 		{
 			ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
-			layerPreparedFailed(InmobiExtraHolder.decodeError(inMobiAdRequestStatus.getStatusCode()));
+			layerPreparedFailed(InmobiExtraHolder.decodeError(inMobiAdRequestStatus));
 		}
 
 		@Override
