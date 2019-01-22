@@ -16,6 +16,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.io.File;
 
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduInterstitialAdapter.generateLayerErrorCode;
+
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
     private RewardVideoAd rewardVideoAd;
@@ -93,7 +95,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoDownloadFailed() {
                 ZplayDebug.i(TAG, "baidu media onVideoDownloadFailed", onoff);
-                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                layerPreparedFailed(generateLayerErrorCode(null));
                 requestAD(getProvider().getNextRequestInterval());
             }
 
@@ -120,7 +122,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdFailed(String s) {
                 ZplayDebug.i(TAG, "baidu media onAdFailed:" + s, onoff);
-                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                layerPreparedFailed(generateLayerErrorCode(s));
                 requestAD(getProvider().getNextRequestInterval());
             }
         };

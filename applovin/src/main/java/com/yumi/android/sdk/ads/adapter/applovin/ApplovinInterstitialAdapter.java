@@ -17,6 +17,8 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinBannerAdapter.generateLayerErrorCode;
+
 public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "ApplovinInterstitialAdapter";
@@ -74,11 +76,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
                 @Override
                 public void failedToReceiveAd(int errorCode) {
                     ZplayDebug.i(TAG, "AppLovin Interstitial failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  || errorCode : " + errorCode, onoff);
-                    if (errorCode == AppLovinErrorCodes.NO_FILL) {
-                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                    } else {
-                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                    }
+                    layerPreparedFailed(generateLayerErrorCode(errorCode));
                 }
             });
         }

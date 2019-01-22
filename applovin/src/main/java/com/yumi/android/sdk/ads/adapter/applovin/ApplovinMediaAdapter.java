@@ -18,6 +18,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
 
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinBannerAdapter.generateLayerErrorCode;
+
 public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "ApplovinMediaAdapter";
@@ -170,11 +172,8 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void failedToReceiveAd(int errorCode) {
                 ZplayDebug.i(TAG, "AppLovin Media failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
-                if (errorCode == AppLovinErrorCodes.NO_FILL) {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
-                }
+
+                layerPreparedFailed(generateLayerErrorCode(errorCode));
             }
         };
     }

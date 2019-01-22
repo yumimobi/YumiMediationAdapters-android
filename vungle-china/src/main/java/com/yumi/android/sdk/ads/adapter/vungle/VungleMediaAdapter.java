@@ -142,14 +142,16 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
-            public void onError(String placementReferenceId, Throwable throwable) {
+            public void onError(String placementReferenceId, final Throwable throwable) {
                 try {
                     ZplayDebug.e(TAG, "vungle media LoadAdCallback onError   placementReferenceId:" + placementReferenceId + "  error:" + throwable.getLocalizedMessage(), onoff);
                     if (getProvider().getKey2().equals(placementReferenceId)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                                LayerErrorCode error = LayerErrorCode.ERROR_NO_FILL;
+                                error.setExtraMsg("Vungle-China error: " + throwable);
+                                layerPreparedFailed(error);
                             }
                         });
                     }

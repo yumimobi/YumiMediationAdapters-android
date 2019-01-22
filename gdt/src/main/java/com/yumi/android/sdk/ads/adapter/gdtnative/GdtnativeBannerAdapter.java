@@ -92,7 +92,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
                 return;
             }
             ZplayDebug.d(TAG, "GDT nativead banner onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
         }
 
         @Override
@@ -103,7 +103,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
                 return;
             }
             ZplayDebug.d(TAG, "GDT nativead banner onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError.getErrorCode()));
+            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
         }
 
         @Override

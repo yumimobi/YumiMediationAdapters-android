@@ -8,13 +8,24 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  */
 public class FacebookAdErrorHolder {
 
-    public static LayerErrorCode decodeError(AdError arg1) {
-        if (arg1.getErrorCode()==1000) {
-            return LayerErrorCode.ERROR_NETWORK_ERROR;
+    public static LayerErrorCode decodeError(AdError adError) {
+        if(adError == null){
+            return LayerErrorCode.ERROR_INTERNAL;
         }
-        if (arg1.getErrorCode()==1001) {
-            return LayerErrorCode.ERROR_NO_FILL;
+
+        LayerErrorCode error;
+        switch (adError.getErrorCode()) {
+            case AdError.NETWORK_ERROR_CODE:
+                error = LayerErrorCode.ERROR_NETWORK_ERROR;
+                break;
+            case AdError.NO_FILL_ERROR_CODE:
+                error = LayerErrorCode.ERROR_NO_FILL;
+                break;
+            default:
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
         }
-        return LayerErrorCode.ERROR_INTERNAL;
+        error.setExtraMsg("Facebook errorCode: " + adError.getErrorCode() + " and errorMsg: " + adError.getErrorMessage());
+        return error;
     }
 }

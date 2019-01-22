@@ -119,20 +119,31 @@ public class ChartboostInterstitialAdapter extends
 		}
 	}
 
-	protected LayerErrorCode decodeError(CBImpressionError error) {
-		if (error.equals(CBImpressionError.INTERNAL)) {
+    static LayerErrorCode decodeError(CBImpressionError chartBoostError) {
+		if(chartBoostError == null){
 			return LayerErrorCode.ERROR_INTERNAL;
 		}
-		if (error.equals(CBImpressionError.NO_AD_FOUND)) {
-			return LayerErrorCode.ERROR_NO_FILL;
-		}
-		if (error.equals(CBImpressionError.INVALID_LOCATION)) {
-			return LayerErrorCode.ERROR_INVALID;
-		}
-		if (error.equals(CBImpressionError.NETWORK_FAILURE)) {
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		}
-		return LayerErrorCode.ERROR_INTERNAL;
-	}
+
+        LayerErrorCode error;
+        switch (chartBoostError) {
+            case INTERNAL:
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
+            case NO_AD_FOUND:
+                error = LayerErrorCode.ERROR_NO_FILL;
+                break;
+            case INVALID_LOCATION:
+                error = LayerErrorCode.ERROR_INVALID;
+                break;
+            case NETWORK_FAILURE:
+                error = LayerErrorCode.ERROR_NETWORK_ERROR;
+                break;
+            default:
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
+        }
+        error.setExtraMsg("ChartBoost errorMes: " + chartBoostError.toString());
+        return error;
+    }
 
 }

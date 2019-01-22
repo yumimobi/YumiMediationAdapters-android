@@ -11,6 +11,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
 
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostInterstitialAdapter.decodeError;
+
 public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private static final String TAG = "ChartboostMediaAdapter";
@@ -116,22 +118,5 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 			};
 		}
 	}
-
-	protected LayerErrorCode decodeError(CBImpressionError error) {
-		if (error.equals(CBImpressionError.INTERNAL)) {
-			return LayerErrorCode.ERROR_INTERNAL;
-		}
-		if (error.equals(CBImpressionError.NO_AD_FOUND)) {
-			return LayerErrorCode.ERROR_NO_FILL;
-		}
-		if (error.equals(CBImpressionError.INVALID_LOCATION)) {
-			return LayerErrorCode.ERROR_INVALID;
-		}
-		if (error.equals(CBImpressionError.NETWORK_FAILURE)) {
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		}
-		return LayerErrorCode.ERROR_INTERNAL;
-	}
-
 
 }

@@ -12,6 +12,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
 
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduInterstitialAdapter.generateLayerErrorCode;
+
 public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
 	private static final String TAG = "BaiduBannerAdapter";
@@ -79,7 +81,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onAdFailed(String arg0) {
 				ZplayDebug.d(TAG, "baidu banner failed " + arg0, onoff);
-				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+				layerPreparedFailed(generateLayerErrorCode(arg0));
 			}
 			
 			@Override

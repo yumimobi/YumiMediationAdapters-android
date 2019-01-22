@@ -9,6 +9,8 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.unity.UnityInterstitialAdapter.generateLayerErrorCode;
+
 
 public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -63,7 +65,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 					@Override
 					public void onUnityAdsError(UnityAdsError error, String message) {
 						ZplayDebug.d(TAG, "unity media prepared failed UnityAdsError : " + error + " || message : " + message, onoff);
-						layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+						layerPreparedFailed(generateLayerErrorCode(error, message));
 					}
 
 					@Override

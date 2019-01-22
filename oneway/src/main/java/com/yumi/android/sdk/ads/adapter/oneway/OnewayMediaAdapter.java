@@ -76,19 +76,26 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onSdkError(OnewaySdkError onewaySdkError, String s) {
                 ZplayDebug.d(TAG, "Oneway media onSdkError onewaySdkError : " + onewaySdkError + "    s : " + s, onoff);
-                layerPreparedFailed(decodeError(onewaySdkError));
+                layerPreparedFailed(decodeError(onewaySdkError, s));
             }
         };
     }
 
-    private LayerErrorCode decodeError(OnewaySdkError onewaySdkError) {
+    private LayerErrorCode decodeError(OnewaySdkError onewaySdkError, String msg) {
+        if (onewaySdkError == null) {
+            return LayerErrorCode.ERROR_INTERNAL;
+        }
+
+        LayerErrorCode result;
         if (onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)) {
-            return LayerErrorCode.ERROR_NO_FILL;
+            result = LayerErrorCode.ERROR_NO_FILL;
+        } else if (onewaySdkError.equals(OnewaySdkError.INITIALIZE_FAILED)) {
+            result = LayerErrorCode.ERROR_NETWORK_ERROR;
+        } else {
+            result = LayerErrorCode.ERROR_INTERNAL;
         }
-        if (onewaySdkError.equals(OnewaySdkError.INITIALIZE_FAILED)) {
-            return LayerErrorCode.ERROR_NETWORK_ERROR;
-        }
-        return LayerErrorCode.ERROR_INTERNAL;
+        result.setExtraMsg("Oneway errorName: " + onewaySdkError + " errorMsg: " + msg);
+        return result;
     }
 
     @Override

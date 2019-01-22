@@ -106,19 +106,27 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         };
     }
 
-    private LayerErrorCode decodeErrorCode(int errorCode) {
+    public static LayerErrorCode decodeErrorCode(int errorCode) {
+        LayerErrorCode error;
         switch (errorCode) {
             case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                return LayerErrorCode.ERROR_INTERNAL;
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
             case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                return LayerErrorCode.ERROR_INVALID;
+                error = LayerErrorCode.ERROR_INVALID;
+                break;
             case AdRequest.ERROR_CODE_NO_FILL:
-                return LayerErrorCode.ERROR_NO_FILL;
+                error = LayerErrorCode.ERROR_NO_FILL;
+                break;
             case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                return LayerErrorCode.ERROR_NETWORK_ERROR;
+                error = LayerErrorCode.ERROR_NETWORK_ERROR;
+                break;
             default:
-                return LayerErrorCode.ERROR_INTERNAL;
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
         }
+        error.setExtraMsg("AdMob errorCode: " + error);
+        return error;
     }
 
     private AdSize calculateBannerSize() {

@@ -65,6 +65,12 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         return UnityAds.isReady(getProvider().getKey2());
     }
 
+    static LayerErrorCode generateLayerErrorCode(UnityAdsError unityAdsError, String message) {
+        LayerErrorCode result = LayerErrorCode.ERROR_INTERNAL;
+        result.setExtraMsg("Unity-China errorMsg: " + unityAdsError + ", " + message);
+        return result;
+    }
+
     @Override
     protected void init() {
         try {
@@ -75,7 +81,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     @Override
                     public void onUnityAdsError(UnityAdsError error, String message) {
                         ZplayDebug.d(TAG, "unity Interstitial prepared failed UnityAdsError:" + error + " || message:" + message, onoff);
-                        layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                        layerPreparedFailed(generateLayerErrorCode(error, message));
                     }
 
                     @Override

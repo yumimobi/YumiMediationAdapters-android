@@ -18,19 +18,30 @@ public class InmobiExtraHolder {
 		}
 	}
 
-	static LayerErrorCode decodeError(StatusCode code){
-		if (code == StatusCode.NO_FILL) {
-			return LayerErrorCode.ERROR_NO_FILL;
-		}
-		if (code == StatusCode.REQUEST_INVALID) {
-			return LayerErrorCode.ERROR_INVALID;
-		}
-		if (code == StatusCode.NETWORK_UNREACHABLE) {
-			return LayerErrorCode.ERROR_NETWORK_ERROR;
-		}
-		return LayerErrorCode.ERROR_INTERNAL;
-	} 
-	
+    public static LayerErrorCode decodeError(StatusCode code) {
+        LayerErrorCode error;
+        if(code == null){
+            return LayerErrorCode.ERROR_INTERNAL;
+        }
+
+        switch (code) {
+            case NO_FILL:
+                error = LayerErrorCode.ERROR_NO_FILL;
+                break;
+            case REQUEST_INVALID:
+                error = LayerErrorCode.ERROR_INVALID;
+                break;
+            case NETWORK_UNREACHABLE:
+                error = LayerErrorCode.ERROR_NETWORK_ERROR;
+                break;
+            default:
+                error = LayerErrorCode.ERROR_INTERNAL;
+                break;
+        }
+        error.setExtraMsg(code.toString());
+        return error;
+    }
+
 
 	static void onDestroy() {
 		isInitlalize = false;
