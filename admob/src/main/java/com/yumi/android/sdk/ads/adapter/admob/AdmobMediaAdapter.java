@@ -124,6 +124,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoStarted() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoStarted", onoff);
                 layerMediaStart();
+                layerExposure();
             }
 
             @Override
