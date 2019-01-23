@@ -7,11 +7,11 @@ import android.os.Message;
 import com.qq.e.ads.interstitial.InterstitialAD;
 import com.qq.e.ads.interstitial.InterstitialADListener;
 import com.qq.e.comm.util.AdError;
-import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -96,11 +96,11 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onNoAD(AdError adError) {
                 if (adError == null){
                     ZplayDebug.d(TAG, "gdt interstitial failed adError = null", onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    layerPreparedFailed(recodeError(null));
                     return;
                 }
                 ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+                layerPreparedFailed(recodeError(adError));
             }
 
             @Override

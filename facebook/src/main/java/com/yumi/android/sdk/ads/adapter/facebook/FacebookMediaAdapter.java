@@ -126,7 +126,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.i(TAG, "facebook media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
-                layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError));
+                layerPreparedFailed(FacebookUtil.recodeError(adError));
                 requestAD(getProvider().getNextRequestInterval());
             }
 

@@ -7,10 +7,9 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.admob.AdmobBannerAdapter.decodeErrorCode;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -107,7 +106,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			@Override
 			public void onAdFailedToLoad(int errorCode) {
 				ZplayDebug.d(TAG, "admob interstitial failed " + errorCode, onoff);
-				layerPreparedFailed(decodeErrorCode(errorCode));
+				layerPreparedFailed(recodeError(errorCode));
 				super.onAdFailedToLoad(errorCode);
 			}
 		};

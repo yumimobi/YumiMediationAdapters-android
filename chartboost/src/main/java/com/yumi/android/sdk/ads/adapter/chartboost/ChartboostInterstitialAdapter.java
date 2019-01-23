@@ -6,10 +6,11 @@ import com.chartboost.sdk.ChartboostDelegate;
 import com.chartboost.sdk.Model.CBError.CBImpressionError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
+
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
 
 public class ChartboostInterstitialAdapter extends
 		YumiCustomerInterstitialAdapter {
@@ -91,7 +92,7 @@ public class ChartboostInterstitialAdapter extends
 				public void didFailToLoadInterstitial(String location,
 						CBImpressionError error) {
 					ZplayDebug.d(TAG, "chartboost interstitial failed " + error, onoff);
-					layerPreparedFailed(decodeError(error));
+					layerPreparedFailed(recodeError(error));
 					super.didFailToLoadInterstitial(location, error);
 				}
 
@@ -118,32 +119,5 @@ public class ChartboostInterstitialAdapter extends
 			};
 		}
 	}
-
-    static LayerErrorCode decodeError(CBImpressionError chartBoostError) {
-		if(chartBoostError == null){
-			return LayerErrorCode.ERROR_INTERNAL;
-		}
-
-        LayerErrorCode error;
-        switch (chartBoostError) {
-            case INTERNAL:
-                error = LayerErrorCode.ERROR_INTERNAL;
-                break;
-            case NO_AD_FOUND:
-                error = LayerErrorCode.ERROR_NO_FILL;
-                break;
-            case INVALID_LOCATION:
-                error = LayerErrorCode.ERROR_INVALID;
-                break;
-            case NETWORK_FAILURE:
-                error = LayerErrorCode.ERROR_NETWORK_ERROR;
-                break;
-            default:
-                error = LayerErrorCode.ERROR_INTERNAL;
-                break;
-        }
-        error.setExtraMsg("ChartBoost errorMes: " + chartBoostError.toString());
-        return error;
-    }
 
 }

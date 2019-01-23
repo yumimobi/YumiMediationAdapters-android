@@ -83,7 +83,9 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     private LayerErrorCode decodeError(OnewaySdkError onewaySdkError, String msg) {
         if (onewaySdkError == null) {
-            return LayerErrorCode.ERROR_INTERNAL;
+            LayerErrorCode result =  LayerErrorCode.ERROR_INTERNAL;
+            result.setExtraMsg("Oneway errorMsg: " + msg);
+            return result;
         }
 
         LayerErrorCode result;

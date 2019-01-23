@@ -12,8 +12,9 @@ import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
 
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -70,7 +71,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                            layerPreparedFailed(recodeError(null));
                         }
                     });
                 }
@@ -144,14 +145,14 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             }
 
             @Override
-            public void onError(String placementReferenceId, Throwable throwable) {
+            public void onError(String placementReferenceId, final Throwable throwable) {
                 try {
                     ZplayDebug.e(TAG, "vungle Interstitial LoadAdCallback onError  placementReferenceId:" + placementReferenceId + " error:" + throwable.getLocalizedMessage(), onoff);
                     if (getProvider().getKey3().equals(placementReferenceId)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                                layerPreparedFailed(recodeError(throwable));
                             }
                         });
                     }

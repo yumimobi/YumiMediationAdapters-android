@@ -12,8 +12,9 @@ import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
 
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -70,7 +71,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                            layerPreparedFailed(recodeError(null));
                         }
                     });
                 }
@@ -151,9 +152,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                LayerErrorCode error = LayerErrorCode.ERROR_NO_FILL;
-                                error.setExtraMsg("Vungle error: " + throwable);
-                                layerPreparedFailed(error);
+                                layerPreparedFailed(recodeError(throwable));
                             }
                         });
                     }

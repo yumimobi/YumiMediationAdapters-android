@@ -7,11 +7,11 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.BidderTokenProvider;
 import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.S2SRewardedVideoAdListener;
-import com.yumi.android.sdk.ads.adapter.facebook.FacebookAdErrorHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 
 /**
  * Created by yfb on 2018/9/6.
@@ -41,7 +41,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
 //        rewardedVideoAd.setRewardData(new RewardData("YOUR_USER_ID", "YOUR_REWARD"));  //不知道到底有什么用，文档里没有说明
             }
             if (getProvider().getErrCode() != 200) {
-                layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL, getProvider().getErrMessage());
+                layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
                 return;
             }
             rewardedVideoAd.loadAdFromBid(getProvider().getPayload(), false);
@@ -115,7 +115,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.i(TAG, "facebookbid media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
-                layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError), adError.getErrorMessage());
+                layerPreparedFailed(recodeError(adError), adError.getErrorMessage());
             }
 
             @Override

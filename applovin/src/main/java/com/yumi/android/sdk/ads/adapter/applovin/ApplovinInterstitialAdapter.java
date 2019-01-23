@@ -10,14 +10,12 @@ import com.applovin.sdk.AppLovinAdClickListener;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdVideoPlaybackListener;
-import com.applovin.sdk.AppLovinErrorCodes;
 import com.applovin.sdk.AppLovinSdk;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinBannerAdapter.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
 
 public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -76,7 +74,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
                 @Override
                 public void failedToReceiveAd(int errorCode) {
                     ZplayDebug.i(TAG, "AppLovin Interstitial failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  || errorCode : " + errorCode, onoff);
-                    layerPreparedFailed(generateLayerErrorCode(errorCode));
+                    layerPreparedFailed(recodeError(errorCode));
                 }
             });
         }

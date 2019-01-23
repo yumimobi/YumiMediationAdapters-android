@@ -14,7 +14,7 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AdIconView;
 import com.facebook.ads.NativeAdListener;
 import com.facebook.ads.NativeBannerAd;
-import com.yumi.android.sdk.ads.adapter.facebook.FacebookAdErrorHolder;
+import com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -55,7 +55,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.d(TAG, "facebook native banner onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage(), onoff);
-                layerPreparedFailed(FacebookAdErrorHolder.decodeError(adError));
+                layerPreparedFailed(FacebookUtil.recodeError(adError));
             }
 
             @Override

@@ -11,8 +11,9 @@ import com.google.android.gms.ads.reward.RewardedVideoAd;
 import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
  * Created by Administrator on 2017/4/19.
@@ -149,14 +150,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
-                LayerErrorCode error;
-                if (AdRequest.ERROR_CODE_NO_FILL == errorCode) {
-                    error = LayerErrorCode.ERROR_NO_FILL;
-                } else {
-                    error = LayerErrorCode.ERROR_INTERNAL;
-                }
-                error.setExtraMsg("AdMob errorCode: " + errorCode);
-                layerPreparedFailed(error);
+                layerPreparedFailed(recodeError(errorCode));
                 loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
         };

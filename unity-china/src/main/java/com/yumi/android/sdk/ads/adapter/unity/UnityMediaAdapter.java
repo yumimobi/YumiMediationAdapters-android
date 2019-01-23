@@ -6,11 +6,9 @@ import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.unity.UnityInterstitialAdapter.generateLayerErrorCode;
-
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 
 public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 

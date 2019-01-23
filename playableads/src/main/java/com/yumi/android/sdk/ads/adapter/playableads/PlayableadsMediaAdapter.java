@@ -7,10 +7,10 @@ import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableadsInterstitialAdapter.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
+
 
 /**
  * Created by syj on 2017/10/12.
@@ -113,7 +113,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                         layerPrepared();
                         return;
                     }
-                    layerPreparedFailed(generateLayerErrorCode(errorCode, s));
+                    layerPreparedFailed(recodeError(errorCode, s));
                 }
             };
         }catch (Exception e)

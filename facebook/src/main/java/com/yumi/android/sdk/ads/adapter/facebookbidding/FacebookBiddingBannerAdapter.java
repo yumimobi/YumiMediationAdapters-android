@@ -8,11 +8,11 @@ import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
 import com.facebook.ads.BidderTokenProvider;
-import com.yumi.android.sdk.ads.adapter.facebook.FacebookAdErrorHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 
 public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -43,7 +43,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "facebookbid request new banner", onoff);
         if (getProvider().getErrCode() != 200) {
-            layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL, getProvider().getErrMessage());
+            layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
             return;
         }
         banner = new AdView(getContext(), getProvider().getKey1(), AdSize.BANNER_HEIGHT_50);
@@ -65,7 +65,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
                 @Override
                 public void onError(Ad arg0, AdError arg1) {
                     ZplayDebug.d(TAG, "facebookbid banner failed " + arg1.getErrorMessage(), onoff);
-                    layerPreparedFailed(FacebookAdErrorHolder.decodeError(arg1), arg1.getErrorMessage());
+                    layerPreparedFailed(recodeError(arg1), arg1.getErrorMessage());
                 }
 
                 @Override

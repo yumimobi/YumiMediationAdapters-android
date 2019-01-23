@@ -7,12 +7,11 @@ import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
 
-import static com.yumi.android.sdk.ads.adapter.baidu.BaiduInterstitialAdapter.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 
 public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -81,7 +80,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onAdFailed(String arg0) {
 				ZplayDebug.d(TAG, "baidu banner failed " + arg0, onoff);
-				layerPreparedFailed(generateLayerErrorCode(arg0));
+				layerPreparedFailed(recodeError(arg0));
 			}
 			
 			@Override

@@ -10,8 +10,9 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
  * Created by Administrator on 2017/3/23.
@@ -100,33 +101,10 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob banner failed " + errorCode, onoff);
-                layerPreparedFailed(decodeErrorCode(errorCode));
+                layerPreparedFailed(recodeError(errorCode));
                 super.onAdFailedToLoad(errorCode);
             }
         };
-    }
-
-    public static LayerErrorCode decodeErrorCode(int errorCode) {
-        LayerErrorCode error;
-        switch (errorCode) {
-            case AdRequest.ERROR_CODE_INTERNAL_ERROR:
-                error = LayerErrorCode.ERROR_INTERNAL;
-                break;
-            case AdRequest.ERROR_CODE_INVALID_REQUEST:
-                error = LayerErrorCode.ERROR_INVALID;
-                break;
-            case AdRequest.ERROR_CODE_NO_FILL:
-                error = LayerErrorCode.ERROR_NO_FILL;
-                break;
-            case AdRequest.ERROR_CODE_NETWORK_ERROR:
-                error = LayerErrorCode.ERROR_NETWORK_ERROR;
-                break;
-            default:
-                error = LayerErrorCode.ERROR_INTERNAL;
-                break;
-        }
-        error.setExtraMsg("AdMob errorCode: " + error);
-        return error;
     }
 
     private AdSize calculateBannerSize() {
