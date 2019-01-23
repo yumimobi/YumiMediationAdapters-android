@@ -7,8 +7,9 @@ import com.playableads.PlayableInterstitial;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
 
 /**
  * Created by syj on 2017/10/12.
@@ -115,24 +116,13 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                         return;
                     }
 
-                    layerPreparedFailed(generateLayerErrorCode(errorCode, s));
+                    layerPreparedFailed(recodeError(errorCode, s));
                 }
             };
         }catch (Exception e)
         {
             ZplayDebug.e(TAG, "Playable Interstitial init error ",e, onoff);
         }
-    }
-
-    static LayerErrorCode generateLayerErrorCode(int playableadsErrorCode, String playableadsErrorMsg){
-        LayerErrorCode result;
-        if (playableadsErrorCode == 2005) { //no ad
-            result = LayerErrorCode.ERROR_NO_FILL;
-        } else {
-            result = LayerErrorCode.ERROR_INTERNAL;
-        }
-        result.setExtraMsg("PlayableAds errorMsg: " + playableadsErrorMsg);
-        return result;
     }
 
     @Override

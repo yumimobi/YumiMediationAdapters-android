@@ -7,14 +7,14 @@ import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
-import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.List;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 
@@ -88,22 +88,22 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         public void onNoAD(AdError adError) {
             if (adError == null){
                 ZplayDebug.d(TAG, "GDT nativead banner onNoAD adError = null", onoff);
-                layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                layerPreparedFailed(recodeError(null));
                 return;
             }
             ZplayDebug.d(TAG, "GDT nativead banner onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+            layerPreparedFailed(recodeError(adError));
         }
 
         @Override
         public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
             if (adError == null){
                 ZplayDebug.d(TAG, "GDT nativead banner onADError adError = null", onoff);
-                layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                layerPreparedFailed(recodeError(null));
                 return;
             }
             ZplayDebug.d(TAG, "GDT nativead banner onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-            layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+            layerPreparedFailed(recodeError(adError));
         }
 
         @Override
@@ -124,11 +124,11 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
                     createWebview(null);
                     loadData(html);
                 } else {
-                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                    layerPreparedFailed(recodeError(null));
                     ZplayDebug.d(TAG, "GDT nativead banner PreparedFailed ERROR_NO_FILL", onoff);
                 }
             } else {
-                layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                layerPreparedFailed(recodeError(null));
                 ZplayDebug.d(TAG, "GDT nativead banner PreparedFailed", onoff);
             }
         }

@@ -7,16 +7,16 @@ import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
-import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.NativeReportRunnable;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 /**
  * Created by Administrator on 2017/7/3.
@@ -96,22 +96,22 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
             public void onNoAD(AdError adError) {
                 if (adError == null){
                     ZplayDebug.d(TAG, "GDT nativead onNoAD adError = null", onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    layerPreparedFailed(recodeError(null));
                     return;
                 }
                 ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+                layerPreparedFailed(recodeError(adError));
             }
 
             @Override
             public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
                 if (adError == null){
                     ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    layerPreparedFailed(recodeError(null));
                     return;
                 }
                 ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+                layerPreparedFailed(recodeError(adError));
             }
         });
     }

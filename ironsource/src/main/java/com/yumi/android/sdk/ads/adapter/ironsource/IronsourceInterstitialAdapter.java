@@ -7,8 +7,9 @@ import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.generateLayerErrorCode;
 
 /**
  * Created by hjl on 2018/8/10.
@@ -134,21 +135,6 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
             };
             IronsourceListenerHandler.setMyIronsourceInterstitialListener(adListener);
         }
-    }
-
-    static LayerErrorCode generateLayerErrorCode(IronSourceError ironSourceError){
-        if (ironSourceError == null){
-            return  LayerErrorCode.ERROR_INTERNAL;
-        }
-
-        LayerErrorCode result;
-        if (ironSourceError.getErrorCode() == IronSourceError.ERROR_BN_LOAD_NO_FILL) {
-            result = LayerErrorCode.ERROR_NO_FILL;
-        } else {
-            result = LayerErrorCode.ERROR_INTERNAL;
-        }
-        result.setExtraMsg("IronSource errorMsg: " + ironSourceError.getErrorMessage());
-        return result;
     }
 
     @Override

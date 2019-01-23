@@ -7,8 +7,9 @@ import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 
 public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -65,11 +66,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         return UnityAds.isReady(getProvider().getKey2());
     }
 
-    static LayerErrorCode generateLayerErrorCode(UnityAdsError unityAdsError, String message) {
-        LayerErrorCode result = LayerErrorCode.ERROR_INTERNAL;
-        result.setExtraMsg("Unity-China errorMsg: " + unityAdsError + ", " + message);
-        return result;
-    }
+
 
     @Override
     protected void init() {

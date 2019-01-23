@@ -4,19 +4,19 @@ import android.app.Activity;
 import android.webkit.WebView;
 
 import com.inmobi.ads.InMobiAdRequestStatus;
-import com.inmobi.ads.InMobiAdRequestStatus.StatusCode;
 import com.inmobi.ads.InMobiNative;
 import com.inmobi.ads.InMobiNative.NativeAdListener;
 import com.inmobi.sdk.InMobiSdk;
-import com.yumi.android.sdk.ads.adapter.inmobi.InmobiExtraHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 
 public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapter
 {
@@ -164,11 +164,11 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 					createWebview(null);
 					loadData(interstitial_html);
 				}else{
-					layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+					layerPreparedFailed(recodeError(ERROR_INTERNAL));
 				}
 			} catch (JSONException e)
 			{
-				layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+				layerPreparedFailed(recodeError(ERROR_INTERNAL));
 				e.printStackTrace();
 			}
 		}
@@ -177,7 +177,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 		public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus)
 		{
 			ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
-			layerPreparedFailed(InmobiExtraHolder.decodeError(inMobiAdRequestStatus));
+			layerPreparedFailed(recodeError(inMobiAdRequestStatus));
 		}
 
 		@Override

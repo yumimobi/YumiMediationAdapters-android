@@ -7,11 +7,11 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.BidderTokenProvider;
 import com.facebook.ads.InterstitialAd;
 import com.facebook.ads.InterstitialAdListener;
-import com.yumi.android.sdk.ads.adapter.facebook.FacebookAdErrorHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 
 public class FacebookBiddingInterstitialAdapter extends
         YumiCustomerInterstitialAdapter {
@@ -49,7 +49,7 @@ public class FacebookBiddingInterstitialAdapter extends
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
         if (getProvider().getErrCode() != 200) {
-            layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL, getProvider().getErrMessage());
+            layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
             return;
         }
         if (interstitial == null) {
@@ -87,7 +87,7 @@ public class FacebookBiddingInterstitialAdapter extends
                 public void onError(Ad arg0, AdError arg1) {
                     ZplayDebug.d(TAG, "facebookbid bidding interstitial failed " + arg1.getErrorMessage(), onoff);
 
-                    layerPreparedFailed(FacebookAdErrorHolder.decodeError(arg1), arg1.getErrorMessage());
+                    layerPreparedFailed(recodeError(arg1), arg1.getErrorMessage());
                 }
 
                 @Override

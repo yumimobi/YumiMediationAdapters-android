@@ -21,13 +21,12 @@ import com.google.android.gms.ads.formats.NativeContentAd;
 import com.google.android.gms.ads.formats.NativeContentAdView;
 import com.yumi.android.sdk.ads.adapter.admob.R;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeAdvancedIntersititalAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.List;
 
-import static com.yumi.android.sdk.ads.adapter.admob.AdmobBannerAdapter.decodeErrorCode;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
  * Created by Administrator on 2017/3/23.
@@ -142,7 +141,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob native interstitial failed errorCode=" + errorCode, onoff);
-                layerPreparedFailed(decodeErrorCode(errorCode));
+                layerPreparedFailed(recodeError(errorCode));
             }
 
             @Override

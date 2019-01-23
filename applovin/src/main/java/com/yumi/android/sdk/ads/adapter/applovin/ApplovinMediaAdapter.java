@@ -9,16 +9,14 @@ import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdRewardListener;
 import com.applovin.sdk.AppLovinAdVideoPlaybackListener;
-import com.applovin.sdk.AppLovinErrorCodes;
 import com.applovin.sdk.AppLovinSdk;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
 
-import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinBannerAdapter.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
 
 public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -173,7 +171,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             public void failedToReceiveAd(int errorCode) {
                 ZplayDebug.i(TAG, "AppLovin Media failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
 
-                layerPreparedFailed(generateLayerErrorCode(errorCode));
+                layerPreparedFailed(recodeError(errorCode));
             }
         };
     }

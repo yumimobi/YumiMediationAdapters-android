@@ -8,11 +8,11 @@ import android.os.SystemClock;
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
 import com.qq.e.comm.util.AdError;
-import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "GdtmobMediaAdapter";
@@ -154,11 +154,11 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             public void onError(AdError adError) {
                 if (adError == null) {
                     ZplayDebug.d(TAG, "gdt media failed adError = null", onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    layerPreparedFailed(recodeError(null));
                     return;
                 }
                 ZplayDebug.d(TAG, "gdt media failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+                layerPreparedFailed(recodeError(adError));
                 requestAD(getProvider().getNextRequestInterval());
             }
         };

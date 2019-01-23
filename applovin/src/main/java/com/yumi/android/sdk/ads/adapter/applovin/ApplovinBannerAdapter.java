@@ -10,13 +10,13 @@ import com.applovin.sdk.AppLovinAdClickListener;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinErrorCodes;
 import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkSettings;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
 
 /**
  * Created by hjl on 2018/9/12.
@@ -78,7 +78,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             public void failedToReceiveAd(final int errorCode) {
                 ZplayDebug.d(TAG, "AppLovin banner failedToReceiveAd  errorCode:" + errorCode, onoff);
 
-                layerPreparedFailed(generateLayerErrorCode(errorCode));
+                layerPreparedFailed(recodeError(errorCode));
             }
         };
 
@@ -127,17 +127,6 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
             }
         };
-    }
-
-    static LayerErrorCode generateLayerErrorCode(int applovinErrorCode) {
-        LayerErrorCode error;
-        if (applovinErrorCode == AppLovinErrorCodes.NO_FILL) {
-            error = LayerErrorCode.ERROR_NO_FILL;
-        } else {
-            error = LayerErrorCode.ERROR_INTERNAL;
-        }
-        error.setExtraMsg("Applovin errorCode: " + applovinErrorCode);
-        return error;
     }
 
     @Override

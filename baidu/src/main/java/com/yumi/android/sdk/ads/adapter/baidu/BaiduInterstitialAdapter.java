@@ -5,10 +5,11 @@ import com.baidu.mobads.InterstitialAd;
 import com.baidu.mobads.InterstitialAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
+
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 
 public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 	private static final String TAG = "BaiduInstertitialAdapter";
@@ -93,7 +94,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				@Override
 				public void onAdFailed(String arg0) {
 					ZplayDebug.d(TAG, "baidu interstitial failed " +  arg0, onoff);
-					layerPreparedFailed(generateLayerErrorCode(arg0));
+					layerPreparedFailed(recodeError(arg0));
 				}
 
 				@Override
@@ -109,12 +110,6 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				}
 			};
 		}
-	}
-
-	static LayerErrorCode generateLayerErrorCode(String baiduErrorMes){
-		LayerErrorCode error = LayerErrorCode.ERROR_INTERNAL;
-		error.setExtraMsg("Baidu errorMsg: " + baiduErrorMes);
-		return  error;
 	}
 
 }

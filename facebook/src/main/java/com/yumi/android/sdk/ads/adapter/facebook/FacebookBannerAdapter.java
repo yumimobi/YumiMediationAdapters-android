@@ -58,7 +58,7 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
 				@Override
 				public void onError(Ad arg0, AdError arg1) {
 					ZplayDebug.d(TAG, "facebook banner failed " + arg1.getErrorMessage(), onoff);
-					layerPreparedFailed(FacebookAdErrorHolder.decodeError(arg1));
+					layerPreparedFailed(FacebookUtil.recodeError(arg1));
 				}
 
 				@Override

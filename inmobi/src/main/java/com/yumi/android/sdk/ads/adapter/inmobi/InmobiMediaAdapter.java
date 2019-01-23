@@ -6,12 +6,14 @@ import com.inmobi.ads.InMobiAdRequestStatus;
 import com.inmobi.ads.InMobiInterstitial;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
 
 public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -73,11 +75,11 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					placementID = Long.valueOf(key2);
 				} catch (NumberFormatException e) {
 					ZplayDebug.e(TAG, "", e, onoff);
-					layerPreparedFailed(LayerErrorCode.ERROR_OVER_RETRY_LIMIT);
+					layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
 					return;
 				}
 			} else {
-				layerPreparedFailed(LayerErrorCode.ERROR_OVER_RETRY_LIMIT);
+				layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
 				return;
 			}
 			media = new InMobiInterstitial(getActivity(), placementID,
@@ -134,7 +136,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 					InMobiAdRequestStatus arg1) {
 				if (!isCallbackInExposure) {
 					ZplayDebug.d(TAG, "inmobi media load failed " + arg1.getStatusCode(), onoff);
-					layerPreparedFailed(InmobiExtraHolder.decodeError(arg1));
+					layerPreparedFailed(recodeError(arg1));
 				}
 				requestAD(getProvider().getNextRequestInterval());
 			}

@@ -12,8 +12,9 @@ import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
 
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -76,7 +77,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                            layerPreparedFailed(recodeError(null));
                         }
                     });
                     requestAD(getProvider().getNextRequestInterval());
@@ -149,9 +150,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                LayerErrorCode error = LayerErrorCode.ERROR_NO_FILL;
-                                error.setExtraMsg("Vungle-China error: " + throwable);
-                                layerPreparedFailed(error);
+                                layerPreparedFailed(recodeError(throwable));
                             }
                         });
                     }

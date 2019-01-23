@@ -6,11 +6,11 @@ import com.qq.e.ads.banner.ADSize;
 import com.qq.e.ads.banner.BannerADListener;
 import com.qq.e.ads.banner.BannerView;
 import com.qq.e.comm.util.AdError;
-import com.yumi.android.sdk.ads.adapter.ErrorCodeHelp;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -60,11 +60,11 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 			public void onNoAD(AdError adError) {
                 if (adError == null){
                     ZplayDebug.d(TAG, "gdt banner failed adError = null", onoff);
-                    layerPreparedFailed(LayerErrorCode.ERROR_INTERNAL);
+                    layerPreparedFailed(recodeError(null));
                     return;
                 }
 				ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-				layerPreparedFailed(ErrorCodeHelp.decodeErrorCode(adError));
+				layerPreparedFailed(recodeError(adError));
 			}
 
 			@Override

@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
-import android.os.AsyncTask;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 
@@ -11,12 +9,9 @@ import com.baidu.mobads.interfaces.IXAdConstants4PDK;
 import com.baidu.mobads.rewardvideo.RewardVideoAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import java.io.File;
-
-import static com.yumi.android.sdk.ads.adapter.baidu.BaiduInterstitialAdapter.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
@@ -95,7 +90,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoDownloadFailed() {
                 ZplayDebug.i(TAG, "baidu media onVideoDownloadFailed", onoff);
-                layerPreparedFailed(generateLayerErrorCode(null));
+                layerPreparedFailed(recodeError(null));
                 requestAD(getProvider().getNextRequestInterval());
             }
 
@@ -122,7 +117,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdFailed(String s) {
                 ZplayDebug.i(TAG, "baidu media onAdFailed:" + s, onoff);
-                layerPreparedFailed(generateLayerErrorCode(s));
+                layerPreparedFailed(recodeError(s));
                 requestAD(getProvider().getNextRequestInterval());
             }
         };

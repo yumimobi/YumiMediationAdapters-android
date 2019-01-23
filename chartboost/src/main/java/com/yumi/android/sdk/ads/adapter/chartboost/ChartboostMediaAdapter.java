@@ -6,12 +6,11 @@ import com.chartboost.sdk.ChartboostDelegate;
 import com.chartboost.sdk.Model.CBError.CBImpressionError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import android.app.Activity;
 
-import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostInterstitialAdapter.decodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
 
 public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -83,7 +82,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				public void didFailToLoadRewardedVideo(String location,
 						CBImpressionError error) {
 					ZplayDebug.d(TAG, "chartboost media failed " + error, onoff);
-					layerPreparedFailed(decodeError(error));
+					layerPreparedFailed(recodeError(error));
 					super.didFailToLoadRewardedVideo(location, error);
 				}
 
