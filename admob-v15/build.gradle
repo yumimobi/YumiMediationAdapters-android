@@ -1,0 +1,37 @@
+apply from: '../shared-build.gradle'
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.firebase:firebase-ads:10.0.1'
+    implementation 'com.google.an`droid.gms:play-services-ads:15.0.0'
+    implementation YUMI_MEDIATION
+}
+
+String version = project.properties['admob-v15.version']
+String projectName = 'admob'
+
+ext {
+    bintrayRepo = 'ads'
+    bintrayName = projectName
+
+    publishedGroupId = 'com.yumimobi.ads.mediation'
+    artifactId = projectName
+    libraryVersion = version
+    libraryName = projectName
+    libraryDescription = 'Yumi Mediation Admob Adapter'
+
+    // publish aar to in-house(remember change the value of inHouseVersion):
+    // Call ./gradlew artifactoryPublish to publish
+    inHouseVersion = ""
+
+    siteUrl = 'https://firebase.google.com/docs/admob/android/banner?hl=zh-cn'
+    gitUrl = 'https://firebase.google.com/docs/admob/android/banner?hl=zh-cn'
+}
+
+if (version) {
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+}
+
+if (inHouseVersion) {
+    apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
+}
