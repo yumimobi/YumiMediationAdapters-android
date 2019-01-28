@@ -8,6 +8,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 
 /**
@@ -51,7 +52,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Banner adFailedToLoad", onoff);
-                layerPreparedFailed(ERROR_INTERNAL);
+                layerPreparedFailed(recodeError(ERROR_INTERNAL));
             }
 
             @Override
