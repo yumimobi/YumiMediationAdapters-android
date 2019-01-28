@@ -46,6 +46,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "IQZone Interstitial init", onoff);
         imdInterstitialAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
+        imdInterstitialAdManager.onAttached(getActivity());
     }
 
     private AdEventsListener newAdEventsListener() {

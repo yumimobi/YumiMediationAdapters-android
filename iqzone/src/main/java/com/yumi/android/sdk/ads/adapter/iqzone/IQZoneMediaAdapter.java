@@ -68,6 +68,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "IQZone Video init", onoff);
         imdRewardedVideoAdManager = new IQzoneInterstitialAdManager(getContext(), getProvider().getKey1(), newAdEventsListener());
+        imdRewardedVideoAdManager.onAttached(getActivity());
     }
 
     private AdEventsListener newAdEventsListener() {
