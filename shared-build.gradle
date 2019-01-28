@@ -27,12 +27,12 @@ ext {
     YUMI_MEDIATION = project(':mediation')
 
     // Yumi and IQZone common party
-    ADCOLONY = '3.3.7.0'
-    CHARTBOOST = '7.3.1.0'
+    ADCOLONY = '3.3.7.1'
+    CHARTBOOST = '7.3.1.1'
     INMOBI = '7.2.2'
-    IRONSOURCE = '6.7.10.0'
-    MOBVISTA = '8.13.0.0'
-    UNITY = '2.3.0.0'
-    VUNGLE = '6.3.17.1'
-    APPLOVIN = '8.0.2.0'
+    IRONSOURCE = '6.7.10.1'
+    MOBVISTA = '8.13.0.1'
+    UNITY = '2.3.0.2'
+    VUNGLE = '6.3.17.3'
+    APPLOVIN = '8.0.2.1'
 }
