@@ -90,7 +90,7 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
             try {
                 YumiProviderBean provider = getProvider();
                 provider.setUseTemplateMode("0");
-                JSONObject content =  inMobiNative.getCustomAdContent();
+                JSONObject content = inMobiNative.getCustomAdContent();
                 String html = null;
                 String banner_landingURL = content.getString("landingURL");
                 setaTagUrl(banner_landingURL);
@@ -123,12 +123,7 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
         @Override
         public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus) {
             ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
-            StatusCode statusCode = inMobiAdRequestStatus.getStatusCode();
-            if (statusCode == StatusCode.NO_FILL) {
-                layerPreparedFailed(recodeError(ERROR_INTERNAL));
-            } else {
-                layerPreparedFailed(recodeError(ERROR_INTERNAL));
-            }
+            layerPreparedFailed(recodeError(inMobiAdRequestStatus));
         }
     }
 
