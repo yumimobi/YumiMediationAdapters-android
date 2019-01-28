@@ -8,6 +8,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.CODE_FAILED;
 
 /**
@@ -78,7 +79,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Interstitial adFailedToLoad", onoff);
-                layerPreparedFailed(CODE_FAILED);
+                layerPreparedFailed(recodeError(CODE_FAILED));
             }
 
             @Override

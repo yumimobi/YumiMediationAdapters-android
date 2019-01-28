@@ -10,6 +10,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.CODE_FAILED;
 
 /**
@@ -101,7 +102,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Video adFailedToLoad", onoff);
-                layerPreparedFailed(CODE_FAILED);
+                layerPreparedFailed(recodeError(CODE_FAILED));
                 requestAD(getProvider().getNextRequestInterval());
             }
 
