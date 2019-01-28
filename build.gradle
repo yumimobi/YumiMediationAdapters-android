@@ -31,9 +31,9 @@ allprojects {
             name 'Google'
         }
 
-        maven() {
-            url "https://dl.bintray.com/yumimobi/thirdparty/"
-        }
+        maven() { url "https://dl.bintray.com/yumimobi/thirdparty/" }
+
+        maven() { url 'http://ad-sdk.oss-cn-beijing.aliyuncs.com/Android' }
 
 //        maven {
 //            url 'http://10.10.30.146:8081/artifactory/gradle-dev-local'
