@@ -17,7 +17,8 @@
     <application>
         <activity
             android:name="com.baidu.mobads.AppActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation" />
+            android:configChanges="keyboard|keyboardHidden|orientation"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 
 </manifest>
