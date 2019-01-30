@@ -25,27 +25,26 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial  instanceId : "+getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial  instanceId : " + getProvider().getKey2(), onoff);
         boolean isReady = IronSource.isISDemandOnlyInterstitialReady(getProvider().getKey2());
-        if(isReady)
-        {
-            ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial isReady  instanceId : "+getProvider().getKey2(), onoff);
+        if (isReady) {
+            ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial isReady  instanceId : " + getProvider().getKey2(), onoff);
             layerPrepared();
-        }else {
+        } else {
             IronSource.loadISDemandOnlyInterstitial(getProvider().getKey2());
         }
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        ZplayDebug.i(TAG, "IronSource Interstitial onShowInterstitialLayer   instanceId : "+getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "IronSource Interstitial onShowInterstitialLayer   instanceId : " + getProvider().getKey2(), onoff);
         IronSource.showISDemandOnlyInterstitial(getProvider().getKey2());
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
         boolean isReady = IronSource.isISDemandOnlyInterstitialReady(getProvider().getKey2());
-        ZplayDebug.i(TAG, "IronSource Interstitial isInterstitialLayerReady   instanceId : "+getProvider().getKey2()+"  isReady : " + isReady, onoff);
+        ZplayDebug.i(TAG, "IronSource Interstitial isInterstitialLayerReady   instanceId : " + getProvider().getKey2() + "  isReady : " + isReady, onoff);
         return isReady;
     }
 
@@ -53,12 +52,12 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
     protected void init() {
         ZplayDebug.i(TAG, "IronSource Interstitial init Key1 : " + getProvider().getKey1() + "  Key2 : " + getProvider().getKey2(), onoff);
         createMediaListener();
-        IronsourceListenerHandler.initIronsourceInterstitialListener(getActivity(),getProvider().getKey1());
+        IronsourceListenerHandler.initIronsourceInterstitialListener(getActivity(), getProvider().getKey1());
     }
 
 
     private void createMediaListener() {
-        if(adListener==null) {
+        if (adListener == null) {
             adListener = new ISDemandOnlyInterstitialListener() {
 
                 /**
@@ -133,7 +132,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                     }
                 }
             };
-            IronsourceListenerHandler.setMyIronsourceInterstitialListener(adListener);
+            IronsourceListenerHandler.setMyIronsourceInterstitialListener(getProvider().getKey2(), adListener);
         }
     }
 

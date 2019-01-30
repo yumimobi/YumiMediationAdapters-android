@@ -9,8 +9,8 @@ import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyRewardedVideoListener;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hjl on 2018/8/20.
@@ -23,12 +23,12 @@ public class IronsourceListenerHandler {
     //设置给Ironsource SDK setISDemandOnlyRewardedVideoListener 的回调
     private static ISDemandOnlyRewardedVideoListener ironsourceVideoListener;
     //多层配置后Ironsource 视频适配器实现的回调
-    private static List<ISDemandOnlyRewardedVideoListener> myIronsourceVideoListener;
+    private static Map<String, ISDemandOnlyRewardedVideoListener> myIronsourceVideoListener;
 
     //设置给Ironsource SDK setISDemandOnlyRewardedVideoListener 的回调
     private static ISDemandOnlyInterstitialListener ironsourceInterstitialListener;
     //多层配置后Ironsource 插屏适配器实现的回调
-    private static List<ISDemandOnlyInterstitialListener> myIronsourceInterstitialListener;
+    private static Map<String, ISDemandOnlyInterstitialListener> myIronsourceInterstitialListener;
 
     /**
      * 初始化Ironsource插屏，并设置回调（这样写是因为Ironsource初始化虽然是单例，但是多次调用会影响回调。。。）
@@ -46,7 +46,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdReady(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdReady instanceId : " + instanceId, onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdReady(instanceId);
                         }
                     }
@@ -59,7 +60,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdLoadFailed(String instanceId, IronSourceError error) {
                     ZplayDebug.e(TAG, "IronSource Interstitial onInterstitialAdLoadFailed : " + instanceId + "   getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdLoadFailed(instanceId, error);
                         }
                     }
@@ -72,7 +74,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdOpened(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdOpened instanceId : " + instanceId, onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdOpened(instanceId);
                         }
                     }
@@ -85,7 +88,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdClosed(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdClosed instanceId : " + instanceId, onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdClosed(instanceId);
                         }
                     }
@@ -98,7 +102,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdShowSucceeded(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdShowSucceeded instanceId : " + instanceId, onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdShowSucceeded(instanceId);
                         }
                     }
@@ -112,7 +117,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdShowFailed(String instanceId, IronSourceError error) {
                     ZplayDebug.e(TAG, "IronSource Interstitial onInterstitialAdShowFailed instanceId : " + instanceId + "  getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdShowFailed(instanceId, error);
                         }
                     }
@@ -125,7 +131,8 @@ public class IronsourceListenerHandler {
                 public void onInterstitialAdClicked(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdClicked instanceId : " + instanceId, onoff);
                     if (myIronsourceInterstitialListener != null) {
-                        for (ISDemandOnlyInterstitialListener ml : myIronsourceInterstitialListener) {
+                        ISDemandOnlyInterstitialListener ml = myIronsourceInterstitialListener.get(instanceId);
+                        if (ml != null) {
                             ml.onInterstitialAdClicked(instanceId);
                         }
                     }
@@ -143,11 +150,11 @@ public class IronsourceListenerHandler {
      *
      * @param ml
      */
-    public static void setMyIronsourceInterstitialListener(ISDemandOnlyInterstitialListener ml) {
+    public static void setMyIronsourceInterstitialListener(String key2, ISDemandOnlyInterstitialListener ml) {
         if (myIronsourceInterstitialListener == null) {
-            myIronsourceInterstitialListener = new ArrayList<ISDemandOnlyInterstitialListener>();
+            myIronsourceInterstitialListener = new HashMap<String, ISDemandOnlyInterstitialListener>();
         }
-        myIronsourceInterstitialListener.add(ml);
+        myIronsourceInterstitialListener.put(key2, ml);
     }
 
 
@@ -163,7 +170,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAdOpened(String s) {
                     ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdOpened instanceId : " + s, onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAdOpened(s);
                         }
                     }
@@ -173,7 +181,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAdClosed(String s) {
                     ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClosed instanceId:" + s, onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAdClosed(s);
                         }
                     }
@@ -183,7 +192,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAvailabilityChanged(String s, boolean b) {
                     ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAvailabilityChanged instanceId : " + s + "  available : " + b, onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAvailabilityChanged(s, b);
                         }
                     }
@@ -193,7 +203,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAdRewarded(String s, Placement placement) {
                     ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + s + "  placement:" + placement.getPlacementName(), onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAdRewarded(s, placement);
                         }
                     }
@@ -203,7 +214,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAdShowFailed(String s, IronSourceError ironSourceError) {
                     ZplayDebug.e(TAG, "IronSource Media onRewardedVideoAdShowFailed  instanceId : " + s + "  getErrorCode : " + ironSourceError.getErrorCode() + "   || getErrorMessage : " + ironSourceError.getErrorMessage(), onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAdShowFailed(s, ironSourceError);
                         }
                     }
@@ -213,7 +225,8 @@ public class IronsourceListenerHandler {
                 public void onRewardedVideoAdClicked(String s, Placement placement) {
                     ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + s + "  placement:" + placement.getPlacementName(), onoff);
                     if (myIronsourceVideoListener != null) {
-                        for (ISDemandOnlyRewardedVideoListener ml : myIronsourceVideoListener) {
+                        ISDemandOnlyRewardedVideoListener ml = myIronsourceVideoListener.get(s);
+                        if (ml != null) {
                             ml.onRewardedVideoAdClicked(s, placement);
                         }
                     }
@@ -231,10 +244,10 @@ public class IronsourceListenerHandler {
      *
      * @param ml
      */
-    public static void setMyIronsourceVideoListener(ISDemandOnlyRewardedVideoListener ml) {
+    public static void setMyIronsourceVideoListener(String key2, ISDemandOnlyRewardedVideoListener ml) {
         if (myIronsourceVideoListener == null) {
-            myIronsourceVideoListener = new ArrayList<ISDemandOnlyRewardedVideoListener>();
+            myIronsourceVideoListener = new HashMap<String, ISDemandOnlyRewardedVideoListener>();
         }
-        myIronsourceVideoListener.add(ml);
+        myIronsourceVideoListener.put(key2, ml);
     }
 }
