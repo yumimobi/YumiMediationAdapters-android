@@ -18,7 +18,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardVideoAd rewardVideoAd;
     private RewardVideoAd.RewardVideoAdListener rewardVideoAdListener;
     private static final int REQUEST_NEXT_MEDIA = 0x001;
-    private static boolean isReady = false;
 
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -26,7 +25,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                 case REQUEST_NEXT_MEDIA:
                     if (rewardVideoAd != null && rewardVideoAdListener != null) {
                         ZplayDebug.d(TAG, "baidu media Video REQUEST_NEXT_MEDIA ", onoff);
-                        isReady = false;
                         layerNWRequestReport();
                         rewardVideoAd.load();
                     }
@@ -46,21 +44,20 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         if (rewardVideoAd != null && rewardVideoAdListener != null) {
-            isReady = false;
             rewardVideoAd.load();
         }
     }
 
     @Override
     protected void onShowMedia() {
-        if (rewardVideoAd != null && isReady) {
+        if (rewardVideoAd != null && rewardVideoAd.isReady()) {
             rewardVideoAd.show();
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-         if( rewardVideoAd != null && isReady){
+         if( rewardVideoAd != null && rewardVideoAd.isReady()){
              return true;
          }
          return  false;
@@ -70,7 +67,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "baidu key1 : " + getProvider().getKey1(), onoff);
         ZplayDebug.i(TAG, "baidu key2 : " + getProvider().getKey2(), onoff);
-        isReady = false;
         createrListener();
         XAdManager.getInstance(getActivity()).setAppSid(getProvider().getKey1());
         rewardVideoAd = new RewardVideoAd(getActivity(), getProvider().getKey2(), rewardVideoAdListener);
@@ -89,7 +85,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             public void onVideoDownloadSuccess() {
                 ZplayDebug.i(TAG, "baidu media onVideoDownloadSuccess", onoff);
                 layerPrepared();
-                isReady = true;
             }
 
             @Override
@@ -104,14 +99,12 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "baidu media get reward", onoff);
                 layerMediaEnd();
                 layerIncentived();
-                isReady = false;
             }
 
             @Override
             public void onAdClick() {
                 ZplayDebug.i(TAG, "baidu media onAdClick", onoff);
                 layerClicked();
-                isReady = false;
             }
 
             @Override
@@ -119,7 +112,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.i(TAG, "baidu media onAdClose", onoff);
                 layerClosed();
                 requestAD(3);
-                isReady = false;
             }
 
             @Override
@@ -127,7 +119,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.i(TAG, "baidu media onAdFailed:" + s, onoff);
                 layerPreparedFailed(recodeError(s));
                 requestAD(getProvider().getNextRequestInterval());
-                isReady = false;
             }
         };
 
