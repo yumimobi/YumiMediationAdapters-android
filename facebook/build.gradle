@@ -3,6 +3,7 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.facebook.android:audience-network-sdk:5.1.0'
+    implementation 'com.google.android.gms:play-services-ads:17.1.3'
     implementation YUMI_MEDIATION
 }
 
