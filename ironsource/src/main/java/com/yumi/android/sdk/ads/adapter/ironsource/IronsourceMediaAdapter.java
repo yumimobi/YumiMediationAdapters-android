@@ -47,7 +47,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "IronSource Media init Key1 : " + getProvider().getKey1() + "  Key2 : " + getProvider().getKey2(), onoff);
         createMediaListener();
-        IronsourceListenerHandler.initIronsourceVideoListener(getActivity(),getProvider().getKey1());
+        IronsourceListenerHandler.initIronsourceVideoListener(getActivity(), getProvider().getKey1());
 //        IronSource.setISDemandOnlyRewardedVideoListener(IronsourceListenerHandler.getIronsourceVideoListener());
     }
 
@@ -120,7 +120,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
         };
-        IronsourceListenerHandler.setMyIronsourceVideoListener(adListener);
+        IronsourceListenerHandler.setMyIronsourceVideoListener(getProvider().getKey2(), adListener);
     }
 
     @Override
