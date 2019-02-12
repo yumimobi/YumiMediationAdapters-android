@@ -153,6 +153,11 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPreparedFailed(recodeError(errorCode));
                 loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
+
+            @Override
+            public void onRewardedVideoCompleted() {
+                ZplayDebug.d(TAG, "admob media onRewardedVideoCompleted", onoff);
+            }
         };
     }
 
