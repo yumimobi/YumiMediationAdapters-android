@@ -56,51 +56,42 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        if (adLoader != null && adLoader.isLoading()) {
-                            ZplayDebug.v(TAG, "admob native isLoading ", onoff);
-                            final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
-                            nativeAdContent.nativeAd(new NativeAdListener() {
-                                @Override
-                                public void onMappingSuccess() {
-                                    ZplayDebug.v(TAG, "admob native onMappingSuccess : ", onoff);
-                                    list.add(nativeAdContent);
+                        ZplayDebug.v(TAG, "admob native isnotLoading", onoff);
+                        final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
+                        nativeAdContent.nativeAd(new NativeAdListener() {
+                            @Override
+                            public void onMappingSuccess() {
+                                ZplayDebug.v(TAG, "admob native onMappingSuccess : ", onoff);
+                                list.add(nativeAdContent);
+                                if (adLoader.isLoading()) {
+                                    return;
+                                }
+                                if (list.size() > 0) {
+                                    ZplayDebug.v(TAG, "YuminativeAdapter onSuccess", onoff);
+                                    layerPrepared(list);
+                                } else if (list.size() <= 0) {
+                                    ZplayDebug.v(TAG, "YuminativeAdapter onFailed", onoff);
+                                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                                 }
 
-                                @Override
-                                public void onMappingFailed() {
-                                    ZplayDebug.v(TAG, "admob native onMappingFailed : ", onoff);
-                                }
-                            });
-                        } else {
-                            ZplayDebug.v(TAG, "admob native isnotLoading", onoff);
-                            final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
-                            nativeAdContent.nativeAd(new NativeAdListener() {
-                                @Override
-                                public void onMappingSuccess() {
-                                    ZplayDebug.v(TAG, "admob native onMappingSuccess : ", onoff);
-                                    list.add(nativeAdContent);
-                                    if (list.size() > 0) {
-                                        ZplayDebug.v(TAG, "YuminativeAdapter onSuccess", onoff);
-                                        layerPrepared(list);
-                                    } else if (list.size() <= 0) {
-                                        ZplayDebug.v(TAG, "YuminativeAdapter onFailed", onoff);
-                                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                                    }
+                            }
+
+                            @Override
+                            public void onMappingFailed() {
+                                ZplayDebug.v(TAG, "admob native onMappingFailed : ", onoff);
+                                if (adLoader.isLoading()) {
+                                    return;
                                 }
 
-                                @Override
-                                public void onMappingFailed() {
-                                    ZplayDebug.v(TAG, "admob native onMappingFailed : ", onoff);
-                                    if (list.size() > 0) {
-                                        ZplayDebug.v(TAG, "YuminativeAdapter onSuccess", onoff);
-                                        layerPrepared(list);
-                                    } else if (list.size() <= 0) {
-                                        ZplayDebug.v(TAG, "YuminativeAdapter onFailed", onoff);
-                                        layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
-                                    }
+                                if (list.size() > 0) {
+                                    ZplayDebug.v(TAG, "YuminativeAdapter onSuccess", onoff);
+                                    layerPrepared(list);
+                                } else if (list.size() <= 0) {
+                                    ZplayDebug.v(TAG, "YuminativeAdapter onFailed", onoff);
+                                    layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                                 }
-                            });
-                        }
+                            }
+                        });
                     }
                 }).withAdListener(new AdListener() {
             @Override
@@ -163,7 +154,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "Admob nativeAd()", onoff);
 
             if (unifiedNativeAd.getIcon() != null) {
-                ZplayDebug.v(TAG, "Admob getIcon()" + unifiedNativeAd.getIcon().getUri().toString(), onoff);
                 ZplayDebug.v(TAG, "Admob getIcon()" + unifiedNativeAd.getIcon().getUri().toString(), onoff);
                 setIcon(new YumiNativeMappedImage(unifiedNativeAd.getIcon().getDrawable(), unifiedNativeAd.getIcon().getUri().toString(), unifiedNativeAd.getIcon().getScale()));
             } else {
