@@ -1,4 +1,4 @@
-package com.yumi.android.sdk.ads.natives.adapter.gdtmob;
+package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
 import android.view.ViewGroup;
@@ -62,13 +62,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                 for (final NativeADDataRef item : arg0)
                 {
                     NativeContent content = new NativeContent();
-                    content.setIcon_url(item.getIconUrl());
-                    content.setImg_url(item.getImgUrl());
+//                    content.setIcon_url(item.getIconUrl());
+//                    content.setImg_url(item.getImgUrl());
                     content.setDesc(item.getDesc());
                     content.setTitle(item.getTitle());
-                    content.setJumpUrl(DEFAULT_JUMPURL);
-                    content.setImg_width(1280);
-                    content.setImg_height(720);
+//                    content.setJumpUrl(DEFAULT_JUMPURL);
+//                    content.setImg_width(1280);
+//                    content.setImg_height(720);
                     content.setReportShowRunnable(new NativeReportRunnable()
                     {
                         @Override
