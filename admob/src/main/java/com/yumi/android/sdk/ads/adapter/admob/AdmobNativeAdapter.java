@@ -126,12 +126,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         NativeAdContent(UnifiedNativeAd unifiedNativeAd) {
             NativeAdContent.this.unifiedNativeAd = unifiedNativeAd;
-            nativeAd();
-        }
-
-        private void nativeAd() {
-            ZplayDebug.v(TAG, "Admob nativeAd()", onoff);
-
             if (unifiedNativeAd.getIcon() != null) {
                 ZplayDebug.v(TAG, "Admob native getIcon()" + unifiedNativeAd.getIcon().getUri().toString(), onoff);
                 setIcon(new YumiNativeMappedImage(unifiedNativeAd.getIcon().getDrawable(), unifiedNativeAd.getIcon().getUri().toString(), unifiedNativeAd.getIcon().getScale()));
