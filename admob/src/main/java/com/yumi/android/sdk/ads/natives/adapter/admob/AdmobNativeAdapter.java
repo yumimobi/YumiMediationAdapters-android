@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.natives.adapter.admob;
 
 import android.app.Activity;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.gms.ads.AdListener;
@@ -12,7 +11,7 @@ import com.google.android.gms.ads.formats.NativeAdOptions;
 import com.google.android.gms.ads.formats.UnifiedNativeAd;
 import com.google.android.gms.ads.formats.UnifiedNativeAdView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
-import com.yumi.android.sdk.ads.formats.ViewBinder;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.formats.YumiNativeMappedImage;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
@@ -166,39 +165,36 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 setImage(null);
             }
             setTitle(unifiedNativeAd.getHeadline());
-            setButtonText(unifiedNativeAd.getCallToAction());
+            setCallToAction(unifiedNativeAd.getCallToAction());
             setPrice(unifiedNativeAd.getPrice());
             setDesc(unifiedNativeAd.getBody());
             setExtras(unifiedNativeAd.getExtras());
+            setStarRating(unifiedNativeAd.getStarRating());
             nativeAdListener.onMappingSuccess();
         }
 
-        public void recordImpression() {
 
-
-        }
-
-        public void handleClick(final View view) {
-
-        }
-
-        public void trackView(ViewGroup view, ViewBinder viewBinder) {
-            UnifiedNativeAdView unifiedAdView = new UnifiedNativeAdView(view.getContext());
-            View actualView = viewBinder.layout;
-            if (actualView.getParent() != null) {
-                ((ViewGroup) actualView.getParent()).removeView(actualView);
+        public void trackView() {
+            if (getNativeAdView() == null) {
+                ZplayDebug.v(TAG, "trackView getNativeAdView() is null", onoff);
+                return;
             }
-            unifiedAdView.setHeadlineView(viewBinder.titleView);
-            unifiedAdView.setBodyView(viewBinder.docView);
-            unifiedAdView.setIconView(viewBinder.iconImageView);
-            unifiedAdView.setImageView(viewBinder.mainImageView);
-            unifiedAdView.setCallToActionView(viewBinder.callToActionView);
-            unifiedAdView.setPriceView(viewBinder.priceView);
+            YumiNativeAdView yumiNativeAdView = (YumiNativeAdView) getNativeAdView();
+            ViewGroup parent = (ViewGroup) yumiNativeAdView.getParent();
+            parent.removeView(yumiNativeAdView);
+
+            UnifiedNativeAdView unifiedAdView = new UnifiedNativeAdView(yumiNativeAdView.getContext());
+            unifiedAdView.setHeadlineView(yumiNativeAdView.getHeadlineView());
+            unifiedAdView.setBodyView(yumiNativeAdView.getBodyView());
+            unifiedAdView.setIconView(yumiNativeAdView.getIconView());
+            unifiedAdView.setImageView(yumiNativeAdView.getImageView());
+            unifiedAdView.setCallToActionView(yumiNativeAdView.getCallToActionView());
+            unifiedAdView.setPriceView(yumiNativeAdView.getPriceView());
+            unifiedAdView.setStarRatingView(yumiNativeAdView.getStarRatingView());
 
             unifiedAdView.removeAllViews();
-            unifiedAdView.addView(actualView);
-            view.removeAllViews();
-            view.addView(unifiedAdView);
+            unifiedAdView.addView(yumiNativeAdView);
+            parent.addView(unifiedAdView);
             unifiedAdView.setNativeAd(unifiedNativeAd);
         }
 
