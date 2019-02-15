@@ -21,10 +21,9 @@ import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 /**
  * Created by Administrator on 2017/7/3.
  */
-public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
+public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     private NativeAD nativeAD;
-    private static final String DEFAULT_JUMPURL = "http://zplay.android.com/jump";
 
     protected GdtmobNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -37,43 +36,31 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
 
     @Override
     protected void onPrepareNative() {
-        if (nativeAD!=null)
-        {
-//			int feedsAdNumber = getProvider().getGlobal().getFeedsAdNumber();
+        if (nativeAD != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             nativeAD.loadAD(currentPoolSpace);
-            ZplayDebug.v(TAG, "GdtnativeAdapter invoke onPrepareInterstitial! currentPoolSpace="+currentPoolSpace, onoff);
+            ZplayDebug.v(TAG, "GdtnativeAdapter invoke onPrepareInterstitial! currentPoolSpace=" + currentPoolSpace, onoff);
         }
     }
 
     @Override
     protected void init() {
-        nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeAdListener()
-        {
+        nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeAdListener() {
             @Override
-            public void onADStatusChanged(NativeADDataRef arg0)
-            {
+            public void onADStatusChanged(NativeADDataRef arg0) {
             }
+
             @Override
-            public void onADLoaded(List<NativeADDataRef> arg0)
-            {
+            public void onADLoaded(List<NativeADDataRef> arg0) {
                 ZplayDebug.v(TAG, "onADLoaded", onoff);
                 List<NativeContent> list = new ArrayList<>();
-                for (final NativeADDataRef item : arg0)
-                {
+                for (final NativeADDataRef item : arg0) {
                     NativeContent content = new NativeContent();
-//                    content.setIcon_url(item.getIconUrl());
-//                    content.setImg_url(item.getImgUrl());
                     content.setDesc(item.getDesc());
                     content.setTitle(item.getTitle());
-//                    content.setJumpUrl(DEFAULT_JUMPURL);
-//                    content.setImg_width(1280);
-//                    content.setImg_height(720);
-                    content.setReportShowRunnable(new NativeReportRunnable()
-                    {
+                    content.setReportShowRunnable(new NativeReportRunnable() {
                         @Override
-                        public void run(ViewGroup view,NativeContent nativeContent)
-                        {
+                        public void run(ViewGroup view, NativeContent nativeContent) {
                             layerExposure();
                             item.onExposured(view);
                         }
@@ -88,13 +75,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
                     });
                     list.add(content);
                 }
-                ZplayDebug.v(TAG, "adprepared length = "+list.size(), onoff);
+                ZplayDebug.v(TAG, "adprepared length = " + list.size(), onoff);
                 layerPrepared(list);
             }
 
             @Override
             public void onNoAD(AdError adError) {
-                if (adError == null){
+                if (adError == null) {
                     ZplayDebug.d(TAG, "GDT nativead onNoAD adError = null", onoff);
                     layerPreparedFailed(recodeError(null));
                     return;
@@ -105,7 +92,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter{
 
             @Override
             public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
-                if (adError == null){
+                if (adError == null) {
                     ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
                     layerPreparedFailed(recodeError(null));
                     return;
