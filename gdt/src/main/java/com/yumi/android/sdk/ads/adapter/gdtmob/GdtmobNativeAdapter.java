@@ -1,7 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
-import android.view.ViewGroup;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.View;
 
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
@@ -9,10 +14,11 @@ import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
-import com.yumi.android.sdk.ads.publish.NativeReportRunnable;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,30 +59,31 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             @Override
             public void onADLoaded(List<NativeADDataRef> arg0) {
                 ZplayDebug.v(TAG, "onADLoaded", onoff);
-                List<NativeContent> list = new ArrayList<>();
+                final List<NativeContent> list = new ArrayList<>();
                 for (final NativeADDataRef item : arg0) {
-                    NativeContent content = new NativeContent();
-                    content.setDesc(item.getDesc());
-                    content.setTitle(item.getTitle());
-                    content.setReportShowRunnable(new NativeReportRunnable() {
-                        @Override
-                        public void run(ViewGroup view, NativeContent nativeContent) {
-                            layerExposure();
-                            item.onExposured(view);
-                        }
-                    });
-                    content.setReportClickRunnable(new NativeReportRunnable() {
-                        @Override
-                        public void run(ViewGroup viewGroup, NativeContent nativeContent) {
-
-                            layerClicked(-99f, -99f);
-                            item.onClicked(viewGroup);
-                        }
-                    });
-                    list.add(content);
+                    final NativeAdContent content = new NativeAdContent(item);
+                    if (content.isValid()) {
+                        list.add(content);
+                    }
                 }
-                ZplayDebug.v(TAG, "adprepared length = " + list.size(), onoff);
-                layerPrepared(list);
+                if (list.isEmpty()) {
+                    ZplayDebug.v(TAG, "gdt data is empty", onoff);
+                    layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but the ad ")));
+                    return;
+                }
+
+                loadDrawables(list, new DownloadDrawableListener() {
+                    @Override
+                    public void onLoaded(List<NativeContent> data) {
+                        layerPrepared(data);
+                    }
+
+                    @Override
+                    public void onFailed() {
+                        layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but cannot download image data")));
+                    }
+                });
+
             }
 
             @Override
@@ -103,6 +110,48 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         });
     }
 
+    private void loadDrawables(final List<NativeContent> data, final DownloadDrawableListener listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final List<NativeContent> result = new ArrayList<>();
+                for (NativeContent nac : data) {
+                    try {
+                        URL url = new URL(nac.getIcon().getUrl());
+                        url.openConnection();
+                        InputStream in = url.openStream();
+                        Bitmap iconBm = BitmapFactory.decodeStream(in);
+                        iconBm.setDensity(DisplayMetrics.DENSITY_DEFAULT);
+
+                        URL urlImg = new URL(nac.getImage().getUrl());
+                        urlImg.openConnection();
+                        in = urlImg.openStream();
+                        Bitmap imgBm = BitmapFactory.decodeStream(in);
+                        imgBm.setDensity(DisplayMetrics.DENSITY_DEFAULT);
+
+                        nac.getIcon().setDrawable(new BitmapDrawable(getActivity().getResources(), iconBm));
+                        if (iconBm.getHeight() != 0) {
+                            nac.getIcon().setScale(iconBm.getWidth() * 1.0 / iconBm.getHeight());
+                        }
+                        nac.getImage().setDrawable(new BitmapDrawable(getActivity().getResources(), imgBm));
+                        if (imgBm.getHeight() != 0) {
+                            nac.getImage().setScale(imgBm.getWidth() * 1.0 / imgBm.getHeight());
+                        }
+                        result.add(nac);
+                    } catch (Exception e) {
+                        ZplayDebug.d(TAG, "download gdt image ", true);
+                    }
+                }
+                if (result.isEmpty()) {
+                    listener.onFailed();
+                } else {
+                    listener.onLoaded(result);
+                }
+            }
+        }).start();
+    }
+
+
     @Override
     protected void callOnActivityDestroy() {
 
@@ -126,5 +175,49 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     public boolean onActivityBackPressed() {
         return false;
+    }
+
+    private class NativeAdContent extends NativeContent {
+
+        private NativeADDataRef mGdtData;
+
+        private NativeAdContent(NativeADDataRef gdtData) {
+            mGdtData = gdtData;
+            setTitle(gdtData.getTitle());
+            setDesc(gdtData.getDesc());
+            setStarRating((double) gdtData.getAPPScore());
+            setImage(new Image(gdtData.getImgUrl()));
+            setIcon(new Image(gdtData.getIconUrl()));
+        }
+
+        /**
+         * 内容信息包括必要元素 iconUrl，title, desc, imageUrl
+         *
+         * @return 包含必要元素，返回 true；否则，返回 false
+         */
+        boolean isValid() {
+            return !TextUtils.isEmpty(getTitle()) &&
+                    !TextUtils.isEmpty(getDesc()) &&
+                    getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
+                    getImage() != null && !TextUtils.isEmpty(getImage().getUrl());
+        }
+
+        @Override
+        public void trackView() {
+            mGdtData.onExposured(getAdChoicesContent());
+            getNativeAdView().setClickable(true);
+            getNativeAdView().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mGdtData.onClicked(v);
+                }
+            });
+        }
+    }
+
+    interface DownloadDrawableListener {
+        void onLoaded(List<NativeContent> data);
+
+        void onFailed();
     }
 }
