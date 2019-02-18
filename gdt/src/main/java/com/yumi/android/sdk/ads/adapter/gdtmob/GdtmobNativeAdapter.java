@@ -1,11 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 
 import com.qq.e.ads.nativ.NativeAD;
@@ -16,13 +12,13 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
 /**
  * Created by Administrator on 2017/7/3.
@@ -72,7 +68,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                     return;
                 }
 
-                loadDrawables(list, new DownloadDrawableListener() {
+                loadDrawables(getActivity(), list, new BitmapDownloadUtil.DownloadDrawableListener() {
                     @Override
                     public void onLoaded(List<NativeContent> data) {
                         layerPrepared(data);
@@ -108,47 +104,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 layerPreparedFailed(recodeError(adError));
             }
         });
-    }
-
-    private void loadDrawables(final List<NativeContent> data, final DownloadDrawableListener listener) {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                final List<NativeContent> result = new ArrayList<>();
-                for (NativeContent nac : data) {
-                    try {
-                        URL url = new URL(nac.getIcon().getUrl());
-                        url.openConnection();
-                        InputStream in = url.openStream();
-                        Bitmap iconBm = BitmapFactory.decodeStream(in);
-                        iconBm.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-
-                        URL urlImg = new URL(nac.getImage().getUrl());
-                        urlImg.openConnection();
-                        in = urlImg.openStream();
-                        Bitmap imgBm = BitmapFactory.decodeStream(in);
-                        imgBm.setDensity(DisplayMetrics.DENSITY_DEFAULT);
-
-                        nac.getIcon().setDrawable(new BitmapDrawable(getActivity().getResources(), iconBm));
-                        if (iconBm.getHeight() != 0) {
-                            nac.getIcon().setScale(iconBm.getWidth() * 1.0 / iconBm.getHeight());
-                        }
-                        nac.getImage().setDrawable(new BitmapDrawable(getActivity().getResources(), imgBm));
-                        if (imgBm.getHeight() != 0) {
-                            nac.getImage().setScale(imgBm.getWidth() * 1.0 / imgBm.getHeight());
-                        }
-                        result.add(nac);
-                    } catch (Exception e) {
-                        ZplayDebug.d(TAG, "download gdt image ", true);
-                    }
-                }
-                if (result.isEmpty()) {
-                    listener.onFailed();
-                } else {
-                    listener.onLoaded(result);
-                }
-            }
-        }).start();
     }
 
 
@@ -213,11 +168,5 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 }
             });
         }
-    }
-
-    interface DownloadDrawableListener {
-        void onLoaded(List<NativeContent> data);
-
-        void onFailed();
     }
 }
