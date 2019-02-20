@@ -14,4 +14,9 @@ class BaiduUtil {
         error.setExtraMsg("Baidu errorMsg: " + baiduErrorMes);
         return  error;
     }
+
+    static LayerErrorCode recodeNativeError(LayerErrorCode error,String baiduErrorMes){
+        error.setExtraMsg("Baidu errorMsg: " + baiduErrorMes);
+        return  error;
+    }
 }
