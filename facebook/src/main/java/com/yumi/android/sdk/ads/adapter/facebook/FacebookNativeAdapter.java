@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -168,8 +167,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
          * @return 包含必要元素，返回 true；否则，返回 false
          */
         boolean isValid() {
-            return !TextUtils.isEmpty(getTitle()) &&
-                    !TextUtils.isEmpty(getDesc());
+            return true;
         }
 
         public void trackView() {
@@ -183,19 +181,20 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                         (FrameLayout.LayoutParams) adChoicesView.getLayoutParams();
                 setViewPosition(adChoicesParams, getProvider().getNativeAdOptions().getAdChoicesPosition());
                 overlayView.requestLayout();
+                
+                if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
+                    TextView adAttribution = new TextView(getNativeAdView().getContext());
+                    adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
+                    adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                    adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
+                    adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                    overlayView.addView(adAttribution);
+                    FrameLayout.LayoutParams adAttributionParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
 
-                //创建广告标识
-                TextView adAttribution = new TextView(getNativeAdView().getContext());
-                adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
-                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
-                adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
-                adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-                overlayView.addView(adAttribution);
-                FrameLayout.LayoutParams adAttributionParams=new FrameLayout.LayoutParams (FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
-
-                setViewPosition(adAttributionParams, getProvider().getNativeAdOptions().getAdAttributionPosition());
-                adAttribution.setLayoutParams(adAttributionParams);
-                overlayView.requestLayout();
+                    setViewPosition(adAttributionParams, getProvider().getNativeAdOptions().getAdAttributionPosition());
+                    adAttribution.setLayoutParams(adAttributionParams);
+                    overlayView.requestLayout();
+                }
 
                 MediaView mMediaView = new MediaView(getNativeAdView().getContext());
                 if (overlayView.getMediaLayout() != null) {
