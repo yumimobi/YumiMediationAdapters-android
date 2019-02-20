@@ -3,7 +3,6 @@ package com.yumi.android.sdk.ads.adapter.gdtmob;
 import android.app.Activity;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
-import android.text.TextUtils;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -158,16 +157,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
-        }
-
-        /**
-         * 内容信息包括必要元素 iconUrl，title, desc, imageUrl
-         *
-         * @return 包含必要元素，返回 true；否则，返回 false
-         */
-        boolean isValid() {
-            return getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
-                    getImage() != null && !TextUtils.isEmpty(getImage().getUrl());
         }
 
         @Override

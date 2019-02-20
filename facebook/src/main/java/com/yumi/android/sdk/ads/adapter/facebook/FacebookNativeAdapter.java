@@ -80,9 +80,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                     }
                     List<NativeContent> nativeContentsList = new ArrayList<>();
                     NativeAdContent nativeAdContent = new NativeAdContent(mNativeAd);
-                    if (nativeAdContent.isValid()) {
-                        nativeContentsList.add(nativeAdContent);
-                    }
+                    nativeContentsList.add(nativeAdContent);
 
                     if (nativeContentsList.isEmpty()) {
                         ZplayDebug.v(TAG, "facebook data is empty", onoff);
@@ -159,15 +157,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setImage(image);
 
             setCallToAction(mNativeAd.getAdCallToAction());
-        }
-
-        /**
-         * 内容信息包括必要元素 iconUrl，title, desc, imageUrl
-         *
-         * @return 包含必要元素，返回 true；否则，返回 false
-         */
-        boolean isValid() {
-            return true;
         }
 
         public void trackView() {
