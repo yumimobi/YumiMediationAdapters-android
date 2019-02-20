@@ -1,9 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.baidu.mobad.feeds.BaiduNative;
 import com.baidu.mobad.feeds.NativeErrorCode;
@@ -11,10 +14,10 @@ import com.baidu.mobad.feeds.NativeResponse;
 import com.baidu.mobad.feeds.RequestParameters;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
-import com.yumi.android.sdk.ads.publish.NativeReportRunnable;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
 import java.util.ArrayList;
@@ -92,6 +95,11 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                 return;
             }
 
+            if (!getProvider().getNativeAdOptions().getIsDownloadImage()) {
+                layerPrepared(nativeContentsList);
+                return;
+            }
+
             loadDrawables(getActivity(), nativeContentsList, new BitmapDownloadUtil.DownloadDrawableListener() {
                 @Override
                 public void onLoaded(List<NativeContent> data) {
@@ -144,10 +152,10 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
         NativeAdContent(NativeResponse nativeAdData) {
             BaiduNativeAdapter.NativeAdContent.this.nativeAdData = nativeAdData;
 
-            setIcon(new Image( nativeAdData.getIconUrl()));
+            setIcon(new Image(nativeAdData.getIconUrl()));
             setImage(new Image(nativeAdData.getImageUrl()));
             setDesc(nativeAdData.getDesc());
-            setCallToAction(nativeAdData.isDownloadApp() ? "下载" : "查看");
+            setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
             setTitle(nativeAdData.getTitle());
         }
 
@@ -164,26 +172,42 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
         }
 
         public void trackView() {
-            setReportShowRunnable(new NativeReportRunnable() {
+            if (getNativeAdView() == null) {
+                ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
+                return;
+            }
+
+            if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
+                TextView adAttribution = new TextView(getNativeAdView().getContext());
+                adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
+                adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                getNativeAdView().addView(adAttribution);
+                FrameLayout.LayoutParams adAttributionParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+                setViewPosition(adAttributionParams, getProvider().getNativeAdOptions().getAdAttributionPosition());
+                adAttribution.setLayoutParams(adAttributionParams);
+                getNativeAdView().requestLayout();
+            }
+            layerExposure();
+            nativeAdData.recordImpression(getNativeAdView());
+            getNativeAdView().setOnClickListener(new ViewGroup.OnClickListener() {
                 @Override
-                public void run() {
-                    layerExposure();
-                    nativeAdData.recordImpression(getNativeAdView());
+                public void onClick(View v) {
+                    layerClicked(-99f, -99f);
+                    nativeAdData.handleClick(getNativeAdView());
                 }
             });
-            setReportClickRunnable(new NativeReportRunnable() {
-                @Override
-                public void run() {
-                    getNativeAdView().setOnClickListener(new ViewGroup.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            layerClicked(-99f, -99f);
-                            nativeAdData.handleClick(getNativeAdView());
-                        }
-                    });
-                }
-            });
-            reportShow();
+            getNativeAdView().setClickable(true);
+            if (getNativeAdView().getCallToActionView() != null) {
+                getNativeAdView().getCallToActionView().setOnClickListener(new ViewGroup.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getNativeAdView().performClick();
+                    }
+                });
+            }
         }
     }
 
