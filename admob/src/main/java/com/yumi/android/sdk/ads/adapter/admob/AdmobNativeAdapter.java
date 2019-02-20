@@ -1,7 +1,10 @@
 package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
+import android.graphics.Typeface;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
@@ -51,7 +54,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
         list = new ArrayList<>();
         ZplayDebug.v(TAG, "admob native init getProvider().getKey1() : " + getProvider().getKey1(), onoff);
         VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
-        NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions).build();
+        NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions)
+                .setAdChoicesPlacement(getProvider().getNativeAdOptions().getAdChoicesPosition())
+                .setReturnUrlsForImageAssets(!getProvider().getNativeAdOptions().getIsDownloadImage()).build();
         AdLoader.Builder builder = new AdLoader.Builder(getActivity(), getProvider().getKey1());
         adLoader = builder.forUnifiedNativeAd(
                 new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
@@ -60,14 +65,15 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                         ZplayDebug.v(TAG, "admob native isnotLoading", onoff);
                         final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
                         list.add(nativeAdContent);
+
                         if (adLoader.isLoading()) {
                             return;
                         }
                         if (list.size() > 0) {
-                            ZplayDebug.v(TAG, "YuminativeAdapter onSuccess", onoff);
+                            ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
                             layerPrepared(list);
                         } else {
-                            ZplayDebug.v(TAG, "YuminativeAdapter onFailed", onoff);
+                            ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
                             layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
                         }
                     }
@@ -123,7 +129,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         private UnifiedNativeAd unifiedNativeAd;
 
-
         NativeAdContent(UnifiedNativeAd unifiedNativeAd) {
             NativeAdContent.this.unifiedNativeAd = unifiedNativeAd;
             if (unifiedNativeAd.getIcon() != null) {
@@ -142,10 +147,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             setCallToAction(unifiedNativeAd.getCallToAction());
             setPrice(unifiedNativeAd.getPrice());
             setDesc(unifiedNativeAd.getBody());
-            setExtras(unifiedNativeAd.getExtras());
             setStarRating(unifiedNativeAd.getStarRating());
         }
-
 
         public void trackView() {
             if (getNativeAdView() == null) {
@@ -169,9 +172,23 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "admob native VideoController.hasVideoContent() =" + vc.hasVideoContent(), onoff);
             if (yumiNativeAdView.getMediaLayout() != null) {
                 MediaView mediaview = new MediaView(unifiedAdView.getContext());
-                ((ViewGroup)yumiNativeAdView.getMediaLayout()).removeAllViews();
-                ((ViewGroup)yumiNativeAdView.getMediaLayout()).addView(mediaview);
+                ((ViewGroup) yumiNativeAdView.getMediaLayout()).removeAllViews();
+                ((ViewGroup) yumiNativeAdView.getMediaLayout()).addView(mediaview);
                 unifiedAdView.setMediaView(mediaview);
+            }
+
+            if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
+                TextView adAttribution = new TextView(getNativeAdView().getContext());
+                adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
+                adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                yumiNativeAdView.addView(adAttribution);
+                FrameLayout.LayoutParams adAttributionParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+                setViewPosition(adAttributionParams, getProvider().getNativeAdOptions().getAdAttributionPosition());
+                adAttribution.setLayoutParams(adAttributionParams);
+                yumiNativeAdView.requestLayout();
             }
 
             unifiedAdView.removeAllViews();
