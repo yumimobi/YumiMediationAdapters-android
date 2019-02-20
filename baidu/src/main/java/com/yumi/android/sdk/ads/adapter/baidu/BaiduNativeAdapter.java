@@ -159,16 +159,6 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             setTitle(nativeAdData.getTitle());
         }
 
-        /**
-         * 内容信息包括必要元素 iconUrl，title, desc, imageUrl
-         *
-         * @return 包含必要元素，返回 true；否则，返回 false
-         */
-        boolean isValid() {
-            return getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
-                    getImage() != null && !TextUtils.isEmpty(getImage().getUrl());
-        }
-
         public void trackView() {
             if (getNativeAdView() == null) {
                 ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
