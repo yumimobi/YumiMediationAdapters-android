@@ -1,17 +1,25 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
-import android.text.TextUtils;
+import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.qq.e.ads.nativ.NativeAD;
 import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
 import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
+import com.yumi.android.sdk.ads.self.ui.ResFactory;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
+import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
 import java.util.ArrayList;
@@ -41,7 +49,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         if (nativeAD != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             nativeAD.loadAD(currentPoolSpace);
-            ZplayDebug.v(TAG, "GdtnativeAdapter invoke onPrepareInterstitial! currentPoolSpace=" + currentPoolSpace, onoff);
+            ZplayDebug.v(TAG, "Gdt native Adapter invoke onPrepareInterstitial! currentPoolSpace=" + currentPoolSpace, onoff);
         }
     }
 
@@ -65,6 +73,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 if (list.isEmpty()) {
                     ZplayDebug.v(TAG, "gdt data is empty", onoff);
                     layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but the ad ")));
+                    return;
+                }
+
+                if (!getProvider().getNativeAdOptions().getIsDownloadImage()) {
+                    layerPrepared(list);
                     return;
                 }
 
@@ -143,30 +156,60 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setStarRating((double) gdtData.getAPPScore());
             setImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
-        }
-
-        /**
-         * 内容信息包括必要元素 iconUrl，title, desc, imageUrl
-         *
-         * @return 包含必要元素，返回 true；否则，返回 false
-         */
-        boolean isValid() {
-            return !TextUtils.isEmpty(getTitle()) &&
-                    !TextUtils.isEmpty(getDesc()) &&
-                    getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
-                    getImage() != null && !TextUtils.isEmpty(getImage().getUrl());
+            setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
         }
 
         @Override
         public void trackView() {
-            mGdtData.onExposured(getAdChoicesContent());
+            if (getNativeAdView() == null) {
+                ZplayDebug.v(TAG, "GDT native trackView getNativeAdView() is null", onoff);
+                return;
+            }
+
+            ImageView adLogo = new ImageView(getNativeAdView().getContext());
+            Drawable zplayad_media_gdt_logo = ResFactory.getDrawableByAssets("zplayad_media_gdt_logo", getNativeAdView().getContext());
+            adLogo.setBackground(zplayad_media_gdt_logo);
+            getNativeAdView().addView(adLogo);
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            adLogoParams.width = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            adLogoParams.height = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
+            adLogo.setLayoutParams(adLogoParams);
+            getNativeAdView().requestLayout();
+
+            if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
+                TextView adAttribution = new TextView(getNativeAdView().getContext());
+                adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
+                adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
+                getNativeAdView().addView(adAttribution);
+                FrameLayout.LayoutParams adAttributionParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+
+                setViewPosition(adAttributionParams, getProvider().getNativeAdOptions().getAdAttributionPosition());
+                adAttribution.setLayoutParams(adAttributionParams);
+                getNativeAdView().requestLayout();
+            }
+
+            mGdtData.onExposured(getNativeAdView());
+            layerExposure();
+
             getNativeAdView().setClickable(true);
             getNativeAdView().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    layerClicked(-99, -99);
                     mGdtData.onClicked(v);
                 }
             });
+            if (getNativeAdView().getCallToActionView() != null) {
+                getNativeAdView().getCallToActionView().setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        getNativeAdView().performClick();
+                    }
+                });
+            }
         }
     }
 }
