@@ -49,7 +49,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "baidu native key1 : " + getProvider().getKey1(), onoff);
-        baiduNative = new BaiduNative(getActivity(), "2058628", new BaiduNative.BaiduNativeNetworkListener() {
+        baiduNative = new BaiduNative(getActivity(), getProvider().getKey1(), new BaiduNative.BaiduNativeNetworkListener() {
             @Override
             public void onNativeLoad(List<NativeResponse> list) {
                 ZplayDebug.i(TAG, "baidu native onNativeLoad : " + list.size(), onoff);
