@@ -20,7 +20,6 @@ import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.formats.YumiNativeMappedImage;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -74,7 +73,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                             layerPrepared(list);
                         } else {
                             ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
-                            layerPreparedFailed(LayerErrorCode.ERROR_NO_FILL);
+                            layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
                         }
                     }
                 }).withAdListener(new AdListener() {

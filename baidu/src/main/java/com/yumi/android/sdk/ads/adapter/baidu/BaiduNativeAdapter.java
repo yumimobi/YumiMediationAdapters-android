@@ -2,7 +2,6 @@ package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -15,7 +14,6 @@ import com.baidu.mobad.feeds.RequestParameters;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
@@ -59,15 +57,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             @Override
             public void onNativeFail(NativeErrorCode nativeErrorCode) {
                 ZplayDebug.i(TAG, "baidu native onNativeFail : " + nativeErrorCode.toString(), onoff);
-                LayerErrorCode result;
-                if (nativeErrorCode == NativeErrorCode.LOAD_AD_FAILED) {
-                    result = LayerErrorCode.ERROR_NO_FILL;
-                } else if (nativeErrorCode == NativeErrorCode.CONFIG_ERROR) {
-                    result = LayerErrorCode.ERROR_INVALID;
-                } else {
-                    result = LayerErrorCode.ERROR_INTERNAL;
-                }
-                layerPreparedFailed(recodeNativeError(result, nativeErrorCode.toString()));
+                layerPreparedFailed(recodeNativeError(nativeErrorCode, nativeErrorCode.toString()));
             }
         });
 
@@ -89,9 +79,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
             if (nativeContentsList.isEmpty()) {
                 ZplayDebug.v(TAG, "baidu data is empty", onoff);
-                LayerErrorCode request = LayerErrorCode.ERROR_NO_FILL;
-                request.setExtraMsg("Baidu Native: baidu ad is no fill");
-                layerPreparedFailed(request);
+                layerPreparedFailed(recodeNativeError(NativeErrorCode.LOAD_AD_FAILED, "baidu data is empty"));
                 return;
             }
 
@@ -108,14 +96,12 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
                 @Override
                 public void onFailed() {
-                    LayerErrorCode request = LayerErrorCode.ERROR_INTERNAL;
-                    request.setExtraMsg("Baidu Native: download image data failed");
-                    layerPreparedFailed(request);
+                    layerPreparedFailed(recodeNativeError(NativeErrorCode.LOAD_AD_FAILED, "Baidu Native: download image data failed"));
                 }
             });
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Baidu getNativeContentList error : " + e, onoff);
-            layerPreparedFailed(recodeNativeError(LayerErrorCode.ERROR_INTERNAL, "Baidu get Native Content List error"));
+            layerPreparedFailed(recodeNativeError(NativeErrorCode.INTERNAL_ERROR, "Baidu get Native Content List error"));
         }
     }
 

@@ -21,7 +21,6 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -84,17 +83,15 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
                     if (nativeContentsList.isEmpty()) {
                         ZplayDebug.v(TAG, "facebook data is empty", onoff);
-                        LayerErrorCode request = LayerErrorCode.ERROR_NO_FILL;
-                        request.setExtraMsg("Facebook Native: facebook ad is no fill");
-                        layerPreparedFailed(request);
+                        AdError adError= new AdError(AdError.NO_FILL_ERROR_CODE, "facebook ad is no fill");
+                        layerPreparedFailed(FacebookUtil.recodeError(adError));
                         return;
                     }
                     layerPrepared(nativeContentsList);
                 } catch (Exception e) {
                     ZplayDebug.e(TAG, "facebook getNativeContentList error : " + e, onoff);
-                    LayerErrorCode request = LayerErrorCode.ERROR_INTERNAL;
-                    request.setExtraMsg("facebook Native: download image data failed");
-                    layerPreparedFailed(request);
+                    AdError adError= new AdError(AdError.NO_FILL_ERROR_CODE, "download image data failed");
+                    layerPreparedFailed(FacebookUtil.recodeError(adError));
                 }
             }
 
