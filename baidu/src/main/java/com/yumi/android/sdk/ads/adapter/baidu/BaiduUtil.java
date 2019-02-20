@@ -25,7 +25,7 @@ class BaiduUtil {
         } else {
             result = LayerErrorCode.ERROR_INTERNAL;
         }
-        result.setExtraMsg(errMsg);
+        result.setExtraMsg("Baidu errorMsg: " + errMsg);
         return  result;
     }
 }
