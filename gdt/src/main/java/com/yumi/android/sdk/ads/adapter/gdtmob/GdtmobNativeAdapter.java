@@ -166,9 +166,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
          * @return 包含必要元素，返回 true；否则，返回 false
          */
         boolean isValid() {
-            return !TextUtils.isEmpty(getTitle()) &&
-                    !TextUtils.isEmpty(getDesc()) &&
-                    getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
+            return getIcon() != null && !TextUtils.isEmpty(getIcon().getUrl()) &&
                     getImage() != null && !TextUtils.isEmpty(getImage().getUrl());
         }
 
