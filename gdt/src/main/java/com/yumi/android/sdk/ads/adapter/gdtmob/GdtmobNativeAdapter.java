@@ -65,9 +65,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 ZplayDebug.v(TAG, "onADLoaded", onoff);
                 final List<NativeContent> list = new ArrayList<>();
                 for (final NativeADDataRef item : arg0) {
-                    final NativeAdContent content = new NativeAdContent(item);
-                    if (content.isValid()) {
-                        list.add(content);
+                    try{
+                        final NativeAdContent content = new NativeAdContent(item);
+                        if (content.isValid()) {
+                            list.add(content);
+                        }
+                    }catch (Exception e) {
+                        ZplayDebug.e(TAG, "gdt data parse error : " + e, onoff);
                     }
                 }
                 if (list.isEmpty()) {
