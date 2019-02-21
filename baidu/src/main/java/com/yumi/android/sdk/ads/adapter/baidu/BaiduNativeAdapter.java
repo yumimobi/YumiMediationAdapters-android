@@ -162,6 +162,10 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "baidu native hasVideoContent :" + (nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO), onoff);
             setHasVideoContent(nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO);
             setNativeAdVideoController(new BaiduNativeAdVideoController(xNativeView));
+
+            setCreaterTime(System.currentTimeMillis());
+            setMaterialEtime(getProvider().getMaterialEtime());
+            setProviderName("Baidu");
         }
 
         public void trackView() {

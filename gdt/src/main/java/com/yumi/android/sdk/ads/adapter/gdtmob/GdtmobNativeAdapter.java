@@ -14,6 +14,7 @@ import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.self.ui.ResFactory;
@@ -161,6 +162,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
+
+            setCreaterTime(System.currentTimeMillis());
+            setMaterialEtime(getProvider().getMaterialEtime());
+            setNativeAdVideoController(new YumiNativeAdVideoController());
+            setProviderName("Gdt");
         }
 
         @Override

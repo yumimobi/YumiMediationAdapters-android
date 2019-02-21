@@ -159,6 +159,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             } else {
                 setImage(null);
             }
+
             setTitle(unifiedNativeAd.getHeadline());
             setCallToAction(unifiedNativeAd.getCallToAction());
             setPrice(unifiedNativeAd.getPrice());
@@ -167,6 +168,10 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             setHasVideoContent(unifiedNativeAd.getVideoController().hasVideoContent());
             ZplayDebug.v(TAG, "admob native hasVideoContent() =" + unifiedNativeAd.getVideoController().hasVideoContent(), onoff);
             setNativeAdVideoController(new AdmobNativeViewController(unifiedNativeAd.getVideoController()));
+
+            setCreaterTime(System.currentTimeMillis());
+            setMaterialEtime(getProvider().getMaterialEtime());
+            setProviderName("Admob");
         }
 
         public void trackView() {

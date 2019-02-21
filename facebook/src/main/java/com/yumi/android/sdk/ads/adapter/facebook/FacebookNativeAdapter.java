@@ -154,6 +154,10 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setImage(image);
 
             setCallToAction(mNativeAd.getAdCallToAction());
+
+            setCreaterTime(System.currentTimeMillis());
+            setMaterialEtime(getProvider().getMaterialEtime());
+            setProviderName("Facebook");
         }
 
         public void trackView() {
