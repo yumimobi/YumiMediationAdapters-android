@@ -85,8 +85,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                         nativeContentsList.add(nativeAdContent);
                     }
                 } catch (Exception e) {
-                    ZplayDebug.e(TAG, "Baidu getNativeContentList error : " + e, onoff);
-                    layerPreparedFailed(recodeNativeError(NativeErrorCode.INTERNAL_ERROR, "get Native Content List error"));
+                    ZplayDebug.e(TAG, "Baidu data parse error : " + e, onoff);
                 }
             }
 

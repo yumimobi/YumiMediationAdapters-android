@@ -66,18 +66,22 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
                         ZplayDebug.v(TAG, "admob native onUnifiedNativeAdLoaded isLoading" + adLoader.isLoading(), onoff);
-                        adCount--;
-                        final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
-                        list.add(nativeAdContent);
-                        if (adCount != 0) {
-                            return;
-                        }
-                        if (list.size() > 0) {
-                            ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
-                            layerPrepared(list);
-                        } else {
-                            ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
-                            layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
+                        try {
+                            adCount--;
+                            final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
+                            list.add(nativeAdContent);
+                            if (adCount != 0) {
+                                return;
+                            }
+                            if (list.size() > 0) {
+                                ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
+                                layerPrepared(list);
+                            } else {
+                                ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
+                                layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
+                            }
+                        } catch (Exception e) {
+                            ZplayDebug.e(TAG, "admob getNativeContentList error : " + e, onoff);
                         }
                     }
                 }).withAdListener(new AdListener() {
