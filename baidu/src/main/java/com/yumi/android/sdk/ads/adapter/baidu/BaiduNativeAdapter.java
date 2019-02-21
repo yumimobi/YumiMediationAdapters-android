@@ -2,20 +2,27 @@ package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.baidu.mobad.feeds.BaiduNative;
 import com.baidu.mobad.feeds.NativeErrorCode;
 import com.baidu.mobad.feeds.NativeResponse;
-import com.baidu.mobad.feeds.RequestParameters;
+import com.baidu.mobads.AdView;
+import com.baidu.mobads.component.XNativeView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
+import com.yumi.android.sdk.ads.self.ui.ResFactory;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
+import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
 import java.util.ArrayList;
@@ -26,7 +33,6 @@ import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawabl
 
 public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
     private BaiduNative baiduNative;
-    private RequestParameters requestParameters;
 
     protected BaiduNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -39,15 +45,20 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
-        if (baiduNative != null && requestParameters != null) {
-            baiduNative.makeRequest(requestParameters);
+        if (baiduNative != null) {
+            baiduNative.makeRequest();
         }
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "baidu native key1 : " + getProvider().getKey1(), onoff);
-        baiduNative = new BaiduNative(getActivity(), getProvider().getKey1(), new BaiduNative.BaiduNativeNetworkListener() {
+        ZplayDebug.i(TAG, "baidu native key1 : " + getProvider().getKey1() + ",key2 :" + getProvider().getKey2(), onoff);
+        AdView.setAppSid(getActivity(), getProvider().getKey1());
+        createrListener();
+    }
+
+    private void createrListener() {
+        baiduNative = new BaiduNative(getActivity(), getProvider().getKey2(), new BaiduNative.BaiduNativeNetworkListener() {
             @Override
             public void onNativeLoad(List<NativeResponse> list) {
                 ZplayDebug.i(TAG, "baidu native onNativeLoad : " + list.size(), onoff);
@@ -61,19 +72,21 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             }
         });
 
-        requestParameters = new RequestParameters.Builder()
-                .downloadAppConfirmPolicy(RequestParameters.DOWNLOAD_APP_CONFIRM_NEVER).build();
     }
-
 
     private void getNativeContentList(final List<NativeResponse> baiduNativeAdlist) {
         List<NativeContent> nativeContentsList = new ArrayList<>();
         try {
             for (int i = 0; i < baiduNativeAdlist.size(); i++) {
-                final NativeResponse adEntity = baiduNativeAdlist.get(i);
-                final NativeAdContent nativeAdContent = new NativeAdContent(adEntity);
-                if (nativeAdContent.isValid()) {
-                    nativeContentsList.add(nativeAdContent);
+                try {
+                    final NativeResponse adEntity = baiduNativeAdlist.get(i);
+                    final NativeAdContent nativeAdContent = new NativeAdContent(adEntity);
+                    if (nativeAdContent.isValid()) {
+                        nativeContentsList.add(nativeAdContent);
+                    }
+                } catch (Exception e) {
+                    ZplayDebug.e(TAG, "Baidu getNativeContentList error : " + e, onoff);
+                    layerPreparedFailed(recodeNativeError(NativeErrorCode.INTERNAL_ERROR, "get Native Content List error"));
                 }
             }
 
@@ -134,6 +147,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
     class NativeAdContent extends NativeContent {
 
         private NativeResponse nativeAdData;
+        private XNativeView xNativeView;
 
         NativeAdContent(NativeResponse nativeAdData) {
             BaiduNativeAdapter.NativeAdContent.this.nativeAdData = nativeAdData;
@@ -143,6 +157,12 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             setDesc(nativeAdData.getDesc());
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
             setTitle(nativeAdData.getTitle());
+
+            xNativeView = new XNativeView(getContext());
+            xNativeView.setNativeItem(nativeAdData);
+            ZplayDebug.v(TAG, "baidu native hasVideoContent :" + (nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO), onoff);
+            setHasVideoContent(nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO);
+            setNativeAdVideoController(new BaiduNativeAdVideoController(xNativeView));
         }
 
         public void trackView() {
@@ -150,6 +170,17 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                 ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
                 return;
             }
+
+            ImageView adLogo = new ImageView(getNativeAdView().getContext());
+            Drawable zplayad_media_baidu_logo = ResFactory.getDrawableByAssets("zplayad_media_baidu_logo", getNativeAdView().getContext());
+            adLogo.setBackground(zplayad_media_baidu_logo);
+            getNativeAdView().addView(adLogo);
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            adLogoParams.width = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            adLogoParams.height = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
+            adLogo.setLayoutParams(adLogoParams);
+            getNativeAdView().requestLayout();
 
             if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
@@ -164,6 +195,12 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                 adAttribution.setLayoutParams(adAttributionParams);
                 getNativeAdView().requestLayout();
             }
+
+            if (getNativeAdView().getMediaLayout() != null && nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO) {
+                ((ViewGroup) getNativeAdView().getMediaLayout()).removeAllViews();
+                ((ViewGroup) getNativeAdView().getMediaLayout()).addView(xNativeView);
+            }
+
             layerExposure();
             nativeAdData.recordImpression(getNativeAdView());
             getNativeAdView().setOnClickListener(new ViewGroup.OnClickListener() {
@@ -181,6 +218,38 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                         getNativeAdView().performClick();
                     }
                 });
+            }
+        }
+
+        public class BaiduNativeAdVideoController extends YumiNativeAdVideoController {
+            private XNativeView xNativeView;
+
+            private BaiduNativeAdVideoController(XNativeView xNativeView) {
+                this.xNativeView = xNativeView;
+            }
+
+            @Override
+            public void play() {
+                if (xNativeView != null) {
+                    xNativeView.render();
+                }
+            }
+
+            @Override
+            public void pause() {
+                if (xNativeView != null) {
+                    xNativeView.pause();
+                }
+            }
+
+            @Override
+            public double getAspectRatio() {
+                return 0;
+            }
+
+            @Override
+            public void setVideoLifecycleCallbacks(YumiVideoLifecycleCallbacks videoLifecycleCallbacks) {
+
             }
         }
     }
