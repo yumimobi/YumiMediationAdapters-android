@@ -9,7 +9,9 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 
 /**
  * Description:
@@ -26,6 +28,11 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
+        if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "IQZone not support smart banner", onoff);
+            layerPreparedFailed(recodeError(ERROR_NO_FILL, "not support smart banner."));
+            return;
+        }
         imdBannerAd.onAttached(getActivity());
         imdBannerAd.loadAd(getProvider().getKey1(), 0, newAdEventListener());
     }
