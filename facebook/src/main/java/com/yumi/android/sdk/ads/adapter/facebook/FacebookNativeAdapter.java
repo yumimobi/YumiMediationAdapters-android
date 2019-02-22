@@ -155,7 +155,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
             setCallToAction(mNativeAd.getAdCallToAction());
 
-            setCreaterTime(System.currentTimeMillis());
+            setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Facebook");
         }
