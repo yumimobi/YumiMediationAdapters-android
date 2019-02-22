@@ -12,6 +12,9 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.google.android.gms.ads.AdSize.BANNER;
+import static com.google.android.gms.ads.AdSize.LEADERBOARD;
+import static com.google.android.gms.ads.AdSize.SMART_BANNER;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
@@ -25,11 +28,9 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     private AdListener adListener;
     private float cx = -99f;
     private float cy = -99f;
-    private Activity mActivity;
 
     protected AdmobBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
-        mActivity=activity;
     }
 
     @Override
@@ -108,29 +109,27 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     private AdSize calculateBannerSize() {
-        if(isMatchWindowWidth && isPortrait(mActivity))
-        {
-            return AdSize.SMART_BANNER;
+        if (isMatchWindowWidth && isPortrait(getActivity())) {
+            return SMART_BANNER;
         }
-        if (bannerSize == com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_320X50) {
-            return AdSize.BANNER;
+
+        switch (bannerSize) {
+            case BANNER_SIZE_SMART:
+                return SMART_BANNER;
+            case BANNER_SIZE_728X90:
+                return LEADERBOARD;
+            default:
+                return BANNER;
         }
-        if (bannerSize == com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_728X90) {
-            return AdSize.LEADERBOARD;
-        }
-        return AdSize.BANNER;
     }
 
 
-    private static final boolean isPortrait(Context context){
+    private static boolean isPortrait(Context context) {
         try {
             DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            if (dm.widthPixels <= dm.heightPixels) {
-                return true;
-            }
+            return dm.widthPixels <= dm.heightPixels;
         } catch (Exception e) {
+            return false;
         }
-        return false;
     }
-
 }

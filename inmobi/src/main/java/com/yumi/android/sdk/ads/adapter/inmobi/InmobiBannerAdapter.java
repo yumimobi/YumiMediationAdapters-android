@@ -15,6 +15,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
 
 public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
@@ -45,6 +47,11 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
+        if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "inmobi not support smart banner", onoff);
+            layerPreparedFailed(recodeError(ERROR_NO_FILL, "not support smart banner."));
+            return;
+        }
         calculateBannerSize();
         ZplayDebug.d(TAG, "inmobi request new banner", onoff);
         String key2 = getProvider().getKey2();
