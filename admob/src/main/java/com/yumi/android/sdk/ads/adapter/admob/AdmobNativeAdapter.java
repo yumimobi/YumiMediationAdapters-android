@@ -169,7 +169,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "admob native hasVideoContent() =" + unifiedNativeAd.getVideoController().hasVideoContent(), onoff);
             setNativeAdVideoController(new AdmobNativeViewController(unifiedNativeAd.getVideoController()));
 
-            setCreaterTime(System.currentTimeMillis());
+            setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Admob");
         }

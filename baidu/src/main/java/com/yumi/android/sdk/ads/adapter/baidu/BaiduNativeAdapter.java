@@ -22,13 +22,13 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.self.ui.ResFactory;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
-import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeNativeError;
+import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
 public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
@@ -163,7 +163,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             setHasVideoContent(nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO);
             setNativeAdVideoController(new BaiduNativeAdVideoController(xNativeView));
 
-            setCreaterTime(System.currentTimeMillis());
+            setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Baidu");
         }
@@ -178,9 +178,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             Drawable zplayad_media_baidu_logo = ResFactory.getDrawableByAssets("zplayad_media_baidu_logo", getNativeAdView().getContext());
             adLogo.setBackground(zplayad_media_baidu_logo);
             getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            adLogoParams.width = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
-            adLogoParams.height = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
             setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
             adLogo.setLayoutParams(adLogoParams);
             getNativeAdView().requestLayout();
