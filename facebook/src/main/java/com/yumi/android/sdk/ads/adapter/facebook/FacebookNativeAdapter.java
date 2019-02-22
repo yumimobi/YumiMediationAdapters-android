@@ -15,9 +15,13 @@ import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.MediaView;
+import com.facebook.ads.MediaViewListener;
+import com.facebook.ads.MediaViewVideoRenderer;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdListener;
+import com.facebook.ads.VideoStartReason;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
@@ -47,11 +51,13 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
             mNativeAd.setAdListener(nativeAdListener);
         }
+        ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
         mNativeAd.loadAd();
     }
 
     @Override
     protected void init() {
+        ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1() , onoff);
         AudienceNetworkAds.initialize(getActivity());
         createListener();
     }
@@ -136,13 +142,14 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
     class NativeAdContent extends NativeContent {
         private NativeAd nativeAd;
+        private MediaView mMediaView;
+        private MediaViewVideoRenderer mediaViewVideoRenderer;
 
         NativeAdContent(NativeAd nativeAd) {
             NativeAdContent.this.nativeAd = nativeAd;
 
             setTitle(nativeAd.getAdHeadline());
             setDesc(nativeAd.getAdBodyText());
-            ZplayDebug.i(TAG, "facebook native icon:" + mNativeAd.getAdIcon().toString(), onoff);
 
             Image icon = new Image(null);
             icon.setDrawable(getDrawable());
@@ -150,7 +157,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
             Image image = new Image(null);
             icon.setDrawable(getDrawable());
-            ZplayDebug.i(TAG, "facebook native icon:" + mNativeAd.getAdCoverImage().toString(), onoff);
             setImage(image);
 
             setCallToAction(mNativeAd.getAdCallToAction());
@@ -158,6 +164,22 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Facebook");
+            if(getActivity() != null){
+                mMediaView = new MediaView(getActivity());
+                mediaViewVideoRenderer = new MediaViewVideoRenderer(getActivity()) {
+                    @Override
+                    protected void setNativeAd(NativeAd nativeAd) {
+                        super.setNativeAd(nativeAd);
+                    }
+                };
+                mediaViewVideoRenderer.play(VideoStartReason.USER_STARTED);
+                mediaViewVideoRenderer.pause(true);
+                mMediaView.setVideoRenderer(mediaViewVideoRenderer);
+            }
+
+            ZplayDebug.i(TAG, "facebook native hasVideoContent:" + (mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO), onoff);
+            setHasVideoContent(mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO);
+            setNativeAdVideoController(new FacebookNativeAdVideoController(mMediaView, mediaViewVideoRenderer));
         }
 
         public void trackView() {
@@ -186,7 +208,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                     overlayView.requestLayout();
                 }
 
-                MediaView mMediaView = new MediaView(getNativeAdView().getContext());
+
                 if (overlayView.getMediaLayout() != null) {
                     ((ViewGroup) overlayView.getMediaLayout()).removeAllViews();
                     ((ViewGroup) overlayView.getMediaLayout()).addView(mMediaView);
@@ -201,6 +223,82 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             Bitmap resultBitmap = Bitmap.createScaledBitmap(bitmap, 1, 1, true);
             bitmap.recycle();
             return new BitmapDrawable(resultBitmap);
+        }
+
+        public class FacebookNativeAdVideoController extends YumiNativeAdVideoController{
+            private MediaView mMediaView;
+            private MediaViewVideoRenderer mediaViewVideoRenderer;
+            private FacebookNativeAdVideoController(MediaView mMediaView,MediaViewVideoRenderer mediaViewVideoRenderer ){
+                this.mMediaView = mMediaView;
+                this.mediaViewVideoRenderer = mediaViewVideoRenderer;
+            }
+            public void play(){
+                if(mediaViewVideoRenderer != null){
+                    mediaViewVideoRenderer.play(VideoStartReason.AUTO_STARTED);
+                }
+            }
+
+            public void pause(){
+                if(mediaViewVideoRenderer != null){
+                    mediaViewVideoRenderer.pause(true);
+                }
+            }
+
+            public double getAspectRatio(){
+                return 0;
+            }
+
+            public void setVideoLifecycleCallbacks(final YumiVideoLifecycleCallbacks videoLifecycleCallbacks){
+               if(mMediaView != null){
+                   mMediaView.setListener(new MediaViewListener() {
+                       @Override
+                       public void onPlay(MediaView mediaView) {
+                               if(videoLifecycleCallbacks != null){
+                                   videoLifecycleCallbacks.onVideoPlay();
+                               }
+                       }
+
+                       @Override
+                       public void onVolumeChange(MediaView mediaView, float v) {
+
+                       }
+
+                       @Override
+                       public void onPause(MediaView mediaView) {
+                           if(videoLifecycleCallbacks != null){
+                               videoLifecycleCallbacks.onVideoPlay();
+                           }
+                       }
+
+                       @Override
+                       public void onComplete(MediaView mediaView) {
+                           if(videoLifecycleCallbacks != null){
+                               videoLifecycleCallbacks.onVideoEnd();
+                           }
+                       }
+
+                       @Override
+                       public void onEnterFullscreen(MediaView mediaView) {
+
+                       }
+
+                       @Override
+                       public void onExitFullscreen(MediaView mediaView) {
+
+                       }
+
+                       @Override
+                       public void onFullscreenBackground(MediaView mediaView) {
+
+                       }
+
+                       @Override
+                       public void onFullscreenForeground(MediaView mediaView) {
+
+                       }
+                   });
+               }
+            }
         }
     }
 

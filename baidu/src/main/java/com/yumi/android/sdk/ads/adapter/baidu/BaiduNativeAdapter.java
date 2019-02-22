@@ -46,6 +46,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void onPrepareNative() {
         if (baiduNative != null) {
+            ZplayDebug.v(TAG, "baidu native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
             baiduNative.makeRequest();
         }
     }
