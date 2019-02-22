@@ -48,6 +48,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
         if (adLoader != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             adCount = currentPoolSpace >= 5 ? 5 : currentPoolSpace;
+            ZplayDebug.v(TAG, "admob native onPrepareNative adCount: " + adCount, onoff);
             adLoader.loadAds(new AdRequest.Builder().build(), adCount);
         }
     }

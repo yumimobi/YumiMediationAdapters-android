@@ -49,13 +49,14 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     protected void onPrepareNative() {
         if (nativeAD != null) {
             int currentPoolSpace = getCurrentPoolSpace();
+            ZplayDebug.v(TAG, "Gdt native Adapter invoke onPrepareNative adCount=" + getCurrentPoolSpace(), onoff);
             nativeAD.loadAD(currentPoolSpace);
-            ZplayDebug.v(TAG, "Gdt native Adapter invoke onPrepareInterstitial! currentPoolSpace=" + currentPoolSpace, onoff);
         }
     }
 
     @Override
     protected void init() {
+        ZplayDebug.v(TAG, "Gdt native Adapter init key1 = " + getProvider().getKey1() + ", key2 = " + getProvider().getKey2(), onoff);
         nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeAdListener() {
             @Override
             public void onADStatusChanged(NativeADDataRef arg0) {
