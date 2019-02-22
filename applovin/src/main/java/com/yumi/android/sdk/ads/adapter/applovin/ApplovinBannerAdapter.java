@@ -14,6 +14,7 @@ import com.applovin.sdk.AppLovinSdk;
 import com.applovin.sdk.AppLovinSdkSettings;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
@@ -38,6 +39,11 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         try {
+            if (bannerSize == AdSize.BANNER_SIZE_SMART) {
+                ZplayDebug.d(TAG, "AppLovin banner not support smart banner:", onoff);
+                layerPreparedFailed(recodeError(-1, "not support smart banner."));
+                return;
+            }
             ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
             if (appLovinSdk == null || adView == null) {
                 init();
