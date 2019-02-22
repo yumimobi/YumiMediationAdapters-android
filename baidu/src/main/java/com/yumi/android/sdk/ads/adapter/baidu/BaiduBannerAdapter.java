@@ -2,6 +2,7 @@ package com.yumi.android.sdk.ads.adapter.baidu;
 
 import org.json.JSONObject;
 
+import com.baidu.mobad.feeds.NativeErrorCode;
 import com.baidu.mobads.AdSize;
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.AdViewListener;
@@ -12,6 +13,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import android.app.Activity;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeNativeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
@@ -42,7 +44,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 	protected void onPrepareBannerLayer() {
 		if (bannerSize == BANNER_SIZE_SMART){
 			ZplayDebug.i(TAG, "baidu not support smart banner", onoff);
-			layerPreparedFailed(recodeError("not support smart banner"));
+			layerPreparedFailed(recodeNativeError(NativeErrorCode.LOAD_AD_FAILED, "not support smart banner"));
 			return;
 		}
 		ZplayDebug.d(TAG, "baidu request new banner", onoff);
