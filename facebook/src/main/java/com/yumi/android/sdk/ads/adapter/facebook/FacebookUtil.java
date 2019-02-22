@@ -1,5 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.facebook;
 
+import android.text.TextUtils;
+
 import com.facebook.ads.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
@@ -9,10 +11,15 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 public class FacebookUtil {
 
     public static LayerErrorCode recodeError(AdError adError) {
+        return recodeError(adError, null);
+    }
+
+
+    public static LayerErrorCode recodeError(AdError adError, String yumiLog) {
         LayerErrorCode result;
-        if(adError == null){
+        if (adError == null) {
             result = LayerErrorCode.ERROR_INTERNAL;
-            result.setExtraMsg("Facebook errorMsg: null" );
+            result.setExtraMsg("Facebook errorMsg: null");
             return result;
         }
 
@@ -27,7 +34,11 @@ public class FacebookUtil {
                 result = LayerErrorCode.ERROR_INTERNAL;
                 break;
         }
-        result.setExtraMsg("Facebook errorCode: " + adError.getErrorCode() + " and errorMsg: " + adError.getErrorMessage());
+        String extraMsg = "Facebook errorCode: " + adError.getErrorCode() + " and errorMsg: " + adError.getErrorMessage();
+        if (!TextUtils.isEmpty(yumiLog)) {
+            extraMsg += ", " + yumiLog;
+        }
+        result.setExtraMsg(extraMsg);
         return result;
     }
 }

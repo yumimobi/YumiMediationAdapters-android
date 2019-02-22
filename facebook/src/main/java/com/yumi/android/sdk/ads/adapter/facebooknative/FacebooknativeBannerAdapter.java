@@ -22,6 +22,9 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.facebook.ads.AdError.NO_FILL;
+import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
+
 
 public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -128,6 +131,11 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         try {
+            if (bannerSize == BANNER_SIZE_SMART) {
+                ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
+                layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
+                return;
+            }
             nativeBannerAd = new NativeBannerAd(getActivity(), getProvider().getKey1());
             nativeBannerAd.loadAd();
             nativeBannerAd.setAdListener(adListener);
