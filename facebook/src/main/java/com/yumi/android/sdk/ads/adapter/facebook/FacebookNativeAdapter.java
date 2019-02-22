@@ -16,10 +16,8 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.MediaViewListener;
-import com.facebook.ads.MediaViewVideoRenderer;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdListener;
-import com.facebook.ads.VideoStartReason;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
@@ -143,7 +141,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     class NativeAdContent extends NativeContent {
         private NativeAd nativeAd;
         private MediaView mMediaView;
-        private MediaViewVideoRenderer mediaViewVideoRenderer;
 
         NativeAdContent(NativeAd nativeAd) {
             NativeAdContent.this.nativeAd = nativeAd;
@@ -166,20 +163,11 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setProviderName("Facebook");
             if(getActivity() != null){
                 mMediaView = new MediaView(getActivity());
-                mediaViewVideoRenderer = new MediaViewVideoRenderer(getActivity()) {
-                    @Override
-                    protected void setNativeAd(NativeAd nativeAd) {
-                        super.setNativeAd(nativeAd);
-                    }
-                };
-                mediaViewVideoRenderer.play(VideoStartReason.USER_STARTED);
-                mediaViewVideoRenderer.pause(true);
-                mMediaView.setVideoRenderer(mediaViewVideoRenderer);
             }
 
             ZplayDebug.i(TAG, "facebook native hasVideoContent:" + (mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO), onoff);
             setHasVideoContent(mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO);
-            setNativeAdVideoController(new FacebookNativeAdVideoController(mMediaView, mediaViewVideoRenderer));
+            setNativeAdVideoController(new FacebookNativeAdVideoController(mMediaView));
         }
 
         public void trackView() {
@@ -227,21 +215,14 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
         public class FacebookNativeAdVideoController extends YumiNativeAdVideoController{
             private MediaView mMediaView;
-            private MediaViewVideoRenderer mediaViewVideoRenderer;
-            private FacebookNativeAdVideoController(MediaView mMediaView,MediaViewVideoRenderer mediaViewVideoRenderer ){
+            private FacebookNativeAdVideoController(MediaView mMediaView){
                 this.mMediaView = mMediaView;
-                this.mediaViewVideoRenderer = mediaViewVideoRenderer;
             }
             public void play(){
-                if(mediaViewVideoRenderer != null){
-                    mediaViewVideoRenderer.play(VideoStartReason.AUTO_STARTED);
-                }
+
             }
 
             public void pause(){
-                if(mediaViewVideoRenderer != null){
-                    mediaViewVideoRenderer.pause(true);
-                }
             }
 
             public double getAspectRatio(){
