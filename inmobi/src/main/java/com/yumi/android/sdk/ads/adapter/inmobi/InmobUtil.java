@@ -3,6 +3,8 @@ package com.yumi.android.sdk.ads.adapter.inmobi;
 import com.inmobi.ads.InMobiAdRequestStatus;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
+import static android.text.TextUtils.isEmpty;
+
 /**
  * Description:
  * <p>
@@ -43,7 +45,15 @@ public class InmobUtil {
     }
 
     public static LayerErrorCode recodeError(LayerErrorCode errorCode) {
-        errorCode.setExtraMsg("Inmobi errorMsg: ");
+        return recodeError(errorCode, null);
+    }
+
+    public static LayerErrorCode recodeError(LayerErrorCode errorCode, String yumiLog) {
+        String extraMsg = "Inmobi errorMsg: ";
+        if (!isEmpty(yumiLog)) {
+            extraMsg += ", " + yumiLog;
+        }
+        errorCode.setExtraMsg(extraMsg);
         return errorCode;
     }
 
