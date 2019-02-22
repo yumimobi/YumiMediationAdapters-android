@@ -14,18 +14,19 @@ import com.qq.e.ads.nativ.NativeADDataRef;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.self.ui.ResFactory;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
-import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
 /**
@@ -65,9 +66,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 ZplayDebug.v(TAG, "onADLoaded", onoff);
                 final List<NativeContent> list = new ArrayList<>();
                 for (final NativeADDataRef item : arg0) {
-                    final NativeAdContent content = new NativeAdContent(item);
-                    if (content.isValid()) {
-                        list.add(content);
+                    try{
+                        final NativeAdContent content = new NativeAdContent(item);
+                        if (content.isValid()) {
+                            list.add(content);
+                        }
+                    }catch (Exception e) {
+                        ZplayDebug.e(TAG, "gdt data parse error : " + e, onoff);
                     }
                 }
                 if (list.isEmpty()) {
@@ -157,6 +162,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
+
+            setMaterialCreationTime(System.currentTimeMillis());
+            setMaterialEtime(getProvider().getMaterialEtime());
+            setNativeAdVideoController(new YumiNativeAdVideoController());
+            setProviderName("Gdt");
         }
 
         @Override
@@ -170,9 +180,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             Drawable zplayad_media_gdt_logo = ResFactory.getDrawableByAssets("zplayad_media_gdt_logo", getNativeAdView().getContext());
             adLogo.setBackground(zplayad_media_gdt_logo);
             getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-            adLogoParams.width = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
-            adLogoParams.height = WindowSizeUtils.dip2px(getNativeAdView().getContext(), 20);
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
             setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
             adLogo.setLayoutParams(adLogoParams);
             getNativeAdView().requestLayout();
