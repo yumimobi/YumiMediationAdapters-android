@@ -182,7 +182,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
                 adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
-                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionTextColor());
                 adAttribution.setBackgroundColor(getProvider().getNativeAdOptions().getAdAttributionBackgroundColor());
                 adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
                 adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
