@@ -119,11 +119,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void onRequestNonResponse() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
