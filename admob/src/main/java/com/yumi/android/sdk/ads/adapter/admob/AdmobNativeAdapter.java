@@ -33,7 +33,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
     private AdLoader adLoader;
     private List<NativeContent> list;
     private int adCount;
-    private boolean isTimeOut = false;
 
     protected AdmobNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -46,7 +45,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
-        isTimeOut = false;
         if (adLoader != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             adCount = currentPoolSpace >= 5 ? 5 : currentPoolSpace;
@@ -73,7 +71,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                             adCount--;
                             final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
                             list.add(nativeAdContent);
-                            if (adCount != 0 || isTimeOut) {
+                            if (adCount != 0) {
                                 return;
                             }
                             if (list.size() > 0) {
@@ -107,23 +105,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 super.onAdFailedToLoad(errorCode);
                 adCount--;
                 ZplayDebug.v(TAG, "admob native Adapter onAdFailedToLoad isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
-                if(!isTimeOut){
-                    layerPreparedFailed(recodeError(errorCode));
-                }
+                layerPreparedFailed(recodeError(errorCode));
             }
         }).withNativeAdOptions(adOptions).build();
-    }
-
-    @Override
-    protected void onRequestNonResponse() {
-        isTimeOut = true;
-        if (list != null && list.size() > 0) {
-            ZplayDebug.v(TAG, "admob native Adapter onRequestNonResponse list > 0", onoff);
-            layerPrepared(list);
-        } else {
-            ZplayDebug.v(TAG, "admob native Adapter onRequestNonResponse list < 0", onoff);
-            layerPreparedFailed(recodeError(502));
-        }
     }
 
     @Override
@@ -206,6 +190,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
                 adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
                 adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setBackgroundColor(getProvider().getNativeAdOptions().getAdAttributionBackgroundColor());
                 adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
                 adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 yumiNativeAdView.addView(adAttribution);

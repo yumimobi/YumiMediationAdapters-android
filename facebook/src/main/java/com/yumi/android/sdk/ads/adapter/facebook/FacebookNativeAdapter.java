@@ -181,6 +181,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                     TextView adAttribution = new TextView(getNativeAdView().getContext());
                     adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
                     adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                    adAttribution.setBackgroundColor(getProvider().getNativeAdOptions().getAdAttributionBackgroundColor());
                     adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
                     adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                     overlayView.addView(adAttribution);
