@@ -24,6 +24,9 @@ public class AdMobUtil {
             case AdRequest.ERROR_CODE_NETWORK_ERROR:
                 result = LayerErrorCode.ERROR_NETWORK_ERROR;
                 break;
+            case 502:
+                result = LayerErrorCode.ERROR_NON_RESPONSE;
+                break;
             default:
                 result = LayerErrorCode.ERROR_INTERNAL;
                 break;

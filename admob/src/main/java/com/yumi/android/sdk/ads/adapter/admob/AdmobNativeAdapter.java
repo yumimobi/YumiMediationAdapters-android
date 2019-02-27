@@ -33,6 +33,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
     private AdLoader adLoader;
     private List<NativeContent> list;
     private int adCount;
+    private boolean isTimeOut = false;
 
     protected AdmobNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -45,6 +46,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
+        isTimeOut = false;
         if (adLoader != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             adCount = currentPoolSpace >= 5 ? 5 : currentPoolSpace;
@@ -71,7 +73,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                             adCount--;
                             final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
                             list.add(nativeAdContent);
-                            if (adCount != 0) {
+                            if (adCount != 0 || isTimeOut) {
                                 return;
                             }
                             if (list.size() > 0) {
@@ -81,6 +83,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                                 ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
                                 layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
                             }
+
                         } catch (Exception e) {
                             ZplayDebug.e(TAG, "admob getNativeContentList error : " + e, onoff);
                         }
@@ -88,10 +91,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 }).withAdListener(new AdListener() {
             @Override
             public void onAdClicked() {
-                super.onAdClicked();
                 ZplayDebug.d(TAG, "admob native onClick", onoff);
+                super.onAdClicked();
                 layerClicked(-99f, -99f);
-
             }
 
             @Override
@@ -103,16 +105,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 super.onAdFailedToLoad(errorCode);
-                ZplayDebug.d(TAG, "admob native failed isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
                 adCount--;
-                if (adCount != 0) {
-                    return;
-                }
-                if (list.size() > 0) {
-                    ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
-                    layerPrepared(list);
-                } else {
-                    ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
+                ZplayDebug.v(TAG, "admob native Adapter onAdFailedToLoad isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
+                if(!isTimeOut){
                     layerPreparedFailed(recodeError(errorCode));
                 }
             }
@@ -120,12 +115,19 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
+    protected void onRequestNonResponse() {
+        isTimeOut = true;
+        if (list != null && list.size() > 0) {
+            ZplayDebug.v(TAG, "admob native Adapter onRequestNonResponse list > 0", onoff);
+            layerPrepared(list);
+        } else {
+            ZplayDebug.v(TAG, "admob native Adapter onRequestNonResponse list < 0", onoff);
+            layerPreparedFailed(recodeError(502));
+        }
     }
 
     @Override
-    protected void onRequestNonResponse() {
+    protected void callOnActivityDestroy() {
 
     }
 
