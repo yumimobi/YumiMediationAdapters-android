@@ -132,11 +132,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void onRequestNonResponse() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
