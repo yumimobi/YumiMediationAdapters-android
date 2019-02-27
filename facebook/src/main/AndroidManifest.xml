@@ -1,5 +1,6 @@
-<manifest package="com.yumi.android.sdk.ads.adapter.facebooknative">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.yumi.android.sdk.ads.adapter.facebooknative">
 
-    <application />
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
