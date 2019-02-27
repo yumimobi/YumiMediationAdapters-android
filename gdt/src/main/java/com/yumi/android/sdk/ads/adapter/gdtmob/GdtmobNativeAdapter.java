@@ -132,11 +132,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void onRequestNonResponse() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
@@ -189,7 +184,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
                 adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
-                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionTextColor());
+                adAttribution.setBackgroundColor(getProvider().getNativeAdOptions().getAdAttributionBackgroundColor());
                 adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
                 adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 getNativeAdView().addView(adAttribution);

@@ -81,6 +81,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                                 ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
                                 layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
                             }
+
                         } catch (Exception e) {
                             ZplayDebug.e(TAG, "admob getNativeContentList error : " + e, onoff);
                         }
@@ -88,10 +89,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 }).withAdListener(new AdListener() {
             @Override
             public void onAdClicked() {
-                super.onAdClicked();
                 ZplayDebug.d(TAG, "admob native onClick", onoff);
+                super.onAdClicked();
                 layerClicked(-99f, -99f);
-
             }
 
             @Override
@@ -103,29 +103,15 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 super.onAdFailedToLoad(errorCode);
-                ZplayDebug.d(TAG, "admob native failed isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
                 adCount--;
-                if (adCount != 0) {
-                    return;
-                }
-                if (list.size() > 0) {
-                    ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
-                    layerPrepared(list);
-                } else {
-                    ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
-                    layerPreparedFailed(recodeError(errorCode));
-                }
+                ZplayDebug.v(TAG, "admob native Adapter onAdFailedToLoad isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
+                layerPreparedFailed(recodeError(errorCode));
             }
         }).withNativeAdOptions(adOptions).build();
     }
 
     @Override
     protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
-    protected void onRequestNonResponse() {
 
     }
 
@@ -203,7 +189,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
                 adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
-                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionColor());
+                adAttribution.setTextColor(getProvider().getNativeAdOptions().getAdAttributionTextColor());
+                adAttribution.setBackgroundColor(getProvider().getNativeAdOptions().getAdAttributionBackgroundColor());
                 adAttribution.setTextSize(getProvider().getNativeAdOptions().getAdAttributionTextSize());
                 adAttribution.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 yumiNativeAdView.addView(adAttribution);
