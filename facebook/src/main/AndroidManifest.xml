@@ -1,16 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-
     package="com.yumi.android.sdk.ads.adapter.facebooknative">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <application>
-
-        <activity
-            android:name="com.facebook.ads.AudienceNetworkActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize" />
-
-    </application>
 
 </manifest>

@@ -2,21 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.yumi.android.sdk.ads.adapter.inmobi">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application>
         <activity
             android:name="com.inmobi.rendering.InMobiAdActivity"
             android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize|screenLayout"
-            android:resizeableActivity="false"
             android:hardwareAccelerated="true"
+            android:resizeableActivity="false"
             android:theme="@android:style/Theme.NoTitleBar"
-            tools:ignore="UnusedAttribute"/>
-
-        <service
-            android:name="com.inmobi.signals.activityrecognition.ActivityRecognitionManager"
-            android:enabled="true"/>
+            tools:ignore="UnusedAttribute" />
     </application>
 
 </manifest>
