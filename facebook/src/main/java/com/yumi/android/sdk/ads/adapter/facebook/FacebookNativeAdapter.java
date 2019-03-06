@@ -149,7 +149,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
             Image image = new Image(null);
             icon.setDrawable(getDrawable());
-            setImage(image);
+            setCoverImage(image);
 
             setCallToAction(mNativeAd.getAdCallToAction());
 

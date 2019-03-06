@@ -155,7 +155,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setTitle(gdtData.getTitle());
             setDesc(gdtData.getDesc());
             setStarRating((double) gdtData.getAPPScore());
-            setImage(new Image(gdtData.getImgUrl()));
+            setCoverImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
 
