@@ -142,9 +142,9 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 setIcon(null);
             }
             if (unifiedNativeAd.getImages().size() > 0) {
-                setImage(new YumiNativeMappedImage(unifiedNativeAd.getImages().get(0).getDrawable(), unifiedNativeAd.getImages().get(0).getUri().toString(), unifiedNativeAd.getImages().get(0).getScale()));
+                setCoverImage(new YumiNativeMappedImage(unifiedNativeAd.getImages().get(0).getDrawable(), unifiedNativeAd.getImages().get(0).getUri().toString(), unifiedNativeAd.getImages().get(0).getScale()));
             } else {
-                setImage(null);
+                setCoverImage(null);
             }
 
             setTitle(unifiedNativeAd.getHeadline());
@@ -174,7 +174,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             unifiedAdView.setHeadlineView(yumiNativeAdView.getTitleView());
             unifiedAdView.setBodyView(yumiNativeAdView.getDescView());
             unifiedAdView.setIconView(yumiNativeAdView.getIconView());
-            unifiedAdView.setImageView(yumiNativeAdView.getImageView());
+            unifiedAdView.setImageView(yumiNativeAdView.getCoverImageView());
             unifiedAdView.setCallToActionView(yumiNativeAdView.getCallToActionView());
             unifiedAdView.setPriceView(yumiNativeAdView.getPriceView());
             unifiedAdView.setStarRatingView(yumiNativeAdView.getStarRatingView());
