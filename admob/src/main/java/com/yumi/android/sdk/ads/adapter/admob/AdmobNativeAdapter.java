@@ -171,8 +171,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             parent.removeView(yumiNativeAdView);
 
             UnifiedNativeAdView unifiedAdView = new UnifiedNativeAdView(yumiNativeAdView.getContext());
-            unifiedAdView.setHeadlineView(yumiNativeAdView.getHeadlineView());
-            unifiedAdView.setBodyView(yumiNativeAdView.getBodyView());
+            unifiedAdView.setHeadlineView(yumiNativeAdView.getTitleView());
+            unifiedAdView.setBodyView(yumiNativeAdView.getDescView());
             unifiedAdView.setIconView(yumiNativeAdView.getIconView());
             unifiedAdView.setImageView(yumiNativeAdView.getImageView());
             unifiedAdView.setCallToActionView(yumiNativeAdView.getCallToActionView());
