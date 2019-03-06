@@ -148,7 +148,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             BaiduNativeAdapter.NativeAdContent.this.nativeAdData = nativeAdData;
 
             setIcon(new Image(nativeAdData.getIconUrl()));
-            setImage(new Image(nativeAdData.getImageUrl()));
+            setCoverImage(new Image(nativeAdData.getImageUrl()));
             setDesc(nativeAdData.getDesc());
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
             setTitle(nativeAdData.getTitle());
