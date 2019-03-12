@@ -27,11 +27,6 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
-        <service android:name="com.mintegral.msdk.shell.MTGService">
-            <intent-filter>
-                <action android:name="com.mintegral.msdk.download.action" />
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>
