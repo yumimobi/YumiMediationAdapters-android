@@ -24,6 +24,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "AdmobMediaAdapter";
     private RewardedVideoAd mAd;
     private RewardedVideoAdListener mediaListener;
+    private boolean isReady;
 
     private static final int REQUEST_NEXT_MEDIA = 0x001;
     private final Handler mHandler = new Handler() {
@@ -33,6 +34,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                     if (mAd != null && !mAd.isLoaded()) {
                         ZplayDebug.d(TAG, "admob media loadRewardedVideoAd loadAd", onoff);
                         layerNWRequestReport();
+                        isReady = false;
                         mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
                     }
                     break;
@@ -68,6 +70,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         if (mAd != null && !mAd.isLoaded()) {
             ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
+            isReady = false;
             mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
         }
     }
@@ -83,6 +86,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
+        try{
         if(mAd!=null) {
             if (mAd.isLoaded()) {
                 ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
@@ -91,6 +95,10 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
         }
         ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
         return false;
+        }catch (Exception e){
+            ZplayDebug.e(TAG, "admob media isMediaReady error : ", e, onoff);
+            return isReady;
+        }
     }
 
     @Override
@@ -112,18 +120,21 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdLoaded() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdLoaded", onoff);
+                isReady = true;
                 layerPrepared();
             }
 
             @Override
             public void onRewardedVideoAdOpened() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked", onoff);
+                isReady = false;
                 layerClicked();
             }
 
             @Override
             public void onRewardedVideoStarted() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoStarted", onoff);
+                isReady = false;
                 layerExposure();
                 layerMediaStart();
             }
@@ -131,6 +142,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdClosed() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdClosed", onoff);
+                isReady = false;
                 layerMediaEnd();
                 layerClosed();
                 loadRewardedVideoAd(1);
@@ -139,6 +151,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewarded(RewardItem rewardItem) {
                 ZplayDebug.d(TAG, "admob media onRewarded", onoff);
+                isReady = false;
                 layerIncentived();
             }
 
@@ -150,6 +163,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdFailedToLoad(int errorCode) {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
+                isReady = false;
                 layerPreparedFailed(recodeError(errorCode));
                 loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
