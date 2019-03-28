@@ -14,14 +14,14 @@ dependencies {
 
     implementation YUMI_MEDIATION
 
-    implementation 'com.yumimobi.ads.thirdparty:iqps-core:2.3.2111@aar'
-    implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1'
-    implementation 'com.yumimobi.ads.thirdparty:ia-sdk-core:7.1.6'
-    implementation 'com.yumimobi.ads.thirdparty:ia-video-kit:7.1.6'
-    implementation 'com.yumimobi.ads.thirdparty:ia-mraid-kit:7.1.6'
-    implementation 'com.yumimobi.ads.thirdparty:ia-native-kit:7.1.6'
-    implementation 'com.yumimobi.ads.thirdparty:soma:8.0.1'
-    implementation 'com.yumimobi.ads.thirdparty:presage-moat-3.0.22-moat:3.0.13'
+    implementation 'com.yumimobi.ads.thirdparty:iqpscore:2.3.2111'
+    implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1.0'
+    implementation 'com.yumimobi.ads.thirdparty:iasdkcore:7.1.6.0'
+    implementation 'com.yumimobi.ads.thirdparty:iavideokit:7.1.6.0'
+    implementation 'com.yumimobi.ads.thirdparty:iamraidkit:7.1.6.0'
+    implementation 'com.yumimobi.ads.thirdparty:ianativekit:7.1.6.0'
+    implementation 'com.yumimobi.ads.thirdparty:soma:8.0.1.0'
+    implementation 'com.yumimobi.ads.thirdparty:presagemoat:3.0.13.0'
 
     implementation 'com.flurry.android:analytics:10.1.0@aar'
     implementation 'com.flurry.android:ads:10.1.0@aar'
@@ -29,7 +29,6 @@ dependencies {
     implementation 'com.flurry.android:ads:10.1.0@aar'
     implementation('com.mopub:mopub-sdk:5.0.0@aar') {
         transitive = true
-        exclude module: 'moat-mobile-app-kit'
     }
 
     implementation 'com.google.code.gson:gson:2.7'
