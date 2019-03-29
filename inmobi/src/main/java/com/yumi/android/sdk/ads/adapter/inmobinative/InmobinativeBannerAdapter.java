@@ -16,7 +16,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 
 public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
 
@@ -42,6 +44,12 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
+        if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "inmobi not support smart banner", onoff);
+            layerPreparedFailed(recodeError(ERROR_NO_FILL, "not support smart banner."));
+            return;
+        }
+
         if (nativeAd != null) {
             ZplayDebug.d(TAG, "Inmobi native Banner request", onoff);
             nativeAd.load();

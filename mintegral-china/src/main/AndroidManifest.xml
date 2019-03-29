@@ -2,10 +2,9 @@
     package="com.yumi.android.sdk.ads.adapter.mobvista">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <application >
+    <application>
         <activity
             android:name="com.mintegral.msdk.reward.player.MTGRewardVideoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -13,15 +12,21 @@
         <activity
             android:name="com.mintegral.msdk.activity.MTGCommonActivity"
             android:configChanges="keyboard|orientation"
-            android:screenOrientation="portrait"
             android:exported="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar">
-        </activity>
-        <service android:name="com.mintegral.msdk.shell.MTGService" >
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <service android:name="com.mintegral.msdk.shell.MTGService">
             <intent-filter>
                 <action android:name="com.mintegral.msdk.download.action" />
             </intent-filter>
         </service>
+        <receiver android:name="com.mintegral.msdk.click.AppReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

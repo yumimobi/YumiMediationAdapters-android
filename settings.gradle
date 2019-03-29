@@ -1,6 +1,5 @@
 include ':adcolony',
         ':admob',
-        ':admob-v17',
         ':applovin',
         ':baidu',
         ':chartboost',

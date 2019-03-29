@@ -26,6 +26,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     private AppLovinIncentivizedInterstitial mediaAd;
     private AppLovinAdLoadListener adLoadListener;
 
+    private boolean userRewardVerified;
     private AppLovinAdRewardListener adRewardListener;
     private AppLovinAdVideoPlaybackListener adVideoPlaybackListener;
     private AppLovinAdDisplayListener adDisplayListener;
@@ -95,7 +96,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void userRewardVerified(AppLovinAd appLovinAd, Map<String, String> map) {
                 ZplayDebug.i(TAG, "AppLovin Media userRewardVerified ", onoff);
-                layerIncentived();
+                userRewardVerified = true;
             }
 
             @Override
@@ -154,7 +155,11 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void adHidden(AppLovinAd appLovinAd) {
-                ZplayDebug.i(TAG, "AppLovin Media adHidden ", onoff);
+                ZplayDebug.i(TAG, "AppLovin Media adHidden, userRewardVerified = " + userRewardVerified, onoff);
+                if (userRewardVerified) {
+                    userRewardVerified = false;
+                    layerIncentived();
+                }
                 layerClosed();
                 preloadAd();
             }

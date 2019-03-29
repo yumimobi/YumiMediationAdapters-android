@@ -23,13 +23,13 @@ android {
 
 ext {
     SUPOORT_LIBRAY_VERSION = '26.1.0'
-//    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:3.4.1'
-    YUMI_MEDIATION = project(':mediation')
+    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:3.6.0'
+//    YUMI_MEDIATION = project(':mediation')
 
     // Yumi and IQZone common party
     ADCOLONY = '3.3.7.1'
     CHARTBOOST = '7.3.1.1'
-    INMOBI = '7.2.2'
+    INMOBI = '7.2.7'
     IRONSOURCE = '6.7.10.1'
     MOBVISTA = '8.13.0.1'
     UNITY = '2.3.0.2'

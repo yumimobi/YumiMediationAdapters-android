@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -42,6 +43,11 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
 	@Override
 	protected void onPrepareBannerLayer() {
+		if (bannerSize == BANNER_SIZE_SMART) {
+			ZplayDebug.d(TAG, "gdt not support smart banner", onoff);
+			layerPreparedFailed(recodeError(new AdError(5004, null), "not support smart banner."));
+			return;
+		}
 		ZplayDebug.d(TAG, "gdt request new banner", onoff);
 		banner = new BannerView(getActivity(), ADSize.BANNER,
 				getProvider().getKey1(), getProvider().getKey2());
