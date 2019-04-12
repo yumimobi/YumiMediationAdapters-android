@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.iqzone.android.AdEventsListener;
 import com.iqzone.android.IQzoneInterstitialAdManager;
@@ -22,26 +20,6 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "IQZoneMediaAdapter";
     private IQzoneInterstitialAdManager imdRewardedVideoAdManager;
     private boolean isReady;
-
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    if (imdRewardedVideoAdManager != null) {
-                        ZplayDebug.d(TAG, "IQZone media Video REQUEST_NEXT_MEDIA ", onoff);
-                        layerNWRequestReport();
-                        imdRewardedVideoAdManager.loadInterstitial();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        ;
-    };
 
     protected IQZoneMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -97,14 +75,12 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Video adDismissed", onoff);
                 layerClosed();
-                requestAD(5);
             }
 
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Video adFailedToLoad", onoff);
                 layerPreparedFailed(recodeError(CODE_FAILED));
-                requestAD(getProvider().getNextRequestInterval());
             }
 
             @Override
@@ -120,18 +96,6 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
                 layerIncentived();
             }
         };
-    }
-
-
-    private void requestAD(int delaySecond) {
-        try {
-            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "IQZone media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "IQZone media requestAD error ", e, onoff);
-        }
     }
 
     @Override
