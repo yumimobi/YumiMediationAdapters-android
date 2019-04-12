@@ -22,8 +22,6 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsMediaAdapter";
 
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
