@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
@@ -26,25 +24,6 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardedVideoAdListener mediaListener;
     private boolean isReady;
 
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    if (mAd != null && !mAd.isLoaded()) {
-                        ZplayDebug.d(TAG, "admob media loadRewardedVideoAd loadAd", onoff);
-                        layerNWRequestReport();
-                        isReady = false;
-                        mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        ;
-    };
     //王雪提供
 //    private static final String AD_UNIT_ID = "ca-app-pub-1755510051935997/3006338664";
 //    private static final String APP_ID = "ca-app-pub-1755510051935997~6407649864";
@@ -110,11 +89,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-        if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-            mHandler.removeMessages(REQUEST_NEXT_MEDIA);
-        }
     }
-
     private void createMediaListener() {
         mediaListener = new RewardedVideoAdListener() {
             @Override
@@ -145,7 +120,6 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 isReady = false;
                 layerMediaEnd();
                 layerClosed();
-                loadRewardedVideoAd(1);
             }
 
             @Override
@@ -165,7 +139,6 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
                 isReady = false;
                 layerPreparedFailed(recodeError(errorCode));
-                loadRewardedVideoAd(getProvider().getNextRequestInterval());
             }
 
             @Override
@@ -173,16 +146,5 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoCompleted", onoff);
             }
         };
-    }
-
-    private void loadRewardedVideoAd(int delaySecond) {
-        try {
-            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "admob media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "admob media requestAD error ", e, onoff);
-        }
     }
 }
