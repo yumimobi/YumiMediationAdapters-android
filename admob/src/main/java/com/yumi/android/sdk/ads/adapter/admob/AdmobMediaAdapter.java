@@ -24,13 +24,6 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardedVideoAdListener mediaListener;
     private boolean isReady;
 
-    //王雪提供
-//    private static final String AD_UNIT_ID = "ca-app-pub-1755510051935997/3006338664";
-//    private static final String APP_ID = "ca-app-pub-1755510051935997~6407649864";
-    //admob提供
-//    private static final String AD_UNIT_ID = "ca-app-pub-3940256099942544/3377882518";
-//    private static final String APP_ID = "ca-app-pub-3940256099942544~4992070916";
-
     protected AdmobMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
