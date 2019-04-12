@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.facebook;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
@@ -21,23 +19,6 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "FacebookMediaAdapter";
     private RewardedVideoAd rewardedVideoAd;
     private S2SRewardedVideoAdListener listener;
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    if (rewardedVideoAd != null && listener != null) {
-                        ZplayDebug.d(TAG, "Facebook media Video REQUEST_NEXT_MEDIA ", onoff);
-                        layerNWRequestReport();
-                        rewardedVideoAd.loadAd(false);
-                    }
-                    break;
-                default:
-                    break;
-            }
-        };
-    };
 
     protected FacebookMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -120,14 +101,12 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoClosed() {
                 ZplayDebug.i(TAG, "facebook media onRewardedVideoClosed", onoff);
                 layerClosed();
-                requestAD(5);
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
                 ZplayDebug.i(TAG, "facebook media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
                 layerPreparedFailed(FacebookUtil.recodeError(adError));
-                requestAD(getProvider().getNextRequestInterval());
             }
 
             @Override
@@ -145,26 +124,12 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
 
-    private void requestAD(int delaySecond) {
-        try {
-            if(!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook media requestAD error ", e, onoff);
-        }
-    }
-
     @Override
     protected void callOnActivityDestroy() {
         try {
             if (rewardedVideoAd != null) {
                 rewardedVideoAd.destroy();
                 rewardedVideoAd = null;
-            }
-            if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                mHandler.removeMessages(REQUEST_NEXT_MEDIA);
             }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook media callOnActivityDestroy error ", e, onoff);

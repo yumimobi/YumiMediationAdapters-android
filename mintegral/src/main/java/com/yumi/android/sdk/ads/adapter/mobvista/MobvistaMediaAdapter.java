@@ -19,7 +19,6 @@ import java.util.Map;
 public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "MobvistaMediaAdapter";
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
     private MTGRewardVideoHandler mMvRewardVideoHandler;
 
     protected MobvistaMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
