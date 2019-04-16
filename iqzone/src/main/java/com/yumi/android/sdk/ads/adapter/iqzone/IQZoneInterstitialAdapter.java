@@ -68,18 +68,21 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void adClicked() {
                 ZplayDebug.d(TAG, "IQZone Interstitial adClicked", onoff);
+                isReady = false;
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Interstitial adDismissed", onoff);
+                isReady = false;
                 layerClosed();
             }
 
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Interstitial adFailedToLoad", onoff);
+                isReady = false;
                 layerPreparedFailed(recodeError(CODE_FAILED));
             }
 
@@ -91,6 +94,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void videoCompleted(boolean skipped) {
                 ZplayDebug.d(TAG, "IQZone Interstitial videoCompleted", onoff);
+                isReady = false;
                 layerMediaEnd();
             }
         };
