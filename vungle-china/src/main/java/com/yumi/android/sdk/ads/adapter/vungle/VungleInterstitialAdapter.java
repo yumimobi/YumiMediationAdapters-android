@@ -22,8 +22,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static LoadAdCallback mLoadAdCallback;
     private static PlayAdCallback mPlayAdCallback;
 
-    private boolean isPrepared = false;
-
     private static final int RESTART_INIT = 0x001;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -62,7 +60,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             if (Vungle.canPlayAd(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);
                 layerPrepared();
-                isPrepared = true;
             } else {
                 if (Vungle.isInitialized()) {
                     Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
@@ -75,7 +72,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         }
                     });
                 }
-                isPrepared = false;
                 ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:" + getProvider().getKey3(), onoff);
             }
         } catch (Exception e) {
