@@ -74,7 +74,6 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 								layerIncentived();
 								ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerIncentived ", onoff);
 							}
-							layerMediaEnd();
 							layerClosed();
 							ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 						}
@@ -95,7 +94,6 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 						if (getProvider().getKey2().equals(zoneId)) {
 							ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
 							layerExposure();
-							layerMediaStart();
 						}
 					}
 				};

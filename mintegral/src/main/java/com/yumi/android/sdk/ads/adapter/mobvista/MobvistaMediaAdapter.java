@@ -125,7 +125,6 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onAdShow() {
                     ZplayDebug.d(TAG, "Mobvista media onAdShow", onoff);
                     layerExposure();
-                    layerMediaStart();
                 }
 
                 @Override
@@ -134,7 +133,6 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.d(TAG, "Mobvista media onAdClose isCompleteView :" + isCompleteView + "   RewardName:" + RewardName + "   RewardAmout:" + RewardAmout, onoff);
                     if (isCompleteView) {
                         layerIncentived();
-                        layerMediaEnd();
                     }
                     layerClosed();
                 }

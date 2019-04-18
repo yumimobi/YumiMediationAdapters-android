@@ -208,7 +208,6 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
                 // Publishers should allow native ads to complete video playback before refreshing
                 // or replacing them with another ad in the same UI location.
                 ZplayDebug.v(TAG, "admob native Video status: Video playback has ended.", onoff);
-                layerMediaEnd();
                 super.onVideoEnd();
             }
         });
