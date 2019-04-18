@@ -86,13 +86,11 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void videoStarted() {
                 ZplayDebug.d(TAG, "IQZone Video videoStarted", onoff);
-                layerMediaStart();
             }
 
             @Override
             public void videoCompleted(boolean skipped) {
                 ZplayDebug.d(TAG, "IQZone Video videoCompleted", onoff);
-                layerMediaEnd();
                 layerIncentived();
             }
         };

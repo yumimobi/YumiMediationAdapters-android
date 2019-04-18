@@ -57,7 +57,6 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onVideoFinished() {
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
-                layerMediaEnd();
             }
 
             @Override
@@ -65,7 +64,6 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override

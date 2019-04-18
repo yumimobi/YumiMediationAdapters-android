@@ -179,7 +179,6 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                                     layerClicked(-99f, -99f);
                                 }
                                 ZplayDebug.d(TAG, "vungle Interstitial closed", onoff);
-                                layerMediaEnd();
                                 layerClosed();
                             } catch (Exception e) {
                                 ZplayDebug.e(TAG, "vungle Interstitial onAdEnd error", e, onoff);
