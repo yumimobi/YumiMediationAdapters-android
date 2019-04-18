@@ -158,7 +158,6 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
                 if (getProvider().getKey2().equals(placementReferenceId)) {
                     layerExposure();
-                    layerMediaStart();
                 }
             }
 
@@ -179,7 +178,6 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                                     layerIncentived();
                                 }
                                 ZplayDebug.d(TAG, "vungle media closed", onoff);
-                                layerMediaEnd();
                                 layerClosed();
                             } catch (Exception e) {
                                 ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);

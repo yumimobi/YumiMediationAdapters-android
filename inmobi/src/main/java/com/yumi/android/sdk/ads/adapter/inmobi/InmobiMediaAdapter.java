@@ -96,7 +96,6 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
                 super.onRewardsUnlocked(inMobiInterstitial, map);
                 ZplayDebug.d(TAG, "onRewardsUnlocked ", onoff);
                 layerIncentived();
-                layerMediaEnd();
             }
 
             @Override
@@ -120,7 +119,6 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdDisplayed(InMobiInterstitial arg0) {
                 ZplayDebug.d(TAG, "inmobi media exposure", onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override

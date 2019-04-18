@@ -126,7 +126,6 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             public void onShowSuccess(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onShowSuccess  adSlotId: " + adSlotId, onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override
@@ -139,7 +138,6 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             public void onADComplete(String adSlotId) {
                 //播放成功，预加载下一个奖励视频
                 ZplayDebug.i(TAG, "Ksyun Media onADComplete  adSlotId: " + adSlotId, onoff);
-                layerMediaEnd();
             }
 
             @Override

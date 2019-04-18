@@ -63,7 +63,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			public void onOpened(AdColonyInterstitial ad) {
 				ZplayDebug.d(TAG, "onOpened", onoff);
 				layerExposure();
-				layerMediaStart();
 			}
 
 			/** Request a new ad if ad is expiring */
@@ -77,7 +76,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			@Override
 			public void onReward(AdColonyReward arg0) {
 				ZplayDebug.d(TAG, "adcolony media closed", onoff);
-				layerMediaEnd();
 				ZplayDebug.d(TAG, "adcolony media get reward", onoff);
 				layerIncentived();
 				layerClosed();

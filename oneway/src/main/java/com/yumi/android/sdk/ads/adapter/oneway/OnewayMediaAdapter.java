@@ -60,13 +60,11 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdStart(String placementID) {
                 ZplayDebug.d(TAG, "Oneway media shown", onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override
             public void onAdFinish(String placementID, OnewayVideoFinishType onewayVideoFinishType) {
                 ZplayDebug.d(TAG, "Oneway media closed", onoff);
-                layerMediaEnd();
                 if (onewayVideoFinishType == OnewayVideoFinishType.COMPLETED) {
                     layerIncentived();
                 }
