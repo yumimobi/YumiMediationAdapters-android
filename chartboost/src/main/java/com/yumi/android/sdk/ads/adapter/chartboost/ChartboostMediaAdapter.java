@@ -89,8 +89,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didCloseRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media closed", onoff);
-	                layerMediaEnd();
-					layerClosed(); 
+					layerClosed();
 					super.didCloseRewardedVideo(location);
 				}
 
@@ -105,7 +104,6 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				public void didDismissRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media shown", onoff);
 					layerExposure();
-					layerMediaStart();
 					super.didDismissRewardedVideo(location);
 				}
 
