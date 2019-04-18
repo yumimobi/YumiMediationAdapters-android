@@ -21,8 +21,6 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsInterstitialAdapter";
 
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
     protected PlayableadsInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.activity = activity;
@@ -58,7 +56,6 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
             public void onVideoFinished() {
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable Interstitial Finish: ", onoff);
-                layerMediaEnd();
             }
 
             @Override

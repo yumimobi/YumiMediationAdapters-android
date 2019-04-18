@@ -21,7 +21,6 @@ import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError
 public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "ApplovinMediaAdapter";
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
     private AppLovinSdk appLovinSDK;
     private AppLovinIncentivizedInterstitial mediaAd;
     private AppLovinAdLoadListener adLoadListener;
@@ -124,13 +123,11 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void videoPlaybackBegan(AppLovinAd appLovinAd) {
                 ZplayDebug.i(TAG, "AppLovin Media videoPlaybackBegan ", onoff);
-                layerMediaStart();
             }
 
             @Override
             public void videoPlaybackEnded(AppLovinAd appLovinAd, double v, boolean b) {
                 ZplayDebug.i(TAG, "AppLovin Media videoPlaybackEnded ", onoff);
-                layerMediaEnd();
             }
         };
 

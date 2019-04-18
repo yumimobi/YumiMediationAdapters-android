@@ -95,7 +95,6 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void videoCompleted(boolean skipped) {
                 ZplayDebug.d(TAG, "IQZone Interstitial videoCompleted", onoff);
                 isReady = false;
-                layerMediaEnd();
             }
         };
     }

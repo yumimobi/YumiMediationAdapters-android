@@ -87,14 +87,12 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoCompleted() {
                 ZplayDebug.i(TAG, "facebook media onRewardedVideoCompleted", onoff);
                 layerIncentived();
-                layerMediaEnd();
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebook media onLoggingImpression", onoff);
                 layerExposure();
-                layerMediaStart();
             }
 
             @Override

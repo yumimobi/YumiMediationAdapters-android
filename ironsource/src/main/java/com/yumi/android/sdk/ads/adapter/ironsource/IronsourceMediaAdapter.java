@@ -59,7 +59,6 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdOpened instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerExposure();
-                    layerMediaStart();
                 }
             }
 
@@ -69,7 +68,6 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdClosed(String instanceId) {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClosed instanceId:" + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
-                    layerMediaEnd();
                     layerClosed();
                 }
             }
