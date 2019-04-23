@@ -124,6 +124,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 ZplayDebug.d(TAG, "gdt interstitial shown", onoff);
                 interstitialReady = false;
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

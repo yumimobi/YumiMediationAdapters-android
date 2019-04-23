@@ -99,6 +99,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             public void onADExpose() {
                 ZplayDebug.i(TAG, "gdt media onADExpose", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

@@ -96,14 +96,14 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdOpened() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked", onoff);
                 isReady = false;
-                layerClicked();
+                layerExposure();
             }
 
             @Override
             public void onRewardedVideoStarted() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoStarted", onoff);
                 isReady = false;
-                layerExposure();
+                layerStartPlaying();
             }
 
             @Override
@@ -123,6 +123,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdLeftApplication() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdLeftApplication", onoff);
+                layerClicked();
             }
 
             @Override

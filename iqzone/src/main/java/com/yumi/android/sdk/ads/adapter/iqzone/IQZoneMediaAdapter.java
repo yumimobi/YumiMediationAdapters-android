@@ -86,6 +86,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void videoStarted() {
                 ZplayDebug.d(TAG, "IQZone Video videoStarted", onoff);
+                layerStartPlaying();
             }
 
             @Override
