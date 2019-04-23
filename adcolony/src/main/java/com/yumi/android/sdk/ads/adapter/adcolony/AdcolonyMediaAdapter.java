@@ -63,6 +63,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			public void onOpened(AdColonyInterstitial ad) {
 				ZplayDebug.d(TAG, "onOpened", onoff);
 				layerExposure();
+				layerStartPlaying();
 			}
 
 			/** Request a new ad if ad is expiring */

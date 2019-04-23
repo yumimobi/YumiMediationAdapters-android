@@ -119,6 +119,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdDisplayed(InMobiInterstitial arg0) {
                 ZplayDebug.d(TAG, "inmobi media exposure", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

@@ -111,6 +111,7 @@ public class FacebookBiddingInterstitialAdapter extends
                 public void onInterstitialDisplayed(Ad arg0) {
                     ZplayDebug.d(TAG, "facebookbid bidding interstitial shown", onoff);
                     layerExposure();
+                    layerStartPlaying();
                 }
 
                 @Override

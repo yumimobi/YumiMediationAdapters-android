@@ -158,6 +158,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
                 if (getProvider().getKey2().equals(placementReferenceId)) {
                     layerExposure();
+                    layerStartPlaying();
                 }
             }
 

@@ -64,6 +64,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

@@ -118,6 +118,7 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onAdDisplayed(InMobiInterstitial arg0) {
                 ZplayDebug.d(TAG, "inmobi interstitial exposure", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

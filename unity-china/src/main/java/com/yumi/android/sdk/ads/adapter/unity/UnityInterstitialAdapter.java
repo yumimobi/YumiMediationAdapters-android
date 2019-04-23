@@ -105,6 +105,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         if (getProvider().getKey2().equals(zoneId)) {
                             ZplayDebug.d(TAG, "unity Interstitial onUnityAdsStart layerExposure", onoff);
                             layerExposure();
+                            layerStartPlaying();
                         }
                     }
 
