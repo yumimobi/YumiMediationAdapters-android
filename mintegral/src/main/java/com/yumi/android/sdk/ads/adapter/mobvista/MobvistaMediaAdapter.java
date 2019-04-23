@@ -125,6 +125,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onAdShow() {
                     ZplayDebug.d(TAG, "Mobvista media onAdShow", onoff);
                     layerExposure();
+                    layerStartPlaying();
                 }
 
                 @Override

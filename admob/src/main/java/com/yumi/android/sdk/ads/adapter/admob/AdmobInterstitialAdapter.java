@@ -94,6 +94,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdOpened() {
 				ZplayDebug.d(TAG, "admob interstitial shown", onoff);
 				layerExposure();
+				layerStartPlaying();
 				isReady = false;
 				super.onAdOpened();
 			}

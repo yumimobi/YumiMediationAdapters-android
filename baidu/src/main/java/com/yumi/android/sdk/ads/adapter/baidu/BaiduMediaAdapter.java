@@ -62,6 +62,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdShow() {
                 ZplayDebug.i(TAG, "baidu media onAdShow", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

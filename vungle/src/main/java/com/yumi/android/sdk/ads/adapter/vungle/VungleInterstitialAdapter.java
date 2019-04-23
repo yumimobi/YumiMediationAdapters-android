@@ -163,6 +163,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 ZplayDebug.d(TAG, "vungle Interstitial onAdStart placementReferenceId:" + placementReferenceId, onoff);
                 if (getProvider().getKey3().equals(placementReferenceId)) {
                     layerExposure();
+                    layerStartPlaying();
                 }
             }
 
