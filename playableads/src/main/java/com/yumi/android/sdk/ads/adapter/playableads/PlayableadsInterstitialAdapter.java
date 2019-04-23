@@ -63,6 +63,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable Interstitial Start: ", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

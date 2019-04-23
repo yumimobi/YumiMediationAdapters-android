@@ -109,6 +109,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdShowSucceeded instanceId : " + instanceId, onoff);
                     if (instanceId.equals(getProvider().getKey2())) {
                         layerExposure();
+                        layerStartPlaying();
                     }
                 }
 

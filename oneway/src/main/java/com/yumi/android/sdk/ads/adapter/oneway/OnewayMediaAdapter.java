@@ -60,6 +60,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdStart(String placementID) {
                 ZplayDebug.d(TAG, "Oneway media shown", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

@@ -93,6 +93,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebook media onLoggingImpression", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override
