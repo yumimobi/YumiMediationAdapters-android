@@ -1,6 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.unity;
 
 import com.unity3d.ads.UnityAds;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -9,9 +10,9 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  * Created by lgd on 2019/1/23.
  */
 public class UnityUtil {
-    static LayerErrorCode generateLayerErrorCode(UnityAds.UnityAdsError unityAdsError, String message) {
-        LayerErrorCode result = LayerErrorCode.ERROR_INTERNAL;
-        result.setExtraMsg("Unity errorMsg: " + unityAdsError + ", " + message);
+    static AdError generateLayerErrorCode(UnityAds.UnityAdsError unityAdsError, String message) {
+        AdError result = new AdError(LayerErrorCode.ERROR_INTERNAL);
+        result.setErrorMessage("Unity errorMsg: " + unityAdsError + ", " + message);
         return result;
     }
 }
