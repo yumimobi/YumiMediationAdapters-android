@@ -1,5 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 import static android.text.TextUtils.isEmpty;
@@ -10,18 +11,19 @@ import static android.text.TextUtils.isEmpty;
  * Created by lgd on 2019/1/28.
  */
 class IQZoneUtil {
-    static LayerErrorCode recodeError(LayerErrorCode layerErrorCode) {
+    static AdError recodeError(LayerErrorCode layerErrorCode) {
         return recodeError(layerErrorCode, null);
     }
 
-    static LayerErrorCode recodeError(LayerErrorCode layerErrorCode, String yumiLog) {
+    static AdError recodeError(LayerErrorCode layerErrorCode, String yumiLog) {
         String extraMsg = "IQZone errorMsg: null";
 
         if (!isEmpty(yumiLog)) {
             extraMsg += ", " + yumiLog;
         }
 
-        layerErrorCode.setExtraMsg(extraMsg);
-        return layerErrorCode;
+        AdError result = new AdError(layerErrorCode);
+        result.setErrorMessage(extraMsg);
+        return result;
     }
 }

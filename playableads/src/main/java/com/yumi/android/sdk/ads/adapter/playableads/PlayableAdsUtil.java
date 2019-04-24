@@ -1,5 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.playableads;
 
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -8,14 +9,14 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  * Created by lgd on 2019/1/23.
  */
 class PlayableAdsUtil {
-    static LayerErrorCode recodeError(int playableadsErrorCode, String playableadsErrorMsg){
-        LayerErrorCode result;
+    static AdError recodeError(int playableadsErrorCode, String playableadsErrorMsg) {
+        AdError result;
         if (playableadsErrorCode == 2005) { //no ad
-            result = LayerErrorCode.ERROR_NO_FILL;
+            result = new AdError(LayerErrorCode.ERROR_NO_FILL);
         } else {
-            result = LayerErrorCode.ERROR_INTERNAL;
+            result = new AdError(LayerErrorCode.ERROR_INTERNAL);
         }
-        result.setExtraMsg("PlayableAds errorMsg: " + playableadsErrorMsg);
+        result.setErrorMessage("PlayableAds errorMsg: " + playableadsErrorMsg);
         return result;
     }
 }
