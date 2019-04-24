@@ -9,6 +9,7 @@ import com.ksc.ad.sdk.IKsyunRewardVideoAdListener;
 import com.ksc.ad.sdk.KsyunAdSdk;
 import com.ksc.ad.sdk.KsyunAdSdkConfig;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -92,8 +93,8 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void loadAd() {
-        ZplayDebug.i(TAG, "Ksyun Media loadAd "+getProvider().getKey2(), onoff);
-        KsyunAdSdk.getInstance().loadAd(getProvider().getKey2(),new IKsyunAdLoadListener() {
+        ZplayDebug.i(TAG, "Ksyun Media loadAd " + getProvider().getKey2(), onoff);
+        KsyunAdSdk.getInstance().loadAd(getProvider().getKey2(), new IKsyunAdLoadListener() {
             @Override
             public void onAdInfoSuccess() {
                 ZplayDebug.i(TAG, "Ksyun Media onAdInfoSuccess", onoff);
@@ -109,7 +110,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                     error = LayerErrorCode.ERROR_INTERNAL;
                 }
                 error.setExtraMsg("Ksyun errorMsg: " + erroMsg);
-                layerPreparedFailed(error);
+                layerPreparedFailed(new AdError(error));
             }
 
             @Override
