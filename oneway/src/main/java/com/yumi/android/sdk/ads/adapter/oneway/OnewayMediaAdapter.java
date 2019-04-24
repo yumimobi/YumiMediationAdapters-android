@@ -3,6 +3,7 @@ package com.yumi.android.sdk.ads.adapter.oneway;
 import android.app.Activity;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.YumiDebug;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
@@ -80,22 +81,22 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
         };
     }
 
-    private LayerErrorCode decodeError(OnewaySdkError onewaySdkError, String msg) {
+    private AdError decodeError(OnewaySdkError onewaySdkError, String msg) {
         if (onewaySdkError == null) {
-            LayerErrorCode result =  LayerErrorCode.ERROR_INTERNAL;
-            result.setExtraMsg("Oneway errorMsg: " + msg);
+            AdError result = new AdError(LayerErrorCode.ERROR_INTERNAL);
+            result.setErrorMessage("Oneway errorMsg: " + msg);
             return result;
         }
 
-        LayerErrorCode result;
+        AdError result;
         if (onewaySdkError.equals(OnewaySdkError.CAMPAIGN_NO_FILL)) {
-            result = LayerErrorCode.ERROR_NO_FILL;
+            result = new AdError(LayerErrorCode.ERROR_NO_FILL);
         } else if (onewaySdkError.equals(OnewaySdkError.INITIALIZE_FAILED)) {
-            result = LayerErrorCode.ERROR_NETWORK_ERROR;
+            result = new AdError(LayerErrorCode.ERROR_NETWORK_ERROR);
         } else {
-            result = LayerErrorCode.ERROR_INTERNAL;
+            result = new AdError(LayerErrorCode.ERROR_INTERNAL);
         }
-        result.setExtraMsg("Oneway errorName: " + onewaySdkError + " errorMsg: " + msg);
+        result.setErrorMessage("Oneway errorName: " + onewaySdkError + " errorMsg: " + msg);
         return result;
     }
 
