@@ -1,7 +1,10 @@
 package com.yumi.android.sdk.ads.adapter.chartboost;
 
 import com.chartboost.sdk.Model.CBError;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 
 /**
  * Description:
@@ -9,32 +12,34 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  * Created by lgd on 2019/1/23.
  */
 public class ChartboostUtil {
-    static LayerErrorCode recodeError(CBError.CBImpressionError chartBoostError) {
-        LayerErrorCode result;
-        if(chartBoostError == null){
-            result = LayerErrorCode.ERROR_INTERNAL;
-            result.setExtraMsg("ChartBoost errorMes: null");
+    static AdError recodeError(CBError.CBImpressionError chartBoostError) {
+        AdError result;
+        if (chartBoostError == null) {
+            result = new AdError(ERROR_INTERNAL);
+            result.setErrorMessage("ChartBoost errorMes: null");
             return result;
         }
 
+        LayerErrorCode errCode;
         switch (chartBoostError) {
             case INTERNAL:
-                result = LayerErrorCode.ERROR_INTERNAL;
+                errCode = ERROR_INTERNAL;
                 break;
             case NO_AD_FOUND:
-                result = LayerErrorCode.ERROR_NO_FILL;
+                errCode = LayerErrorCode.ERROR_NO_FILL;
                 break;
             case INVALID_LOCATION:
-                result = LayerErrorCode.ERROR_INVALID;
+                errCode = LayerErrorCode.ERROR_INVALID;
                 break;
             case NETWORK_FAILURE:
-                result = LayerErrorCode.ERROR_NETWORK_ERROR;
+                errCode = LayerErrorCode.ERROR_NETWORK_ERROR;
                 break;
             default:
-                result = LayerErrorCode.ERROR_INTERNAL;
+                errCode = ERROR_INTERNAL;
                 break;
         }
-        result.setExtraMsg("ChartBoost errorMes: " + chartBoostError.toString());
+        result = new AdError(errCode);
+        result.setErrorMessage("ChartBoost errorMes: " + chartBoostError.toString());
         return result;
     }
 }

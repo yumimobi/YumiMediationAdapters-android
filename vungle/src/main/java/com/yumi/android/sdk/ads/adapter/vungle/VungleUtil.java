@@ -1,6 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.vungle;
 
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.AdError;
 
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 
@@ -10,9 +10,9 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
  * Created by lgd on 2019/1/23.
  */
 class VungleUtil {
-    static LayerErrorCode recodeError(Throwable extra){
-        LayerErrorCode result = ERROR_NO_FILL;
-        result.setExtraMsg("Vungle error: " + extra);
+    static AdError recodeError(Throwable extra) {
+        AdError result = new AdError(ERROR_NO_FILL);
+        result.setErrorMessage("Vungle error: " + extra);
         return result;
     }
 }
