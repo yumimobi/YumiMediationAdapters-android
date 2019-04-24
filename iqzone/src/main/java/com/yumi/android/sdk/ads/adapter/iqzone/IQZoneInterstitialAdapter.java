@@ -89,6 +89,7 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void videoStarted() {
                 ZplayDebug.d(TAG, "videoStarted", onoff);
+                layerStartPlaying();
             }
 
             @Override

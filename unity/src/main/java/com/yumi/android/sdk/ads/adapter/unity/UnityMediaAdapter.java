@@ -94,6 +94,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 						if (getProvider().getKey2().equals(zoneId)) {
 							ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
 							layerExposure();
+							layerStartPlaying();
 						}
 					}
 				};

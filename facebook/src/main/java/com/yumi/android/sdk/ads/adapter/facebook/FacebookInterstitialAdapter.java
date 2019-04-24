@@ -103,6 +103,7 @@ public class FacebookInterstitialAdapter extends
 				public void onInterstitialDisplayed(Ad arg0) {
 					ZplayDebug.d(TAG, "facebook interstitial shown", onoff);
 					layerExposure();
+					layerStartPlaying();
 				}
 
 				@Override

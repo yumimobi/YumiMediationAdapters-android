@@ -115,6 +115,7 @@ public class ChartboostInterstitialAdapter extends
 				public void didDisplayInterstitial(String location) {
 					ZplayDebug.d(TAG, "chartboost interstitial shown", onoff);
 					layerExposure();
+					layerStartPlaying();
 					super.didDisplayInterstitial(location);
 				}
 			};

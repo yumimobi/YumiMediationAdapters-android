@@ -148,6 +148,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             public void adDisplayed(AppLovinAd appLovinAd) {
                 ZplayDebug.i(TAG, "AppLovin Media adDisplayed ", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

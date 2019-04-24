@@ -104,6 +104,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				public void didDismissRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media shown", onoff);
 					layerExposure();
+					layerStartPlaying();
 					super.didDismissRewardedVideo(location);
 				}
 

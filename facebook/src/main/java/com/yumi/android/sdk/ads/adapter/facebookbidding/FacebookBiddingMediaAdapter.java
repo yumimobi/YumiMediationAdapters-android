@@ -102,6 +102,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebookbid media onLoggingImpression", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

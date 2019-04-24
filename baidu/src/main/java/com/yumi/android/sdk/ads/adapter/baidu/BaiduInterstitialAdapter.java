@@ -89,6 +89,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 				public void onAdPresent() {
 					ZplayDebug.d(TAG, "baidu interstitial shown", onoff);
 					layerExposure();
+					layerStartPlaying();
 				}
 
 				@Override

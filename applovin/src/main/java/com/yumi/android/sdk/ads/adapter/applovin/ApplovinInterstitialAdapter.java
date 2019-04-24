@@ -132,6 +132,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
             public void adDisplayed(AppLovinAd appLovinAd) {
                 ZplayDebug.d(TAG, "AppLovin ad adDisplayed", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override
