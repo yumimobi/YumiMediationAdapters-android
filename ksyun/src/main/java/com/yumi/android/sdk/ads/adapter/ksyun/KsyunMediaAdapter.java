@@ -109,8 +109,9 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                 } else {
                     error = LayerErrorCode.ERROR_INTERNAL;
                 }
-                error.setExtraMsg("Ksyun errorMsg: " + erroMsg);
-                layerPreparedFailed(new AdError(error));
+                AdError adError = new AdError(error);
+                adError.setErrorMessage("Ksyun errorMsg: " + erroMsg);
+                layerPreparedFailed(adError);
             }
 
             @Override
