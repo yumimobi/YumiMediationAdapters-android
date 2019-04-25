@@ -24,6 +24,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "KsyunMediaAdapter";
     private IKsyunAdListener adListener;
     private IKsyunRewardVideoAdListener rewardVideoAdListener;
+    private boolean isCompletePlaying = false;
 
     protected KsyunMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -127,6 +128,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onShowSuccess(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onShowSuccess  adSlotId: " + adSlotId, onoff);
+                isCompletePlaying = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -141,6 +143,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             public void onADComplete(String adSlotId) {
                 //播放成功，预加载下一个奖励视频
                 ZplayDebug.i(TAG, "Ksyun Media onADComplete  adSlotId: " + adSlotId, onoff);
+                isCompletePlaying = true;
             }
 
             @Override
@@ -152,7 +155,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADClose(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onADClose  adSlotId: " + adSlotId, onoff);
-                layerClosed();
+                layerClosed(isCompletePlaying);
             }
         };
 
