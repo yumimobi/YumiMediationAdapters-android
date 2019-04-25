@@ -35,4 +35,5 @@ ext {
     UNITY = '2.3.0.2'
     VUNGLE = '6.3.17.3'
     APPLOVIN = '8.0.2.1'
+    PLAY_SERVICES_ADS = '17.2.0'
 }
