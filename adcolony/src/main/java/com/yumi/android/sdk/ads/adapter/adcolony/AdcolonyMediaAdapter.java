@@ -22,7 +22,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 	private AdColonyInterstitialListener listener;
 	private AdColonyRewardListener rewardListennr;
 	private AdColonyAdOptions ad_options;
-	private boolean isCompletePlaying = false;
 
 	protected AdcolonyMediaAdapter(Activity activity, YumiProviderBean provider) {
 		super(activity, provider);
@@ -63,7 +62,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			@Override
 			public void onOpened(AdColonyInterstitial ad) {
 				ZplayDebug.d(TAG, "onOpened", onoff);
-				isCompletePlaying = false;
 				layerExposure();
 				layerStartPlaying();
 			}
@@ -80,9 +78,8 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			public void onReward(AdColonyReward arg0) {
 				ZplayDebug.d(TAG, "adcolony media closed", onoff);
 				ZplayDebug.d(TAG, "adcolony media get reward", onoff);
-				isCompletePlaying = true;
 				layerIncentived();
-				layerClosed(isCompletePlaying);
+				layerClosed(true);
 			}
 		};
 
