@@ -21,6 +21,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private Activity activity;
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsMediaAdapter";
+    private boolean isCompletePlaying = false;
 
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -44,6 +45,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
                 ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
+                isCompletePlaying = true;
                 layerIncentived();
             }
 
@@ -63,6 +65,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onVideoStart() {
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
+                isCompletePlaying = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -77,7 +80,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdClosed() {
                 super.onAdClosed();
                 ZplayDebug.d(TAG, "Playable media Video AdClosed: ", onoff);
-                layerClosed();
+                layerClosed(isCompletePlaying);
             }
         });
 

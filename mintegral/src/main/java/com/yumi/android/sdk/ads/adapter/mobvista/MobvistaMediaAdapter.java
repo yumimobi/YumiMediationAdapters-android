@@ -136,7 +136,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                     if (isCompleteView) {
                         layerIncentived();
                     }
-                    layerClosed();
+                    layerClosed(isCompleteView);
                 }
 
                 @Override

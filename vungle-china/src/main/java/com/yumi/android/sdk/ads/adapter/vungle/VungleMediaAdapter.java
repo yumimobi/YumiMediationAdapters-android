@@ -179,7 +179,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                                     layerIncentived();
                                 }
                                 ZplayDebug.d(TAG, "vungle media closed", onoff);
-                                layerClosed();
+                                layerClosed(completed);
                             } catch (Exception e) {
                                 ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
                             }
