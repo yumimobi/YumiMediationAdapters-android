@@ -17,7 +17,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "IronsourceMediaAdapter";
     private ISDemandOnlyRewardedVideoListener adListener;
-    private boolean isCompletePlaying = false;
+    private boolean isRewarded = false;
 
     protected IronsourceMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -59,7 +59,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdOpened(String instanceId) {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdOpened instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
-                    isCompletePlaying = false;
+                    isRewarded = false;
                     layerExposure();
                     layerStartPlaying();
                 }
@@ -71,7 +71,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdClosed(String instanceId) {
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClosed instanceId:" + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
-                    layerClosed(isCompletePlaying);
+                    layerClosed(isRewarded);
                 }
             }
 
@@ -101,7 +101,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 int rewardAmount = placement.getRewardAmount();
                 ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId + "  placement:" + placement.getPlacementName(), onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
-                    isCompletePlaying = true;
+                    isRewarded = true;
                     layerIncentived();
                 }
             }

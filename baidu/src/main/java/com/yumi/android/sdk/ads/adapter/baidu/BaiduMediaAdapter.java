@@ -15,7 +15,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardVideoAd rewardVideoAd;
     private RewardVideoAd.RewardVideoAdListener rewardVideoAdListener;
     private static boolean isReady = false;
-    private boolean isCompletePlaying = false;
+    private boolean isRewarded = false;
 
 
     protected BaiduMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -62,7 +62,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdShow() {
                 ZplayDebug.i(TAG, "baidu media onAdShow", onoff);
-                isCompletePlaying = false;
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -83,9 +83,10 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void playCompletion() {
                 ZplayDebug.d(TAG, "baidu media get reward", onoff);
+                isRewarded = true;
                 layerIncentived();
                 isReady = false;
-                isCompletePlaying = true;
+
             }
 
             @Override
@@ -98,7 +99,7 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdClose(float v) {
                 ZplayDebug.i(TAG, "baidu media onAdClose", onoff);
-                layerClosed(isCompletePlaying);
+                layerClosed(isRewarded);
                 isReady = false;
             }
 
