@@ -19,7 +19,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "FacebookMediaAdapter";
     private RewardedVideoAd rewardedVideoAd;
     private S2SRewardedVideoAdListener listener;
-    private boolean isCompletePlaying = false;
+    private boolean isRewarded = false;
 
     protected FacebookMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -87,14 +87,14 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoCompleted() {
                 ZplayDebug.i(TAG, "facebook media onRewardedVideoCompleted", onoff);
-                isCompletePlaying = true;
+                isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebook media onLoggingImpression", onoff);
-                isCompletePlaying = false;
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -102,7 +102,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoClosed() {
                 ZplayDebug.i(TAG, "facebook media onRewardedVideoClosed", onoff);
-                layerClosed(isCompletePlaying);
+                layerClosed(isRewarded);
             }
 
             @Override

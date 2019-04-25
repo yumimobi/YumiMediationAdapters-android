@@ -30,7 +30,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     private AppLovinAdVideoPlaybackListener adVideoPlaybackListener;
     private AppLovinAdDisplayListener adDisplayListener;
     private AppLovinAdClickListener adClickListener;
-    private boolean isCompletePlaying = false;
+    private boolean isRewarded = false;
 
     private boolean isFirstClick = false;
 
@@ -97,7 +97,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             public void userRewardVerified(AppLovinAd appLovinAd, Map<String, String> map) {
                 ZplayDebug.i(TAG, "AppLovin Media userRewardVerified ", onoff);
                 userRewardVerified = true;
-                isCompletePlaying = true;
+                isRewarded = true;
             }
 
             @Override
@@ -149,7 +149,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
                 ZplayDebug.i(TAG, "AppLovin Media adDisplayed ", onoff);
-                isCompletePlaying = false;
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -161,7 +161,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
                     userRewardVerified = false;
                     layerIncentived();
                 }
-                layerClosed(isCompletePlaying);
+                layerClosed(isRewarded);
                 preloadAd();
             }
         };
