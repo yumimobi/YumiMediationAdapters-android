@@ -70,11 +70,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 					public void onUnityAdsFinish(String zoneId, FinishState result) {
 						ZplayDebug.d(TAG, "unity media onUnityAdsFinish zoneId : " + zoneId + "  FinishState : " + result, onoff);
 						if (getProvider().getKey2().equals(zoneId)) {
+							boolean isCompletePlaying = false;
 							if (result == FinishState.COMPLETED) {
+								isCompletePlaying = true;
 								layerIncentived();
 								ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerIncentived ", onoff);
 							}
-							layerClosed();
+							layerClosed(isCompletePlaying);
 							ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 						}
 					}
