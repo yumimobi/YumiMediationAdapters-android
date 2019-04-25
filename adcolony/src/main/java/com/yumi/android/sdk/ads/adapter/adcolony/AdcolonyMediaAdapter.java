@@ -79,7 +79,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 				ZplayDebug.d(TAG, "adcolony media closed", onoff);
 				ZplayDebug.d(TAG, "adcolony media get reward", onoff);
 				layerIncentived();
-				layerClosed();
+				layerClosed(true);
 			}
 		};
 
@@ -108,7 +108,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onShowMedia() {
 		if (ad != null&&!ad.isExpired()) {
-
 			ad.show();
 		}
 	}

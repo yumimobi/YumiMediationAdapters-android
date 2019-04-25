@@ -22,6 +22,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private String TAG = "OnewayMediaAdapter";
     private Activity activity;
     private OnewaySdkListener listener;
+    private boolean isRewarded = false;
 
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -60,6 +61,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdStart(String placementID) {
                 ZplayDebug.d(TAG, "Oneway media shown", onoff);
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -68,9 +70,10 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdFinish(String placementID, OnewayVideoFinishType onewayVideoFinishType) {
                 ZplayDebug.d(TAG, "Oneway media closed", onoff);
                 if (onewayVideoFinishType == OnewayVideoFinishType.COMPLETED) {
+                    isRewarded = true;
                     layerIncentived();
                 }
-                layerClosed();
+                layerClosed(isRewarded);
             }
 
             @Override

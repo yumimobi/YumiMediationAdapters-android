@@ -17,6 +17,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardVideoADListener rewardVideoADListener;
     private RewardVideoAD rewardVideoAD;
     private boolean adLoaded = false;
+    private boolean isRewarded = false;
 
     protected GdtmobMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -98,6 +99,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADExpose() {
                 ZplayDebug.i(TAG, "gdt media onADExpose", onoff);
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -105,6 +107,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onReward() {
                 ZplayDebug.i(TAG, "gdt media onReward", onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 
@@ -122,7 +125,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADClose() {
                 ZplayDebug.i(TAG, "gdt media onADClose", onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
 
             @Override

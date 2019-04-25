@@ -24,6 +24,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "KsyunMediaAdapter";
     private IKsyunAdListener adListener;
     private IKsyunRewardVideoAdListener rewardVideoAdListener;
+    private boolean isRewarded = false;
 
     protected KsyunMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -127,6 +128,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onShowSuccess(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onShowSuccess  adSlotId: " + adSlotId, onoff);
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -152,7 +154,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADClose(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onADClose  adSlotId: " + adSlotId, onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
         };
 
@@ -160,6 +162,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdAwardSuccess(String s) {
                 ZplayDebug.i(TAG, "Ksyun Media onAdAwardSuccess  s: " + s, onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 

@@ -22,6 +22,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "FacebookBiddingMediaAdapter";
     private RewardedVideoAd rewardedVideoAd;
     private S2SRewardedVideoAdListener listener;
+    private boolean isRewarded = false;
 
 
     protected FacebookBiddingMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -95,12 +96,14 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoCompleted() {
                 ZplayDebug.i(TAG, "facebookbid media onRewardedVideoCompleted", onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebookbid media onLoggingImpression", onoff);
+                isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -108,7 +111,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoClosed() {
                 ZplayDebug.i(TAG, "facebookbid media onRewardedVideoClosed", onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
 
             @Override

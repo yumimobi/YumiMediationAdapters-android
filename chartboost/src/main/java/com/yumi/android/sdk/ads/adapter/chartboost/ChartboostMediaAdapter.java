@@ -16,6 +16,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private static final String TAG = "ChartboostMediaAdapter";
 	private ChartboostDelegate delegate;
+	private boolean isRewarded = false;
 
 	protected ChartboostMediaAdapter(Activity activity,
 			YumiProviderBean provider) {
@@ -89,7 +90,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didCloseRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media closed", onoff);
-					layerClosed();
+					layerClosed(isRewarded);
 					super.didCloseRewardedVideo(location);
 				}
 
@@ -103,6 +104,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didDismissRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media shown", onoff);
+					isRewarded = false;
 					layerExposure();
 					layerStartPlaying();
 					super.didDismissRewardedVideo(location);
@@ -111,6 +113,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didCompleteRewardedVideo(String location, int reward) {
 					ZplayDebug.d(TAG, "chartboost media get rewarded", onoff);
+					isRewarded = true;
 					layerIncentived();
 				}
 			};

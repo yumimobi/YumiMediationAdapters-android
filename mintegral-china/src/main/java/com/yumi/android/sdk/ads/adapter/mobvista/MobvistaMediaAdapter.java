@@ -7,6 +7,7 @@ import com.mintegral.msdk.out.MIntegralSDKFactory;
 import com.mintegral.msdk.out.MTGRewardVideoHandler;
 import com.mintegral.msdk.out.RewardVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -112,8 +113,8 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 @Override
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
-                    LayerErrorCode error = LayerErrorCode.ERROR_NO_FILL;
-                    error.setExtraMsg("minteral-China errorMsg: " + errorMsg);
+                    AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
+                    error.setErrorMessage("minteral-China errorMsg: " + errorMsg);
                     layerPreparedFailed(error);
                 }
 
@@ -136,7 +137,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                     if (isCompleteView) {
                         layerIncentived();
                     }
-                    layerClosed();
+                    layerClosed(isCompleteView);
                 }
 
                 @Override

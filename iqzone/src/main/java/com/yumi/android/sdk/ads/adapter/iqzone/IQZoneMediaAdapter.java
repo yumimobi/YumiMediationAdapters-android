@@ -20,6 +20,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "IQZoneMediaAdapter";
     private IQzoneInterstitialAdManager imdRewardedVideoAdManager;
     private boolean isReady;
+    private boolean isRewarded = false;
 
     protected IQZoneMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -61,6 +62,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adImpression() {
                 isReady = false;
+                isRewarded = false;
                 ZplayDebug.d(TAG, "IQZone Video adImpression", onoff);
                 layerExposure();
             }
@@ -74,7 +76,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Video adDismissed", onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
 
             @Override
@@ -92,6 +94,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void videoCompleted(boolean skipped) {
                 ZplayDebug.d(TAG, "IQZone Video videoCompleted", onoff);
+                isRewarded = true;
                 layerIncentived();
             }
         };
