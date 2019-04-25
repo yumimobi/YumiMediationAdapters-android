@@ -3,6 +3,7 @@ package com.yumi.android.sdk.ads.adapter.vungle;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 
 import com.vungle.warren.AdConfig;
 import com.vungle.warren.InitCallback;
@@ -11,10 +12,12 @@ import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -196,6 +199,11 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     ZplayDebug.e(TAG, "vungle Interstitial PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
                     if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
                         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
+                    }
+                    if (TextUtils.equals(placementReferenceId, getProvider().getKey3())) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("Vungle error: " + throwable);
+                        layerExposureFailed(adError);
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle Interstitial PlayAdCallback onError try error", cex, onoff);
