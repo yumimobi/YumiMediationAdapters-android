@@ -23,6 +23,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardedVideoAd mAd;
     private RewardedVideoAdListener mediaListener;
     private boolean isReady;
+    private boolean isCompletePlaying = false;
 
     protected AdmobMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -95,6 +96,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoAdOpened() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked", onoff);
+                isCompletePlaying = false;
                 isReady = false;
                 layerExposure();
             }
@@ -110,7 +112,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardedVideoAdClosed() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoAdClosed", onoff);
                 isReady = false;
-                layerClosed();
+                layerClosed(isCompletePlaying);
             }
 
             @Override
@@ -136,6 +138,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoCompleted() {
                 ZplayDebug.d(TAG, "admob media onRewardedVideoCompleted", onoff);
+                isCompletePlaying = true;
             }
         };
     }

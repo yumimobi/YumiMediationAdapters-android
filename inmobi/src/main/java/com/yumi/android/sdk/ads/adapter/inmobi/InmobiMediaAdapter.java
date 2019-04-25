@@ -20,6 +20,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
     private InMobiInterstitial media;
     private InterstitialAdEventListener mediaListener;
     private boolean isCallbackInExposure = false;
+    private boolean isCompletePlaying = false;
 
 
     protected InmobiMediaAdapter(Activity activity, YumiProviderBean provider) {
@@ -95,6 +96,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             public void onRewardsUnlocked(InMobiInterstitial inMobiInterstitial, Map<Object, Object> map) {
                 super.onRewardsUnlocked(inMobiInterstitial, map);
                 ZplayDebug.d(TAG, "onRewardsUnlocked ", onoff);
+                isCompletePlaying = true;
                 layerIncentived();
             }
 
@@ -118,6 +120,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdDisplayed(InMobiInterstitial arg0) {
                 ZplayDebug.d(TAG, "inmobi media exposure", onoff);
+                isCompletePlaying = false;
                 layerExposure();
                 layerStartPlaying();
             }
@@ -125,7 +128,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdDismissed(InMobiInterstitial arg0) {
                 ZplayDebug.d(TAG, "inmobi media closed", onoff);
-                layerClosed();
+                layerClosed(isCompletePlaying);
             }
         };
     }
