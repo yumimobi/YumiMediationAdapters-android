@@ -69,7 +69,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			}
 			return false;
 		}catch (Exception e){
-			ZplayDebug.e(TAG, "admob media isMediaReady error : ", e, onoff);
+			ZplayDebug.e(TAG, "admob interstitial isInterstitialLayerReady error : ", e, onoff);
 			return isReady;
 		}
 	}
