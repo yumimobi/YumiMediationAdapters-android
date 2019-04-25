@@ -3,7 +3,7 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.yumimobi.ads.thirdparty:adcolony:$ADCOLONY"
-    implementation 'com.google.android.gms:play-services-ads:17.1.3'
+    implementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
     implementation "com.android.support:support-annotations:$SUPOORT_LIBRAY_VERSION"
     implementation YUMI_MEDIATION
 }
