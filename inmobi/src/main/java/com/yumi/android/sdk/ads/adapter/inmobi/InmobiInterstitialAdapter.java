@@ -58,11 +58,11 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                     placementID = Long.valueOf(key2);
                 } catch (NumberFormatException e) {
                     ZplayDebug.e(TAG, "", e, onoff);
-                    layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+                    layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                     return;
                 }
             } else {
-                layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+                layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                 return;
             }
             JSONObject consent = new JSONObject();

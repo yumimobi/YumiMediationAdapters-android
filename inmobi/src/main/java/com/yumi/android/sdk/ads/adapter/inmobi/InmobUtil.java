@@ -52,7 +52,7 @@ public class InmobUtil {
     public static AdError recodeError(LayerErrorCode errorCode, String yumiLog) {
         String extraMsg = "Inmobi errorMsg: ";
         if (!isEmpty(yumiLog)) {
-            extraMsg += ", " + yumiLog;
+            extraMsg += yumiLog;
         }
         AdError result = new AdError(errorCode);
         result.setErrorMessage(extraMsg);
