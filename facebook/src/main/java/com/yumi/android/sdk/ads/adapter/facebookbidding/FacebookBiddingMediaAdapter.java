@@ -42,7 +42,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
 //        rewardedVideoAd.setRewardData(new RewardData("YOUR_USER_ID", "YOUR_REWARD"));  //不知道到底有什么用，文档里没有说明
             }
             if (getProvider().getErrCode() != 200) {
-                layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
+                layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
                 return;
             }
             rewardedVideoAd.loadAdFromBid(getProvider().getPayload(), false);
