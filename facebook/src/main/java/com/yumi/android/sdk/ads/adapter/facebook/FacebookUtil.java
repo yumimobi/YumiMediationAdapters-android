@@ -21,7 +21,7 @@ public class FacebookUtil {
         AdError result;
         if (adError == null) {
             result = new AdError(LayerErrorCode.ERROR_INTERNAL);
-            result.setErrorMessage("Facebook errorMsg: null");
+            result.setErrorMessage("Facebook errorMsg: " + yumiLog);
             return result;
         }
 
