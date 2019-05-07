@@ -49,7 +49,7 @@ public class FacebookBiddingInterstitialAdapter extends
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
         if (getProvider().getErrCode() != 200) {
-            layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
+            layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
             return;
         }
         if (interstitial == null) {
