@@ -16,6 +16,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -53,6 +54,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "AppLovin request new interstitial ", onoff);
+        updateGDPRStatus(getContext());
         isFirstClick = false;
         String zoneId = getProvider().getKey2();
         if (appLovinSDK != null && zoneId != null && !"".equals(zoneId)) {

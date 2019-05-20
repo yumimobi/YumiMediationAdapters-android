@@ -1,7 +1,11 @@
 package com.yumi.android.sdk.ads.adapter.ironsource;
 
+import android.content.Context;
+
+import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -25,5 +29,14 @@ class IronsourceUtil {
         }
         result.setErrorMessage("IronSource errorMsg: " + ironSourceError.getErrorMessage());
         return result;
+    }
+
+    static void updateGDPRStatus(Context context){
+        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        if(isConsent == null) {
+            return;
+        }
+        // https://developers.ironsrc.com/ironsource-mobile/android/advanced-settings/
+        IronSource.setConsent(isConsent);
     }
 }

@@ -2,10 +2,11 @@ package com.yumi.android.sdk.ads.adapter.inmobi;
 
 import android.app.Activity;
 
-import com.inmobi.ads.InMobiAdRequestStatus;
-import com.inmobi.ads.InMobiAdRequestStatus.StatusCode;
 import com.inmobi.sdk.InMobiSdk;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class InmobiExtraHolder {
 
@@ -13,7 +14,21 @@ public class InmobiExtraHolder {
 
 	static void initInmobiSDK(Activity activity, String appid) {
 		if (!isInitlalize) {
-			InMobiSdk.init(activity, appid);
+			Boolean isConsent = YumiSettings.isGDPRConsent(activity);
+
+			if(isConsent == null) {
+				InMobiSdk.init(activity, appid);
+			}else{
+				// https://support.inmobi.com/monetize/android-guidelines/
+				JSONObject consentObject = new JSONObject();
+				try {
+                    // Provide 0 if GDPR is not applicable and 1 if applicable
+					consentObject.put("gdpr", isConsent ? "1" : "0");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				InMobiSdk.init(activity, appid, consentObject);
+			}
 			InMobiSdk.setLogLevel(InMobiSdk.LogLevel.DEBUG);
 			isInitlalize = true;
 		}

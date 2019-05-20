@@ -5,7 +5,6 @@ import android.content.Context;
 import android.util.DisplayMetrics;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
@@ -15,6 +14,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import static com.google.android.gms.ads.AdSize.BANNER;
 import static com.google.android.gms.ads.AdSize.LEADERBOARD;
 import static com.google.android.gms.ads.AdSize.SMART_BANNER;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
@@ -61,8 +61,7 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         adView.setAdSize(calculateBannerSize());
         adView.setAdUnitId(getProvider().getKey1());
         adView.setAdListener(adListener);
-        AdRequest req = new AdRequest.Builder().build();
-        adView.loadAd(req);
+        adView.loadAd(getAdRequest(getContext()));
     }
 
     @Override

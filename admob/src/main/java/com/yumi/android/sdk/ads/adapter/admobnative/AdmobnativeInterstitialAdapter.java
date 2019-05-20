@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdLoader;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.VideoController;
 import com.google.android.gms.ads.VideoOptions;
 import com.google.android.gms.ads.formats.MediaView;
@@ -26,6 +25,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.List;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
@@ -152,9 +152,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
             }
         }).build();
 
-        adLoader.loadAd(new AdRequest.Builder().build());
-
-
+        adLoader.loadAd(getAdRequest(getContext()));
     }
 
 

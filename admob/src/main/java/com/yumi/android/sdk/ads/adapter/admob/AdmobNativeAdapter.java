@@ -26,6 +26,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
@@ -49,7 +50,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             int currentPoolSpace = getCurrentPoolSpace();
             adCount = currentPoolSpace >= 5 ? 5 : currentPoolSpace;
             ZplayDebug.v(TAG, "admob native onPrepareNative adCount: " + adCount, onoff);
-            adLoader.loadAds(new AdRequest.Builder().build(), adCount);
+            adLoader.loadAds(getAdRequest(getContext()), adCount);
         }
     }
 

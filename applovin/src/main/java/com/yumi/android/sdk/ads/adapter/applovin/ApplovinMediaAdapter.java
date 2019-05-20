@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -51,6 +52,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         ZplayDebug.d(TAG, "AppLovin request new media", onoff);
+        updateGDPRStatus(getContext());
         isFirstClick = false;
     }
 
