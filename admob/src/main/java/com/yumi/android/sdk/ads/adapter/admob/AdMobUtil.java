@@ -1,7 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.admob;
 
+import android.content.Context;
+import android.os.Bundle;
+
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -32,5 +37,16 @@ public class AdMobUtil {
         AdError adError = new AdError(errCode);
         adError.setErrorMessage("AdMob errorCode: " + errorCode);
         return adError;
+    }
+
+    public static AdRequest getAdRequest(Context context) {
+        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        if (isConsent == null || isConsent) {
+            return new AdRequest.Builder().build();
+        }
+        // https://developers.google.com/admob/android/eu-consent#forward_consent_to_the_google_mobile_ads_sdk
+        Bundle extras = new Bundle();
+        extras.putString("npa", "1");
+        return new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
     }
 }

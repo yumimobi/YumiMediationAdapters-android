@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
@@ -29,6 +30,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial  instanceId : " + getProvider().getKey2(), onoff);
+        updateGDPRStatus(getContext());
         boolean isReady = IronSource.isISDemandOnlyInterstitialReady(getProvider().getKey2());
         if (isReady) {
             ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial isReady  instanceId : " + getProvider().getKey2(), onoff);

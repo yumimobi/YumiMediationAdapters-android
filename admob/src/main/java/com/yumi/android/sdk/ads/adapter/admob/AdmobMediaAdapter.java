@@ -2,7 +2,6 @@ package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.reward.RewardItem;
 import com.google.android.gms.ads.reward.RewardedVideoAd;
@@ -11,6 +10,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
@@ -44,7 +44,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
         if (mAd != null && !mAd.isLoaded()) {
             ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
             isReady = false;
-            mAd.loadAd(getProvider().getKey1(), new AdRequest.Builder().build());
+            mAd.loadAd(getProvider().getKey1(), getAdRequest(getContext()));
         }
     }
 

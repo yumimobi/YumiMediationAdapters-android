@@ -10,6 +10,8 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.updateGDPRStatus;
+
 /**
  * Created by hjl on 2018/8/10.
  */
@@ -25,7 +27,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-
+        updateGDPRStatus(getContext());
     }
 
     @Override
