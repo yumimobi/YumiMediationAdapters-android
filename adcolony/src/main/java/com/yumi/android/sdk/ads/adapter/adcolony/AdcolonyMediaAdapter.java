@@ -1,5 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.adcolony;
 
+import android.app.Activity;
+
 import com.adcolony.sdk.AdColony;
 import com.adcolony.sdk.AdColonyAdOptions;
 import com.adcolony.sdk.AdColonyAppOptions;
@@ -9,10 +11,9 @@ import com.adcolony.sdk.AdColonyReward;
 import com.adcolony.sdk.AdColonyRewardListener;
 import com.adcolony.sdk.AdColonyZone;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-
-import android.app.Activity;
 
 public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -29,10 +30,16 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private void initAdcolonySDK() {
 		createListeners();
-		AdColonyAppOptions app_options = new AdColonyAppOptions()
-				.setUserID(CLIENT_OPTIONS);
-		AdColony.configure(getActivity(), app_options, getProvider().getKey1(),
-				getProvider().getKey2());
+        final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
+
+        Boolean isConsent = YumiSettings.isGDPRConsent(getContext());
+        if (isConsent != null && !isConsent) {
+            // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
+            appOptions
+					.setGDPRConsentString("0")
+					.setGDPRRequired(true);
+        }
+        AdColony.configure(getActivity(), appOptions, getProvider().getKey1(), getProvider().getKey2());
 		/** Ad specific options to be sent with request */
 		ad_options = new AdColonyAdOptions().enableConfirmationDialog(false).enableResultsDialog(false);// 控制dialog
 		AdColony.setRewardListener(rewardListennr);
@@ -92,7 +99,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
 	@Override
 	public void onActivityResume() {
-	
+
 	}
 
 	@Override

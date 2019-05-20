@@ -18,6 +18,7 @@ import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 /**
  * Created by hjl on 2018/9/12.
@@ -39,6 +40,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         try {
+            updateGDPRStatus(getContext());
             if (bannerSize == AdSize.BANNER_SIZE_SMART) {
                 ZplayDebug.d(TAG, "AppLovin banner not support smart banner:", onoff);
                 layerPreparedFailed(recodeError(-1, "not support smart banner."));

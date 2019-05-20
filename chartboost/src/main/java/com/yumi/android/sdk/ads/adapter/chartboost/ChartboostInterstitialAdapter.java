@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import android.app.Activity;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
 public class ChartboostInterstitialAdapter extends
 		YumiCustomerInterstitialAdapter {
@@ -52,6 +53,7 @@ public class ChartboostInterstitialAdapter extends
 	@Override
 	protected void onPrepareInterstitial() {
 		ZplayDebug.d(TAG, "chartboost request new interstitial", onoff);
+		updateGDPRStatus(getContext());
 		Chartboost.cacheInterstitial(CBLocation.LOCATION_LEADERBOARD);
 	}
 
