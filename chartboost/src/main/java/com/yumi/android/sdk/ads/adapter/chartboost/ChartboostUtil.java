@@ -1,7 +1,11 @@
 package com.yumi.android.sdk.ads.adapter.chartboost;
 
+import android.content.Context;
+
+import com.chartboost.sdk.Chartboost;
 import com.chartboost.sdk.Model.CBError;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
@@ -41,5 +45,19 @@ public class ChartboostUtil {
         result = new AdError(errCode);
         result.setErrorMessage("ChartBoost errorMes: " + chartBoostError.toString());
         return result;
+    }
+
+    static void updateGDPRStatus(Context context){
+        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        if(isConsent == null){
+            return;
+        }
+
+        // https://answers.chartboost.com/en-us/child_article/android#gdpr
+        if(isConsent) {
+            Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.YES_BEHAVIORAL);
+        }else {
+            Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.NO_BEHAVIORAL);
+        }
     }
 }

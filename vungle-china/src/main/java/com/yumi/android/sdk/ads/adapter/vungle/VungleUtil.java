@@ -1,8 +1,13 @@
 package com.yumi.android.sdk.ads.adapter.vungle;
 
-import com.yumi.android.sdk.ads.publish.AdError;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import android.content.Context;
 
+import com.vungle.warren.Vungle;
+import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
+
+import static com.vungle.warren.Vungle.Consent.OPTED_IN;
+import static com.vungle.warren.Vungle.Consent.OPTED_OUT;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 
 /**
@@ -15,5 +20,16 @@ class VungleUtil {
         AdError result = new AdError(ERROR_NO_FILL);
         result.setErrorMessage("Vungle-China error: " + extra);
         return result;
+    }
+
+    static void updateGDPRStatus(Context context) {
+        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        if (isConsent == null) {
+            return;
+        }
+
+        // https://support.vungle.com/hc/en-us/articles/360002922871-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-6
+        Vungle.Consent consent = isConsent ? OPTED_IN : OPTED_OUT;
+        Vungle.updateConsentStatus(consent, "1.0.0");
     }
 }

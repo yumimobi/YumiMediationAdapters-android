@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -59,6 +60,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         try {
+            updateGDPRStatus(getContext());
             ZplayDebug.d(TAG, "vungle request new Interstitial", onoff);
             if (Vungle.canPlayAd(getProvider().getKey3())) {
                 ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);

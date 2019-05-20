@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -51,7 +52,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			instertitial.setAdUnitId(getProvider().getKey1());
 			instertitial.setAdListener(adListener);
 		}
-		AdRequest req = new AdRequest.Builder().build();
+		AdRequest req = getAdRequest(getContext());
 		isReady = false;
 		instertitial.loadAd(req);
 	}
