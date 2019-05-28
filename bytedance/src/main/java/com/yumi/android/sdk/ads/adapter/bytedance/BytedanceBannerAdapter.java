@@ -33,6 +33,11 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "Bytedance request new banner", onoff);
+        if (bannerSize == AdSize.BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "Bytedance banner not support smart banner:", onoff);
+            layerPreparedFailed(recodeError(-999, "not support smart banner."));
+            return;
+        }
         calculateBannerSize();
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
