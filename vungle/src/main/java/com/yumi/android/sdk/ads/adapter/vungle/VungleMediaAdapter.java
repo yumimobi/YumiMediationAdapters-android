@@ -11,11 +11,13 @@ import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -197,6 +199,11 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
                     if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
                         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+                    }
+                    if (getProvider().getKey2().equals(placementReferenceId)) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("vungle error: " + throwable);
+                        layerExposureFailed(adError);
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError try error", cex, onoff);
