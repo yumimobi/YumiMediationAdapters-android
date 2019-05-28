@@ -39,12 +39,12 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
             calculateMediaSize();
             isReady = false;
             AdSlot adSlot = new AdSlot.Builder()
-                    .setCodeId("901121365")
+                    .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
                     .setImageAcceptedSize(rewardWidth, rewardHeight)
-                    .setUserID("")//用户id,必传参数
-                    .setMediaExtra("") //附加参数，可选
-                    .setOrientation(isLandscaps()) //必填参数，期望视频的播放方向：TTAdConstant.HORIZONTAL 或 TTAdConstant.VERTICAL
+                    .setUserID("")
+                    .setMediaExtra("")
+                    .setOrientation(isLandscaps())
                     .build();
             //step5:请求广告
             mTTAdNative.loadRewardVideoAd(adSlot, loadListener);
@@ -72,15 +72,15 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
-                        .appId("5001121")
-                        .useTextureView(false) //使用TextureView控件播放视频,默认为SurfaceView,当有SurfaceView冲突的场景，可以使用TextureView
+                        .appId(getProvider().getKey1())
+                        .useTextureView(false)
                         .appName(getActivity().getPackageName())
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
-                        .allowShowNotify(false) //是否允许sdk展示通知栏提示
-                        .allowShowPageWhenScreenLock(true) //是否在锁屏场景支持展示广告落地页
-                        .debug(true) //测试阶段打开，可以通过日志排查问题，上线时去除该调用
-                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G) //允许直接下载的网络状态集合
-                        .supportMultiProcess(false) //是否支持多进程，true支持
+                        .allowShowNotify(false)
+                        .allowShowPageWhenScreenLock(false)
+                        .debug(false)
+                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
+                        .supportMultiProcess(false)
                         .build());
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());//baseContext建议为activity
         createrListener();
@@ -95,7 +95,6 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
                 isReady = false;
             }
 
-            //视频广告加载后，视频资源缓存到本地的回调，在此回调后，播放本地视频，流畅不阻塞。
             @Override
             public void onRewardVideoCached() {
                 ZplayDebug.d(TAG, "Bytedance media Prepared ", onoff);
@@ -103,11 +102,9 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPrepared();
             }
 
-            //视频广告的素材加载完毕，比如视频url等，在此回调后，可以播放在线视频，网络不好可能出现加载缓冲，影响体验。
             @Override
             public void onRewardVideoAdLoad(TTRewardVideoAd ad) {
                 mttRewardVideoAd = ad;
-//                mttRewardVideoAd.setShowDownLoadBar(false);
                 setRewardAdInteractionListener(mttRewardVideoAd);
             }
         };
@@ -140,7 +137,6 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
                 layerClosed(isRewarded);
             }
 
-            //视频播放完成回调
             @Override
             public void onVideoComplete() {
                 isReady = false;
