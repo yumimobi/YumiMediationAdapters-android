@@ -14,6 +14,8 @@ import com.fyber.inneractive.sdk.external.InneractiveErrorCode;
 import com.fyber.inneractive.sdk.external.InneractiveUnitController;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
+import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
@@ -32,6 +34,11 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "inneractive request new banner", onoff);
+        if (bannerSize == AdSize.BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "inneractive banner not support smart banner:", onoff);
+            layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL, "not support smart banner."));
+            return;
+        }
         InneractiveAdViewUnitController controller = new InneractiveAdViewUnitController();
         mBannerSpot.addUnitController(controller);
 
@@ -56,7 +63,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
         mBannerSpot = InneractiveAdSpotManager.get().createSpot();
     }
 
-    private void createListener(){
+    private void createListener() {
         requestListener = new InneractiveAdSpot.RequestListener() {
             @Override
             public void onInneractiveSuccessfulAdRequest(InneractiveAdSpot adSpot) {
@@ -65,7 +72,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
                 }
 
                 container = new FrameLayout(getActivity());
-                InneractiveAdViewUnitController controller = (InneractiveAdViewUnitController)mBannerSpot.getSelectedUnitController();
+                InneractiveAdViewUnitController controller = (InneractiveAdViewUnitController) mBannerSpot.getSelectedUnitController();
                 controller.setEventsListener(new InneractiveAdViewEventsListener() {
                     @Override
                     public void onAdImpression(InneractiveAdSpot adSpot) {
@@ -75,7 +82,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
                     @Override
                     public void onAdClicked(InneractiveAdSpot adSpot) {
                         ZplayDebug.d(TAG, "inneractive banner onAdClicked", onoff);
-                        layerClicked(-99f,-99f);
+                        layerClicked(-99f, -99f);
                     }
 
                     @Override
