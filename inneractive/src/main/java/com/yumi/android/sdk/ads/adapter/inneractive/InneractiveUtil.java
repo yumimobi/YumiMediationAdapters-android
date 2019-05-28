@@ -30,7 +30,7 @@ public class InneractiveUtil {
     }
 
     public static AdError recodeError(LayerErrorCode errorCode, String yumiLog) {
-        String extraMsg = "Inmobi errorMsg: ";
+        String extraMsg = "Inneractive errorMsg: ";
         if (!isEmpty(yumiLog)) {
             extraMsg += yumiLog;
         }

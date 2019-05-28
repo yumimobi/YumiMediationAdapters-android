@@ -11,7 +11,11 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 public class BytedanceUtil {
     public static AdError recodeError(int errorCode, String errMags) {
         LayerErrorCode errCode;
-        errCode = LayerErrorCode.ERROR_NO_FILL;
+        if(errorCode == -999){
+            errCode = LayerErrorCode.ERROR_INTERNAL;
+        }else{
+            errCode = LayerErrorCode.ERROR_NO_FILL;
+        }
 
         AdError adError = new AdError(errCode);
         adError.setErrorMessage("Bytedance errorCode: " + errorCode +", errorMessage: " + errMags);
