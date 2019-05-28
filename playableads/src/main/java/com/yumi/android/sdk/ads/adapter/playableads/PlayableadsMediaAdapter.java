@@ -6,10 +6,12 @@ import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 
 /**
@@ -53,6 +55,9 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                adError.setErrorMessage("Playable errorCoed: "+errorCode+"errorMsg: " + message);
+                layerExposureFailed(adError);
             }
 
             @Override
