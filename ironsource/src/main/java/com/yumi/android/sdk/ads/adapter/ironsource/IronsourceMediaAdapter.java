@@ -1,16 +1,20 @@
 package com.yumi.android.sdk.ads.adapter.ironsource;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyRewardedVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.generateLayerErrorCode;
 import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
  * Created by hjl on 2018/8/10.
@@ -56,6 +60,22 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
     private void createMediaListener() {
         adListener = new ISDemandOnlyRewardedVideoListener() {
+            @Override
+            public void onRewardedVideoAdLoadSuccess(String instanceId) {
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadSuccess instanceId : " + instanceId , onoff);
+                if (instanceId.equals(getProvider().getKey2())) {
+                    layerPrepared();
+                }
+            }
+
+            @Override
+            public void onRewardedVideoAdLoadFailed(String instanceId, IronSourceError ironSourceError) {
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadFailed instanceId : " + instanceId , onoff);
+                if (instanceId.equals(getProvider().getKey2())) {
+                    layerPreparedFailed(generateLayerErrorCode(ironSourceError));
+                }
+            }
+
             // Invoked when the RewardedVideo ad view is about to open.
             @Override
             public void onRewardedVideoAdOpened(String instanceId) {
@@ -77,52 +97,35 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
 
-            // Invoked when there is a change in the ad availability status.
-            // @param - available - value will change to true when rewarded videos
-            // are available.
-            // You can then show the video by calling showRewardedVideo().
-            // Value will change to false when no videos are available.
-            // Change the in-app 'Traffic Driver' state according to availability.
+            // Invoked when RewardedVideo call to show a rewarded video has
+            // failed. IronSourceError contains the reason for the failure.
             @Override
-            public void onRewardedVideoAvailabilityChanged(String instanceId, boolean available) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAvailabilityChanged instanceId : " + instanceId + "  available : " + available, onoff);
-                if (instanceId.equals(getProvider().getKey2()) && available) {
-                    layerPrepared();
+            public void onRewardedVideoAdShowFailed(String instanceId, IronSourceError error) {
+                ZplayDebug.e(TAG, "IronSource Media onRewardedVideoAdShowFailed  instanceId : " + instanceId + "  getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
+                if (TextUtils.equals(instanceId, getProvider().getKey2())) {
+                    AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                    adError.setErrorMessage("IronSource errorMsg: " + error);
+                    layerExposureFailed(adError);
                 }
             }
 
-            // Invoked when the user completed the video and should be rewarded.
-            // If using server-to-server callbacks you may ignore this events and
-            // wait for the callback from the ironSource server.
-            // @param - placement - the Placement the user completed a video
-            // from.
             @Override
-            public void onRewardedVideoAdRewarded(String instanceId, Placement placement) {
-                // here you can reward the user according to the given amount.
-                String rewardName = placement.getRewardName();
-                int rewardAmount = placement.getRewardAmount();
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId + "  placement:" + placement.getPlacementName(), onoff);
+            public void onRewardedVideoAdClicked(String instanceId) {
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + instanceId , onoff);
+                if (instanceId.equals(getProvider().getKey2())) {
+                    layerClicked();
+                }
+            }
+
+            @Override
+            public void onRewardedVideoAdRewarded(String instanceId) {
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId , onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     isRewarded = true;
                     layerIncentived();
                 }
             }
 
-            // Invoked when RewardedVideo call to show a rewarded video has
-            // failed. IronSourceError contains the reason for the failure.
-            @Override
-            public void onRewardedVideoAdShowFailed(String instanceId, IronSourceError error) {
-                ZplayDebug.e(TAG, "IronSource Media onRewardedVideoAdShowFailed  instanceId : " + instanceId + "  getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
-            }
-
-            // Invoked when the end user clicked on the RewardedVideo ad
-            @Override
-            public void onRewardedVideoAdClicked(String instanceId, Placement placement) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + instanceId + "  placement:" + placement.getPlacementName(), onoff);
-                if (instanceId.equals(getProvider().getKey2())) {
-                    layerClicked();
-                }
-            }
         };
         IronsourceListenerHandler.setMyIronsourceVideoListener(getProvider().getKey2(), adListener);
     }

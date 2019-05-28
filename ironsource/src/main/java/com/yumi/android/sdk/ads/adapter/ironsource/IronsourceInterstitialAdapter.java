@@ -93,6 +93,10 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                 @Override
                 public void onInterstitialAdOpened(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdOpened instanceId : " + instanceId, onoff);
+                    if (instanceId.equals(getProvider().getKey2())) {
+                        layerExposure();
+                        layerStartPlaying();
+                    }
                 }
 
                 /*
@@ -103,18 +107,6 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdClosed instanceId : " + instanceId, onoff);
                     if (instanceId.equals(getProvider().getKey2())) {
                         layerClosed();
-                    }
-                }
-
-                /*
-                 * Invoked when the ad was opened and shown successfully.
-                 */
-                @Override
-                public void onInterstitialAdShowSucceeded(String instanceId) {
-                    ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdShowSucceeded instanceId : " + instanceId, onoff);
-                    if (instanceId.equals(getProvider().getKey2())) {
-                        layerExposure();
-                        layerStartPlaying();
                     }
                 }
 
