@@ -11,11 +11,13 @@ import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -148,6 +150,12 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                                 layerPreparedFailed(recodeError(throwable));
                             }
                         });
+                    }
+
+                    if (getProvider().getKey2().equals(placementReferenceId)) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("vungle error: " + throwable);
+                        layerExposureFailed(adError);
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media LoadAdCallback onError try error", cex, onoff);
