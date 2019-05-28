@@ -34,13 +34,11 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "Bytedance request new banner", onoff);
         calculateBannerSize();
-        //step4:创建广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
-                .setCodeId("901121895") //广告位id
+                .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
                 .setImageAcceptedSize(bannerWidth, bannerHeight)
                 .build();
-        //step5:请求广告，对请求回调的广告作渲染处理
         mTTAdNative.loadBannerAd(adSlot, bannerAdListener);
     }
 
@@ -50,15 +48,15 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
-                        .appId("5001121")
-                        .useTextureView(false) //使用TextureView控件播放视频,默认为SurfaceView,当有SurfaceView冲突的场景，可以使用TextureView
+                        .appId(getProvider().getKey1())
+                        .useTextureView(false)
                         .appName(getActivity().getPackageName())
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
-                        .allowShowNotify(false) //是否允许sdk展示通知栏提示
-                        .allowShowPageWhenScreenLock(true) //是否在锁屏场景支持展示广告落地页
-                        .debug(true) //测试阶段打开，可以通过日志排查问题，上线时去除该调用
-                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G) //允许直接下载的网络状态集合
-                        .supportMultiProcess(false) //是否支持多进程，true支持
+                        .allowShowNotify(false)
+                        .allowShowPageWhenScreenLock(false)
+                        .debug(false)
+                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
+                        .supportMultiProcess(false)
                         .build());
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());//baseContext建议为activity
         createListener();
@@ -84,7 +82,6 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                     return;
                 }
 
-                //设置广告互动监听回调
                 ad.setBannerInteractionListener(new TTBannerAd.AdInteractionListener() {
                     @Override
                     public void onAdClicked(View view, int type) {
