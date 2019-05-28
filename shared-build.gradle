@@ -29,7 +29,7 @@ ext {
     // Yumi and IQZone common party
     ADCOLONY = '3.3.7.1'
     CHARTBOOST = '7.3.1.1'
-    INMOBI = '7.2.7'
+    INMOBI = '8.0.9'
     IRONSOURCE = '6.7.10.1'
     MOBVISTA = '8.13.0.1'
     UNITY = '2.3.0.2'
