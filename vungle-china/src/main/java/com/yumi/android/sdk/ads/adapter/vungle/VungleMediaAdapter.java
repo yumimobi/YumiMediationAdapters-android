@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
 
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -59,6 +60,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         try {
+            updateGDPRStatus(getContext());
             ZplayDebug.d(TAG, "vungle request new media", onoff);
             if (Vungle.canPlayAd(getProvider().getKey2())) {
                 ZplayDebug.d(TAG, "vungle media prapared", onoff);

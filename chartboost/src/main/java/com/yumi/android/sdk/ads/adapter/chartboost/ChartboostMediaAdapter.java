@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import android.app.Activity;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
 public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -44,6 +45,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onPrepareMedia() {
 		ZplayDebug.d(TAG, "chartboost request new media", onoff);
+		updateGDPRStatus(getContext());
 		Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
 	}
 

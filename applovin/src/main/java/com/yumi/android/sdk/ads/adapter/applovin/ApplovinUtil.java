@@ -1,9 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.applovin;
 
+import android.content.Context;
 import android.text.TextUtils;
 
 import com.applovin.sdk.AppLovinErrorCodes;
+import com.applovin.sdk.AppLovinPrivacySettings;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 /**
@@ -33,5 +36,14 @@ class ApplovinUtil {
         }
         result.setErrorMessage(extraMsg);
         return result;
+    }
+
+    static void updateGDPRStatus(Context context){
+        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        if(isConsent == null){
+            return;
+        }
+        // https://dash.applovin.com/docs/integration#androidPrivacySettings
+        AppLovinPrivacySettings.setHasUserConsent(isConsent, context);
     }
 }
