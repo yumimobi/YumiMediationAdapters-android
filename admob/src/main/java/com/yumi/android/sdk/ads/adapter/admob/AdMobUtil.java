@@ -8,6 +8,7 @@ import com.google.android.gms.ads.AdRequest;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 /**
  * Description:
@@ -40,8 +41,8 @@ public class AdMobUtil {
     }
 
     public static AdRequest getAdRequest(Context context) {
-        Boolean isConsent = YumiSettings.isGDPRConsent();
-        if (isConsent == null || isConsent) {
+        boolean isConsent = YumiSettings.isGDPRConsent();
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN || isConsent) {
             return new AdRequest.Builder().build();
         }
         // https://developers.google.com/admob/android/eu-consent#forward_consent_to_the_google_mobile_ads_sdk

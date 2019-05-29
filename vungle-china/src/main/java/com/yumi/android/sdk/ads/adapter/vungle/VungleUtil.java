@@ -5,6 +5,7 @@ import android.content.Context;
 import com.vungle.warren.Vungle;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 import static com.vungle.warren.Vungle.Consent.OPTED_IN;
 import static com.vungle.warren.Vungle.Consent.OPTED_OUT;
@@ -23,11 +24,10 @@ class VungleUtil {
     }
 
     static void updateGDPRStatus(Context context) {
-        Boolean isConsent = YumiSettings.isGDPRConsent();
-        if (isConsent == null) {
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
-
+        boolean isConsent = YumiSettings.isGDPRConsent();
         // https://support.vungle.com/hc/en-us/articles/360002922871-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-6
         Vungle.Consent consent = isConsent ? OPTED_IN : OPTED_OUT;
         Vungle.updateConsentStatus(consent, "1.0.0");
