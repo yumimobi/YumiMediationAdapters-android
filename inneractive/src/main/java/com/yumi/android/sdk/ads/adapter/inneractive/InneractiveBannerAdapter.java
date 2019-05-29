@@ -34,7 +34,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "inneractive request new banner", onoff);
-        if (bannerSize == AdSize.BANNER_SIZE_SMART) {
+        if (mBannerSpot != null && bannerSize == AdSize.BANNER_SIZE_SMART) {
             ZplayDebug.d(TAG, "inneractive banner not support smart banner:", onoff);
             layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL, "not support smart banner."));
             return;

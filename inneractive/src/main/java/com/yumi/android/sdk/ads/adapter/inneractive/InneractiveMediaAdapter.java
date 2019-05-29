@@ -37,7 +37,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         ZplayDebug.d(TAG, "inneractive request new media", onoff);
-        if (requestListener != null) {
+        if (mVideoSpot != null && requestListener != null) {
             // Now create a full screen unit controller
             InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
             // Configure the request
