@@ -13,6 +13,7 @@ import com.adcolony.sdk.AdColonyZone;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
@@ -32,11 +33,10 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 		createListeners();
         final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
 
-        Boolean isConsent = YumiSettings.isGDPRConsent();
-        if (isConsent != null && !isConsent) {
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
             // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
             appOptions
-					.setGDPRConsentString("0")
+					.setGDPRConsentString(YumiSettings.getGDPRStatus().getGDPRValue())
 					.setGDPRRequired(true);
         }
         AdColony.configure(getActivity(), appOptions, getProvider().getKey1(), getProvider().getKey2());

@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.inmobi.sdk.InMobiSdk;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,11 +15,14 @@ public class InmobiExtraHolder {
 
 	static void initInmobiSDK(Activity activity, String appid) {
 		if (!isInitlalize) {
-			Boolean isConsent = YumiSettings.isGDPRConsent();
 
-			if(isConsent == null) {
+
+			if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
 				InMobiSdk.init(activity, appid);
 			}else{
+
+				boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
+
 				// https://support.inmobi.com/monetize/android-guidelines/
 				JSONObject consentObject = new JSONObject();
 				try {

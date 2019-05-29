@@ -7,6 +7,7 @@ import com.unity3d.ads.metadata.MetaData;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 /**
  * Description:
@@ -21,11 +22,12 @@ public class UnityUtil {
     }
 
     static void updateGDPRStatus(Context context){
-        Boolean isConsent = YumiSettings.isGDPRConsent();
-        if(isConsent == null){
+
+        if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
             return;
         }
-
+        
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://unityads.unity3d.com/help/legal/gdpr
         MetaData gdprMetaData = new MetaData(context);
         gdprMetaData.set("gdpr.consent", isConsent);
