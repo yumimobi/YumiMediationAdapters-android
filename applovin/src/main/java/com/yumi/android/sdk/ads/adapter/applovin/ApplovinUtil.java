@@ -39,7 +39,7 @@ class ApplovinUtil {
     }
 
     static void updateGDPRStatus(Context context){
-        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        Boolean isConsent = YumiSettings.isGDPRConsent();
         if(isConsent == null){
             return;
         }
