@@ -14,6 +14,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
 
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
+
 /**
  * Created by hjl on 2017/11/28.
  */
@@ -63,8 +65,8 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected boolean isMediaReady() {
         if (mMvRewardVideoHandler != null) {
-            boolean isReady= mMvRewardVideoHandler.isReady();
-            ZplayDebug.d(TAG, "Mobvista media isMediaReady "+isReady, onoff);
+            boolean isReady = mMvRewardVideoHandler.isReady();
+            ZplayDebug.d(TAG, "Mobvista media isMediaReady " + isReady, onoff);
             return isReady;
         }
         ZplayDebug.d(TAG, "Mobvista media isMediaReady mMvRewardVideoHandler is null", onoff);
@@ -111,6 +113,11 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 }
 
                 @Override
+                public void onLoadSuccess(String s) {
+
+                }
+
+                @Override
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
                     AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
@@ -121,6 +128,9 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 @Override
                 public void onShowFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onShowFail errorMsg:" + errorMsg, onoff);
+                    AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                    adError.setErrorMessage("Mobvista errorMsg: " + errorMsg);
+                    layerExposureFailed(adError);
                 }
 
                 @Override
@@ -144,6 +154,16 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onVideoAdClicked(String unitId) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoAdClicked unitId:" + unitId, onoff);
                     layerClicked();
+                }
+
+                @Override
+                public void onVideoComplete(String s) {
+
+                }
+
+                @Override
+                public void onEndcardShow(String s) {
+
                 }
 
             });

@@ -2,11 +2,17 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.yumimobi.ads.thirdparty:mobvista-china:9.11.0.0"
+
+    implementation 'com.yumimobi.ads.thirdparty:iasdkcore:7.3.0.3'
+    implementation 'com.yumimobi.ads.thirdparty:iavideokit:7.3.0.3'
+    implementation 'com.yumimobi.ads.thirdparty:iamraidkit:7.3.0.3'
+
+    implementation 'com.google.code.gson:gson:2.7'
+
     implementation YUMI_MEDIATION
 }
 
-String version = project.properties['mintegral-china.version']
+String version = project.properties['inneractive.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -16,7 +22,7 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Mintegral-china Adapter'
+    libraryDescription = 'Yumi Mediation Inneractive Adapter'
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
@@ -27,8 +33,7 @@ ext {
 }
 
 if (version) {
-//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
-    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
 }
 
 if (inHouseVersion) {
