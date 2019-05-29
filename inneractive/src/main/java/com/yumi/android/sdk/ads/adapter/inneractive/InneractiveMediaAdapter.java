@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
 
 
@@ -82,7 +83,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         ZplayDebug.d(TAG, "inneractive media init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
-        InneractiveAdManager.initialize(getActivity(), getProvider().getKey1());
+        initInneractiveSDK(getActivity(), getProvider().getKey1());
 
         createListener();
 
