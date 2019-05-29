@@ -21,7 +21,7 @@ public class InmobiExtraHolder {
 				InMobiSdk.init(activity, appid);
 			}else{
 
-				boolean isConsent = YumiSettings.isGDPRConsent();
+				boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
 
 				// https://support.inmobi.com/monetize/android-guidelines/
 				JSONObject consentObject = new JSONObject();

@@ -54,7 +54,7 @@ public class ChartboostUtil {
             return;
         }
 
-        boolean isConsent = YumiSettings.isGDPRConsent();
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://answers.chartboost.com/en-us/child_article/android#gdpr
         if(isConsent) {
             Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.YES_BEHAVIORAL);
