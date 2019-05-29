@@ -14,8 +14,10 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 
 
 public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
@@ -55,7 +57,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                 new TTAdConfig.Builder()
                         .appId(getProvider().getKey1())
                         .useTextureView(false)
-                        .appName(getActivity().getPackageName())
+                        .appName(PackageInfoGetter.getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
                         .allowShowNotify(false)
                         .allowShowPageWhenScreenLock(false)
@@ -152,8 +154,5 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
         }
     }
 
-    private final int dip2px(Context context, int dp) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return ((int) (dp * scale + 0.5f));
-    }
+
 }
