@@ -41,8 +41,7 @@ public class AdMobUtil {
     }
 
     public static AdRequest getAdRequest(Context context) {
-        boolean isConsent = YumiSettings.isGDPRConsent();
-        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN || isConsent) {
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.NON_PERSONALIZED) {
             return new AdRequest.Builder().build();
         }
         // https://developers.google.com/admob/android/eu-consent#forward_consent_to_the_google_mobile_ads_sdk

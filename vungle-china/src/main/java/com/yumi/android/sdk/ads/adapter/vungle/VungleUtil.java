@@ -27,7 +27,7 @@ class VungleUtil {
         if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
-        boolean isConsent = YumiSettings.isGDPRConsent();
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://support.vungle.com/hc/en-us/articles/360002922871-Get-Started-with-Vungle-Android-or-Amazon-SDK-v-6
         Vungle.Consent consent = isConsent ? OPTED_IN : OPTED_OUT;
         Vungle.updateConsentStatus(consent, "1.0.0");
