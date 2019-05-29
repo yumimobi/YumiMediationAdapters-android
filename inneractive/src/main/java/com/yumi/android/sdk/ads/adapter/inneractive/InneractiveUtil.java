@@ -1,7 +1,11 @@
 package com.yumi.android.sdk.ads.adapter.inneractive;
 
+import android.app.Activity;
+
+import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveErrorCode;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 import static android.text.TextUtils.isEmpty;
@@ -37,6 +41,14 @@ public class InneractiveUtil {
         AdError result = new AdError(errorCode);
         result.setErrorMessage(extraMsg);
         return result;
+    }
+
+    public static void initInneractiveSDK(Activity activity,String key1){
+        Boolean isConsent = YumiSettings.isGDPRConsent();
+        if (isConsent == null || isConsent) {
+            InneractiveAdManager.setGdprConsent(isConsent);
+        }
+        InneractiveAdManager.initialize(activity, key1);
     }
 
 }
