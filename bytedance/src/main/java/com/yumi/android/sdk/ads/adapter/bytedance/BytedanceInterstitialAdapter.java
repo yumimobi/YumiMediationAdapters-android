@@ -11,8 +11,10 @@ import com.bytedance.sdk.openadsdk.TTInteractionAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 
 public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -36,7 +38,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
-                    .setImageAcceptedSize(600, 900)
+                    .setImageAcceptedSize(dip2px(getActivity(), 600), dip2px(getActivity(), 600))
                     .build();
 
             mTTAdNative.loadInteractionAd(adSlot, loadListener);
@@ -63,7 +65,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
                 new TTAdConfig.Builder()
                         .appId(getProvider().getKey1())
                         .useTextureView(false)
-                        .appName(getActivity().getPackageName())
+                        .appName(PackageInfoGetter.getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
                         .allowShowNotify(false)
                         .allowShowPageWhenScreenLock(false)
