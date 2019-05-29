@@ -32,7 +32,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 		createListeners();
         final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
 
-        Boolean isConsent = YumiSettings.isGDPRConsent(getContext());
+        Boolean isConsent = YumiSettings.isGDPRConsent();
         if (isConsent != null && !isConsent) {
             // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
             appOptions
