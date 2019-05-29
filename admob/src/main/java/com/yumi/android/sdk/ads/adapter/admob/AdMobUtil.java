@@ -40,7 +40,7 @@ public class AdMobUtil {
     }
 
     public static AdRequest getAdRequest(Context context) {
-        Boolean isConsent = YumiSettings.isGDPRConsent(context);
+        Boolean isConsent = YumiSettings.isGDPRConsent();
         if (isConsent == null || isConsent) {
             return new AdRequest.Builder().build();
         }

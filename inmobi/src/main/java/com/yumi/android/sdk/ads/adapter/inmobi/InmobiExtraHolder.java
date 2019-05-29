@@ -14,7 +14,7 @@ public class InmobiExtraHolder {
 
 	static void initInmobiSDK(Activity activity, String appid) {
 		if (!isInitlalize) {
-			Boolean isConsent = YumiSettings.isGDPRConsent(activity);
+			Boolean isConsent = YumiSettings.isGDPRConsent();
 
 			if(isConsent == null) {
 				InMobiSdk.init(activity, appid);
