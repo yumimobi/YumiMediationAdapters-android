@@ -36,7 +36,7 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "inneractive request new interstitial", onoff);
-        if (requestListener != null) {
+        if (mInterstitialSpot != null && requestListener != null) {
             // Now create a full screen unit controller
             InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
             // Configure the request
