@@ -152,11 +152,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                         });
                     }
 
-                    if (getProvider().getKey2().equals(placementReferenceId)) {
-                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                        adError.setErrorMessage("vungle error: " + throwable);
-                        layerExposureFailed(adError);
-                    }
+
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media LoadAdCallback onError try error", cex, onoff);
                 }
@@ -205,6 +201,12 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
                     if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
                         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+                    }
+
+                    if (getProvider().getKey2().equals(placementReferenceId)) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("vungle error: " + throwable);
+                        layerExposureFailed(adError);
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError try error", cex, onoff);
