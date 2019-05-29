@@ -7,6 +7,7 @@ import com.fyber.inneractive.sdk.external.InneractiveErrorCode;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -44,8 +45,8 @@ public class InneractiveUtil {
     }
 
     public static void initInneractiveSDK(Activity activity,String key1){
-        Boolean isConsent = YumiSettings.isGDPRConsent();
-        if (isConsent == null || isConsent) {
+        boolean isConsent = YumiSettings.isGDPRConsent();
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
             InneractiveAdManager.setGdprConsent(isConsent);
         }
         InneractiveAdManager.initialize(activity, key1);
