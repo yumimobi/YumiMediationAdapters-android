@@ -43,7 +43,7 @@ class ApplovinUtil {
         if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
             return;
         }
-        boolean isConsent = YumiSettings.isGDPRConsent();
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://dash.applovin.com/docs/integration#androidPrivacySettings
         AppLovinPrivacySettings.setHasUserConsent(isConsent, context);
     }

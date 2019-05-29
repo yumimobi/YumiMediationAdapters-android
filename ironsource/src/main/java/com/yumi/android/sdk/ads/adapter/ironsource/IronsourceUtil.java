@@ -38,7 +38,7 @@ class IronsourceUtil {
             return;
         }
 
-        boolean isConsent = YumiSettings.isGDPRConsent();
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://developers.ironsrc.com/ironsource-mobile/android/advanced-settings/
         IronSource.setConsent(isConsent);
     }
