@@ -18,6 +18,7 @@ import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
 
 public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
@@ -53,7 +54,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "inneractive banner init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
 
-        InneractiveAdManager.initialize(getActivity(), getProvider().getKey1());
+        initInneractiveSDK(getActivity(), getProvider().getKey1());
         createListener();
         // initialize rectangle spot
         if (mBannerSpot != null) {
