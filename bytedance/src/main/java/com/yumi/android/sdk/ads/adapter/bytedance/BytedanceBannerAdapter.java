@@ -80,10 +80,12 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onBannerAdLoad(final TTBannerAd ad) {
                 if (ad == null) {
+                    layerPreparedFailed(recodeError(-999, "Bytedance banner TTBannerAd is null"));
                     return;
                 }
                 View bannerView = ad.getBannerView();
                 if (bannerView == null) {
+                    layerPreparedFailed(recodeError(-999, "Bytedance banner bannerView is null"));
                     return;
                 }
 
