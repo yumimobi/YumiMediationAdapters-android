@@ -21,6 +21,7 @@ import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
@@ -65,7 +66,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 new TTAdConfig.Builder()
                         .appId(getProvider().getKey1())
                         .useTextureView(false)
-                        .appName(getActivity().getPackageName())
+                        .appName(PackageInfoGetter.getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
                         .allowShowNotify(false)
                         .allowShowPageWhenScreenLock(false)
