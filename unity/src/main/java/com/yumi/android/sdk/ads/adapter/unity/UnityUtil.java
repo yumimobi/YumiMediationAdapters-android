@@ -25,7 +25,7 @@ public class UnityUtil {
         if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
             return;
         }
-        boolean isConsent = YumiSettings.isGDPRConsent();
+        boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://unityads.unity3d.com/help/legal/gdpr
         MetaData gdprMetaData = new MetaData(context);
         gdprMetaData.set("gdpr.consent", isConsent);
