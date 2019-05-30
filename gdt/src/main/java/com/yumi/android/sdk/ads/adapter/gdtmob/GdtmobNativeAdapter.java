@@ -243,18 +243,17 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "Gdt native Adapter AdPatternType : " + mGdtData.getAdPatternType(), onoff);
             if (mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                 if (mediaview != null) {
-
-
+                    setNativeAdVideoController(new GdtNativeViewController(mGdtData, mediaview));
                 }
             }
 
         }
 
-        public void onResume(){
+        public void onResume() {
             ZplayDebug.v(TAG, "Gdt native Adapter onResume", onoff);
-           if(mGdtData != null){
-               mGdtData.resume();
-           }
+            if (mGdtData != null) {
+                mGdtData.resume();
+            }
         }
 
         public class GdtNativeViewController extends YumiNativeAdVideoController {
