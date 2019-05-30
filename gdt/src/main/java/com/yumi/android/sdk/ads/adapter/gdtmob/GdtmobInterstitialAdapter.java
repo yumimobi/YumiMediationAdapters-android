@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
-import com.qq.e.ads.interstitial.InterstitialAD;
-import com.qq.e.ads.interstitial.InterstitialADListener;
+import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
+import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -16,16 +16,16 @@ import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "GdtInterstitialAdapter";
-    private InterstitialADListener interstitialListener;
-    private InterstitialAD interstitial;
+    private UnifiedInterstitialADListener unifiedInterstitialListener;
+    private UnifiedInterstitialAD unifiedInterstitial;
     protected boolean interstitialReady;
     private static final int REQ_INTERSTITIAL = 0x321;
 
     private final Handler gdtInterstitialHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (msg.what == REQ_INTERSTITIAL) {
-                if (interstitial != null) {
-                    interstitial.loadAD();
+                if (unifiedInterstitial != null) {
+                    unifiedInterstitial.loadAD();
                 }
             }
         }
@@ -49,9 +49,8 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected final void callOnActivityDestroy() {
-        if (interstitial != null) {
-            interstitial.closePopupWindow();
-            interstitial.destroy();
+        if (unifiedInterstitial != null) {
+            unifiedInterstitial.destroy();
         }
     }
 
@@ -64,23 +63,22 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "gdt request new interstitial", onoff);
         interstitialReady = false;
-        if (interstitial == null) {
-            interstitial = new InterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2());
-            interstitial.setADListener(interstitialListener);
+        if (unifiedInterstitial == null) {
+            unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedInterstitialListener);
         }
         gdtInterstitialHandler.sendEmptyMessageDelayed(REQ_INTERSTITIAL, 1000);
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        if (interstitial != null) {
-            interstitial.show(activity);
+        if (unifiedInterstitial != null) {
+            unifiedInterstitial.show(activity);
         }
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (interstitial != null && interstitialReady) {
+        if (unifiedInterstitial != null && interstitialReady) {
             return true;
         }
         return false;
@@ -90,7 +88,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
         ZplayDebug.i(TAG, "pId : " + getProvider().getKey2(), onoff);
-        interstitialListener = new InterstitialADListener() {
+        unifiedInterstitialListener = new UnifiedInterstitialADListener() {
 
             @Override
             public void onNoAD(AdError adError) {
@@ -128,8 +126,8 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onADClosed() {
-                if (interstitial != null) {
-                    interstitial.destroy();
+                if (unifiedInterstitial != null) {
+                    unifiedInterstitial.destroy();
                 }
                 ZplayDebug.d(TAG, "gdt interstitial closed", onoff);
                 layerClosed();
