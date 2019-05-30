@@ -4,17 +4,25 @@ import android.app.Activity;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.qq.e.ads.nativ.NativeAD;
-import com.qq.e.ads.nativ.NativeAD.NativeAdListener;
-import com.qq.e.ads.nativ.NativeADDataRef;
+import com.qq.e.ads.cfg.VideoOption;
+import com.qq.e.ads.nativ.MediaView;
+import com.qq.e.ads.nativ.NativeADEventListener;
+import com.qq.e.ads.nativ.NativeADMediaListener;
+import com.qq.e.ads.nativ.NativeADUnifiedListener;
+import com.qq.e.ads.nativ.NativeUnifiedAD;
+import com.qq.e.ads.nativ.NativeUnifiedADData;
+import com.qq.e.ads.nativ.widget.NativeAdContainer;
+import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.self.ui.ResFactory;
@@ -34,7 +42,7 @@ import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawabl
  */
 public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
-    private NativeAD nativeAD;
+    private NativeUnifiedAD nativeAD;
 
     protected GdtmobNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -50,29 +58,25 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         if (nativeAD != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             ZplayDebug.v(TAG, "Gdt native Adapter invoke onPrepareNative adCount=" + getCurrentPoolSpace(), onoff);
-            nativeAD.loadAD(currentPoolSpace);
+            nativeAD.loadData(currentPoolSpace);
         }
     }
 
     @Override
     protected void init() {
         ZplayDebug.v(TAG, "Gdt native Adapter init key1 = " + getProvider().getKey1() + ", key2 = " + getProvider().getKey2(), onoff);
-        nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeAdListener() {
+        nativeAD = new NativeUnifiedAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new NativeADUnifiedListener() {
             @Override
-            public void onADStatusChanged(NativeADDataRef arg0) {
-            }
-
-            @Override
-            public void onADLoaded(List<NativeADDataRef> arg0) {
+            public void onADLoaded(List<NativeUnifiedADData> adlist) {
                 ZplayDebug.v(TAG, "onADLoaded", onoff);
                 final List<NativeContent> list = new ArrayList<>();
-                for (final NativeADDataRef item : arg0) {
-                    try{
+                for (final NativeUnifiedADData item : adlist) {
+                    try {
                         final NativeAdContent content = new NativeAdContent(item);
                         if (content.isValid()) {
                             list.add(content);
                         }
-                    }catch (Exception e) {
+                    } catch (Exception e) {
                         ZplayDebug.e(TAG, "gdt data parse error : " + e, onoff);
                     }
                 }
@@ -98,22 +102,10 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                         layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but cannot download image data")));
                     }
                 });
-
             }
 
             @Override
             public void onNoAD(AdError adError) {
-                if (adError == null) {
-                    ZplayDebug.d(TAG, "GDT nativead onNoAD adError = null", onoff);
-                    layerPreparedFailed(recodeError(null));
-                    return;
-                }
-                ZplayDebug.w(TAG, "GDT nativead onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
-                layerPreparedFailed(recodeError(adError));
-            }
-
-            @Override
-            public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
                 if (adError == null) {
                     ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
                     layerPreparedFailed(recodeError(null));
@@ -123,6 +115,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 layerPreparedFailed(recodeError(adError));
             }
         });
+
     }
 
 
@@ -148,18 +141,20 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     private class NativeAdContent extends NativeContent {
 
-        private NativeADDataRef mGdtData;
+        private NativeUnifiedADData mGdtData;
+        private MediaView mediaview;
 
-        private NativeAdContent(NativeADDataRef gdtData) {
+        private NativeAdContent(NativeUnifiedADData gdtData) {
             mGdtData = gdtData;
             setTitle(gdtData.getTitle());
             setDesc(gdtData.getDesc());
-            setStarRating((double) gdtData.getAPPScore());
+            setStarRating((double) gdtData.getAppScore());
             setCoverImage(new Image(gdtData.getImgUrl()));
             setIcon(new Image(gdtData.getIconUrl()));
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
 
             setMaterialCreationTime(System.currentTimeMillis());
+            setHasVideoContent(mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO);
             setMaterialEtime(getProvider().getMaterialEtime());
             setNativeAdVideoController(new YumiNativeAdVideoController());
             setProviderName("Gdt");
@@ -169,6 +164,16 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         public void trackView() {
             if (getNativeAdView() == null) {
                 ZplayDebug.v(TAG, "GDT native trackView getNativeAdView() is null", onoff);
+                return;
+            }
+
+            YumiNativeAdView yumiNativeAdView = getNativeAdView();
+            ViewGroup parent;
+            if (yumiNativeAdView.getParent() instanceof ViewGroup) {
+                parent = (ViewGroup) yumiNativeAdView.getParent();
+                parent.removeView(yumiNativeAdView);
+            }else{
+                ZplayDebug.v(TAG, "GDT native parent view is null", onoff);
                 return;
             }
 
@@ -196,25 +201,157 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 getNativeAdView().requestLayout();
             }
 
-            mGdtData.onExposured(getNativeAdView());
-            layerExposure();
+            if (mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
+                if (yumiNativeAdView.getMediaLayout() != null) {
+                    mediaview = new MediaView(getActivity());
+                    mediaview.setVisibility(View.VISIBLE);
+                    ((ViewGroup) yumiNativeAdView.getMediaLayout()).removeAllViews();
+                    ((ViewGroup) yumiNativeAdView.getMediaLayout()).addView(mediaview);
+                }
+            }
 
-            getNativeAdView().setClickable(true);
-            getNativeAdView().setOnClickListener(new View.OnClickListener() {
+            NativeAdContainer nativeAdContainer = new NativeAdContainer(getActivity());
+            nativeAdContainer.removeAllViews();
+            nativeAdContainer.addView(yumiNativeAdView);
+
+            parent.addView(nativeAdContainer);
+
+            List<View> clickableViews = new ArrayList<>();
+            clickableViews.add(getNativeAdView());
+            if (getNativeAdView().getCallToActionView() != null) {
+                clickableViews.add(getNativeAdView().getCallToActionView());
+            }
+            mGdtData.bindAdToView(getActivity(), nativeAdContainer, null, clickableViews);
+
+            mGdtData.setNativeAdEventListener(new NativeADEventListener() {
                 @Override
-                public void onClick(View v) {
-                    layerClicked(-99, -99);
-                    mGdtData.onClicked(v);
+                public void onADExposed() {
+                    ZplayDebug.v(TAG, "Gdt native Adapter onADExposed", onoff);
+                    layerExposure();
+                }
+
+                @Override
+                public void onADClicked() {
+                    ZplayDebug.v(TAG, "Gdt native Adapter onADClicked", onoff);
+                    layerClicked(-99f, -99f);
+
+                }
+
+                @Override
+                public void onADError(AdError adError) {
+                    ZplayDebug.v(TAG, "Gdt native Adapter onADError" + adError.getErrorMsg(), onoff);
+                }
+
+                @Override
+                public void onADStatusChanged() {
+                    ZplayDebug.v(TAG, "Gdt native Adapter onADStatusChanged", onoff);
                 }
             });
-            if (getNativeAdView().getCallToActionView() != null) {
-                getNativeAdView().getCallToActionView().setOnClickListener(new View.OnClickListener() {
+            ZplayDebug.v(TAG, "Gdt native Adapter AdPatternType : " + mGdtData.getAdPatternType(), onoff);
+            if (mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
+                if (mediaview != null) {
+                    setNativeAdVideoController(new GdtNativeViewController(mGdtData, mediaview));
+                }
+            }
+
+        }
+
+        public void onResume() {
+            ZplayDebug.v(TAG, "Gdt native Adapter onResume", onoff);
+            if (mGdtData != null) {
+                mGdtData.resume();
+            }
+        }
+
+        public class GdtNativeViewController extends YumiNativeAdVideoController {
+            private NativeUnifiedADData gdtData;
+            YumiVideoLifecycleCallbacks videoLifecycleCallbacks;
+
+            private GdtNativeViewController(NativeUnifiedADData gdtData, MediaView mediaview) {
+                this.gdtData = gdtData;
+                ZplayDebug.v(TAG, "Gdt native Adapter AdPatternType : bindMediaView", onoff);
+                gdtData.bindMediaView(mediaview, new VideoOption.Builder()
+                        .setAutoPlayMuted(true).setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI).build(), new NativeADMediaListener() {
                     @Override
-                    public void onClick(View v) {
-                        getNativeAdView().performClick();
+                    public void onVideoInit() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoInit", onoff);
+                    }
+
+                    @Override
+                    public void onVideoLoading() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoLoading", onoff);
+                    }
+
+                    @Override
+                    public void onVideoReady() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoReady", onoff);
+                    }
+
+                    @Override
+                    public void onVideoLoaded(int videoDuration) {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoLoaded", onoff);
+                    }
+
+                    @Override
+                    public void onVideoStart() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoStart", onoff);
+                        if (videoLifecycleCallbacks != null) {
+                            videoLifecycleCallbacks.onVideoPlay();
+                        }
+                    }
+
+                    @Override
+                    public void onVideoPause() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoPause", onoff);
+                        if (videoLifecycleCallbacks != null) {
+                            videoLifecycleCallbacks.onVideoPause();
+                        }
+                    }
+
+                    @Override
+                    public void onVideoResume() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoResume", onoff);
+                    }
+
+                    @Override
+                    public void onVideoCompleted() {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoCompleted", onoff);
+                        if (videoLifecycleCallbacks != null) {
+                            videoLifecycleCallbacks.onVideoEnd();
+                        }
+                    }
+
+                    @Override
+                    public void onVideoError(AdError error) {
+                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoError" + error.getErrorMsg(), onoff);
                     }
                 });
             }
+
+            @Override
+            public void play() {
+                if (gdtData != null) {
+                    gdtData.resumeVideo();
+                }
+            }
+
+            @Override
+            public void pause() {
+                if (gdtData != null) {
+                    gdtData.pauseVideo();
+                }
+            }
+
+            @Override
+            public double getAspectRatio() {
+                return 0;
+            }
+
+            @Override
+            public void setVideoLifecycleCallbacks(YumiVideoLifecycleCallbacks videoLifecycleCallbacks) {
+                this.videoLifecycleCallbacks = videoLifecycleCallbacks;
+            }
+
         }
     }
 }
