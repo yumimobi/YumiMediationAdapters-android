@@ -168,14 +168,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             }
 
             YumiNativeAdView yumiNativeAdView = getNativeAdView();
-            ViewGroup parent;
-            if (yumiNativeAdView.getParent() instanceof ViewGroup) {
-                parent = (ViewGroup) yumiNativeAdView.getParent();
-                parent.removeView(yumiNativeAdView);
-            }else{
-                ZplayDebug.v(TAG, "GDT native parent view is null", onoff);
-                return;
-            }
+            ViewGroup parent = (ViewGroup) yumiNativeAdView.getParent();
+            parent.removeView(yumiNativeAdView);
 
             ImageView adLogo = new ImageView(getNativeAdView().getContext());
             Drawable zplayad_media_gdt_logo = ResFactory.getDrawableByAssets("zplayad_media_gdt_logo", getNativeAdView().getContext());
@@ -213,7 +207,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             NativeAdContainer nativeAdContainer = new NativeAdContainer(getActivity());
             nativeAdContainer.removeAllViews();
             nativeAdContainer.addView(yumiNativeAdView);
-
             parent.addView(nativeAdContainer);
 
             List<View> clickableViews = new ArrayList<>();

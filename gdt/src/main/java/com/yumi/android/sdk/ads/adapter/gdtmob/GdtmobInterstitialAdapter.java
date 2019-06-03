@@ -129,9 +129,8 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onADClosed() {
-                interstitialReady = false;
-                if (interstitial != null) {
-                    interstitial.destroy();
+                if (unifiedInterstitial != null) {
+                    unifiedInterstitial.destroy();
                 }
                 ZplayDebug.d(TAG, "gdt interstitial closed", onoff);
                 layerClosed();
