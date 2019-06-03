@@ -25,7 +25,7 @@ import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BytedanceSplashAdapter";
 
-    TTAdNative mTTAdNative;
+    private TTAdNative mTTAdNative;
 
     public BytedanceSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -69,13 +69,13 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "onError: " + message);
-                layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: " + message));
+                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: " + message));
             }
 
             @Override
             public void onTimeout() {
                 Log.d(TAG, "onTimeout: ");
-                layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: timeout"));
+                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: timeout"));
             }
 
             @Override
