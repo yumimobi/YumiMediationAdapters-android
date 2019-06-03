@@ -53,7 +53,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onADExposure() {
-                layerExposure();
+                // GDT Demo 中没有这个方法，而且测试发现，总是先触发 onADPresent 然后再触发此方法，所以忽略这个方法
             }
         }, getProvider().getOutTime() * 1000);
     }
