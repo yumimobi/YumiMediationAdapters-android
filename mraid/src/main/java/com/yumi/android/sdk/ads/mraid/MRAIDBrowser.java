@@ -171,7 +171,6 @@ public class MRAIDBrowser extends Activity {
          */
         webSettings.setSupportZoom(true);
         webSettings.setBuiltInZoomControls(true);
-        webSettings.setUseWideViewPort(true);
 
         webView.loadUrl(intent.getStringExtra(URL_EXTRA));
         webView.setWebViewClient(new WebViewClient() {
