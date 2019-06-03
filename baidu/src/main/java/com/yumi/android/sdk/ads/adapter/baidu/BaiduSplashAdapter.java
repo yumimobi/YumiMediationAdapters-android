@@ -40,7 +40,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onAdFailed(String arg0) {
                 ZplayDebug.e(TAG, "Baidu Splash ad failed: " + arg0);
-                layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "baidu: " + arg0));
+                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "baidu: " + arg0));
             }
 
             @Override

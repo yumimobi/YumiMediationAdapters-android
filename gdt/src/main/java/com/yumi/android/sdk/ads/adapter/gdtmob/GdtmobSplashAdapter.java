@@ -33,7 +33,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAD: " + adError.getErrorMsg());
-                layerExposureFailed(new com.yumi.android.sdk.ads.publish.AdError(LayerErrorCode.ERROR_NO_FILL, "GDT: " + adError.getErrorMsg()));
+                layerPreparedFailed(new com.yumi.android.sdk.ads.publish.AdError(LayerErrorCode.ERROR_NO_FILL, "GDT: " + adError.getErrorMsg()));
             }
 
             @Override
