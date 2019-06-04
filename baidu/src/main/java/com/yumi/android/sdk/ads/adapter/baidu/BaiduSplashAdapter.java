@@ -3,6 +3,7 @@ package com.yumi.android.sdk.ads.adapter.baidu;
 import android.app.Activity;
 import android.util.Log;
 
+import com.baidu.mobads.AdView;
 import com.baidu.mobads.SplashAd;
 import com.baidu.mobads.SplashLpCloseListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
@@ -45,6 +46,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onAdPresent() {
+                ZplayDebug.i(TAG, "onAdPresent");
                 layerExposure();
             }
 
@@ -54,7 +56,8 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
                 layerClicked(-99f, -99f);
             }
         };
+        AdView.setAppSid(getActivity(),getProvider().getKey1());
         // canClick参数表示是否接受点击类型的⼴广告，强烈建议设置为 true，否则影响广告填充
-        new SplashAd(getActivity(), getDeveloperCntainer(), listener, getProvider().getKey1(), true);
+        new SplashAd(getActivity(), getDeveloperCntainer(), listener, getProvider().getKey2(), true);
     }
 }
