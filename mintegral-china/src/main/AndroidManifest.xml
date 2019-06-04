@@ -16,6 +16,10 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
+        <activity
+            android:name="com.mintegral.msdk.mtgjscommon.authority.activity.MTGAuthorityActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+
         <service android:name="com.mintegral.msdk.shell.MTGService">
             <intent-filter>
                 <action android:name="com.mintegral.msdk.download.action" />
