@@ -109,9 +109,6 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     private AdSize calculateBannerSize() {
-        if (isMatchWindowWidth && isPortrait(getActivity())) {
-            return SMART_BANNER;
-        }
 
         switch (bannerSize) {
             case BANNER_SIZE_SMART:
