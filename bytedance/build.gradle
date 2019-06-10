@@ -6,6 +6,7 @@ dependencies {
     implementation "com.yumimobi.ads.thirdparty:bytedance:1.9.9.5.3"
     implementation YUMI_MEDIATION
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    implementation 'com.yumimobi.ads.thirdparty:androidquery:0.26.7.1'
 }
 
 String version = project.properties['bytedance.version']
