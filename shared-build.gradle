@@ -33,7 +33,13 @@ ext {
     IRONSOURCE = '6.8.4.0'
     MOBVISTA = '9.11.0.0'
     UNITY = '3.1.0.0'
-    VUNGLE = '6.3.24.0'
+    VUNGLE = '6.4.10.0'
     APPLOVIN = '8.0.2.1'
     PLAY_SERVICES_ADS = '17.2.0'
+
+    // innerativeAdSDK
+    IASDKCORE = '7.3.0.3'
+    IAVIDEOKIT = '7.3.0.3'
+    IAMRAIDKIT = '7.3.0.3'
+    IANATIVEKIT = '7.3.0.3'
 }

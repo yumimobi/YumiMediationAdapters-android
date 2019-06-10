@@ -16,10 +16,10 @@ dependencies {
 
     implementation 'com.yumimobi.ads.thirdparty:iqpscore:2.3.2111'
     implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1.0'
-    implementation 'com.yumimobi.ads.thirdparty:iasdkcore:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:iavideokit:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:iamraidkit:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:ianativekit:7.1.6.0'
+    implementation "com.yumimobi.ads.thirdparty:iasdkcore:$IASDKCORE"
+    implementation "com.yumimobi.ads.thirdparty:iavideokit:$IAVIDEOKIT"
+    implementation "com.yumimobi.ads.thirdparty:iamraidkit:$IAMRAIDKIT"
+    implementation "com.yumimobi.ads.thirdparty:ianativekit:$IANATIVEKIT"
     implementation 'com.yumimobi.ads.thirdparty:soma:8.0.1.0'
     implementation 'com.yumimobi.ads.thirdparty:presagemoat:3.0.13.0'
 
