@@ -1,6 +1,9 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import com.baidu.mobads.AdView;
@@ -20,6 +23,14 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BaiduSplashAdapter";
 
+    private static final int WHAT_TIMEOUT = 0;
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            layerTimeout();
+        }
+    };
+
     public BaiduSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
@@ -27,6 +38,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
     @Override
     protected void onPrepareSplashLayer() {
         Log.d(TAG, "onPrepareSplashLayer: ");
+        mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
         SplashLpCloseListener listener = new SplashLpCloseListener() {
             @Override
             public void onLpClosed() {
@@ -41,11 +53,13 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onAdFailed(String arg0) {
                 ZplayDebug.e(TAG, "Baidu Splash ad failed: " + arg0);
+                mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "baidu: " + arg0));
             }
 
             @Override
             public void onAdPresent() {
+                mHandler.removeMessages(WHAT_TIMEOUT);
                 ZplayDebug.i(TAG, "onAdPresent");
                 layerExposure();
             }
