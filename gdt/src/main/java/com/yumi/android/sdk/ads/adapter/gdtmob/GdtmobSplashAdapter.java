@@ -1,6 +1,9 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 
 import com.qq.e.ads.splash.SplashAD;
@@ -17,6 +20,13 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
  */
 public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "GdtmobSplashAdapter";
+    private static final int WHAT_TIMEOUT = 0;
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            layerTimeout();
+        }
+    };
 
     public GdtmobSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -24,6 +34,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
 
     @Override
     protected void onPrepareSplashLayer() {
+        mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
         new SplashAD(getActivity(), getDeveloperCntainer(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
             @Override
             public void onADDismissed() {
@@ -33,11 +44,13 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAD: " + adError.getErrorMsg());
+                mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(new com.yumi.android.sdk.ads.publish.AdError(LayerErrorCode.ERROR_NO_FILL, "GDT: " + adError.getErrorMsg()));
             }
 
             @Override
             public void onADPresent() {
+                mHandler.removeMessages(WHAT_TIMEOUT);
                 layerExposure();
             }
 
