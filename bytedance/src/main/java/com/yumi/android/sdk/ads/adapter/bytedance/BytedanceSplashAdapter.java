@@ -1,6 +1,9 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 
@@ -24,6 +27,13 @@ import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
  */
 public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BytedanceSplashAdapter";
+    private static final int WHAT_TIMEOUT = 0;
+    private Handler mHandler = new Handler(Looper.getMainLooper()){
+        @Override
+        public void handleMessage(Message msg) {
+            layerTimeout();
+        }
+    };
 
     private TTAdNative mTTAdNative;
 
@@ -56,6 +66,8 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     }
 
     private void loadSplashAd() {
+        mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
+
         int[] realSize = WindowSizeUtils.getRealSize(getActivity());
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
@@ -69,12 +81,15 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onError(int code, String message) {
                 Log.d(TAG, "onError: " + message);
+                mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: " + message));
             }
 
             @Override
             public void onTimeout() {
                 Log.d(TAG, "onTimeout: ");
+                mHandler.removeMessages(WHAT_TIMEOUT);
+                layerTimeout();
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: timeout"));
             }
 
@@ -102,6 +117,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                     @Override
                     public void onAdShow(View view, int type) {
                         Log.d(TAG, "onAdShow: " + type);
+                        mHandler.removeMessages(WHAT_TIMEOUT);
                         layerExposure();
                     }
 
