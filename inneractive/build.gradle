@@ -3,9 +3,9 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.yumimobi.ads.thirdparty:iasdkcore:7.3.0.3'
-    implementation 'com.yumimobi.ads.thirdparty:iavideokit:7.3.0.3'
-    implementation 'com.yumimobi.ads.thirdparty:iamraidkit:7.3.0.3'
+    implementation "com.yumimobi.ads.thirdparty:iasdkcore:$IASDKCORE"
+    implementation "com.yumimobi.ads.thirdparty:iavideokit:$IAVIDEOKIT"
+    implementation "com.yumimobi.ads.thirdparty:iamraidkit:$IAMRAIDKIT"
 
     implementation 'com.google.code.gson:gson:2.7'
 
