@@ -1,11 +1,13 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
 import android.app.Activity;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConfig;
@@ -28,7 +30,7 @@ import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BytedanceSplashAdapter";
     private static final int WHAT_TIMEOUT = 0;
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             layerTimeout();
@@ -36,9 +38,20 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     };
 
     private TTAdNative mTTAdNative;
+    private ViewTreeObserver.OnWindowFocusChangeListener mLayoutListener;
 
     public BytedanceSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            mLayoutListener = new ViewTreeObserver.OnWindowFocusChangeListener() {
+                @Override
+                public void onWindowFocusChanged(boolean hasFocus) {
+                    if (!hasFocus) {
+                        removeSplashViews();
+                    }
+                }
+            };
+        }
     }
 
     @Override
@@ -83,6 +96,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 Log.d(TAG, "onError: " + message);
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: " + message));
+                removeSplashViews();
             }
 
             @Override
@@ -91,10 +105,11 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerTimeout();
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: timeout"));
+                removeSplashViews();
             }
 
             @Override
-            public void onSplashAdLoad(TTSplashAd ad) {
+            public void onSplashAdLoad(final TTSplashAd ad) {
                 Log.d(TAG, "开屏广告请求成功");
                 if (ad == null) {
                     layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: TTSplashAd is null."));
@@ -119,21 +134,35 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                         Log.d(TAG, "onAdShow: " + type);
                         mHandler.removeMessages(WHAT_TIMEOUT);
                         layerExposure();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                            getDeveloperCntainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
+                        }
                     }
 
                     @Override
                     public void onAdSkip() {
                         Log.d(TAG, "onAdSkip");
                         layerClosed();
+                        removeSplashViews();
                     }
 
                     @Override
                     public void onAdTimeOver() {
                         Log.d(TAG, "onAdTimeOver");
                         layerClosed();
+                        removeSplashViews();
                     }
                 });
             }
         }, getProvider().getOutTime() * 1000);
+    }
+
+    private void removeSplashViews() {
+        if (getDeveloperCntainer() != null) {
+            getDeveloperCntainer().removeAllViews();
+            if (mLayoutListener != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                getDeveloperCntainer().getViewTreeObserver().removeOnWindowFocusChangeListener(mLayoutListener);
+            }
+        }
     }
 }
