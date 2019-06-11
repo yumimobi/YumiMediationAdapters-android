@@ -124,6 +124,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                     @Override
                     public void onAdSkip() {
                         Log.d(TAG, "onAdSkip");
+                        layerClosed();
                     }
 
                     @Override
