@@ -22,6 +22,8 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+
 /**
  * Description:
  * <p>
@@ -95,7 +97,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
             public void onError(int code, String message) {
                 Log.d(TAG, "onError: " + message);
                 mHandler.removeMessages(WHAT_TIMEOUT);
-                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: " + message));
+                layerPreparedFailed(recodeError(code, message));
                 removeSplashViews();
             }
 
