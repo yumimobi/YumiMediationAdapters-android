@@ -4,6 +4,7 @@ import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 import static android.text.TextUtils.isEmpty;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NON_RESPONSE;
 
 /**
  * Created by hjl on 2017/10/26.
@@ -24,6 +25,8 @@ public class GdtUtil {
 
         if (gdtError.getErrorCode() == 4003) {
             result = new AdError(LayerErrorCode.ERROR_INVALID);
+        } else if (gdtError.getErrorCode() == 4011) {
+            result = new AdError(ERROR_NON_RESPONSE);
         } else if (gdtError.getErrorCode() == 5004) {
             result = new AdError(LayerErrorCode.ERROR_NO_FILL);
         } else {
