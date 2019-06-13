@@ -103,8 +103,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
             public void onTimeout() {
                 Log.d(TAG, "onTimeout: ");
                 mHandler.removeMessages(WHAT_TIMEOUT);
-                layerTimeout();
-                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: timeout"));
+                layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NON_RESPONSE, "Bytedance: timeout"));
                 removeSplashViews();
             }
 
