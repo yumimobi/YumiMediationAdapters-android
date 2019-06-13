@@ -11,7 +11,8 @@ import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 
 /**
  * Description:
@@ -45,7 +46,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
             public void onNoAD(AdError adError) {
                 Log.d(TAG, "onNoAD: " + adError.getErrorMsg());
                 mHandler.removeMessages(WHAT_TIMEOUT);
-                layerPreparedFailed(new com.yumi.android.sdk.ads.publish.AdError(LayerErrorCode.ERROR_NO_FILL, "GDT: " + adError.getErrorMsg()));
+                layerPreparedFailed(recodeError(adError));
             }
 
             @Override
