@@ -252,7 +252,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         public void onResume() {
             ZplayDebug.v(TAG, "Gdt native Adapter onResume", onoff);
             if (mGdtData != null) {
-                mGdtData.resume();
+                try {
+                    mGdtData.resume();
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onResume: " + e);
+                }
             }
         }
 
@@ -324,14 +328,22 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             @Override
             public void play() {
                 if (gdtData != null) {
-                    gdtData.resumeVideo();
+                    try {
+                        gdtData.resumeVideo();
+                    } catch (Exception e) {
+                        ZplayDebug.d(TAG, "play: " + e);
+                    }
                 }
             }
 
             @Override
             public void pause() {
                 if (gdtData != null) {
-                    gdtData.pauseVideo();
+                    try {
+                        gdtData.pauseVideo();
+                    } catch (Exception e) {
+                        ZplayDebug.d(TAG, "pause: " + e);
+                    }
                 }
             }
 
