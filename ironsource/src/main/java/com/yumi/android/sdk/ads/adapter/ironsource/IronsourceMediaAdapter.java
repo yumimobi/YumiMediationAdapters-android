@@ -5,7 +5,6 @@ import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyRewardedVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
@@ -32,6 +31,13 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         updateGDPRStatus(getContext());
+        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(getProvider().getKey2());
+        if (isReady) {
+            ZplayDebug.i(TAG, "IronSource Media onPrepareMedia isReady  instanceId : " + getProvider().getKey2(), onoff);
+            layerPrepared();
+        } else {
+            IronSource.loadISDemandOnlyRewardedVideo(getProvider().getKey2());
+        }
     }
 
     @Override
