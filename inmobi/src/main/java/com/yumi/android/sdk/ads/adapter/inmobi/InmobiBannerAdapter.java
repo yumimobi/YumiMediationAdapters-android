@@ -72,7 +72,12 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
         banner = new InMobiBanner(getActivity(), placementID);
         banner.setListener(bannerListener);
-        banner.setEnableAutoRefresh(false);
+        if (getProvider().getAutoRefreshInterval() > 0) {
+            banner.setEnableAutoRefresh(true);
+            banner.setRefreshInterval(getProvider().getAutoRefreshInterval());
+        } else {
+            banner.setEnableAutoRefresh(false);
+        }
         container.addView(banner, new FrameLayout.LayoutParams(bannerWidth, bannerHeight, Gravity.CENTER));
         sendChangeViewBeforePrepared(container);
         banner.load();
@@ -129,7 +134,7 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onAdLoadSucceeded(InMobiBanner arg0) {
                 ZplayDebug.d(TAG, "inmobi banner load successed", onoff);
-                layerPrepared(container, true);
+                layerPrepared(container, false);
             }
 
             @Override
@@ -144,6 +149,7 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdDisplayed(InMobiBanner arg0) {
+                layerExposure();
             }
 
             @Override

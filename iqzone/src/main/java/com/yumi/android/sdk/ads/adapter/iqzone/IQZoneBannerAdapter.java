@@ -22,6 +22,7 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
 public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
     private static final String TAG = "IQZoneBannerAdapter";
     private IQzoneBannerView imdBannerAd;
+    private boolean hasShownAd;
 
     protected IQZoneBannerAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -36,7 +37,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             return;
         }
         imdBannerAd.onAttached(getActivity());
-        imdBannerAd.loadAd(getProvider().getKey1(), 0, newAdEventListener());
+        imdBannerAd.loadAd(getProvider().getKey1(), getProvider().getAutoRefreshInterval(), newAdEventListener());
     }
 
     private AdEventsListener newAdEventListener() {
@@ -44,12 +45,14 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adLoaded() {
                 ZplayDebug.d(TAG, "IQZone Banner adLoaded", onoff);
-                layerPrepared(imdBannerAd, true);
+                layerPrepared(imdBannerAd, false);
             }
 
             @Override
             public void adImpression() {
                 ZplayDebug.d(TAG, "IQZone Banner adImpression", onoff);
+                layerExposure();
+                hasShownAd = true;
             }
 
             @Override
@@ -77,7 +80,10 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Banner adDismissed", onoff);
-                layerClosed();
+                if (hasShownAd) {
+                    hasShownAd = false;
+                    layerClosed();
+                }
             }
         };
     }
