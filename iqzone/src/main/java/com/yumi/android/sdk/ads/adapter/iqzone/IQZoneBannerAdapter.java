@@ -36,7 +36,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             return;
         }
         imdBannerAd.onAttached(getActivity());
-        imdBannerAd.loadAd(getProvider().getKey1(), 0, newAdEventListener());
+        imdBannerAd.loadAd(getProvider().getKey1(), getProvider().getAutoRefreshInterval(), newAdEventListener());
     }
 
     private AdEventsListener newAdEventListener() {
