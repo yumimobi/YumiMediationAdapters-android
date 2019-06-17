@@ -85,6 +85,9 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                     layerPreparedFailed(recodeError(-999, "Bytedance banner TTBannerAd is null"));
                     return;
                 }
+                if(getProvider().getAutoRefreshInterval() > 0) {
+                    ad.setSlideIntervalTime(getProvider().getAutoRefreshInterval());
+                }
                 View bannerView = ad.getBannerView();
                 if (bannerView == null) {
                     layerPreparedFailed(recodeError(-999, "Bytedance banner bannerView is null"));

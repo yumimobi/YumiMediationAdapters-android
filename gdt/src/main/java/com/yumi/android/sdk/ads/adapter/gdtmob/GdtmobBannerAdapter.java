@@ -49,7 +49,8 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 		}
 		ZplayDebug.d(TAG, "gdt request new banner", onoff);
 		unifiedBanner = new UnifiedBannerView(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedBannerListener);
-		unifiedBanner.setRefresh(0);
+		//设置广告轮播时间，为0或30~120之间的数字，单位为s,0标识不自动轮播
+		unifiedBanner.setRefresh(getProvider().getAutoRefreshInterval());
 		unifiedBanner.loadAD();
 	}
 
