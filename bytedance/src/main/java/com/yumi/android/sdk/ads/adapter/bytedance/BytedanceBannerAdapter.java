@@ -103,11 +103,10 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
                     @Override
                     public void onAdShow(View view, int type) {
-                        layerExposure();
                     }
                 });
                 ZplayDebug.d(TAG, "Bytedance banner Prepared", onoff);
-                layerPrepared(bannerView, false);
+                layerPrepared(bannerView, true);
             }
         };
     }

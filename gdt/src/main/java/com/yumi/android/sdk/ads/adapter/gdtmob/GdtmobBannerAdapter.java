@@ -74,7 +74,7 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onADReceive() {
 				ZplayDebug.d(TAG, "gdt banner prepared", onoff);
-				layerPrepared(unifiedBanner, false);
+				layerPrepared(unifiedBanner, true);
 			}
 
 			
@@ -93,7 +93,6 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 			@Override
 			public void onADExposure() {
 				ZplayDebug.d(TAG, "gdt banner shown", onoff);
-				layerExposure();				
 			}
 			
 			@Override
