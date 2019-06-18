@@ -79,7 +79,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             public void adReceived(AppLovinAd appLovinAd) {
                 ZplayDebug.d(TAG, "AppLovin banner adReceived", onoff);
                 adView.renderAd(appLovinAd);
-                layerPrepared(adView, false);
+                layerPrepared(adView, true);
             }
 
             @Override
@@ -101,7 +101,6 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
                 ZplayDebug.d(TAG, "AppLovin banner adDisplayed", onoff);
-                layerExposure();
             }
 
             @Override
