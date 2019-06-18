@@ -9,9 +9,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
-import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
-import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.google.android.gms.ads.AdSize.BANNER;
@@ -102,11 +100,6 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdLoaded() {
-                if(isInterruptSmartBanner()){
-                    ZplayDebug.d(TAG, "admob smart banner bigger than ad container");
-                    layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Admob SMART_BANNER compatible error."));
-                    return;
-                }
                 ZplayDebug.d(TAG, "admob banner preapred", onoff);
                 layerPrepared(adView, true);
                 super.onAdLoaded();
@@ -121,15 +114,12 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         };
     }
 
-    private boolean isInterruptSmartBanner(){
-        // AdMob SMART_BANNER 有个 bug，在 > 720dp 的设置上返回 90dp 高度的 banner，如果容器小于此值
-        // 则广告不显示，与 AdMob 沟通说过几周会发布修复此 bug 的版本（date: 20190614）
-        return !isSupportGoogleService && getHeightDp() >= 720 && mAdSize == SMART_BANNER;
-    }
-
     private AdSize calculateBannerSize() {
         switch (bannerSize) {
             case BANNER_SIZE_SMART:
+                if (!isSupportGoogleService) {
+                    return BANNER;
+                }
                 return SMART_BANNER;
             case BANNER_SIZE_728X90:
                 return LEADERBOARD;
