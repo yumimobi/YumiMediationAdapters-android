@@ -28,8 +28,11 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
         @Override
         public void handleMessage(Message msg) {
             layerTimeout();
+            hitPreparedFailed("not got any callback from the sdk");
         }
     };
+
+    private boolean hasHitLayerPreparedFailed;
 
     public BaiduSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -39,6 +42,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
     protected void onPrepareSplashLayer() {
         Log.d(TAG, "onPrepareSplashLayer: ");
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
+        hasHitLayerPreparedFailed = false;
         SplashLpCloseListener listener = new SplashLpCloseListener() {
             @Override
             public void onLpClosed() {
@@ -54,7 +58,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             public void onAdFailed(String arg0) {
                 ZplayDebug.e(TAG, "Baidu Splash ad failed: " + arg0);
                 mHandler.removeMessages(WHAT_TIMEOUT);
-                layerPreparedFailed(recodeError(arg0));
+                hitPreparedFailed(arg0);
             }
 
             @Override
@@ -73,5 +77,12 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
         AdView.setAppSid(getActivity(), getProvider().getKey1());
         // canClick参数表示是否接受点击类型的⼴广告，强烈建议设置为 true，否则影响广告填充
         new SplashAd(getActivity(), getDeveloperCntainer(), listener, getProvider().getKey2(), true);
+    }
+
+    private void hitPreparedFailed(String msg) {
+        if (!hasHitLayerPreparedFailed) {
+            hasHitLayerPreparedFailed = true;
+        }
+        layerPreparedFailed(recodeError(msg));
     }
 }
