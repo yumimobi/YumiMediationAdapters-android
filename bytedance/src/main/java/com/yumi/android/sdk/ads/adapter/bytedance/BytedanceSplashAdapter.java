@@ -125,6 +125,11 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     getDeveloperCntainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
                 }
+
+                // 展示广告后立即点击广告，sdk 不会点击 onAdShow 会导致没有上报（合并上报）
+                layerExposure();
+                mHandler.removeMessages(WHAT_TIMEOUT);
+
                 //设置SplashView的交互监听器
                 ad.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
                     @Override
@@ -135,8 +140,6 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                     @Override
                     public void onAdShow(View view, int type) {
                         ZplayDebug.d(TAG, "onAdShow: " + type);
-                        mHandler.removeMessages(WHAT_TIMEOUT);
-                        layerExposure();
                     }
 
                     @Override
