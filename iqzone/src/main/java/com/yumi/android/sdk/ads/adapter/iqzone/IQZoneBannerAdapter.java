@@ -45,13 +45,12 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adLoaded() {
                 ZplayDebug.d(TAG, "IQZone Banner adLoaded", onoff);
-                layerPrepared(imdBannerAd, false);
+                layerPrepared(imdBannerAd, true);
             }
 
             @Override
             public void adImpression() {
                 ZplayDebug.d(TAG, "IQZone Banner adImpression", onoff);
-                layerExposure();
                 hasShownAd = true;
             }
 
