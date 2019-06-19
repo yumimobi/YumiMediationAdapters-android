@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -19,6 +18,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 
@@ -41,6 +41,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
 
     private TTAdNative mTTAdNative;
     private ViewTreeObserver.OnWindowFocusChangeListener mLayoutListener;
+    private boolean isHitCloseCallback;
 
     public BytedanceSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -49,7 +50,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 @Override
                 public void onWindowFocusChanged(boolean hasFocus) {
                     if (!hasFocus) {
-                        removeSplashViews();
+                        hitCloseCallback();
                     }
                 }
             };
@@ -90,12 +91,11 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 .setImageAcceptedSize(realSize[0], realSize[1])
                 .setSupportDeepLink(true)
                 .build();
-        Log.d(TAG, "loadSplashAd: " + realSize[0] + " : " + realSize[1]);
         //step4:请求广告，调用开屏广告异步请求接口，对请求回调的广告作渲染处理
         mTTAdNative.loadSplashAd(adSlot, new TTAdNative.SplashAdListener() {
             @Override
             public void onError(int code, String message) {
-                Log.d(TAG, "onError: " + message);
+                ZplayDebug.d(TAG, "onError: " + message);
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(recodeError(code, message));
                 removeSplashViews();
@@ -103,7 +103,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onTimeout() {
-                Log.d(TAG, "onTimeout: ");
+                ZplayDebug.d(TAG, "onTimeout: ");
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(new AdError(LayerErrorCode.ERROR_NON_RESPONSE, "Bytedance: timeout"));
                 removeSplashViews();
@@ -111,7 +111,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onSplashAdLoad(final TTSplashAd ad) {
-                Log.d(TAG, "开屏广告请求成功");
+                ZplayDebug.d(TAG, "开屏广告请求成功");
                 if (ad == null) {
                     layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: TTSplashAd is null."));
                     return;
@@ -121,41 +121,45 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 getDeveloperCntainer().removeAllViews();
                 //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
                 getDeveloperCntainer().addView(view);
-
+                isHitCloseCallback = false;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                    getDeveloperCntainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
+                }
                 //设置SplashView的交互监听器
                 ad.setSplashInteractionListener(new TTSplashAd.AdInteractionListener() {
                     @Override
                     public void onAdClicked(View view, int type) {
-                        Log.d(TAG, "onAdClicked: " + type);
                         layerClicked(0, 0);
                     }
 
                     @Override
                     public void onAdShow(View view, int type) {
-                        Log.d(TAG, "onAdShow: " + type);
+                        ZplayDebug.d(TAG, "onAdShow: " + type);
                         mHandler.removeMessages(WHAT_TIMEOUT);
                         layerExposure();
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                            getDeveloperCntainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
-                        }
                     }
 
                     @Override
                     public void onAdSkip() {
-                        Log.d(TAG, "onAdSkip");
-                        layerClosed();
-                        removeSplashViews();
+                        hitCloseCallback();
                     }
 
                     @Override
                     public void onAdTimeOver() {
-                        Log.d(TAG, "onAdTimeOver");
-                        layerClosed();
-                        removeSplashViews();
+                        hitCloseCallback();
                     }
                 });
             }
         }, getProvider().getOutTime() * 1000);
+    }
+
+    private void hitCloseCallback() {
+        if (!isHitCloseCallback) {
+            mHandler.removeMessages(WHAT_TIMEOUT);
+            isHitCloseCallback = true;
+            layerClosed();
+            removeSplashViews();
+        }
     }
 
     private void removeSplashViews() {
