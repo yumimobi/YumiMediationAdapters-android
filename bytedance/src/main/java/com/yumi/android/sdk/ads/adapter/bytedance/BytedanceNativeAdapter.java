@@ -21,7 +21,6 @@ import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
@@ -38,6 +37,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
 
     private TTAdNative mTTAdNative;
     private TTAdNative.FeedAdListener loadAdListener;
+
     protected BytedanceNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
@@ -79,8 +79,8 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
         createrListener();
     }
 
-    private void createrListener(){
-        loadAdListener =  new TTAdNative.FeedAdListener() {
+    private void createrListener() {
+        loadAdListener = new TTAdNative.FeedAdListener() {
             @Override
             public void onError(int code, String message) {
                 ZplayDebug.d(TAG, "Bytedance native onError" + message, onoff);
@@ -140,6 +140,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.e(TAG, "bytedance getNativeContentList error : " + e, onoff);
         }
     }
+
     @Override
     protected void callOnActivityDestroy() {
 
@@ -168,12 +169,12 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
 
             setTitle(nativeAdData.getTitle());
             BytedanceNativeAdapter.NativeAdContent.this.nativeAdData = nativeAdData;
-            if(nativeAdData.getIcon().isValid()){
+            if (nativeAdData.getIcon().isValid()) {
                 setIcon(new Image(nativeAdData.getIcon().getImageUrl()));
             }
 
-            if(nativeAdData.getImageList().size() > 0 && nativeAdData.getImageList().get(0).isValid()){
-            setCoverImage(new Image(nativeAdData.getImageList().get(0).getImageUrl()));
+            if (nativeAdData.getImageList().size() > 0 && nativeAdData.getImageList().get(0).isValid()) {
+                setCoverImage(new Image(nativeAdData.getImageList().get(0).getImageUrl()));
             }
 
             setDesc(nativeAdData.getDescription());
@@ -219,14 +220,14 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             //可以被点击的view, 也可以把convertView放进来意味item可被点击
             List<View> clickViewList = new ArrayList<>();
             clickViewList.add(overlayView);
-            if(overlayView.getCallToActionView() != null){
+            if (overlayView.getCallToActionView() != null) {
                 clickViewList.add(overlayView.getCallToActionView());
             }
 
-            nativeAdData.registerViewForInteraction((ViewGroup) overlayView, clickViewList,null, new TTNativeAd.AdInteractionListener() {
+            nativeAdData.registerViewForInteraction((ViewGroup) overlayView, clickViewList, null, new TTNativeAd.AdInteractionListener() {
                 @Override
                 public void onAdClicked(View view, TTNativeAd ad) {
-                   layerClicked(-99f, -99f);
+                    layerClicked(-99f, -99f);
                 }
 
                 @Override
@@ -245,11 +246,11 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 View video = nativeAdData.getAdView();
                 if (video != null) {
                     if (video.getParent() == null) {
-                        ((ViewGroup)overlayView.getMediaLayout()).removeAllViews();
-                        ((ViewGroup)overlayView.getMediaLayout()).addView(video);
+                        ((ViewGroup) overlayView.getMediaLayout()).removeAllViews();
+                        ((ViewGroup) overlayView.getMediaLayout()).addView(video);
                     }
                 }
             }
-            }
         }
+    }
 }

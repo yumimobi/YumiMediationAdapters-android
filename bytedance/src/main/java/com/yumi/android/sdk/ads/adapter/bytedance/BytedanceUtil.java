@@ -14,14 +14,14 @@ import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 public class BytedanceUtil {
     public static AdError recodeError(int errorCode, String errMags) {
         LayerErrorCode errCode;
-        if(errorCode == -999){
+        if (errorCode == -999) {
             errCode = LayerErrorCode.ERROR_INTERNAL;
-        }else{
+        } else {
             errCode = LayerErrorCode.ERROR_NO_FILL;
         }
 
         AdError adError = new AdError(errCode);
-        adError.setErrorMessage("Bytedance errorCode: " + errorCode +", errorMessage: " + errMags);
+        adError.setErrorMessage("Bytedance errorCode: " + errorCode + ", errorMessage: " + errMags);
         return adError;
     }
 
@@ -30,7 +30,7 @@ public class BytedanceUtil {
         errCode = LayerErrorCode.ERROR_NO_FILL;
 
         AdError adError = new AdError(errCode);
-        adError.setErrorMessage("Bytedance errorCode: " + errorCode +", errorMessage: " + errMags);
+        adError.setErrorMessage("Bytedance errorCode: " + errorCode + ", errorMessage: " + errMags);
         return adError;
     }
 

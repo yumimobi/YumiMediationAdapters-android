@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.View;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
@@ -14,7 +13,6 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
@@ -86,7 +84,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                     layerPreparedFailed(recodeError(-999, "Bytedance banner TTBannerAd is null"));
                     return;
                 }
-                if(getProvider().getAutoRefreshInterval() > 0) {
+                if (getProvider().getAutoRefreshInterval() > 0) {
                     ad.setSlideIntervalTime(getProvider().getAutoRefreshInterval());
                 }
                 View bannerView = ad.getBannerView();
