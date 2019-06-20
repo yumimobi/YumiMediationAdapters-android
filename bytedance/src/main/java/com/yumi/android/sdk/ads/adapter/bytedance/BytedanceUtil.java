@@ -1,5 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
@@ -29,5 +32,15 @@ public class BytedanceUtil {
         AdError adError = new AdError(errCode);
         adError.setErrorMessage("Bytedance errorCode: " + errorCode +", errorMessage: " + errMags);
         return adError;
+    }
+
+    public static String getAppName(PackageManager pm, String pkg) {
+        try {
+            ApplicationInfo info = pm.getApplicationInfo(pkg, 0);
+            return info.loadLabel(pm).toString();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 }

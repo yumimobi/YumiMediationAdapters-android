@@ -13,6 +13,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PackageInfoGetter;
 
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 
@@ -65,7 +66,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
                 new TTAdConfig.Builder()
                         .appId(getProvider().getKey1())
                         .useTextureView(false)
-                        .appName(PackageInfoGetter.getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
+                        .appName(getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
                         .allowShowNotify(false)
                         .allowShowPageWhenScreenLock(false)
