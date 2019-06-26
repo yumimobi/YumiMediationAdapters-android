@@ -10,6 +10,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
 
 public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -29,7 +30,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     public void onActivityPause() {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
@@ -47,6 +48,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "unity Interstitial request new", onoff);
+        updateGDPRStatus(getContext());
         UnityAds.setDebugMode(isDebugMode); //测试
         if (UnityAds.isReady(getProvider().getKey2())) {
             callLayerPrepared();
@@ -86,7 +88,6 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         if (getProvider().getKey2().equals(zoneId)) {
                             ZplayDebug.d(TAG, "unity Interstitial onUnityAdsFinish layerClosed layerMediaEnd", onoff);
                             layerClosed();
-                            layerMediaEnd();
                         }
                     }
 
@@ -105,6 +106,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         if (getProvider().getKey2().equals(zoneId)) {
                             ZplayDebug.d(TAG, "unity Interstitial onUnityAdsStart layerExposure", onoff);
                             layerExposure();
+                            layerStartPlaying();
                         }
                     }
 

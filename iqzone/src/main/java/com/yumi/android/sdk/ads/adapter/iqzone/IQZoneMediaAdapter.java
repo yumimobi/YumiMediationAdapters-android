@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 
 import com.iqzone.android.AdEventsListener;
 import com.iqzone.android.IQzoneInterstitialAdManager;
@@ -11,6 +9,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.CODE_FAILED;
 
 /**
@@ -22,29 +21,11 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "IQZoneMediaAdapter";
     private IQzoneInterstitialAdManager imdRewardedVideoAdManager;
     private boolean isReady;
-
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    if (imdRewardedVideoAdManager != null) {
-                        ZplayDebug.d(TAG, "IQZone media Video REQUEST_NEXT_MEDIA ", onoff);
-                        layerNWRequestReport();
-                        imdRewardedVideoAdManager.loadInterstitial();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        ;
-    };
+    private boolean isRewarded = false;
 
     protected IQZoneMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
+        updateGDPRStatus(activity);
     }
 
     @Override
@@ -83,6 +64,7 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adImpression() {
                 isReady = false;
+                isRewarded = false;
                 ZplayDebug.d(TAG, "IQZone Video adImpression", onoff);
                 layerExposure();
             }
@@ -96,42 +78,28 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Video adDismissed", onoff);
-                layerClosed();
-                requestAD(5);
+                layerClosed(isRewarded);
             }
 
             @Override
             public void adFailedToLoad() {
                 ZplayDebug.d(TAG, "IQZone Video adFailedToLoad", onoff);
                 layerPreparedFailed(recodeError(CODE_FAILED));
-                requestAD(getProvider().getNextRequestInterval());
             }
 
             @Override
             public void videoStarted() {
                 ZplayDebug.d(TAG, "IQZone Video videoStarted", onoff);
-                layerMediaStart();
+                layerStartPlaying();
             }
 
             @Override
             public void videoCompleted(boolean skipped) {
                 ZplayDebug.d(TAG, "IQZone Video videoCompleted", onoff);
-                layerMediaEnd();
+                isRewarded = true;
                 layerIncentived();
             }
         };
-    }
-
-
-    private void requestAD(int delaySecond) {
-        try {
-            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "IQZone media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "IQZone media requestAD error ", e, onoff);
-        }
     }
 
     @Override

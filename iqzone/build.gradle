@@ -3,10 +3,6 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-
     implementation "com.android.support:support-v4:$SUPOORT_LIBRAY_VERSION"
     implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
     implementation "com.android.support:recyclerview-v7:$SUPOORT_LIBRAY_VERSION"
@@ -16,10 +12,10 @@ dependencies {
 
     implementation 'com.yumimobi.ads.thirdparty:iqpscore:2.3.2111'
     implementation 'com.yumimobi.ads.thirdparty:hyprmx:4.3.1.0'
-    implementation 'com.yumimobi.ads.thirdparty:iasdkcore:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:iavideokit:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:iamraidkit:7.1.6.0'
-    implementation 'com.yumimobi.ads.thirdparty:ianativekit:7.1.6.0'
+    implementation "com.yumimobi.ads.thirdparty:iasdkcore:$IASDKCORE"
+    implementation "com.yumimobi.ads.thirdparty:iavideokit:$IAVIDEOKIT"
+    implementation "com.yumimobi.ads.thirdparty:iamraidkit:$IAMRAIDKIT"
+    implementation "com.yumimobi.ads.thirdparty:ianativekit:$IANATIVEKIT"
     implementation 'com.yumimobi.ads.thirdparty:soma:8.0.1.0'
     implementation 'com.yumimobi.ads.thirdparty:presagemoat:3.0.13.0'
 

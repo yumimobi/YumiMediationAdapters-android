@@ -11,10 +11,13 @@ import com.vungle.warren.PlayAdCallback;
 import com.vungle.warren.Vungle;
 import com.vungle.warren.error.VungleException;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -24,18 +27,12 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final int RESTART_INIT = 0x001;
 
-    private static final int REQUEST_NEXT_MEDIA = 0x003;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case RESTART_INIT:
                     ZplayDebug.d(TAG, "vungle media restart init", onoff);
                     VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-                    break;
-                case REQUEST_NEXT_MEDIA:
-                    ZplayDebug.d(TAG, "vungle media Video REQUEST_NEXT_MEDIA ", onoff);
-                    layerNWRequestReport();
-                    onPrepareMedia();
                     break;
                 default:
                     break;
@@ -65,6 +62,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         try {
+            updateGDPRStatus(getContext());
             ZplayDebug.d(TAG, "vungle request new media", onoff);
             if (Vungle.canPlayAd(getProvider().getKey2())) {
                 ZplayDebug.d(TAG, "vungle media prapared", onoff);
@@ -80,7 +78,6 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                             layerPreparedFailed(recodeError(null));
                         }
                     });
-                    requestAD(getProvider().getNextRequestInterval());
                 }
                 ZplayDebug.d(TAG, "vungle onPrepareMedia loadAd:" + getProvider().getKey2(), onoff);
             }
@@ -165,7 +162,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
                 if (getProvider().getKey2().equals(placementReferenceId)) {
                     layerExposure();
-                    layerMediaStart();
+                    layerStartPlaying();
                 }
             }
 
@@ -186,9 +183,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                                     layerIncentived();
                                 }
                                 ZplayDebug.d(TAG, "vungle media closed", onoff);
-                                layerMediaEnd();
-                                layerClosed();
-                                requestAD(10);
+                                layerClosed(completed);
                             } catch (Exception e) {
                                 ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
                             }
@@ -204,6 +199,11 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
                     if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
                         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+                    }
+                    if (getProvider().getKey2().equals(placementReferenceId)) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("vungle error: " + throwable);
+                        layerExposureFailed(adError);
                     }
                 } catch (Exception cex) {
                     ZplayDebug.e(TAG, "vungle media PlayAdCallback onError try error", cex, onoff);
@@ -234,17 +234,6 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             }
         });
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-    }
-
-    private void requestAD(int delaySecond) {
-        try {
-            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "vungle media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle media requestAD error ", e, onoff);
-        }
     }
 
     @Override

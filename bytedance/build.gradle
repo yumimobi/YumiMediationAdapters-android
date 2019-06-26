@@ -1,0 +1,39 @@
+apply from: '../shared-build.gradle'
+
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "com.yumimobi.ads.thirdparty:bytedance:1.9.9.5.3"
+    implementation YUMI_MEDIATION
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    implementation 'com.yumimobi.ads.thirdparty:androidquery:0.26.7.1'
+}
+
+String version = project.properties['bytedance.version']
+
+ext {
+    bintrayRepo = 'ads'
+    bintrayName = project.name
+
+    publishedGroupId = 'com.yumimobi.ads.mediation'
+    artifactId = project.name
+    libraryVersion = version
+    libraryName = project.name
+    libraryDescription = 'Yumi Mediation Bytedance Adapter'
+
+    // publish aar to in-house(remember change the value of inHouseVersion):
+    // Call ./gradlew artifactoryPublish to publish
+    inHouseVersion = ""
+
+    siteUrl = ''
+    gitUrl = ''
+}
+
+if (version) {
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+}
+
+if (inHouseVersion) {
+    apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
+}
+

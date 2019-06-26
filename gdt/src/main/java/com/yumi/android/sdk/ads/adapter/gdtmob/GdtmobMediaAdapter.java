@@ -1,8 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
 import android.os.SystemClock;
 
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
@@ -19,26 +17,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     private RewardVideoADListener rewardVideoADListener;
     private RewardVideoAD rewardVideoAD;
     private boolean adLoaded = false;
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
-
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case REQUEST_NEXT_MEDIA:
-                    if (rewardVideoAD != null && rewardVideoADListener != null) {
-                        ZplayDebug.d(TAG, "Gdt media Video REQUEST_NEXT_MEDIA ", onoff);
-                        layerNWRequestReport();
-                        adLoaded = false;
-                        rewardVideoAD.loadAD();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        ;
-    };
+    private boolean isRewarded = false;
 
     protected GdtmobMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -70,7 +49,6 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
                     rewardVideoAD.showAD();
                 } else {
                     ZplayDebug.e(TAG, "gdt media onShowMedia error : MATERIAL ETIME ", onoff);
-                    requestAD(getProvider().getNextRequestInterval());
                 }
             } else {
                 ZplayDebug.e(TAG, "gdt media onShowMedia error : hasShown" + rewardVideoAD.hasShown(), onoff);
@@ -121,13 +99,15 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADExpose() {
                 ZplayDebug.i(TAG, "gdt media onADExpose", onoff);
+                isRewarded = false;
                 layerExposure();
-                layerMediaStart();
+                layerStartPlaying();
             }
 
             @Override
             public void onReward() {
                 ZplayDebug.i(TAG, "gdt media onReward", onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 
@@ -140,14 +120,12 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoComplete() {
                 ZplayDebug.i(TAG, "gdt media onVideoComplete", onoff);
-                layerMediaEnd();
             }
 
             @Override
             public void onADClose() {
                 ZplayDebug.i(TAG, "gdt media onADClose", onoff);
-                layerClosed();
-                requestAD(3);
+                layerClosed(isRewarded);
             }
 
             @Override
@@ -159,31 +137,12 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
                 }
                 ZplayDebug.d(TAG, "gdt media failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
                 layerPreparedFailed(recodeError(adError));
-                requestAD(getProvider().getNextRequestInterval());
             }
         };
     }
 
-    private void requestAD(int delaySecond) {
-        try {
-            if (!mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                ZplayDebug.d(TAG, "facebook media Video requestAD delaySecond" + delaySecond, onoff);
-                mHandler.sendEmptyMessageDelayed(REQUEST_NEXT_MEDIA, delaySecond * 1000);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "Gdt media requestAD error ", e, onoff);
-        }
-    }
-
     @Override
     protected void callOnActivityDestroy() {
-        try {
-            if (mHandler != null && mHandler.hasMessages(REQUEST_NEXT_MEDIA)) {
-                mHandler.removeMessages(REQUEST_NEXT_MEDIA);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "Gdt media callOnActivityDestroy error ", e, onoff);
-        }
     }
 
     @Override

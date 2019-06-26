@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -16,6 +17,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 	private static final String TAG = "AdmobInterstitialAdapter";
 	private InterstitialAd instertitial;
 	private AdListener adListener;
+	private boolean isReady;
 
 	protected AdmobInterstitialAdapter(Activity activity,
 			YumiProviderBean provider) {
@@ -50,7 +52,8 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			instertitial.setAdUnitId(getProvider().getKey1());
 			instertitial.setAdListener(adListener);
 		}
-		AdRequest req = new AdRequest.Builder().build();
+		AdRequest req = getAdRequest(getContext());
+		isReady = false;
 		instertitial.loadAd(req);
 	}
 
@@ -61,10 +64,15 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
 	@Override
 	protected boolean isInterstitialLayerReady() {
-		if (instertitial != null && instertitial.isLoaded()) {
-			return true;
+		try{
+			if (instertitial != null && instertitial.isLoaded()) {
+				return true;
+			}
+			return false;
+		}catch (Exception e){
+			ZplayDebug.e(TAG, "admob interstitial isInterstitialLayerReady error : ", e, onoff);
+			return isReady;
 		}
-		return false;
 	}
 
 	@Override
@@ -79,6 +87,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdClosed() {
 				ZplayDebug.d(TAG, "admob interstitial closed", onoff);
 				layerClosed();
+				isReady = false;
 				super.onAdClosed();
 			}
 
@@ -86,6 +95,8 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdOpened() {
 				ZplayDebug.d(TAG, "admob interstitial shown", onoff);
 				layerExposure();
+				layerStartPlaying();
+				isReady = false;
 				super.onAdOpened();
 			}
 
@@ -93,6 +104,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdLeftApplication() {
 				ZplayDebug.d(TAG, "admob interstitial clicked", onoff);
 				layerClicked(-99f, -99f);
+				isReady = false;
 				super.onAdLeftApplication();
 			}
 
@@ -100,6 +112,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdLoaded() {
 				ZplayDebug.d(TAG, "admob interstitial prepared", onoff);
 				layerPrepared();
+				isReady = true;
 				super.onAdLoaded();
 			}
 
@@ -107,6 +120,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 			public void onAdFailedToLoad(int errorCode) {
 				ZplayDebug.d(TAG, "admob interstitial failed " + errorCode, onoff);
 				layerPreparedFailed(recodeError(errorCode));
+				isReady = false;
 				super.onAdFailedToLoad(errorCode);
 			}
 		};

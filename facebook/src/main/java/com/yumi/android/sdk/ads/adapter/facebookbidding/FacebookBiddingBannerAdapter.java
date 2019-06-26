@@ -51,7 +51,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
         }
         ZplayDebug.d(TAG, "facebookbid request new banner", onoff);
         if (getProvider().getErrCode() != 200) {
-            layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
+            layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
             return;
         }
         banner = new AdView(getContext(), getProvider().getKey1(), AdSize.BANNER_HEIGHT_50);

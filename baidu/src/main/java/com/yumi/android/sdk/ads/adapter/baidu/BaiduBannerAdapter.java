@@ -75,14 +75,13 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 				ZplayDebug.d(TAG, "baidu banner shown", onoff);
 				if (isLoad){
 					isLoad = false;
-					layerExposure();
 				}
 			}
 			
 			@Override
 			public void onAdReady(AdView arg0) {
 				ZplayDebug.d(TAG, "baidu banner prepared", onoff);
-				layerPrepared(arg0, false);				
+				layerPrepared(arg0, true);
 			}
 			
 			@Override

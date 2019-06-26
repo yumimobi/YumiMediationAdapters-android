@@ -22,6 +22,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "FacebookBiddingMediaAdapter";
     private RewardedVideoAd rewardedVideoAd;
     private S2SRewardedVideoAdListener listener;
+    private boolean isRewarded = false;
 
 
     protected FacebookBiddingMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -41,7 +42,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
 //        rewardedVideoAd.setRewardData(new RewardData("YOUR_USER_ID", "YOUR_REWARD"));  //不知道到底有什么用，文档里没有说明
             }
             if (getProvider().getErrCode() != 200) {
-                layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
+                layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
                 return;
             }
             rewardedVideoAd.loadAdFromBid(getProvider().getPayload(), false);
@@ -95,21 +96,22 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onRewardedVideoCompleted() {
                 ZplayDebug.i(TAG, "facebookbid media onRewardedVideoCompleted", onoff);
+                isRewarded = true;
                 layerIncentived();
-                layerMediaEnd();
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
                 ZplayDebug.i(TAG, "facebookbid media onLoggingImpression", onoff);
+                isRewarded = false;
                 layerExposure();
-                layerMediaStart();
+                layerStartPlaying();
             }
 
             @Override
             public void onRewardedVideoClosed() {
                 ZplayDebug.i(TAG, "facebookbid media onRewardedVideoClosed", onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
 
             @Override

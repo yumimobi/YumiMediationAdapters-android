@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
@@ -21,9 +22,11 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
 public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
     private static final String TAG = "IQZoneBannerAdapter";
     private IQzoneBannerView imdBannerAd;
+    private boolean hasShownAd;
 
     protected IQZoneBannerAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
+        updateGDPRStatus(activity);
     }
 
     @Override
@@ -34,7 +37,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             return;
         }
         imdBannerAd.onAttached(getActivity());
-        imdBannerAd.loadAd(getProvider().getKey1(), 0, newAdEventListener());
+        imdBannerAd.loadAd(getProvider().getKey1(), getProvider().getAutoRefreshInterval(), newAdEventListener());
     }
 
     private AdEventsListener newAdEventListener() {
@@ -48,6 +51,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adImpression() {
                 ZplayDebug.d(TAG, "IQZone Banner adImpression", onoff);
+                hasShownAd = true;
             }
 
             @Override
@@ -75,7 +79,10 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void adDismissed() {
                 ZplayDebug.d(TAG, "IQZone Banner adDismissed", onoff);
-                layerClosed();
+                if (hasShownAd) {
+                    hasShownAd = false;
+                    layerClosed();
+                }
             }
         };
     }

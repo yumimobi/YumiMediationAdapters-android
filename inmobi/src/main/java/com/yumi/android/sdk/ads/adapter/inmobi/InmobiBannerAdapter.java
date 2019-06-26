@@ -61,18 +61,23 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
                 placementID = Long.valueOf(key2);
             } catch (NumberFormatException e) {
                 ZplayDebug.e(TAG, "", e, onoff);
-                layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+                layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                 return;
             }
         } else {
-            layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT));
+            layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
             return;
         }
         container = new FrameLayout(getActivity());
 
         banner = new InMobiBanner(getActivity(), placementID);
         banner.setListener(bannerListener);
-        banner.setEnableAutoRefresh(false);
+        if (getProvider().getAutoRefreshInterval() > 0) {
+            banner.setEnableAutoRefresh(true);
+            banner.setRefreshInterval(getProvider().getAutoRefreshInterval());
+        } else {
+            banner.setEnableAutoRefresh(false);
+        }
         container.addView(banner, new FrameLayout.LayoutParams(bannerWidth, bannerHeight, Gravity.CENTER));
         sendChangeViewBeforePrepared(container);
         banner.load();

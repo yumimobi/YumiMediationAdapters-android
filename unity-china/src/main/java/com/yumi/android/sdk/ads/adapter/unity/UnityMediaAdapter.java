@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
 
 public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -36,6 +37,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onPrepareMedia() {
 		ZplayDebug.d(TAG, "unity media request new media", onoff);
+		updateGDPRStatus(getContext());
 		UnityAds.setDebugMode(isDebugMode); //测试
 		if (UnityAds.isReady(getProvider().getKey2())) {
 			layerPrepared();
@@ -70,12 +72,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 					public void onUnityAdsFinish(String zoneId, FinishState result) {
 						ZplayDebug.d(TAG, "unity media onUnityAdsFinish zoneId : " + zoneId + "  FinishState : " + result, onoff);
 						if (getProvider().getKey2().equals(zoneId)) {
+							boolean isRewarded = false;
 							if (result == FinishState.COMPLETED) {
+								isRewarded = true;
 								layerIncentived();
 								ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerIncentived ", onoff);
 							}
-							layerMediaEnd();
-							layerClosed();
+							layerClosed(isRewarded);
 							ZplayDebug.d(TAG, "unity media onUnityAdsFinish layerClosed layerMediaEnd ", onoff);
 						}
 					}
@@ -95,7 +98,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 						if (getProvider().getKey2().equals(zoneId)) {
 							ZplayDebug.d(TAG, "unity media onUnityAdsStart layerExposure layerMediaStart", onoff);
 							layerExposure();
-							layerMediaStart();
+							layerStartPlaying();
 						}
 					}
 				};

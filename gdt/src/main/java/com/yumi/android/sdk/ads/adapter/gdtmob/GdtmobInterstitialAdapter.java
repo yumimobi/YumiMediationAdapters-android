@@ -92,6 +92,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onNoAD(AdError adError) {
+                interstitialReady = false;
                 if (adError == null){
                     ZplayDebug.d(TAG, "gdt interstitial failed adError = null", onoff);
                     layerPreparedFailed(recodeError(null));
@@ -121,7 +122,9 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onADExposure() {
                 ZplayDebug.d(TAG, "gdt interstitial shown", onoff);
+                interstitialReady = false;
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override
@@ -136,6 +139,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onADClicked() {
                 ZplayDebug.d(TAG, "gdt interstitial clicked", onoff);
+                interstitialReady = false;
                 layerClicked(-99f, -99f);
             }
         };

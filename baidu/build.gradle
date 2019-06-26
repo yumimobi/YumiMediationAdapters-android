@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.yumimobi.ads.thirdparty:baidu:5.8.0.6'
+    implementation 'com.yumimobi.ads.thirdparty:baidu:5.8.0.7'
     implementation YUMI_MEDIATION
 }
 

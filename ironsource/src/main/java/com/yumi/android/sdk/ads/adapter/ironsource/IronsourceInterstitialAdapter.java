@@ -1,15 +1,19 @@
 package com.yumi.android.sdk.ads.adapter.ironsource;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.ironsource.IronsourceUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
  * Created by hjl on 2018/8/10.
@@ -26,6 +30,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial  instanceId : " + getProvider().getKey2(), onoff);
+        updateGDPRStatus(getContext());
         boolean isReady = IronSource.isISDemandOnlyInterstitialReady(getProvider().getKey2());
         if (isReady) {
             ZplayDebug.i(TAG, "IronSource Interstitial onPrepareInterstitial isReady  instanceId : " + getProvider().getKey2(), onoff);
@@ -88,6 +93,10 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                 @Override
                 public void onInterstitialAdOpened(String instanceId) {
                     ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdOpened instanceId : " + instanceId, onoff);
+                    if (instanceId.equals(getProvider().getKey2())) {
+                        layerExposure();
+                        layerStartPlaying();
+                    }
                 }
 
                 /*
@@ -101,24 +110,18 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
                     }
                 }
 
-                /*
-                 * Invoked when the ad was opened and shown successfully.
-                 */
-                @Override
-                public void onInterstitialAdShowSucceeded(String instanceId) {
-                    ZplayDebug.i(TAG, "IronSource Interstitial onInterstitialAdShowSucceeded instanceId : " + instanceId, onoff);
-                    if (instanceId.equals(getProvider().getKey2())) {
-                        layerExposure();
-                    }
-                }
-
                 /**
                  * Invoked when Interstitial ad failed to show.
                  * // @param error - An object which represents the reason of showInterstitial failure.
                  */
                 @Override
                 public void onInterstitialAdShowFailed(String instanceId, IronSourceError error) {
-                    ZplayDebug.e(TAG, "IronSource Interstitial onInterstitialAdShowFailed instanceId : " + instanceId + "  getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
+                    ZplayDebug.e(TAG, "IronSource Interstitial onInterstitialAdShowFailed instanceId : " + instanceId + "  getError : " + error, onoff);
+                    if (TextUtils.equals(instanceId, getProvider().getKey2())) {
+                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                        adError.setErrorMessage("IronSource errorMsg: " + error);
+                        layerExposureFailed(adError);
+                    }
                 }
 
                 /*

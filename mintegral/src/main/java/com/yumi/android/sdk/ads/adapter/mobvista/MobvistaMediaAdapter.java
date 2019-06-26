@@ -2,16 +2,22 @@ package com.yumi.android.sdk.ads.adapter.mobvista;
 
 import android.app.Activity;
 
+import com.mintegral.msdk.MIntegralConstans;
 import com.mintegral.msdk.MIntegralSDK;
 import com.mintegral.msdk.out.MIntegralSDKFactory;
 import com.mintegral.msdk.out.MTGRewardVideoHandler;
 import com.mintegral.msdk.out.RewardVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
+
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
  * Created by hjl on 2017/11/28.
@@ -19,7 +25,6 @@ import java.util.Map;
 public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "MobvistaMediaAdapter";
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
     private MTGRewardVideoHandler mMvRewardVideoHandler;
 
     protected MobvistaMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -76,6 +81,10 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
             ZplayDebug.d(TAG, "Mobvista media init appId : " + getProvider().getKey1() + "   || appKey : " + getProvider().getKey2(), onoff);
             MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
             Map<String, String> map = sdk.getMTGConfigurationMap(getProvider().getKey1(), getProvider().getKey2()); //appId, appKey
+            if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
+                int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ?  MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
+                sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
+            }
             sdk.init(map, getContext());
             initHandler();
         } catch (Exception e) {
@@ -110,23 +119,31 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 }
 
                 @Override
+                public void onLoadSuccess(String unitId) {
+
+                }
+
+                @Override
                 public void onVideoLoadFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoLoadFail errorMsg:" + errorMsg, onoff);
-                    LayerErrorCode error = LayerErrorCode.ERROR_NO_FILL;
-                    error.setExtraMsg("minteral errorMsg: " + errorMsg);
+                    AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
+                    error.setErrorMessage("minteral errorMsg: " + errorMsg);
                     layerPreparedFailed(error);
                 }
 
                 @Override
                 public void onShowFail(String errorMsg) {
                     ZplayDebug.d(TAG, "Mobvista media onShowFail errorMsg:" + errorMsg, onoff);
+                    AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                    adError.setErrorMessage("Mobvista errorMsg: " + errorMsg);
+                    layerExposureFailed(adError);
                 }
 
                 @Override
                 public void onAdShow() {
                     ZplayDebug.d(TAG, "Mobvista media onAdShow", onoff);
                     layerExposure();
-                    layerMediaStart();
+                    layerStartPlaying();
                 }
 
                 @Override
@@ -135,15 +152,24 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.d(TAG, "Mobvista media onAdClose isCompleteView :" + isCompleteView + "   RewardName:" + RewardName + "   RewardAmout:" + RewardAmout, onoff);
                     if (isCompleteView) {
                         layerIncentived();
-                        layerMediaEnd();
                     }
-                    layerClosed();
+                    layerClosed(isCompleteView);
                 }
 
                 @Override
                 public void onVideoAdClicked(String unitId) {
                     ZplayDebug.d(TAG, "Mobvista media onVideoAdClicked unitId:" + unitId, onoff);
                     layerClicked();
+                }
+
+                @Override
+                public void onVideoComplete(String s) {
+
+                }
+
+                @Override
+                public void onEndcardShow(String s) {
+
                 }
 
             });

@@ -6,10 +6,12 @@ import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableInterstitial;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
  * Created by syj on 2017/10/12.
@@ -20,8 +22,6 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     private Activity activity;
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsInterstitialAdapter";
-
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
 
     protected PlayableadsInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -51,14 +51,16 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
-                ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                ZplayDebug.d(TAG, "Playable media Video Show Error: " + message, onoff);
+                AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                adError.setErrorMessage("Playable error: " + message);
+                layerExposureFailed(adError);
             }
 
             @Override
             public void onVideoFinished() {
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable Interstitial Finish: ", onoff);
-                layerMediaEnd();
             }
 
             @Override
@@ -66,6 +68,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable Interstitial Start: ", onoff);
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override

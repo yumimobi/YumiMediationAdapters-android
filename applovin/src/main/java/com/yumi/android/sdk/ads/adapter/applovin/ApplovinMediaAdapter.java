@@ -17,11 +17,11 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "ApplovinMediaAdapter";
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
     private AppLovinSdk appLovinSDK;
     private AppLovinIncentivizedInterstitial mediaAd;
     private AppLovinAdLoadListener adLoadListener;
@@ -31,6 +31,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     private AppLovinAdVideoPlaybackListener adVideoPlaybackListener;
     private AppLovinAdDisplayListener adDisplayListener;
     private AppLovinAdClickListener adClickListener;
+    private boolean isRewarded = false;
 
     private boolean isFirstClick = false;
 
@@ -51,6 +52,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         ZplayDebug.d(TAG, "AppLovin request new media", onoff);
+        updateGDPRStatus(getContext());
         isFirstClick = false;
     }
 
@@ -97,6 +99,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             public void userRewardVerified(AppLovinAd appLovinAd, Map<String, String> map) {
                 ZplayDebug.i(TAG, "AppLovin Media userRewardVerified ", onoff);
                 userRewardVerified = true;
+                isRewarded = true;
             }
 
             @Override
@@ -124,13 +127,11 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void videoPlaybackBegan(AppLovinAd appLovinAd) {
                 ZplayDebug.i(TAG, "AppLovin Media videoPlaybackBegan ", onoff);
-                layerMediaStart();
             }
 
             @Override
             public void videoPlaybackEnded(AppLovinAd appLovinAd, double v, boolean b) {
                 ZplayDebug.i(TAG, "AppLovin Media videoPlaybackEnded ", onoff);
-                layerMediaEnd();
             }
         };
 
@@ -150,7 +151,9 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
                 ZplayDebug.i(TAG, "AppLovin Media adDisplayed ", onoff);
+                isRewarded = false;
                 layerExposure();
+                layerStartPlaying();
             }
 
             @Override
@@ -160,7 +163,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
                     userRewardVerified = false;
                     layerIncentived();
                 }
-                layerClosed();
+                layerClosed(isRewarded);
                 preloadAd();
             }
         };

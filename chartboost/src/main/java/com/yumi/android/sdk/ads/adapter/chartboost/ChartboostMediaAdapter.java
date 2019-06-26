@@ -11,11 +11,13 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import android.app.Activity;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
 public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private static final String TAG = "ChartboostMediaAdapter";
 	private ChartboostDelegate delegate;
+	private boolean isRewarded = false;
 
 	protected ChartboostMediaAdapter(Activity activity,
 			YumiProviderBean provider) {
@@ -43,6 +45,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onPrepareMedia() {
 		ZplayDebug.d(TAG, "chartboost request new media", onoff);
+		updateGDPRStatus(getContext());
 		Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
 	}
 
@@ -89,8 +92,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didCloseRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media closed", onoff);
-	                layerMediaEnd();
-					layerClosed(); 
+					layerClosed(isRewarded);
 					super.didCloseRewardedVideo(location);
 				}
 
@@ -104,14 +106,16 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 				@Override
 				public void didDismissRewardedVideo(String location) {
 					ZplayDebug.d(TAG, "chartboost media shown", onoff);
+					isRewarded = false;
 					layerExposure();
-					layerMediaStart();
+					layerStartPlaying();
 					super.didDismissRewardedVideo(location);
 				}
 
 				@Override
 				public void didCompleteRewardedVideo(String location, int reward) {
 					ZplayDebug.d(TAG, "chartboost media get rewarded", onoff);
+					isRewarded = true;
 					layerIncentived();
 				}
 			};

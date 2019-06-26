@@ -1,13 +1,13 @@
 package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
-import android.content.Context;
-import android.util.DisplayMetrics;
+import android.content.res.Resources;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailabilityLight;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import static com.google.android.gms.ads.AdSize.BANNER;
 import static com.google.android.gms.ads.AdSize.LEADERBOARD;
 import static com.google.android.gms.ads.AdSize.SMART_BANNER;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 /**
@@ -28,9 +29,14 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     private AdListener adListener;
     private float cx = -99f;
     private float cy = -99f;
+    private boolean isSupportGoogleService;
+    private AdSize mAdSize;
 
     protected AdmobBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
+        GoogleApiAvailabilityLight googleApiAvailability = GoogleApiAvailabilityLight.getInstance();
+        int resultCode = googleApiAvailability.isGooglePlayServicesAvailable(getContext());
+        isSupportGoogleService = resultCode == ConnectionResult.SUCCESS;
     }
 
     @Override
@@ -57,12 +63,12 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "admob request new banner", onoff);
+        mAdSize = calculateBannerSize();
         adView = new AdView(getActivity());
-        adView.setAdSize(calculateBannerSize());
+        adView.setAdSize(mAdSize);
         adView.setAdUnitId(getProvider().getKey1());
         adView.setAdListener(adListener);
-        AdRequest req = new AdRequest.Builder().build();
-        adView.loadAd(req);
+        adView.loadAd(getAdRequest(getContext()));
     }
 
     @Override
@@ -109,12 +115,11 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     private AdSize calculateBannerSize() {
-        if (isMatchWindowWidth && isPortrait(getActivity())) {
-            return SMART_BANNER;
-        }
-
         switch (bannerSize) {
             case BANNER_SIZE_SMART:
+                if (!isSupportGoogleService) {
+                    return BANNER;
+                }
                 return SMART_BANNER;
             case BANNER_SIZE_728X90:
                 return LEADERBOARD;
@@ -123,13 +128,9 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         }
     }
 
-
-    private static boolean isPortrait(Context context) {
-        try {
-            DisplayMetrics dm = context.getResources().getDisplayMetrics();
-            return dm.widthPixels <= dm.heightPixels;
-        } catch (Exception e) {
-            return false;
-        }
+    private int getHeightDp() {
+        int px = Resources.getSystem().getDisplayMetrics().heightPixels;
+        float density = Resources.getSystem().getDisplayMetrics().density;
+        return (int) ((px / density) + 0.5);
     }
 }

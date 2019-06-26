@@ -1,5 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.adcolony;
 
+import android.app.Activity;
+
 import com.adcolony.sdk.AdColony;
 import com.adcolony.sdk.AdColonyAdOptions;
 import com.adcolony.sdk.AdColonyAppOptions;
@@ -9,10 +11,10 @@ import com.adcolony.sdk.AdColonyReward;
 import com.adcolony.sdk.AdColonyRewardListener;
 import com.adcolony.sdk.AdColonyZone;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-
-import android.app.Activity;
 
 public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
@@ -29,10 +31,15 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
 	private void initAdcolonySDK() {
 		createListeners();
-		AdColonyAppOptions app_options = new AdColonyAppOptions()
-				.setUserID(CLIENT_OPTIONS);
-		AdColony.configure(getActivity(), app_options, getProvider().getKey1(),
-				getProvider().getKey2());
+        final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
+
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
+            // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
+            appOptions
+					.setGDPRConsentString(YumiSettings.getGDPRStatus().getGDPRValue())
+					.setGDPRRequired(true);
+        }
+        AdColony.configure(getActivity(), appOptions, getProvider().getKey1(), getProvider().getKey2());
 		/** Ad specific options to be sent with request */
 		ad_options = new AdColonyAdOptions().enableConfirmationDialog(false).enableResultsDialog(false);// 控制dialog
 		AdColony.setRewardListener(rewardListennr);
@@ -63,7 +70,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			public void onOpened(AdColonyInterstitial ad) {
 				ZplayDebug.d(TAG, "onOpened", onoff);
 				layerExposure();
-				layerMediaStart();
+				layerStartPlaying();
 			}
 
 			/** Request a new ad if ad is expiring */
@@ -77,10 +84,9 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 			@Override
 			public void onReward(AdColonyReward arg0) {
 				ZplayDebug.d(TAG, "adcolony media closed", onoff);
-				layerMediaEnd();
 				ZplayDebug.d(TAG, "adcolony media get reward", onoff);
 				layerIncentived();
-				layerClosed();
+				layerClosed(true);
 			}
 		};
 
@@ -93,7 +99,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
 	@Override
 	public void onActivityResume() {
-	
+
 	}
 
 	@Override
@@ -109,7 +115,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 	@Override
 	protected void onShowMedia() {
 		if (ad != null&&!ad.isExpired()) {
-
 			ad.show();
 		}
 	}

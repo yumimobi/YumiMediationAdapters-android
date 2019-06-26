@@ -1,39 +1,42 @@
 package com.yumi.android.sdk.ads.adapter;
 
-import com.qq.e.comm.util.AdError;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 
 import static android.text.TextUtils.isEmpty;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NON_RESPONSE;
 
 /**
  * Created by hjl on 2017/10/26.
  */
 
 public class GdtUtil {
-    public static LayerErrorCode recodeError(AdError gdtError) {
+    public static AdError recodeError(com.qq.e.comm.util.AdError gdtError) {
         return recodeError(gdtError, null);
     }
 
-    public static LayerErrorCode recodeError(AdError gdtError, String yumiLog) {
-        LayerErrorCode result;
+    public static AdError recodeError(com.qq.e.comm.util.AdError gdtError, String yumiLog) {
+        AdError result;
         if (gdtError == null) {
-            result = LayerErrorCode.ERROR_INTERNAL;
-            result.setExtraMsg("GDT errorMsg: null");
+            result = new AdError(LayerErrorCode.ERROR_INTERNAL);
+            result.setErrorMessage("GDT errorMsg: null");
             return result;
         }
 
         if (gdtError.getErrorCode() == 4003) {
-            result = LayerErrorCode.ERROR_INVALID;
+            result = new AdError(LayerErrorCode.ERROR_INVALID);
+        } else if (gdtError.getErrorCode() == 4011) {
+            result = new AdError(ERROR_NON_RESPONSE);
         } else if (gdtError.getErrorCode() == 5004) {
-            result = LayerErrorCode.ERROR_NO_FILL;
+            result = new AdError(LayerErrorCode.ERROR_NO_FILL);
         } else {
-            result = LayerErrorCode.ERROR_INTERNAL;
+            result = new AdError(LayerErrorCode.ERROR_INTERNAL);
         }
         String extraMsg = "GDT errorMsg: " + gdtError.getErrorMsg();
         if (!isEmpty(yumiLog)) {
             extraMsg += ", " + extraMsg;
         }
-        result.setExtraMsg(extraMsg);
+        result.setErrorMessage(extraMsg);
         return result;
     }
 }

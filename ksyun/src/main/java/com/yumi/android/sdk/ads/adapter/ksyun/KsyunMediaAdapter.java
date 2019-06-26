@@ -9,6 +9,7 @@ import com.ksc.ad.sdk.IKsyunRewardVideoAdListener;
 import com.ksc.ad.sdk.KsyunAdSdk;
 import com.ksc.ad.sdk.KsyunAdSdkConfig;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -23,6 +24,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "KsyunMediaAdapter";
     private IKsyunAdListener adListener;
     private IKsyunRewardVideoAdListener rewardVideoAdListener;
+    private boolean isRewarded = false;
 
     protected KsyunMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -92,8 +94,8 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void loadAd() {
-        ZplayDebug.i(TAG, "Ksyun Media loadAd "+getProvider().getKey2(), onoff);
-        KsyunAdSdk.getInstance().loadAd(getProvider().getKey2(),new IKsyunAdLoadListener() {
+        ZplayDebug.i(TAG, "Ksyun Media loadAd " + getProvider().getKey2(), onoff);
+        KsyunAdSdk.getInstance().loadAd(getProvider().getKey2(), new IKsyunAdLoadListener() {
             @Override
             public void onAdInfoSuccess() {
                 ZplayDebug.i(TAG, "Ksyun Media onAdInfoSuccess", onoff);
@@ -108,8 +110,9 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                 } else {
                     error = LayerErrorCode.ERROR_INTERNAL;
                 }
-                error.setExtraMsg("Ksyun errorMsg: " + erroMsg);
-                layerPreparedFailed(error);
+                AdError adError = new AdError(error);
+                adError.setErrorMessage("Ksyun errorMsg: " + erroMsg);
+                layerPreparedFailed(adError);
             }
 
             @Override
@@ -125,8 +128,9 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onShowSuccess(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onShowSuccess  adSlotId: " + adSlotId, onoff);
+                isRewarded = false;
                 layerExposure();
-                layerMediaStart();
+                layerStartPlaying();
             }
 
             @Override
@@ -139,7 +143,6 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             public void onADComplete(String adSlotId) {
                 //播放成功，预加载下一个奖励视频
                 ZplayDebug.i(TAG, "Ksyun Media onADComplete  adSlotId: " + adSlotId, onoff);
-                layerMediaEnd();
             }
 
             @Override
@@ -151,7 +154,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onADClose(String adSlotId) {
                 ZplayDebug.i(TAG, "Ksyun Media onADClose  adSlotId: " + adSlotId, onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
         };
 
@@ -159,6 +162,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdAwardSuccess(String s) {
                 ZplayDebug.i(TAG, "Ksyun Media onAdAwardSuccess  s: " + s, onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 

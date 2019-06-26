@@ -7,6 +7,8 @@ import com.chartboost.sdk.ChartboostDelegate;
 import com.chartboost.sdk.Libraries.CBLogging.Level;
 import com.chartboost.sdk.Model.CBError.CBImpressionError;
 
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
+
 public class ChartboostExtra {
 
 	private boolean hasInitCharboost = false;
@@ -45,6 +47,7 @@ public class ChartboostExtra {
 			Chartboost.onCreate(activity);
 			Chartboost.onStart(activity);
 			Chartboost.setAutoCacheAds(false);
+			updateGDPRStatus(activity);
 		}
 	}
 

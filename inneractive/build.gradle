@@ -1,0 +1,41 @@
+apply from: '../shared-build.gradle'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation "com.yumimobi.ads.thirdparty:iasdkcore:$IASDKCORE"
+    implementation "com.yumimobi.ads.thirdparty:iavideokit:$IAVIDEOKIT"
+    implementation "com.yumimobi.ads.thirdparty:iamraidkit:$IAMRAIDKIT"
+
+    implementation 'com.google.code.gson:gson:2.7'
+
+    implementation YUMI_MEDIATION
+}
+
+String version = project.properties['inneractive.version']
+
+ext {
+    bintrayRepo = 'ads'
+    bintrayName = project.name
+
+    publishedGroupId = 'com.yumimobi.ads.mediation'
+    artifactId = project.name
+    libraryVersion = version
+    libraryName = project.name
+    libraryDescription = 'Yumi Mediation Inneractive Adapter'
+
+    // publish aar to in-house(remember change the value of inHouseVersion):
+    // Call ./gradlew artifactoryPublish to publish
+    inHouseVersion = ""
+
+    siteUrl = ''
+    gitUrl = ''
+}
+
+if (version) {
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+}
+
+if (inHouseVersion) {
+    apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
+}

@@ -6,10 +6,12 @@ import com.playableads.PlayPreloadingListener;
 import com.playableads.PlayableAds;
 import com.playableads.SimplePlayLoadingListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
+import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 
 /**
@@ -21,8 +23,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private Activity activity;
     private YumiProviderBean provoder;
     private String TAG = "PlayableadsMediaAdapter";
-
-    private static final int REQUEST_NEXT_MEDIA = 0x001;
+    private boolean isRewarded = false;
 
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -46,6 +47,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
                 ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
+                isRewarded = true;
                 layerIncentived();
             }
 
@@ -53,21 +55,24 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                adError.setErrorMessage("Playable errorCoed: "+errorCode+"errorMsg: " + message);
+                layerExposureFailed(adError);
             }
 
             @Override
             public void onVideoFinished() {
                 super.onVideoFinished();
                 ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
-                layerMediaEnd();
             }
 
             @Override
             public void onVideoStart() {
                 super.onVideoStart();
                 ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
+                isRewarded = false;
                 layerExposure();
-                layerMediaStart();
+                layerStartPlaying();
             }
 
             @Override
@@ -80,7 +85,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdClosed() {
                 super.onAdClosed();
                 ZplayDebug.d(TAG, "Playable media Video AdClosed: ", onoff);
-                layerClosed();
+                layerClosed(isRewarded);
             }
         });
 

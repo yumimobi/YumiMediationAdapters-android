@@ -1,6 +1,14 @@
 package com.yumi.android.sdk.ads.adapter.iqzone;
 
+import android.content.Context;
+
+import com.iqzone.android.GDPR;
+import com.iqzone.android.GDPRConsent;
+import com.iqzone.android.IQzoneBannerView;
+import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 import static android.text.TextUtils.isEmpty;
 
@@ -10,18 +18,27 @@ import static android.text.TextUtils.isEmpty;
  * Created by lgd on 2019/1/28.
  */
 class IQZoneUtil {
-    static LayerErrorCode recodeError(LayerErrorCode layerErrorCode) {
+    static AdError recodeError(LayerErrorCode layerErrorCode) {
         return recodeError(layerErrorCode, null);
     }
 
-    static LayerErrorCode recodeError(LayerErrorCode layerErrorCode, String yumiLog) {
+    static AdError recodeError(LayerErrorCode layerErrorCode, String yumiLog) {
         String extraMsg = "IQZone errorMsg: null";
 
         if (!isEmpty(yumiLog)) {
             extraMsg += ", " + yumiLog;
         }
 
-        layerErrorCode.setExtraMsg(extraMsg);
-        return layerErrorCode;
+        AdError result = new AdError(layerErrorCode);
+        result.setErrorMessage(extraMsg);
+        return result;
+    }
+
+    static void updateGDPRStatus(Context context) {
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
+            GDPRConsent consent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ? GDPRConsent.CONSENTED : GDPRConsent.DOES_NOT_CONSENT;
+            IQzoneBannerView imdBannerAd = new IQzoneBannerView(context);
+            imdBannerAd.setGDPRApplies(GDPR.APPLIES, consent);
+        }
     }
 }
