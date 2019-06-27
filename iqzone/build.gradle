@@ -21,6 +21,9 @@ dependencies {
 
     implementation('com.mopub:mopub-sdk:5.0.0@aar') {
         transitive = true
+        // TODO: mopub 依赖的 moat-mobile-app-kit 库需要在 https://s3.amazonaws.com/moat-sdk-builds（翻墙） 库中下载，经常 timeout 或其它问题
+        // TODO: 为了不折腾，在这里记录，当需要同步资源时，取消下面的注释即可
+        //exclude group: 'com.moat.analytics.mobile.mpub', module: 'moat-mobile-app-kit'
     }
 
     implementation 'com.google.code.gson:gson:2.7'
@@ -34,8 +37,12 @@ dependencies {
     implementation "com.yumimobi.ads.thirdparty:vungle:$VUNGLE"
     implementation "com.yumimobi.ads.thirdparty:applovin:$APPLOVIN"
 
-    implementation 'com.google.android.gms:play-services-ads:11.0.4'
+    implementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
 
+}
+
+repositories {
+    maven { url "https://s3.amazonaws.com/moat-sdk-builds" }
 }
 
 String version = project.properties['iqzone.version']
