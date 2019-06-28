@@ -7,8 +7,11 @@ import com.unity3d.ads.UnityAds;
  */
 
 public interface IMyUnityAdsListener {
-    public void onUnityAdsError(UnityAds.UnityAdsError error, String message);
-    public void onUnityAdsFinish(String zoneId, UnityAds.FinishState result);
-    public void onUnityAdsReady(String zoneId);
-    public void onUnityAdsStart(String zoneId);
+    void onUnityAdsError(UnityAds.UnityAdsError error, String message);
+
+    void onUnityAdsFinish(String zoneId, UnityAds.FinishState result);
+
+    void onUnityAdsReady(String zoneId);
+
+    void onUnityAdsStart(String zoneId);
 }

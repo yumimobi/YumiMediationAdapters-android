@@ -10,10 +10,10 @@ public class MyIntersititialMraidiListener implements MRAIDViewListener {
 
     private InterstitialAD intersititialAD;
 
-    public MyIntersititialMraidiListener(InterstitialAD intersititialAD)
-    {
+    public MyIntersititialMraidiListener(InterstitialAD intersititialAD) {
         this.intersititialAD = intersititialAD;
     }
+
     @Override
     public void mraidViewLoaded(MRAIDView mraidView) {
         intersititialAD.setStatusPrepared();

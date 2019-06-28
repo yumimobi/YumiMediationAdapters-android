@@ -23,10 +23,9 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "VungleInterstitialAdapter";
+    private static final int RESTART_INIT = 0x001;
     private static LoadAdCallback mLoadAdCallback;
     private static PlayAdCallback mPlayAdCallback;
-
-    private static final int RESTART_INIT = 0x001;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {

@@ -261,8 +261,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         }
 
         public class GdtNativeViewController extends YumiNativeAdVideoController {
-            private NativeUnifiedADData gdtData;
             YumiVideoLifecycleCallbacks videoLifecycleCallbacks;
+            private NativeUnifiedADData gdtData;
 
             private GdtNativeViewController(NativeUnifiedADData gdtData, MediaView mediaview) {
                 this.gdtData = gdtData;

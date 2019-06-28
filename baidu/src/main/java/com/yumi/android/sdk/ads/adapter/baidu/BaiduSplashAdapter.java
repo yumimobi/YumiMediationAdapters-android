@@ -24,6 +24,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BaiduSplashAdapter";
 
     private static final int WHAT_TIMEOUT = 0;
+    private boolean hasHitLayerPreparedFailed;
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -31,8 +32,6 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             hitPreparedFailed("not got any callback from the sdk");
         }
     };
-
-    private boolean hasHitLayerPreparedFailed;
 
     public BaiduSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);

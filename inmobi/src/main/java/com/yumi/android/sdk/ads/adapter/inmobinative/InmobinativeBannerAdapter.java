@@ -22,13 +22,12 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
 
 public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
 
+    private static final String TAG = "InmobinativeBannerAdapter";
+    private InMobiNative nativeAd;
+
     protected InmobinativeBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
-
-    private static final String TAG = "InmobinativeBannerAdapter";
-
-    private InMobiNative nativeAd;
 
     @Override
     protected void init() {
