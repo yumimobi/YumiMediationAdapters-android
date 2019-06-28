@@ -48,17 +48,17 @@ public class ChartboostUtil {
         return result;
     }
 
-    static void updateGDPRStatus(Context context){
+    static void updateGDPRStatus(Context context) {
 
-        if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
 
         boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://answers.chartboost.com/en-us/child_article/android#gdpr
-        if(isConsent) {
+        if (isConsent) {
             Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.YES_BEHAVIORAL);
-        }else {
+        } else {
             Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.NO_BEHAVIORAL);
         }
     }

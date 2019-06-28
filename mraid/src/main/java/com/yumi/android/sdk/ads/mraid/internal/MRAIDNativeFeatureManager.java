@@ -10,17 +10,17 @@ import com.yumi.android.sdk.ads.mraid.MRAIDNativeFeature;
 import java.util.ArrayList;
 
 public class MRAIDNativeFeatureManager {
-    
-	private final static String TAG = "MRAIDNativeFeatureManager";
-    
+
+    private final static String TAG = "MRAIDNativeFeatureManager";
+
     private Context context;
     private ArrayList<String> supportedNativeFeatures;
-    
+
     public MRAIDNativeFeatureManager(Context context, ArrayList<String> supportedNativeFeatures) {
         this.context = context;
         this.supportedNativeFeatures = supportedNativeFeatures;
     }
-    
+
     public boolean isCalendarSupported() {
         boolean retval =
                 supportedNativeFeatures.contains(MRAIDNativeFeature.CALENDAR) &&
@@ -40,7 +40,7 @@ public class MRAIDNativeFeatureManager {
     public boolean isSmsSupported() {
         boolean retval =
                 supportedNativeFeatures.contains(MRAIDNativeFeature.SMS);
-                //        && PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(Manifest.permission.SEND_SMS);
+        //        && PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(Manifest.permission.SEND_SMS);
         MRAIDLog.d(TAG, "isSmsSupported " + retval);
         return retval;
     }
@@ -50,16 +50,16 @@ public class MRAIDNativeFeatureManager {
         MRAIDLog.d(TAG, "isStorePictureSupported " + retval);
         return retval;
     }
-    
+
     public boolean isTelSupported() {
         boolean retval =
                 supportedNativeFeatures.contains(MRAIDNativeFeature.TEL);
-                        //&& PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(Manifest.permission.CALL_PHONE);
+        //&& PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(Manifest.permission.CALL_PHONE);
         MRAIDLog.d(TAG, "isTelSupported " + retval);
         return retval;
     }
 
     public ArrayList<String> getSupportedNativeFeatures() {
-    	return supportedNativeFeatures;
+        return supportedNativeFeatures;
     }
 }

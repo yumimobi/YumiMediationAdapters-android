@@ -5,13 +5,13 @@ import java.util.List;
 
 public final class MRAIDResizeProperties {
 
-	public static final int CUSTOM_CLOSE_POSITION_TOP_LEFT      = 0;
-	public static final int CUSTOM_CLOSE_POSITION_TOP_CENTER    = 1;
-	public static final int CUSTOM_CLOSE_POSITION_TOP_RIGHT     = 2;
-	public static final int CUSTOM_CLOSE_POSITION_CENTER        = 3;
-	public static final int CUSTOM_CLOSE_POSITION_BOTTOM_LEFT   = 4;
-	public static final int CUSTOM_CLOSE_POSITION_BOTTOM_CENTER = 5;
-	public static final int CUSTOM_CLOSE_POSITION_BOTTOM_RIGHT  = 6;
+    public static final int CUSTOM_CLOSE_POSITION_TOP_LEFT = 0;
+    public static final int CUSTOM_CLOSE_POSITION_TOP_CENTER = 1;
+    public static final int CUSTOM_CLOSE_POSITION_TOP_RIGHT = 2;
+    public static final int CUSTOM_CLOSE_POSITION_CENTER = 3;
+    public static final int CUSTOM_CLOSE_POSITION_BOTTOM_LEFT = 4;
+    public static final int CUSTOM_CLOSE_POSITION_BOTTOM_CENTER = 5;
+    public static final int CUSTOM_CLOSE_POSITION_BOTTOM_RIGHT = 6;
 
     public int width;
     public int height;
@@ -38,7 +38,7 @@ public final class MRAIDResizeProperties {
         this.customClosePosition = customClosePosition;
         this.allowOffscreen = allowOffscreen;
     }
-    
+
     static public int customClosePositionFromString(String name) {
         final List<String> names = Arrays.asList(
                 "top-left",
@@ -48,7 +48,7 @@ public final class MRAIDResizeProperties {
                 "bottom-left",
                 "bottom-center",
                 "bottom-right"
-                );
+        );
         int idx = names.indexOf(name);
         if (idx != -1) {
             return idx;
@@ -56,5 +56,5 @@ public final class MRAIDResizeProperties {
         // Use top-right for the default value.
         return CUSTOM_CLOSE_POSITION_TOP_RIGHT;
     }
-    
+
 }

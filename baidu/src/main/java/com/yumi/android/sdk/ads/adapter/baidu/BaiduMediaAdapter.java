@@ -12,9 +12,9 @@ import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
+    private static boolean isReady = false;
     private RewardVideoAd rewardVideoAd;
     private RewardVideoAd.RewardVideoAdListener rewardVideoAdListener;
-    private static boolean isReady = false;
     private boolean isRewarded = false;
 
 
