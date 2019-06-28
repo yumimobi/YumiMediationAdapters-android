@@ -61,7 +61,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
     @Override
     protected void onPreparedNativeInterstitial() {
         ZplayDebug.d(TAG, "admob navitead interstitial onPreparedNativeInterstitial", onoff);
-        refreshAd(true,true);
+        refreshAd(true, true);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
     protected void init() {
         ZplayDebug.d(TAG, "admob navitead interstitial init", onoff);
     }
+
     @Override
     protected void callOnActivityDestroy() {
 
@@ -109,7 +110,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
                     NativeAppInstallAdView adView = (NativeAppInstallAdView) getActivity().getLayoutInflater()
                             .inflate(R.layout.ad_app_install, null);
                     populateAppInstallAdView(ad, adView);
-                    if(adView!=null) {
+                    if (adView != null) {
                         ZplayDebug.d(TAG, "admob navitead interstitial refreshAd onAppInstallAdLoaded", onoff);
                         loadData(adView);
                     }
@@ -124,7 +125,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
                     NativeContentAdView adView = (NativeContentAdView) getActivity().getLayoutInflater()
                             .inflate(R.layout.ad_content, null);
                     populateContentAdView(ad, adView);
-                    if(adView!=null) {
+                    if (adView != null) {
                         ZplayDebug.d(TAG, "admob navitead interstitial refreshAd onContentAdLoaded", onoff);
                         loadData(adView);
                     }

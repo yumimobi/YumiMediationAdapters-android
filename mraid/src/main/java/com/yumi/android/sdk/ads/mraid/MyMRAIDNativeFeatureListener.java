@@ -19,10 +19,42 @@ import java.util.List;
 
 public class MyMRAIDNativeFeatureListener implements MRAIDNativeFeatureListener {
 
+    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 101;
     private Activity context;
 
     public MyMRAIDNativeFeatureListener(Activity context) {
         this.context = context;
+    }
+
+    public static void checkSelfPermissionYumi(Activity context, String permission) {
+        try {
+            if (android.os.Build.VERSION.SDK_INT < 23) {
+                return;
+            }
+            List<String> denyPermissions = findDeniedPermissions(context, permission);
+
+            if (denyPermissions != null && denyPermissions.size() > 0) {
+                if (!ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.READ_CONTACTS)) {
+                    ActivityCompat.requestPermissions(context, (String[]) denyPermissions.toArray(new String[denyPermissions.size()]), MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+                }
+            }
+
+        } catch (Exception e) {
+        }
+    }
+
+    private static List<String> findDeniedPermissions(Activity context, String... permission) {
+        try {
+            List<String> denyPermissions = new ArrayList<>();
+            for (String value : permission) {
+                if (ContextCompat.checkSelfPermission(context, value) != PackageManager.PERMISSION_GRANTED) {
+                    denyPermissions.add(value);
+                }
+            }
+            return denyPermissions;
+        } catch (Exception e) {
+        }
+        return null;
     }
 
     @Override
@@ -82,39 +114,6 @@ public class MyMRAIDNativeFeatureListener implements MRAIDNativeFeatureListener 
             }
         }
 
-    }
-
-    private static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 101;
-
-    public static void checkSelfPermissionYumi(Activity context, String permission) {
-        try {
-            if (android.os.Build.VERSION.SDK_INT < 23) {
-                return;
-            }
-            List<String> denyPermissions = findDeniedPermissions(context, permission);
-
-            if (denyPermissions != null && denyPermissions.size() > 0) {
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.READ_CONTACTS)) {
-                    ActivityCompat.requestPermissions(context, (String[]) denyPermissions.toArray(new String[denyPermissions.size()]), MY_PERMISSIONS_REQUEST_READ_CONTACTS);
-                }
-            }
-
-        } catch (Exception e) {
-        }
-    }
-
-    private static List<String> findDeniedPermissions(Activity context, String... permission) {
-        try {
-            List<String> denyPermissions = new ArrayList<>();
-            for (String value : permission) {
-                if (ContextCompat.checkSelfPermission(context, value) != PackageManager.PERMISSION_GRANTED) {
-                    denyPermissions.add(value);
-                }
-            }
-            return denyPermissions;
-        } catch (Exception e) {
-        }
-        return null;
     }
 
 

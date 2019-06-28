@@ -34,7 +34,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
         ZplayDebug.d(TAG, "Playable Interstitial onPrepareMedia: ", onoff);
         if (playable != null && listener != null) {
             ZplayDebug.d(TAG, "Playable Interstitial REQUEST_NEXT_MEDIA ", onoff);
-            playable.requestPlayableAds(provoder.getKey2(),listener);
+            playable.requestPlayableAds(provoder.getKey2(), listener);
         }
     }
 
@@ -73,7 +73,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
             @Override
             public void onLandingPageInstallBtnClicked() {
-                layerClicked(-99f,-99f);
+                layerClicked(-99f, -99f);
                 super.onLandingPageInstallBtnClicked();
             }
 
@@ -88,15 +88,13 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if(playable.canPresentAd(provoder.getKey2())){
+        if (playable.canPresentAd(provoder.getKey2())) {
             ZplayDebug.d(TAG, "Playable Interstitial isMediaReady true", onoff);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
-
-
 
 
     @Override
@@ -110,6 +108,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                     ZplayDebug.d(TAG, "Playable Interstitial Ready ", onoff);
                     layerPrepared();
                 }
+
                 @Override
                 public void onLoadFailed(int errorCode, String s) {
                     ZplayDebug.d(TAG, "Playable Interstitial onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
@@ -122,9 +121,8 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                     layerPreparedFailed(recodeError(errorCode, s));
                 }
             };
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "Playable Interstitial init error ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "Playable Interstitial init error ", e, onoff);
         }
     }
 
@@ -134,9 +132,8 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
             if (playable != null) {
                 ZplayDebug.d(TAG, "Playable Interstitial onDestroy ", onoff);
             }
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "Playable Interstitial callOnActivityDestroy error : ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "Playable Interstitial callOnActivityDestroy error : ", e, onoff);
         }
     }
 

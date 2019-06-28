@@ -68,7 +68,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
         adListener = new ISDemandOnlyRewardedVideoListener() {
             @Override
             public void onRewardedVideoAdLoadSuccess(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadSuccess instanceId : " + instanceId , onoff);
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadSuccess instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerPrepared();
                 }
@@ -76,7 +76,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdLoadFailed(String instanceId, IronSourceError ironSourceError) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadFailed instanceId : " + instanceId , onoff);
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadFailed instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerPreparedFailed(generateLayerErrorCode(ironSourceError));
                 }
@@ -117,7 +117,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdClicked(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + instanceId , onoff);
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerClicked();
                 }
@@ -125,7 +125,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdRewarded(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId , onoff);
+                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId, onoff);
                 if (instanceId.equals(getProvider().getKey2())) {
                     isRewarded = true;
                     layerIncentived();

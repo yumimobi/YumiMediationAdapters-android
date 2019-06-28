@@ -6,9 +6,6 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
     lintOptions {
         abortOnError false
@@ -23,7 +20,7 @@ android {
 
 ext {
     SUPOORT_LIBRAY_VERSION = '26.1.0'
-//    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:4.1.0'
+//    YUMI_MEDIATION = 'com.yumimobi.ads:mediation:4.1.1'
     YUMI_MEDIATION = project(':mediation')
 
     // Yumi and IQZone common party

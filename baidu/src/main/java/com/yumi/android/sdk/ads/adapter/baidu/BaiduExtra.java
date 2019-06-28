@@ -17,12 +17,6 @@ public class BaiduExtra {
         return BaiduExtraHolder.INSTANCE;
     }
 
-    private static class BaiduExtraHolder {
-
-        private static final BaiduExtra INSTANCE = new BaiduExtra();
-
-    }
-
     public InterstitialAd getBaiduInterstitialAd(Activity activity, String key2, InterstitialAdListener instertitialListener) {
 
         if (instertitial == null) {
@@ -30,5 +24,11 @@ public class BaiduExtra {
         }
         instertitial.setListener(instertitialListener);
         return instertitial;
+    }
+
+    private static class BaiduExtraHolder {
+
+        private static final BaiduExtra INSTANCE = new BaiduExtra();
+
     }
 }

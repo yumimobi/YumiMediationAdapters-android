@@ -44,7 +44,7 @@ public class InneractiveUtil {
         return result;
     }
 
-    public static void initInneractiveSDK(Activity activity,String key1){
+    public static void initInneractiveSDK(Activity activity, String key1) {
         boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
             InneractiveAdManager.setGdprConsent(isConsent);
