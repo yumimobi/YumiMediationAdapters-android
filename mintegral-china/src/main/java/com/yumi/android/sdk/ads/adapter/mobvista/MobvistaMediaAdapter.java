@@ -83,7 +83,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
             MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
             Map<String, String> map = sdk.getMTGConfigurationMap(getProvider().getKey1(), getProvider().getKey2()); //appId, appKey
             if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
-                int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ?  MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
+                int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ? MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
                 sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
             }
             sdk.init(map, getContext());

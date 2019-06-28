@@ -16,12 +16,10 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
 
     private static final String TAG = "UnityInterstitialAdapter";
+    private static final boolean isDebugMode = false; //测试模式 正式发部需要该成false
     private IMyUnityAdsListener unityAdsListener;
-    
-    private static final boolean isDebugMode=false; //测试模式 正式发部需要该成false
+    private boolean isPrepared = false;
 
-    private boolean isPrepared=false;
-    
     protected UnityInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
@@ -53,7 +51,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             callLayerPrepared();
         } else {
             isPrepared = false;
-        }   
+        }
     }
 
     @Override
@@ -66,7 +64,6 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected boolean isInterstitialLayerReady() {
         return UnityAds.isReady(getProvider().getKey2());
     }
-
 
 
     @Override
@@ -114,14 +111,12 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 UnityListenerFactory.setMyCpUnityAdsListener(unityAdsListener);
                 UnityAds.initialize(getActivity(), getProvider().getKey1(), UnityListenerFactory.getUnityAdsListenerInstance(), isDebugMode);
             }
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "unity Interstitial init error ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "unity Interstitial init error ", e, onoff);
         }
     }
-    
-    private synchronized void callLayerPrepared()
-    {
+
+    private synchronized void callLayerPrepared() {
         isPrepared = true;
         layerPrepared();
     }
@@ -129,7 +124,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void callOnActivityDestroy() {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

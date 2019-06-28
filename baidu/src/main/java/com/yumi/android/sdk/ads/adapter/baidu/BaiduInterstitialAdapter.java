@@ -1,13 +1,13 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
+import android.app.Activity;
+
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.InterstitialAd;
 import com.baidu.mobads.InterstitialAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-
-import android.app.Activity;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 
