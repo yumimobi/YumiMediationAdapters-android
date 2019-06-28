@@ -50,7 +50,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onShowMedia() {
-        if(mAd!=null) {
+        if (mAd != null) {
             if (mAd.isLoaded()) {
                 mAd.show();
             }
@@ -59,16 +59,16 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        try{
-        if(mAd!=null) {
-            if (mAd.isLoaded()) {
-                ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
-                return true;
+        try {
+            if (mAd != null) {
+                if (mAd.isLoaded()) {
+                    ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
+                    return true;
+                }
             }
-        }
-        ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
-        return false;
-        }catch (Exception e){
+            ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
+            return false;
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "admob media isMediaReady error : ", e, onoff);
             return isReady;
         }
@@ -84,6 +84,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void callOnActivityDestroy() {
     }
+
     private void createMediaListener() {
         mediaListener = new RewardedVideoAdListener() {
             @Override

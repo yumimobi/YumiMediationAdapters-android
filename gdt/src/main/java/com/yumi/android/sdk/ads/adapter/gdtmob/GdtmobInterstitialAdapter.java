@@ -16,11 +16,10 @@ import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "GdtInterstitialAdapter";
+    private static final int REQ_INTERSTITIAL = 0x321;
+    protected boolean interstitialReady;
     private UnifiedInterstitialADListener unifiedInterstitialListener;
     private UnifiedInterstitialAD unifiedInterstitial;
-    protected boolean interstitialReady;
-    private static final int REQ_INTERSTITIAL = 0x321;
-
     private final Handler gdtInterstitialHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (msg.what == REQ_INTERSTITIAL) {
@@ -93,7 +92,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onNoAD(AdError adError) {
                 interstitialReady = false;
-                if (adError == null){
+                if (adError == null) {
                     ZplayDebug.d(TAG, "gdt interstitial failed adError = null", onoff);
                     layerPreparedFailed(recodeError(null));
                     return;

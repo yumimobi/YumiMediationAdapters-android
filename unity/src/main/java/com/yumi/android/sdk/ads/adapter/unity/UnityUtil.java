@@ -21,8 +21,8 @@ public class UnityUtil {
         return result;
     }
 
-    static void updateGDPRStatus(Context context){
-        if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
+    static void updateGDPRStatus(Context context) {
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
         boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
