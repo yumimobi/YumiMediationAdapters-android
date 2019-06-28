@@ -21,12 +21,12 @@ public class UnityUtil {
         return result;
     }
 
-    static void updateGDPRStatus(Context context){
+    static void updateGDPRStatus(Context context) {
 
-        if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN){
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
-        
+
         boolean isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED;
         // https://unityads.unity3d.com/help/legal/gdpr
         MetaData gdprMetaData = new MetaData(context);

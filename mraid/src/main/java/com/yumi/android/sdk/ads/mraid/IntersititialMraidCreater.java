@@ -62,7 +62,7 @@ public class IntersititialMraidCreater {
                     String[].class,
                     Class.forName("com.yumi.android.sdk.ads.mraid.MRAIDViewListener"),
                     Class.forName("com.yumi.android.sdk.ads.mraid.MRAIDNativeFeatureListener")
-                    );
+            );
 
             obj_MRAIDView = constructor_MRAIDView.newInstance(
                     activity,
@@ -75,7 +75,7 @@ public class IntersititialMraidCreater {
 
             FrameLayout.LayoutParams web_param = new FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            intersititialDialogHouse.addView(((ViewGroup)obj_MRAIDView), web_param);
+            intersititialDialogHouse.addView(((ViewGroup) obj_MRAIDView), web_param);
             return true;
         } catch (Exception e) {
             ZplayDebug.e_s(TAG, e.getMessage(), e, onoff);
@@ -84,8 +84,7 @@ public class IntersititialMraidCreater {
     }
 
     public void destory() {
-        if (obj_MRAIDView!=null)
-        {
+        if (obj_MRAIDView != null) {
             try {
                 String classname_MRAIDView = "com.yumi.android.sdk.ads.mraid.MRAIDView";
                 Class<?> class_MRAIDView = Class.forName(classname_MRAIDView);

@@ -100,8 +100,7 @@ public class BannerMraidCreater {
     }
 
     public void destroyBannerMraid() {
-        if (mraidView != null)
-        {
+        if (mraidView != null) {
             mraidView.destroy();
         }
         /*if (obj_MRAIDView != null) {

@@ -15,56 +15,46 @@ public class UnityListenerFactory {
     private static IMyUnityAdsListener myCpUnityAdsListener;
     private static IMyUnityAdsListener myMediaUnityAdsListener;
 
-    public static IUnityAdsListener getUnityAdsListenerInstance()
-    {
-        if(unityAdsListener==null)
-        {
-            unityAdsListener=new IUnityAdsListener() {
+    public static IUnityAdsListener getUnityAdsListenerInstance() {
+        if (unityAdsListener == null) {
+            unityAdsListener = new IUnityAdsListener() {
                 @Override
                 public void onUnityAdsReady(String s) {
-                    if(myCpUnityAdsListener!=null)
-                    {
+                    if (myCpUnityAdsListener != null) {
                         myCpUnityAdsListener.onUnityAdsReady(s);
                     }
-                    if(myMediaUnityAdsListener!=null)
-                    {
+                    if (myMediaUnityAdsListener != null) {
                         myMediaUnityAdsListener.onUnityAdsReady(s);
                     }
                 }
 
                 @Override
                 public void onUnityAdsStart(String s) {
-                    if(myCpUnityAdsListener!=null)
-                    {
+                    if (myCpUnityAdsListener != null) {
                         myCpUnityAdsListener.onUnityAdsStart(s);
                     }
-                    if(myMediaUnityAdsListener!=null)
-                    {
+                    if (myMediaUnityAdsListener != null) {
                         myMediaUnityAdsListener.onUnityAdsStart(s);
                     }
                 }
 
                 @Override
                 public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
-                    if(myCpUnityAdsListener!=null)
-                    {
-                        myCpUnityAdsListener.onUnityAdsFinish(s,finishState);
+                    if (myCpUnityAdsListener != null) {
+                        myCpUnityAdsListener.onUnityAdsFinish(s, finishState);
                     }
-                    if(myMediaUnityAdsListener!=null)
-                    {
-                        myMediaUnityAdsListener.onUnityAdsFinish(s,finishState);
+                    if (myMediaUnityAdsListener != null) {
+                        myMediaUnityAdsListener.onUnityAdsFinish(s, finishState);
                     }
                 }
 
                 @Override
                 public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-                    if(myCpUnityAdsListener!=null)
-                    {
-                        myCpUnityAdsListener.onUnityAdsError(unityAdsError,s);
+                    if (myCpUnityAdsListener != null) {
+                        myCpUnityAdsListener.onUnityAdsError(unityAdsError, s);
                     }
-                    if(myMediaUnityAdsListener!=null)
-                    {
-                        myMediaUnityAdsListener.onUnityAdsError(unityAdsError,s);
+                    if (myMediaUnityAdsListener != null) {
+                        myMediaUnityAdsListener.onUnityAdsError(unityAdsError, s);
                     }
                 }
             };
@@ -72,13 +62,11 @@ public class UnityListenerFactory {
         return unityAdsListener;
     }
 
-   public static void setMyCpUnityAdsListener(IMyUnityAdsListener cpUnityAdsListener)
-   {
-       myCpUnityAdsListener=cpUnityAdsListener;
-   }
+    public static void setMyCpUnityAdsListener(IMyUnityAdsListener cpUnityAdsListener) {
+        myCpUnityAdsListener = cpUnityAdsListener;
+    }
 
-    public static void setMyMediaUnityAdsListener(IMyUnityAdsListener mediaUnityAdsListener)
-    {
-        myMediaUnityAdsListener=mediaUnityAdsListener;
+    public static void setMyMediaUnityAdsListener(IMyUnityAdsListener mediaUnityAdsListener) {
+        myMediaUnityAdsListener = mediaUnityAdsListener;
     }
 }

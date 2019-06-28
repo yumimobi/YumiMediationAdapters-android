@@ -22,7 +22,7 @@ import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "GdtmobSplashAdapter";
     private static final int WHAT_TIMEOUT = 0;
-    private Handler mHandler = new Handler(Looper.getMainLooper()){
+    private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
             layerTimeout();

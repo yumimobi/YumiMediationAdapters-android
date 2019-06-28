@@ -32,9 +32,9 @@ class IronsourceUtil {
         return result;
     }
 
-    static void updateGDPRStatus(Context context){
+    static void updateGDPRStatus(Context context) {
 
-        if(YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
+        if (YumiSettings.getGDPRStatus() == YumiGDPRStatus.UNKNOWN) {
             return;
         }
 

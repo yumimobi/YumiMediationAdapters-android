@@ -75,7 +75,7 @@ public class FacebookBiddingInterstitialAdapter extends
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1()+ ",payload:" + getProvider().getPayload(), onoff);
+        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload:" + getProvider().getPayload(), onoff);
         createListener();
     }
 
