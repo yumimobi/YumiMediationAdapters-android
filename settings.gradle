@@ -18,6 +18,4 @@ include ':adcolony',
         ':oneway',
         ':playableads',
         ':unity',
-        ':unity-china',
-        ':vungle',
-        ':vungle-china'
+        ':vungle'
