@@ -96,7 +96,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onRequestSuccess(TJPlacement tjPlacement) {
                 ZplayDebug.d(TAG, "onRequestSuccess: " + tjPlacement.isContentReady() + " : " + tjPlacement.isContentAvailable());
                 if (!tjPlacement.isContentAvailable()) {
-                    layerExposureFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
+                    layerPreparedFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
                 }
             }
 
