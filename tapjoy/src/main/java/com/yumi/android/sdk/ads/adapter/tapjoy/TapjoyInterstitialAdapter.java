@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.connectTapjoy;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.recodeError;
+import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRStatus;
 
 public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -41,6 +42,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
+        updateGDPRStatus();
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
             if (!isReady()) {
