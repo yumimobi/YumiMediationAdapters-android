@@ -43,7 +43,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void onPrepareInterstitial() {
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
-            if (directPlayPlacement != null && !directPlayPlacement.isContentReady()) {
+            if (!isReady()) {
                 directPlayPlacement.requestContent();
             }
         } else {
