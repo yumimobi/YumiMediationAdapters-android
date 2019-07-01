@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.connectTapjoy;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.recodeError;
+import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRStatus;
 
 /**
  * Created by Administrator on 2017/4/19.
@@ -41,6 +42,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
+        updateGDPRStatus();
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
             if (!isReady()) {

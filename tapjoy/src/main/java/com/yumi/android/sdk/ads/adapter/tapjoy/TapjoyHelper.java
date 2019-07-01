@@ -7,10 +7,14 @@ import com.tapjoy.TJError;
 import com.tapjoy.Tapjoy;
 import com.tapjoy.TapjoyConnectFlag;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Hashtable;
+
+import static com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus.NON_PERSONALIZED;
+import static com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus.PERSONALIZED;
 
 /**
  * Description:
@@ -43,5 +47,17 @@ class TapjoyHelper {
         // API 文档：https://ltv.tapjoy.com/sdk/api/java/index.html
         ZplayDebug.d(TAG, "recodeError: " + tjError.code + ", msg: " + tjError.message);
         return new AdError(LayerErrorCode.ERROR_NO_FILL);
+    }
+
+    static void updateGDPRStatus() {
+        if (YumiSettings.getGDPRStatus() == PERSONALIZED) {
+            Tapjoy.subjectToGDPR(true);
+            Tapjoy.setUserConsent("1");
+        }
+
+        if (YumiSettings.getGDPRStatus() == NON_PERSONALIZED) {
+            Tapjoy.subjectToGDPR(true);
+            Tapjoy.setUserConsent("0");
+        }
     }
 }
