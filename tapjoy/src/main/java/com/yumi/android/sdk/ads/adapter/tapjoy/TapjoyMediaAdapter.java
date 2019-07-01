@@ -43,7 +43,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
-            if (directPlayPlacement != null && !directPlayPlacement.isContentReady()) {
+            if (!isReady()) {
                 directPlayPlacement.requestContent();
             }
         } else {
