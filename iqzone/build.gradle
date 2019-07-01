@@ -35,7 +35,7 @@ dependencies {
     implementation "com.yumimobi.ads.thirdparty:mobvista:$MOBVISTA"
     implementation "com.yumimobi.ads.thirdparty:unity:$UNITY"
     implementation "com.yumimobi.ads.thirdparty:vungle:$VUNGLE"
-    implementation "com.yumimobi.ads.thirdparty:applovin:$APPLOVIN"
+    implementation "com.applovin:applovin-sdk:$APPLOVIN"
 
     implementation "com.google.android.gms:play-services-ads:$PLAY_SERVICES_ADS"
 
