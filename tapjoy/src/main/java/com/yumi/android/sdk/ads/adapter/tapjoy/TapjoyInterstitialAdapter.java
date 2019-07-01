@@ -20,8 +20,6 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "TapjoyInterstitial";
     private TJPlacement directPlayPlacement;
-    private int mLastCoins;
-    private boolean isRewarded;
     private boolean isConnectSuccess;
 
     protected TapjoyInterstitialAdapter(Activity activity, YumiProviderBean provider) {
