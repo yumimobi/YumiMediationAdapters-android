@@ -47,6 +47,7 @@ public class FacebookBiddingInterstitialAdapter extends
 
     @Override
     protected void onPrepareInterstitial() {
+     try{
         ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
         if (getProvider().getErrCode() != 200) {
             layerPreparedFailed(recodeError(null), getProvider().getErrMessage());
@@ -57,6 +58,9 @@ public class FacebookBiddingInterstitialAdapter extends
             interstitial.setAdListener(interstitialListener);
         }
         interstitial.loadAdFromBid(getProvider().getPayload());
+     } catch (Exception e) {
+         ZplayDebug.e(TAG, "facebook bidding interstitial onPrepareInterstitial error", e, onoff);
+     }
     }
 
     @Override
