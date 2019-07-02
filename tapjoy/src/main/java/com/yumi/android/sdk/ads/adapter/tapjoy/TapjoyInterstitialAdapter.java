@@ -15,13 +15,12 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.connectTapjoy;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.recodeError;
+import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRStatus;
 
 public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "TapjoyInterstitial";
     private TJPlacement directPlayPlacement;
-    private int mLastCoins;
-    private boolean isRewarded;
     private boolean isConnectSuccess;
 
     protected TapjoyInterstitialAdapter(Activity activity, YumiProviderBean provider) {
@@ -43,9 +42,10 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
+        updateGDPRStatus();
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
-            if (directPlayPlacement != null && !directPlayPlacement.isContentReady()) {
+            if (!isReady()) {
                 directPlayPlacement.requestContent();
             }
         } else {
@@ -96,7 +96,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onRequestSuccess(TJPlacement tjPlacement) {
                 ZplayDebug.d(TAG, "onRequestSuccess: " + tjPlacement.isContentReady() + " : " + tjPlacement.isContentAvailable());
                 if (!tjPlacement.isContentAvailable()) {
-                    layerExposureFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
+                    layerPreparedFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
                 }
             }
 

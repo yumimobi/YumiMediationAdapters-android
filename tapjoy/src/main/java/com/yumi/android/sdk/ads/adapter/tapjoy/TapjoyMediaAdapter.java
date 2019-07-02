@@ -5,7 +5,6 @@ import android.app.Activity;
 import com.tapjoy.TJActionRequest;
 import com.tapjoy.TJConnectListener;
 import com.tapjoy.TJError;
-import com.tapjoy.TJGetCurrencyBalanceListener;
 import com.tapjoy.TJPlacement;
 import com.tapjoy.TJPlacementListener;
 import com.tapjoy.TJPlacementVideoListener;
@@ -16,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.connectTapjoy;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.recodeError;
+import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRStatus;
 
 /**
  * Created by Administrator on 2017/4/19.
@@ -25,7 +25,6 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "TapjoyMediaAdapter";
     private TJPlacement directPlayPlacement;
-    private int mLastCoins;
     private boolean isRewarded;
     private boolean isConnectSuccess;
 
@@ -43,9 +42,10 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
+        updateGDPRStatus();
         Tapjoy.setActivity(getActivity());
         if (isConnectSuccess) {
-            if (directPlayPlacement != null && !directPlayPlacement.isContentReady()) {
+            if (!isReady()) {
                 directPlayPlacement.requestContent();
             }
         } else {
@@ -91,24 +91,12 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void requestAd() {
-
-        Tapjoy.getCurrencyBalance(new TJGetCurrencyBalanceListener() {
-            @Override
-            public void onGetCurrencyBalanceResponse(String s, int i) {
-                mLastCoins = i;
-            }
-
-            @Override
-            public void onGetCurrencyBalanceResponseFailure(String s) {
-            }
-        });
-
         directPlayPlacement = Tapjoy.getPlacement(getProvider().getKey2(), new TJPlacementListener() {
             @Override
             public void onRequestSuccess(TJPlacement tjPlacement) {
                 ZplayDebug.d(TAG, "onRequestSuccess: " + tjPlacement.isContentReady() + " : " + tjPlacement.isContentAvailable());
                 if (!tjPlacement.isContentAvailable()) {
-                    layerExposureFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
+                    layerPreparedFailed(recodeError(new TJError(-1, "No content available for placement " + tjPlacement.getName())));
                 }
             }
 
@@ -127,6 +115,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onContentShow(TJPlacement tjPlacement) {
                 ZplayDebug.d(TAG, "onContentShow: ");
+                isRewarded = false;
                 layerExposure();
             }
 
@@ -160,6 +149,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
             public void onVideoStart(TJPlacement placement) {
                 ZplayDebug.i(TAG, "onVideoStart: " + placement);
                 layerStartPlaying();
+                isRewarded = false;
             }
 
             @Override
@@ -170,23 +160,8 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onVideoComplete(TJPlacement placement) {
                 ZplayDebug.d(TAG, "onVideoComplete: ");
-
-                Tapjoy.getCurrencyBalance(new TJGetCurrencyBalanceListener() {
-                    @Override
-                    public void onGetCurrencyBalanceResponse(String s, int i) {
-                        isRewarded = i > mLastCoins;
-                        mLastCoins = i;
-                        ZplayDebug.d(TAG, "onGetCurrencyBalanceResponse: " + mLastCoins);
-                        if (isRewarded) {
-                            layerIncentived();
-                        }
-                    }
-
-                    @Override
-                    public void onGetCurrencyBalanceResponseFailure(String s) {
-                        ZplayDebug.d(TAG, "onGetCurrencyBalanceResponseFailure: " + s);
-                    }
-                });
+                isRewarded = true;
+                layerIncentived();
             }
 
         });
