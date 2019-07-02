@@ -85,7 +85,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                     }
 
                     public void onRewardedAdFailedToShow(int errorCode) {
-                        layerClosed(false);
+                        layerExposureFailed(recodeError(errorCode));
                     }
                 });
             }
