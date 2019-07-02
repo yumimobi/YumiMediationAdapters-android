@@ -47,16 +47,20 @@ public class FacebookBiddingInterstitialAdapter extends
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
-        if (getProvider().getErrCode() != 200) {
-            layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
-            return;
+        try {
+            ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
+            if (getProvider().getErrCode() != 200) {
+                layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
+                return;
+            }
+            if (interstitial == null) {
+                interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
+                interstitial.setAdListener(interstitialListener);
+            }
+            interstitial.loadAdFromBid(getProvider().getPayload());
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "facebook interstitial onPrepareInterstitial error", e, onoff);
         }
-        if (interstitial == null) {
-            interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
-            interstitial.setAdListener(interstitialListener);
-        }
-        interstitial.loadAdFromBid(getProvider().getPayload());
     }
 
     @Override
@@ -75,7 +79,7 @@ public class FacebookBiddingInterstitialAdapter extends
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1()+ ",payload:" + getProvider().getPayload(), onoff);
+        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload:" + getProvider().getPayload(), onoff);
         createListener();
     }
 
