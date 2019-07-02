@@ -44,12 +44,16 @@ public class FacebookInterstitialAdapter extends
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "facebook request new interstitial", onoff);
-        if (interstitial == null) {
-            interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
-            interstitial.setAdListener(interstitialListener);
+        try {
+            ZplayDebug.d(TAG, "facebook request new interstitial", onoff);
+            if (interstitial == null) {
+                interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
+                interstitial.setAdListener(interstitialListener);
+            }
+            interstitial.loadAd();
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "facebook interstitial onPrepareInterstitial error", e, onoff);
         }
-        interstitial.loadAd();
     }
 
     @Override
