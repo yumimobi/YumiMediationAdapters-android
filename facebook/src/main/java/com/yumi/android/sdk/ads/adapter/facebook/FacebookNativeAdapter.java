@@ -45,12 +45,16 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
+    try{
         if (mNativeAd == null) {
             mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
             mNativeAd.setAdListener(nativeAdListener);
         }
         ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
         mNativeAd.loadAd();
+    } catch (Exception e) {
+        ZplayDebug.e(TAG, "facebook native onPrepareNative error", e, onoff);
+    }
     }
 
     @Override

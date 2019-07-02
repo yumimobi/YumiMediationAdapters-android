@@ -41,6 +41,7 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
 
 	@Override
 	protected void onPrepareBannerLayer() {
+	try{
         if (bannerSize == BANNER_SIZE_SMART) {
             ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
             layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
@@ -50,7 +51,10 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
 		banner = new AdView(getContext(), getProvider().getKey1(), calculateBannerSize());
 		banner.setAdListener(bannerListener);
 		banner.loadAd();
-	}
+    } catch (Exception e) {
+        ZplayDebug.e(TAG, "facebook banner onPrepareBanner error", e, onoff);
+    }
+}
 
 	@Override
 	protected void init() {
