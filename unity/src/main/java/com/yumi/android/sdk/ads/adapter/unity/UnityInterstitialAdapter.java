@@ -89,6 +89,5 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-        UnityAdsProxy.unregisterUnityAdsListener(getProvider().getKey2());
     }
 }
