@@ -89,7 +89,6 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void callOnActivityDestroy() {
-        UnityAdsProxy.unregisterUnityAdsListener(getProvider().getKey2());
     }
 
 }
