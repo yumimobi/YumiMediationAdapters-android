@@ -171,15 +171,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             ViewGroup parent = (ViewGroup) yumiNativeAdView.getParent();
             parent.removeView(yumiNativeAdView);
 
-            ImageView adLogo = new ImageView(getNativeAdView().getContext());
-            Drawable zplayad_media_gdt_logo = ResFactory.getDrawableByAssets("zplayad_media_gdt_logo", getNativeAdView().getContext());
-            adLogo.setBackground(zplayad_media_gdt_logo);
-            getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
-            setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
-            adLogo.setLayoutParams(adLogoParams);
-            getNativeAdView().requestLayout();
-
             if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                 TextView adAttribution = new TextView(getNativeAdView().getContext());
                 adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
