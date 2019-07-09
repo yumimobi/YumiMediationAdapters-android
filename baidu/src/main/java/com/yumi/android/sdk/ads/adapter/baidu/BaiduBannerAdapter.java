@@ -51,7 +51,6 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
         isLoad = true;
         banner = new AdView(getActivity(), AdSize.Banner, getProvider().getKey2());
         banner.setListener(bannerListener);
-        sendChangeViewBeforePrepared(banner);
     }
 
     @Override

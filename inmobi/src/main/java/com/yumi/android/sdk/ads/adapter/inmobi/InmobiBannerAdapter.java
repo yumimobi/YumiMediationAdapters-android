@@ -79,7 +79,6 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
             banner.setEnableAutoRefresh(false);
         }
         container.addView(banner, new FrameLayout.LayoutParams(bannerWidth, bannerHeight, Gravity.CENTER));
-        sendChangeViewBeforePrepared(container);
         banner.load();
     }
 
@@ -88,7 +87,6 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
             if (calculateLayerSize[0] > 0 && calculateLayerSize[1] > 0) {
                 bannerWidth = calculateLayerSize[0];
                 bannerHeight = calculateLayerSize[1];
-                return;
             } else {
                 if (bannerSize == AdSize.BANNER_SIZE_728X90) {
                     bannerWidth = 728;
