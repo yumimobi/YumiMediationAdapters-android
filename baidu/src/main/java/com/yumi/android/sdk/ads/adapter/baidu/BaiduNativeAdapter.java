@@ -174,7 +174,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             Drawable zplayad_media_baidu_logo = ResFactory.getDrawableByAssets("zplayad_media_baidu_logo", getNativeAdView().getContext());
             adLogo.setBackground(zplayad_media_baidu_logo);
             getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(20), dip2px(20));
             setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
             adLogo.setLayoutParams(adLogoParams);
             getNativeAdView().requestLayout();
