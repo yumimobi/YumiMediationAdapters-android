@@ -197,7 +197,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             ImageView adLogo = new ImageView(getNativeAdView().getContext());
             adLogo.setImageBitmap(nativeAdData.getAdLogo());
             getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(20), dip2px(20));
             setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
             adLogo.setLayoutParams(adLogoParams);
             getNativeAdView().requestLayout();
