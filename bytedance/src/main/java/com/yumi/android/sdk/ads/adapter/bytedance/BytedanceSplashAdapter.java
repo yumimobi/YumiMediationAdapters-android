@@ -84,7 +84,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     private void loadSplashAd() {
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
 
-        int[] realSize = WindowSizeUtils.getRealSize(getActivity());
+        int[] realSize = WindowSizeUtils.getRealSize();
         //step3:创建开屏广告请求参数AdSlot,具体参数含义参考文档
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
