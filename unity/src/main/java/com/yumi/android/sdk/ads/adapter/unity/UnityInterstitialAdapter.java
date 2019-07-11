@@ -2,9 +2,10 @@ package com.yumi.android.sdk.ads.adapter.unity;
 
 import android.app.Activity;
 
-import com.unity3d.ads.IUnityAdsListener;
+import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.UnityAds.FinishState;
 import com.unity3d.ads.UnityAds.UnityAdsError;
+import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -15,12 +16,24 @@ import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
 public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "UnityInterstitialAdapter";
-    private IUnityAdsListener mUnityAdsListener;
+    private IUnityAdsExtendedListener mUnityAdsListener;
 
     protected UnityInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
         UnityAdsProxy.initUnitySDK(getActivity(), getProvider().getKey1());
-        mUnityAdsListener = new IUnityAdsListener() {
+        mUnityAdsListener = new IUnityAdsExtendedListener() {
+            @Override
+            public void onUnityAdsClick(String placementId) {
+                ZplayDebug.d(TAG, "onUnityAdsClick: " + placementId);
+
+                layerClicked(-99, -99);
+            }
+
+            @Override
+            public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+                ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + placementId + ", placementState: " + placementState + ", placementState1: " + placementState1);
+            }
+
             @Override
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
