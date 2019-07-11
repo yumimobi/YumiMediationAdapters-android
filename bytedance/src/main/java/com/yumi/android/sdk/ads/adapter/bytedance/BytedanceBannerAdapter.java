@@ -139,8 +139,8 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                     bannerWidth = 320;
                     bannerHeight = 50;
                 }
-                bannerWidth = dip2px(getContext(), bannerWidth);
-                bannerHeight = dip2px(getContext(), bannerHeight);
+                bannerWidth = dip2px(bannerWidth);
+                bannerHeight = dip2px(bannerHeight);
             }
         } else {
             if (bannerSize == AdSize.BANNER_SIZE_728X90) {
@@ -150,8 +150,8 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                 bannerWidth = 320;
                 bannerHeight = 50;
             }
-            bannerWidth = dip2px(getContext(), bannerWidth);
-            bannerHeight = dip2px(getContext(), bannerHeight);
+            bannerWidth = dip2px(bannerWidth);
+            bannerHeight = dip2px(bannerHeight);
         }
     }
 

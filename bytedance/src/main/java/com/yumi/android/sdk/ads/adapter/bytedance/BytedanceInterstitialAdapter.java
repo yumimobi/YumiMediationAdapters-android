@@ -38,7 +38,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
-                    .setImageAcceptedSize(dip2px(getActivity(), 600), dip2px(getActivity(), 600))
+                    .setImageAcceptedSize(dip2px(600), dip2px(600))
                     .build();
 
             mTTAdNative.loadInteractionAd(adSlot, loadListener);
