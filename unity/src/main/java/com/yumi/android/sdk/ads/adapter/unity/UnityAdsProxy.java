@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
+import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,23 @@ final class UnityAdsProxy {
 
     private static Map<String, UnityAdsListenerObserver> sListeners = new HashMap<>(3);
 
-    private static IUnityAdsListener unityAdsListener = new IUnityAdsListener() {
+    private static IUnityAdsListener unityAdsListener = new IUnityAdsExtendedListener() {
+        @Override
+        public void onUnityAdsClick(String s) {
+            if (!sListeners.containsKey(s)) {
+                sListeners.put(s, new UnityAdsListenerObserver());
+            }
+            sListeners.get(s).onUnityAdsClick(s);
+        }
+
+        @Override
+        public void onUnityAdsPlacementStateChanged(String s, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+            if (!sListeners.containsKey(s)) {
+                sListeners.put(s, new UnityAdsListenerObserver());
+            }
+            sListeners.get(s).onUnityAdsPlacementStateChanged(s, placementState, placementState1);
+        }
+
         @Override
         public void onUnityAdsReady(String s) {
             if (!sListeners.containsKey(s)) {
@@ -54,7 +71,7 @@ final class UnityAdsProxy {
         }
     }
 
-    static void registerUnityAdsListener(String placementId, final IUnityAdsListener listener) {
+    static void registerUnityAdsListener(String placementId, final IUnityAdsExtendedListener listener) {
         if (!sListeners.containsKey(placementId)) {
             UnityAdsListenerObserver myListener = new UnityAdsListenerObserver();
             sListeners.put(placementId, myListener);
