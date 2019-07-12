@@ -164,8 +164,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
-            setProviderName("Admob");
-            setSpecifiedProvider("10002");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
             setIsTemplateView(false);
         }
         @Override

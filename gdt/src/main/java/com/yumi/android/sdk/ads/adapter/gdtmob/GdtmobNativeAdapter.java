@@ -2,11 +2,9 @@ package com.yumi.android.sdk.ads.adapter.gdtmob;
 
 import android.app.Activity;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qq.e.ads.cfg.VideoOption;
@@ -23,12 +21,10 @@ import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
-import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
-import com.yumi.android.sdk.ads.self.ui.ResFactory;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
@@ -235,7 +231,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setHasVideoContent(expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO);
-            setSpecifiedProvider("10026");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
             setIsTemplateView(true);
             if (expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                 setNativeAdVideoController(new YumiNativeAdVideoController());
@@ -361,8 +358,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setHasVideoContent(mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO);
             setMaterialEtime(getProvider().getMaterialEtime());
             setNativeAdVideoController(new YumiNativeAdVideoController());
-            setProviderName("Gdt");
-            setSpecifiedProvider("10026");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
             setIsTemplateView(false);
         }
 
