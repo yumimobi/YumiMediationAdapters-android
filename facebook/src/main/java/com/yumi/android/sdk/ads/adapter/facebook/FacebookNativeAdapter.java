@@ -160,6 +160,8 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Facebook");
+            setSpecifiedProvider("10007");
+            setIsTemplateView(false);
             if (getActivity() != null) {
                 mMediaView = new MediaView(getActivity());
             }
@@ -202,6 +204,13 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                     ((ViewGroup) overlayView.getMediaLayout()).addView(mMediaView);
                 }
                 nativeAd.registerViewForInteraction(overlayView, mMediaView, (ImageView) overlayView.getIconView());
+            }
+        }
+        @Override
+        public void destroy(){
+            ZplayDebug.v(TAG, "facebook native destory", onoff);
+            if (nativeAd != null) {
+                nativeAd.destroy();
             }
         }
 
