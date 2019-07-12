@@ -17,6 +17,7 @@ import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
@@ -180,15 +181,18 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             setDesc(nativeAdData.getDescription());
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
             setHasVideoContent(nativeAdData.getImageMode() == 5);
+            setNativeAdVideoController(new YumiNativeAdVideoController());
 
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
-            setProviderName("Bytedance");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
+            setIsTemplateView(false);
         }
-
+        @Override
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "bytedance native trackView getNativeAdView() is null", onoff);
                 return;
             }
 
