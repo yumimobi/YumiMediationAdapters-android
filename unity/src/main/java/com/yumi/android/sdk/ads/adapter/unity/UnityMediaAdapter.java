@@ -83,6 +83,11 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "unity media request new media", onoff);
         updateGDPRStatus(getContext());
 
+        if (UnityAdsProxy.isReady(getProvider().getKey2())) {
+            layerPrepared();
+            return;
+        }
+
         UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 

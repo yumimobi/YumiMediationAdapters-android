@@ -83,6 +83,11 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         ZplayDebug.d(TAG, "unity Interstitial request new", onoff);
         updateGDPRStatus(getContext());
 
+        if (UnityAdsProxy.isReady(getProvider().getKey2())) {
+            layerPrepared();
+            return;
+        }
+
         UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 
