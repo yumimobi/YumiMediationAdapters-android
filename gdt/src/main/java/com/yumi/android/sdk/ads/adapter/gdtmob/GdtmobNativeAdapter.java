@@ -158,6 +158,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialEtime(getProvider().getMaterialEtime());
             setNativeAdVideoController(new YumiNativeAdVideoController());
             setProviderName("Gdt");
+            setSpecifiedProvider("10026");
+            setIsTemplateView(false);
         }
 
         @Override
@@ -239,7 +241,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             }
 
         }
-
+        @Override
         public void onResume() {
             ZplayDebug.v(TAG, "Gdt native Adapter onResume", onoff);
             if (mGdtData != null) {
@@ -248,6 +250,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 } catch (Exception e) {
                     ZplayDebug.d(TAG, "onResume: " + e);
                 }
+            }
+        }
+        @Override
+        public void destroy(){
+            ZplayDebug.v(TAG, "gdt native destory", onoff);
+            if (mGdtData != null) {
+                mGdtData.destroy();
             }
         }
 

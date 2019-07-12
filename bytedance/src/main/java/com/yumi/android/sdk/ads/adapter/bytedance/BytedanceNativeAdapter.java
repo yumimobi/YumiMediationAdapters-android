@@ -184,6 +184,8 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName("Bytedance");
+            setSpecifiedProvider("10074");
+            setIsTemplateView(false);
         }
 
         public void trackView() {
