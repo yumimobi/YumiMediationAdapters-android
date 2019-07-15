@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
-import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
 /**
@@ -221,13 +220,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         private NativeExpressAdContent(NativeExpressADView expressADView){
             this.expressADView = expressADView;
-            setTemplateView(expressADView);
+            setExpressView(expressADView);
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setHasVideoContent(expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO);
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsTemplateView(true);
+            setIsExpressView(true);
             if (expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                 setNativeAdVideoController(new YumiNativeAdVideoController());
             }
@@ -354,7 +353,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setNativeAdVideoController(new YumiNativeAdVideoController());
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsTemplateView(false);
+            setIsExpressView(false);
         }
 
         @Override

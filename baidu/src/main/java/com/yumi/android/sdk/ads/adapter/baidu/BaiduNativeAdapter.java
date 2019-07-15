@@ -158,7 +158,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsTemplateView(false);
+            setIsExpressView(false);
         }
 
         public void trackView() {
