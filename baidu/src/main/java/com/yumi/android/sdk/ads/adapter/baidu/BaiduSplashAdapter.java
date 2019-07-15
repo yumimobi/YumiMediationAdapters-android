@@ -75,7 +75,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
         };
         AdView.setAppSid(getActivity(), getProvider().getKey1());
         // canClick参数表示是否接受点击类型的⼴广告，强烈建议设置为 true，否则影响广告填充
-        new SplashAd(getActivity(), getDeveloperCntainer(), listener, getProvider().getKey2(), true);
+        new SplashAd(getActivity(), getDeveloperContainer(), listener, getProvider().getKey2(), true);
     }
 
     private void hitPreparedFailed(String msg) {
