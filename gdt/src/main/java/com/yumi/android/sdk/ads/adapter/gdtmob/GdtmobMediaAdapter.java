@@ -142,10 +142,6 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-    }
-
-    @Override
     public void onActivityPause() {
 
     }

@@ -114,11 +114,6 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
         if (rewardVideoAd != null) {
             rewardVideoAd.pause();

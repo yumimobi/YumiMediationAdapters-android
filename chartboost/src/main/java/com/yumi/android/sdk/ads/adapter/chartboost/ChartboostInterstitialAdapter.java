@@ -37,7 +37,7 @@ public class ChartboostInterstitialAdapter extends
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         ChartboostExtra.getChartboostExtra().onDestroy();
         Chartboost.onDestroy(getActivity());
     }

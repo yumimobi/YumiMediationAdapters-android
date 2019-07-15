@@ -103,7 +103,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
     }
 
     @Override

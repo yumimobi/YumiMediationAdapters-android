@@ -137,7 +137,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         try {
             if (adView != null) {
                 adView.destroy();

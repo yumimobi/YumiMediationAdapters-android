@@ -130,11 +130,6 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }

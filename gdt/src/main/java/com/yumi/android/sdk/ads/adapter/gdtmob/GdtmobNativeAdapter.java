@@ -201,12 +201,6 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     }
 
-
-    @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
     @Override
     public void onActivityPause() {
 

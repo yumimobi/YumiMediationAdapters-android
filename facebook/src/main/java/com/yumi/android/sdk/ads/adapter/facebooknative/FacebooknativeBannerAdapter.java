@@ -122,7 +122,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (nativeBannerAd != null) {
             nativeBannerAd.destroy();
         }

@@ -140,7 +140,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         IronSource.onPause(getActivity());
     }
 

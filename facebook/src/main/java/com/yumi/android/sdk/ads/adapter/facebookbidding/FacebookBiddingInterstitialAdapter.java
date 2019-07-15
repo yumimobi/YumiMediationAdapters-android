@@ -34,7 +34,7 @@ public class FacebookBiddingInterstitialAdapter extends
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         if (interstitial != null) {
             interstitial.destroy();
         }
