@@ -27,13 +27,9 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     private static PlayAdCallback mPlayAdCallback;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case RESTART_INIT:
-                    ZplayDebug.d(TAG, "vungle media restart init", onoff);
-                    VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-                    break;
-                default:
-                    break;
+            if (msg.what == RESTART_INIT) {
+                ZplayDebug.d(TAG, "vungle media restart init", onoff);
+                VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
             }
         }
     };
@@ -51,7 +47,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         if (mHandler != null && mHandler.hasMessages(RESTART_INIT)) {
             mHandler.removeMessages(RESTART_INIT);
         }
@@ -232,11 +228,6 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             }
         });
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-    }
-
-    @Override
-    protected void onRequestNonResponse() {
-        super.onRequestNonResponse();
     }
 
 }

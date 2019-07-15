@@ -86,7 +86,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         ZplayDebug.d(TAG, "gdt native Interstitial callOnActivityDestroy", onoff);
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();

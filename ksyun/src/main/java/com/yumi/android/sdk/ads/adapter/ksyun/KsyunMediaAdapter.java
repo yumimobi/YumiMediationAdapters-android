@@ -173,10 +173,4 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             }
         };
     }
-
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
-
 }

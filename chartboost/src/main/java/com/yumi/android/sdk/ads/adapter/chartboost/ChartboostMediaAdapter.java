@@ -37,7 +37,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         ChartboostExtra.getChartboostExtra().onDestroy();
         Chartboost.onDestroy(getActivity());
     }

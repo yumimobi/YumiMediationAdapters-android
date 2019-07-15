@@ -103,7 +103,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
     }
 
     @Override
@@ -136,10 +136,4 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.i(TAG, "zoneId : " + getProvider().getKey2(), onoff);
         initAdcolonySDK();
     }
-
-    @Override
-    protected void onRequestNonResponse() {
-        super.onRequestNonResponse();
-    }
-
 }

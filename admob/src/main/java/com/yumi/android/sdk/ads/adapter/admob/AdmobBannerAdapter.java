@@ -54,7 +54,7 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         if (adView != null) {
             adView.destroy();
         }

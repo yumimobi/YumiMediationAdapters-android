@@ -41,7 +41,7 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         InmobiExtraHolder.onDestroy();
     }
 

@@ -168,8 +168,4 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
 
         directPlayPlacement.requestContent();
     }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
 }
