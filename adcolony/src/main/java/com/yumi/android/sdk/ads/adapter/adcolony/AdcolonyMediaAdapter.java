@@ -136,10 +136,4 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.i(TAG, "zoneId : " + getProvider().getKey2(), onoff);
         initAdcolonySDK();
     }
-
-    @Override
-    protected void onRequestNonResponse() {
-        super.onRequestNonResponse();
-    }
-
 }

@@ -234,9 +234,4 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
     }
 
-    @Override
-    protected void onRequestNonResponse() {
-        super.onRequestNonResponse();
-    }
-
 }
