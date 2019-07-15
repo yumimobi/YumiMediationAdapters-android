@@ -116,14 +116,14 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                     layerExposureFailed(new AdError(LayerErrorCode.ERROR_NO_FILL, "Bytedance: TTSplashAd is null."));
                     return;
                 }
-                //获取SplashView
+                // 获取SplashView
                 View view = ad.getSplashView();
-                getDeveloperCntainer().removeAllViews();
-                //把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
-                getDeveloperCntainer().addView(view);
+                getDeveloperContainer().removeAllViews();
+                // 把SplashView 添加到ViewGroup中,注意开屏广告view：width >=70%屏幕宽；height >=50%屏幕宽
+                getDeveloperContainer().addView(view);
                 isHitCloseCallback = false;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    getDeveloperCntainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
+                    getDeveloperContainer().getViewTreeObserver().addOnWindowFocusChangeListener(mLayoutListener);
                 }
 
                 // 展示广告后立即点击广告，sdk 不会点击 onAdShow 会导致没有上报（合并上报）
@@ -166,10 +166,10 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
     }
 
     private void removeSplashViews() {
-        if (getDeveloperCntainer() != null) {
-            getDeveloperCntainer().removeAllViews();
+        if (getDeveloperContainer() != null) {
+            getDeveloperContainer().removeAllViews();
             if (mLayoutListener != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                getDeveloperCntainer().getViewTreeObserver().removeOnWindowFocusChangeListener(mLayoutListener);
+                getDeveloperContainer().getViewTreeObserver().removeOnWindowFocusChangeListener(mLayoutListener);
             }
         }
     }
