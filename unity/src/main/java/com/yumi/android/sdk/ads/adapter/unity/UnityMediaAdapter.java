@@ -104,9 +104,4 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
     }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
-
 }

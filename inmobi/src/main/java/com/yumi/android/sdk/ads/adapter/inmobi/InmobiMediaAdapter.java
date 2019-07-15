@@ -36,11 +36,6 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
-
-    }
-
-    @Override
     protected void onPrepareMedia() {
         ZplayDebug.d(TAG, "inmobi request new media", onoff);
         isCallbackInExposure = false;

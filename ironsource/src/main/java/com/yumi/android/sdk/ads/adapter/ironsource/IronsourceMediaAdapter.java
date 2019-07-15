@@ -137,7 +137,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         IronSource.onPause(getActivity());
     }
 

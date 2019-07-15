@@ -127,7 +127,7 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
 
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         try {
             if (rewardedVideoAd != null) {
                 rewardedVideoAd.destroy();

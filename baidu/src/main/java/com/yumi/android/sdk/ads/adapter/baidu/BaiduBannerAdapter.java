@@ -36,11 +36,6 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
-
-    }
-
-    @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
             ZplayDebug.i(TAG, "baidu not support smart banner", onoff);

@@ -111,11 +111,6 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }

@@ -35,11 +35,6 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public boolean onActivityBackPressed() {
         return false;
     }
