@@ -36,7 +36,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
     @Override
     protected void onPrepareSplashLayer() {
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
-        new SplashAD(getActivity(), getDeveloperCntainer(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
+        new SplashAD(getActivity(), getDeveloperContainer(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
             @Override
             public void onADDismissed() {
                 layerClosed();
