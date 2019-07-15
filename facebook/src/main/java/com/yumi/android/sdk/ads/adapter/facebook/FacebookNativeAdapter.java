@@ -156,7 +156,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsTemplateView(false);
+            setIsExpressView(false);
             if (getActivity() != null) {
                 mMediaView = new MediaView(getActivity());
             }
