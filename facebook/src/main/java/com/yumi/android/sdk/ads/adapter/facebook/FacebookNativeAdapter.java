@@ -118,11 +118,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }

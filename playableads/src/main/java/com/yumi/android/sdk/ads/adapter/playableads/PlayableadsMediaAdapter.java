@@ -128,7 +128,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         try {
             if (playable != null) {
                 ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);

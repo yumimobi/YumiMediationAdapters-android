@@ -103,10 +103,6 @@ public class IQZoneMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-    }
-
-    @Override
     public void onActivityPause() {
         ZplayDebug.d(TAG, "IQZone Video onActivityPause", onoff);
         imdRewardedVideoAdManager.onDetached();

@@ -119,11 +119,6 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }

@@ -172,7 +172,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (mVideoSpot != null) {
             mVideoSpot.destroy();
             mVideoSpot = null;

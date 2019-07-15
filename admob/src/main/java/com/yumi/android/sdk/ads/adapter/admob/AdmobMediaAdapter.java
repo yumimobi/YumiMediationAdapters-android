@@ -112,8 +112,4 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
     }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
 }

@@ -127,7 +127,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         try {
             if (playable != null) {
                 ZplayDebug.d(TAG, "Playable Interstitial onDestroy ", onoff);

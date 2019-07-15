@@ -103,10 +103,6 @@ public class IQZoneInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-    }
-
-    @Override
     public void onActivityPause() {
         ZplayDebug.d(TAG, "IQZone Interstitial onActivityPause", onoff);
         imdInterstitialAdManager.onDetached();

@@ -93,7 +93,7 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         ZplayDebug.d(TAG, "IQZone Banner callOnActivityDestroy", onoff);
         imdBannerAd.onDetached();
     }

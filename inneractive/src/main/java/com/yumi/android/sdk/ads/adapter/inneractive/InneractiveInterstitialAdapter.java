@@ -164,7 +164,7 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (mInterstitialSpot != null) {
             mInterstitialSpot.destroy();
             mInterstitialSpot = null;

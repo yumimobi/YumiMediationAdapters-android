@@ -164,8 +164,4 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
         directPlayPlacement.requestContent();
     }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
 }

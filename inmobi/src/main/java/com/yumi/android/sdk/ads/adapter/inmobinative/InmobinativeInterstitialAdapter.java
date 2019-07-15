@@ -69,13 +69,6 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
         nativeAd.destroy();
     }
 
-
-    @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-
     @Override
     public void onActivityPause() {
 

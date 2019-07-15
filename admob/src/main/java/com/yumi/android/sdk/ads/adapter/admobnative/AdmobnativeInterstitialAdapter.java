@@ -92,11 +92,6 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
         ZplayDebug.d(TAG, "admob navitead interstitial init", onoff);
     }
 
-    @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
     private void refreshAd(boolean requestAppInstallAds, boolean requestContentAds) {
         if (!requestAppInstallAds && !requestContentAds) {
             return;

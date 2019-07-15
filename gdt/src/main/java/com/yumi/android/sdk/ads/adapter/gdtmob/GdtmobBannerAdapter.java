@@ -33,7 +33,8 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected void onDestroy() {
+        super.onDestroy();
         if (unifiedBanner != null) {
             unifiedBanner.destroy();
         }

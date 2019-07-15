@@ -84,11 +84,6 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         }
     }
 
-    @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
     private class MyNativeAdListener implements NativeAdListener {
 
         @Override

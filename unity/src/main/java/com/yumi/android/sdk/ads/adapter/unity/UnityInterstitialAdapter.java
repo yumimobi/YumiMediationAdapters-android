@@ -104,8 +104,4 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void init() {
     }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
 }

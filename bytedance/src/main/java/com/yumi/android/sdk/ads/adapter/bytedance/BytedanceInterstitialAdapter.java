@@ -125,11 +125,6 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
