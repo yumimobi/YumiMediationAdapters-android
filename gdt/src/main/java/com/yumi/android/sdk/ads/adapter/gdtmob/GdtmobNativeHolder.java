@@ -8,6 +8,7 @@ import com.qq.e.ads.nativ.NativeADUnifiedListener;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressAD.NativeExpressADListener;
 import com.qq.e.ads.nativ.NativeUnifiedAD;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 public class GdtmobNativeHolder {
@@ -37,8 +38,8 @@ public class GdtmobNativeHolder {
         }
     }
 
-    public void initNativeExpressAD(Context mContext, String key1, String key2, NativeExpressADListener expressADListeners ){
-        nativeExpressAD = new NativeExpressAD(mContext, new ADSize(ADSize.FULL_WIDTH, ADSize.AUTO_HEIGHT), key1, key2, expressADListeners); // 传入Activity
+    public void initNativeExpressAD(Context mContext, String key1, String key2, YumiNativeAdOptions nativeAdOptions, NativeExpressADListener expressADListeners ){
+        nativeExpressAD = new NativeExpressAD(mContext, new ADSize(nativeAdOptions.getExpressAdSize().getWidth(), nativeAdOptions.getExpressAdSize().getHeight()), key1, key2, expressADListeners); // 传入Activity
         // 注意：如果您在联盟平台上新建原生模板广告位时，选择了支持视频，那么可以进行个性化设置（可选）
         nativeExpressAD.setVideoOption(new VideoOption.Builder()
                 .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI) // WIFI 环境下可以自动播放视频
