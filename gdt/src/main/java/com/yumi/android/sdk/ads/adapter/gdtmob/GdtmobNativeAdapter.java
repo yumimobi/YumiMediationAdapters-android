@@ -220,13 +220,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         private NativeExpressAdContent(NativeExpressADView expressADView){
             this.expressADView = expressADView;
-            setExpressView(expressADView);
+            setExpressAdView(expressADView);
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
             setHasVideoContent(expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO);
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsExpressView(true);
+            setIsExpressAdView(true);
             if (expressADView.getBoundData().getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                 setNativeAdVideoController(new YumiNativeAdVideoController());
             }
@@ -353,7 +353,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             setNativeAdVideoController(new YumiNativeAdVideoController());
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsExpressView(false);
+            setIsExpressAdView(false);
         }
 
         @Override
