@@ -195,7 +195,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                    layerPreparedFailed(recodeError(adError));
                }
            };
-           GdtmobNativeHolder.getInstance().initNativeExpressAD(getContext(), getProvider().getKey1(), getProvider().getKey2(), nativeExpressADListener);
+           GdtmobNativeHolder.getInstance().initNativeExpressAD(getContext(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getNativeAdOptions(), nativeExpressADListener);
        }
 
     }
