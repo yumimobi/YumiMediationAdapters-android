@@ -182,7 +182,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             setMaterialEtime(getProvider().getMaterialEtime());
             setProviderName(getProvider().getProviderName());
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
-            setIsExpressView(false);
+            setIsExpressAdView(false);
         }
         @Override
         public void trackView() {
