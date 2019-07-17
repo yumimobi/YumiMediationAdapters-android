@@ -1,6 +1,13 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.RelativeLayout.LayoutParams;
 
 import com.baidu.mobads.AdView;
 import com.baidu.mobads.InterstitialAd;
@@ -15,6 +22,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static final String TAG = "BaiduInstertitialAdapter";
     private InterstitialAdListener instertitialListener;
     private InterstitialAd instertitial;
+    private RelativeLayout parentLayout;
 
     protected BaiduInterstitialAdapter(Activity activity,
                                        YumiProviderBean provider) {
@@ -39,15 +47,38 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "baidu request new interstitial", onoff);
-        if (instertitial == null) {
+        if (isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
+            int[] interstitialAdSize = getInterstitialAdSize();
+            ZplayDebug.d(TAG, "baidu interstitial AdSize，width : " + interstitialAdSize[0] + ",height: " + interstitialAdSize[1], onoff);
+            instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialForVideoPausePlayAd(getActivity(), getProvider().getKey2(), instertitialListener);
+            instertitial.loadAdForVideoApp(interstitialAdSize[0], interstitialAdSize[1]);
+        } else {
             instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialAd(getActivity(), getProvider().getKey2(), instertitialListener);
+            instertitial.loadAd();
         }
-        instertitial.loadAd();
+
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        instertitial.showAd(activity);
+        if (!isInterstitialLayerReady()) {
+            return;
+        }
+        if (isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
+            int[] interstitialAdSize = getInterstitialAdSize();
+            parentLayout = new RelativeLayout(getContext());
+            LayoutParams parentParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            parentLayout.setClickable(true);
+            getActivity().addContentView(parentLayout, parentParams);
+            final RelativeLayout adView = new RelativeLayout(getContext());
+            LayoutParams adViewParams = new RelativeLayout.LayoutParams(interstitialAdSize[0], interstitialAdSize[1]);
+            adViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            parentLayout.setBackgroundColor(Color.BLACK);
+            parentLayout.addView(adView, adViewParams);
+            instertitial.showAdInParentForVideoApp(getActivity(), adView);
+        } else {
+            instertitial.showAd(activity);
+        }
     }
 
     @Override
@@ -92,6 +123,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 public void onAdDismissed() {
                     ZplayDebug.d(TAG, "baidu interstitial closed", onoff);
                     layerClosed();
+                    removeInterstitialView();
                 }
 
                 @Override
@@ -103,4 +135,44 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         }
     }
 
+    private int[] getInterstitialAdSize() {
+        try {
+            DisplayMetrics displayMetrics = Resources.getSystem().getDisplayMetrics();
+            int width = displayMetrics.widthPixels;
+            int height = displayMetrics.heightPixels;
+
+            int adWidth = Math.min(width, height);
+
+            return new int[]{adWidth, (int) (adWidth / Double.valueOf(getProvider().getExtraData("interstitialAspectRatio")))};
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "baidu interstitial getInterstitialAdSize error: " + e, onoff);
+
+        }
+        return new int[]{0, 0};
+    }
+
+    private boolean isInterstitialAspectRatio(String aspectRatio) {
+        try {
+            if (TextUtils.equals("0", aspectRatio.trim())) {
+                return false;
+            }
+            Double.valueOf(aspectRatio);
+            return true;
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "baidu interstitial isDoubleOrFloat error: " + e, onoff);
+        }
+        return false;
+    }
+
+    private void removeInterstitialView() {
+        try {
+            if (parentLayout != null && parentLayout.getParent() instanceof ViewGroup) {
+                ((ViewGroup) parentLayout.getParent()).removeView(parentLayout);
+                parentLayout = null;
+            }
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "baidu interstitial removeInterstitialView error: " + e, onoff);
+
+        }
+    }
 }
