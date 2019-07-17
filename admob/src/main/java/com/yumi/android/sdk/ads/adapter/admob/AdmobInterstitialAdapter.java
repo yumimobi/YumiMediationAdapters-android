@@ -15,8 +15,8 @@ import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "AdmobInterstitialAdapter";
-    private InterstitialAd instertitial;
-    private AdListener adListener;
+    private InterstitialAd mInterstitialAd;
+    private AdListener mAdListener;
     private boolean isReady;
 
     protected AdmobInterstitialAdapter(Activity activity,
@@ -26,12 +26,10 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     public void onActivityPause() {
-
     }
 
     @Override
     public void onActivityResume() {
-
     }
 
     @Override
@@ -42,28 +40,25 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "admob request new interstitial", onoff);
-        if (instertitial == null) {
-            instertitial = new InterstitialAd(getActivity());
-            instertitial.setAdUnitId(getProvider().getKey1());
-            instertitial.setAdListener(adListener);
+        if (mInterstitialAd == null) {
+            mInterstitialAd = new InterstitialAd(getActivity());
+            mInterstitialAd.setAdUnitId(getProvider().getKey1());
+            mInterstitialAd.setAdListener(mAdListener);
         }
         AdRequest req = getAdRequest(getContext());
         isReady = false;
-        instertitial.loadAd(req);
+        mInterstitialAd.loadAd(req);
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        instertitial.show();
+        mInterstitialAd.show();
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
         try {
-            if (instertitial != null && instertitial.isLoaded()) {
-                return true;
-            }
-            return false;
+            return mInterstitialAd != null && mInterstitialAd.isLoaded();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "admob interstitial isInterstitialLayerReady error : ", e, onoff);
             return isReady;
@@ -77,7 +72,7 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     private void createAdListener() {
-        adListener = new AdListener() {
+        mAdListener = new AdListener() {
             @Override
             public void onAdClosed() {
                 ZplayDebug.d(TAG, "admob interstitial closed", onoff);
