@@ -115,7 +115,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                    layerPreparedFailed(recodeError(adError));
                }
            };
-           GdtmobNativeHolder.getInstance().initNativeUnifiedAD(getContext(), getProvider().getKey1(), getProvider().getKey2(), nativeADUnifiedListener);
+           GdtmobNativeHolder.getInstance().initNativeUnifiedAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), nativeADUnifiedListener);
 
        }else{
            NativeExpressADListener nativeExpressADListener = new NativeExpressADListener() {
@@ -195,7 +195,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                    layerPreparedFailed(recodeError(adError));
                }
            };
-           GdtmobNativeHolder.getInstance().initNativeExpressAD(getContext(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getNativeAdOptions(), nativeExpressADListener);
+           GdtmobNativeHolder.getInstance().initNativeExpressAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getNativeAdOptions(), nativeExpressADListener);
        }
 
     }
