@@ -47,40 +47,37 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "baidu request new interstitial", onoff);
-        if (!isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
-            instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialAd(getActivity(), getProvider().getKey2(), instertitialListener);
-            instertitial.loadAd();
-        } else {
+        if (isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
             int[] interstitialAdSize = getInterstitialAdSize();
             ZplayDebug.d(TAG, "baidu interstitial AdSize，width : " + interstitialAdSize[0] + ",height: " + interstitialAdSize[1], onoff);
             instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialForVideoPausePlayAd(getActivity(), getProvider().getKey2(), instertitialListener);
             instertitial.loadAdForVideoApp(interstitialAdSize[0], interstitialAdSize[1]);
+        } else {
+            instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialAd(getActivity(), getProvider().getKey2(), instertitialListener);
+            instertitial.loadAd();
         }
 
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        if (!isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
-            if (isInterstitialLayerReady()) {
-                instertitial.showAd(activity);
-            }
+        if (!isInterstitialLayerReady()) {
+            return;
+        }
+        if (isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
+            int[] interstitialAdSize = getInterstitialAdSize();
+            parentLayout = new RelativeLayout(getContext());
+            LayoutParams parentParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+            parentLayout.setClickable(true);
+            getActivity().addContentView(parentLayout, parentParams);
+            final RelativeLayout adView = new RelativeLayout(getContext());
+            LayoutParams adViewParams = new RelativeLayout.LayoutParams(interstitialAdSize[0], interstitialAdSize[1]);
+            adViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+            parentLayout.setBackgroundColor(Color.BLACK);
+            parentLayout.addView(adView, adViewParams);
+            instertitial.showAdInParentForVideoApp(getActivity(), adView);
         } else {
-            if (isInterstitialLayerReady()) {
-                int[] interstitialAdSize = getInterstitialAdSize();
-                parentLayout = new RelativeLayout(getContext());
-                LayoutParams parentParams = new RelativeLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-                parentLayout.setClickable(true);
-                getActivity().addContentView(parentLayout, parentParams);
-                final RelativeLayout adView = new RelativeLayout(getContext());
-                LayoutParams adViewParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-                adViewParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-                adViewParams.width = interstitialAdSize[0];
-                adViewParams.height = interstitialAdSize[1];
-                parentLayout.setBackgroundColor(Color.BLACK);
-                parentLayout.addView(adView, adViewParams);
-                instertitial.showAdInParentForVideoApp(getActivity(), adView);
-            }
+            instertitial.showAd(activity);
         }
     }
 
