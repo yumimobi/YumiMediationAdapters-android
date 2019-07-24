@@ -37,8 +37,6 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
-
-                layerPrepared();
             }
 
             @Override
@@ -83,12 +81,10 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "unity media request new media", onoff);
         updateGDPRStatus(getContext());
 
+        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
         if (UnityAdsProxy.isReady(getProvider().getKey2())) {
             layerPrepared();
-            return;
         }
-
-        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 
     @Override
