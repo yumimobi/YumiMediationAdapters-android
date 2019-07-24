@@ -37,8 +37,6 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
-
-                layerPrepared();
             }
 
             @Override
@@ -83,12 +81,10 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         ZplayDebug.d(TAG, "unity Interstitial request new", onoff);
         updateGDPRStatus(getContext());
 
+        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
         if (UnityAdsProxy.isReady(getProvider().getKey2())) {
             layerPrepared();
-            return;
         }
-
-        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 
     @Override
