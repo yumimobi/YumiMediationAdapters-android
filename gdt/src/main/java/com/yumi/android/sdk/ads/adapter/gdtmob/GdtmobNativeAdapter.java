@@ -15,7 +15,6 @@ import com.qq.e.ads.nativ.NativeADUnifiedListener;
 import com.qq.e.ads.nativ.NativeExpressAD.NativeExpressADListener;
 import com.qq.e.ads.nativ.NativeExpressADView;
 import com.qq.e.ads.nativ.NativeExpressMediaListener;
-import com.qq.e.ads.nativ.NativeUnifiedAD;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.qq.e.comm.constants.AdPatternType;
@@ -40,7 +39,7 @@ import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawabl
  */
 public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
-    private NativeUnifiedAD nativeAD;
+    private List<NativeContent> list = new ArrayList<>();
 
     protected GdtmobNativeAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -122,7 +121,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                @Override
                public void onADLoaded(List<NativeExpressADView> adlist) {
                    ZplayDebug.v(TAG, "gdt express nativeAd onADLoaded", onoff);
-                   final List<NativeContent> list = new ArrayList<>();
+
                    for (final NativeExpressADView item : adlist) {
                        try {
                            final NativeExpressAdContent content = new NativeExpressAdContent(item);
@@ -144,12 +143,22 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                @Override
                public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                   ZplayDebug.v(TAG, "gdt express nativeAd onRenderFail", onoff);
+                   ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdRenderFail", onoff);
+                   for(NativeContent content: list){
+                       if(content.getExpressAdView() == nativeExpressADView){
+                           layerExpressAdRenderFail(content);
+                       }
+                   }
                }
 
                @Override
                public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                   ZplayDebug.v(TAG, "gdt express nativeAd onRenderSuccess", onoff);
+                   ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdRenderSuccess", onoff);
+                   for(NativeContent content: list){
+                       if(content.getExpressAdView() == nativeExpressADView){
+                           layerExpressAdRenderSuccess(content);
+                       }
+                   }
                }
 
                @Override
@@ -166,7 +175,13 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                @Override
                public void onADClosed(NativeExpressADView nativeExpressADView) {
-                   ZplayDebug.v(TAG, "gdt express nativeAd onADClosed", onoff);
+                   ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdClosed", onoff);
+                   for(NativeContent content: list){
+                       if(content.getExpressAdView() == nativeExpressADView){
+                          layerExpressAdClosed(content);
+                          nativeExpressADView.destroy();
+                       }
+                   }
                }
 
                @Override
@@ -245,6 +260,9 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             ZplayDebug.v(TAG, "gdt express native destory", onoff);
             if (expressADView != null) {
                 expressADView.destroy();
+            }
+            if(list != null && list.contains(NativeExpressAdContent.this)){
+                list.remove(NativeExpressAdContent.this);
             }
         }
 
