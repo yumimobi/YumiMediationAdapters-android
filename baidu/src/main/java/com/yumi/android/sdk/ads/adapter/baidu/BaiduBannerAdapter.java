@@ -1,6 +1,10 @@
 package com.yumi.android.sdk.ads.adapter.baidu;
 
 import android.app.Activity;
+import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import com.baidu.mobad.feeds.NativeErrorCode;
 import com.baidu.mobads.AdSize;
@@ -12,6 +16,9 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import org.json.JSONObject;
 
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.dp2px;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.isTablet;
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeNativeError;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
@@ -19,9 +26,10 @@ import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART
 public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
     private static final String TAG = "BaiduBannerAdapter";
-    private AdView banner;
     private AdViewListener bannerListener;
     private boolean isLoad = true;
+    private FrameLayout mActivityContent;
+    private FrameLayout mBannerContainer;
 
     protected BaiduBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -36,6 +44,12 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        removeTempViews();
+    }
+
+    @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
             ZplayDebug.i(TAG, "baidu not support smart banner", onoff);
@@ -44,8 +58,13 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
         }
         ZplayDebug.d(TAG, "baidu request new banner", onoff);
         isLoad = true;
-        banner = new AdView(getActivity(), AdSize.Banner, getProvider().getKey2());
+        AdView banner = new AdView(getActivity(), AdSize.Banner, getProvider().getKey2());
         banner.setListener(bannerListener);
+        removeTempViews();
+        mActivityContent = newActivityContentView();
+        mBannerContainer = newFrameLayout();
+        mActivityContent.addView(mBannerContainer);
+        mBannerContainer.addView(banner);
     }
 
     @Override
@@ -53,7 +72,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
         ZplayDebug.i(TAG, "appSid : " + getProvider().getKey1(), onoff);
         ZplayDebug.i(TAG, "adPlaceId : " + getProvider().getKey2(), onoff);
         createBannerListener();
-        AdView.setAppSid(getContext(), getProvider().getKey1());
+        AdView.setAppSid(getActivity(), getProvider().getKey1());
     }
 
     private void createBannerListener() {
@@ -75,12 +94,14 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onAdReady(AdView arg0) {
                 ZplayDebug.d(TAG, "baidu banner prepared", onoff);
+                removeTempViews();
                 layerPrepared(arg0, true);
             }
 
             @Override
             public void onAdFailed(String arg0) {
                 ZplayDebug.d(TAG, "baidu banner failed " + arg0, onoff);
+                removeTempViews();
                 layerPreparedFailed(recodeError(arg0));
             }
 
@@ -92,10 +113,53 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdClose(JSONObject arg0) {
-                // TODO Auto-generated method stub
                 layerClosed();
             }
         };
+    }
+
+    private FrameLayout newActivityContentView() {
+        FrameLayout result = new FrameLayout(getActivity());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(WRAP_CONTENT, WRAP_CONTENT);
+        getActivity().addContentView(result, params);
+        return result;
+    }
+
+    private FrameLayout newFrameLayout() {
+        int[] wh = getWH();
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(wh[0], wh[1]);
+        params.gravity = Gravity.BOTTOM;
+        FrameLayout result = new FrameLayout(getActivity());
+        result.setLayoutParams(params);
+        return result;
+    }
+
+    private void removeTempViews() {
+        removeView(mActivityContent);
+        removeView(mBannerContainer);
+    }
+
+    private void removeView(View view) {
+        if (view != null && view.getParent() instanceof ViewGroup) {
+            if (view.getParent() instanceof ViewGroup) {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }
+        }
+    }
+
+    private int[] getWH() {
+        // 百度 Banner
+        switch (bannerSize) {
+            case BANNER_SIZE_728X90:
+                return new int[]{dp2px(720), dp2px(720f / 20 * 3)};
+            case BANNER_SIZE_AUTO:
+                if (isTablet()) {
+                    return new int[]{dp2px(720), dp2px(720f / 20 * 3)};
+                }
+            default:
+                return new int[]{dp2px(320), dp2px(50)};
+        }
+
     }
 
 }
