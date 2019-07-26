@@ -23,6 +23,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private InterstitialAdListener instertitialListener;
     private InterstitialAd instertitial;
     private RelativeLayout parentLayout;
+    private boolean isAdPresent = false;
 
     protected BaiduInterstitialAdapter(Activity activity,
                                        YumiProviderBean provider) {
@@ -110,6 +111,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 @Override
                 public void onAdPresent() {
                     ZplayDebug.d(TAG, "baidu interstitial shown", onoff);
+                    isAdPresent = true;
                     layerExposure();
                 }
 
@@ -122,8 +124,11 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 @Override
                 public void onAdDismissed() {
                     ZplayDebug.d(TAG, "baidu interstitial closed", onoff);
-                    layerClosed();
                     removeInterstitialView();
+                    if(isAdPresent){
+                        layerClosed();
+                    }
+                    isAdPresent = false;
                 }
 
                 @Override
