@@ -63,7 +63,9 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
 
     @Override
     protected void onDestroy() {
-        nativeAd.destroy();
+        if(nativeAd != null){
+            nativeAd.destroy();
+        }
     }
 
     @Override
