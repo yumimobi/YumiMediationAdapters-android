@@ -61,7 +61,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onShowMedia() {
         if (mAd != null) {
-            if (mAd.isLoaded()) {
+            if (isMediaReady()) {
                 mAd.show(getActivity(), new RewardedAdCallback() {
                     public void onRewardedAdOpened() {
                         ZplayDebug.d(TAG, "admob media onRewardedAdOpened", onoff);

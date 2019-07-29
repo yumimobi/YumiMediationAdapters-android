@@ -146,7 +146,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                    ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdRenderFail", onoff);
                    for(NativeContent content: list){
                        if(content.getExpressAdView() == nativeExpressADView){
-                           layerExpressAdRenderFail(content);
+                           layerExpressAdRenderFail(content, "gdt express nativeAd RenderFail");
                        }
                    }
                }
