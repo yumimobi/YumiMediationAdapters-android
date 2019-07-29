@@ -66,7 +66,9 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
     @Override
     protected void webLayerDismiss() {
         layerClosed();
-        nativeAd.destroy();
+        if(nativeAd != null){
+            nativeAd.destroy();
+        }
     }
 
     @Override
