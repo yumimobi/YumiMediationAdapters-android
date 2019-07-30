@@ -45,17 +45,21 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
-        if (mNativeAd == null) {
-            mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
-            mNativeAd.setAdListener(nativeAdListener);
+        try {
+            if (mNativeAd == null) {
+                mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
+                mNativeAd.setAdListener(nativeAdListener);
+            }
+            ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
+            mNativeAd.loadAd();
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "facebook native onPrepareNative error", e, onoff);
         }
-        ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
-        mNativeAd.loadAd();
     }
 
     @Override
     protected void init() {
-        ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1() , onoff);
+        ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1(), onoff);
         AudienceNetworkAds.initialize(getActivity());
         createListener();
     }
@@ -87,14 +91,14 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
                     if (nativeContentsList.isEmpty()) {
                         ZplayDebug.v(TAG, "facebook data is empty", onoff);
-                        AdError adError= new AdError(AdError.NO_FILL_ERROR_CODE, "facebook ad is no fill");
+                        AdError adError = new AdError(AdError.NO_FILL_ERROR_CODE, "facebook ad is no fill");
                         layerPreparedFailed(FacebookUtil.recodeError(adError));
                         return;
                     }
                     layerPrepared(nativeContentsList);
                 } catch (Exception e) {
                     ZplayDebug.e(TAG, "facebook getNativeContentList error : " + e, onoff);
-                    AdError adError= new AdError(AdError.NO_FILL_ERROR_CODE, "download image data failed");
+                    AdError adError = new AdError(AdError.NO_FILL_ERROR_CODE, "download image data failed");
                     layerPreparedFailed(FacebookUtil.recodeError(adError));
                 }
             }
@@ -111,11 +115,6 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                 layerExposure();
             }
         };
-    }
-
-    @Override
-    protected void callOnActivityDestroy() {
-
     }
 
     @Override
@@ -155,8 +154,10 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
-            setProviderName("Facebook");
-            if(getActivity() != null){
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
+            setIsExpressAdView(false);
+            if (getActivity() != null) {
                 mMediaView = new MediaView(getActivity());
             }
 
@@ -176,7 +177,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                         (FrameLayout.LayoutParams) adChoicesView.getLayoutParams();
                 setViewPosition(adChoicesParams, getProvider().getNativeAdOptions().getAdChoicesPosition());
                 overlayView.requestLayout();
-                
+
                 if (!getProvider().getNativeAdOptions().getHideAdAttribution()) {
                     TextView adAttribution = new TextView(getNativeAdView().getContext());
                     adAttribution.setText(getProvider().getNativeAdOptions().getAdAttributionText());
@@ -200,6 +201,13 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                 nativeAd.registerViewForInteraction(overlayView, mMediaView, (ImageView) overlayView.getIconView());
             }
         }
+        @Override
+        public void destroy(){
+            ZplayDebug.v(TAG, "facebook native destory", onoff);
+            if (nativeAd != null) {
+                nativeAd.destroy();
+            }
+        }
 
         private Drawable getDrawable() {
             Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
@@ -209,72 +217,74 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
             return new BitmapDrawable(resultBitmap);
         }
 
-        public class FacebookNativeAdVideoController extends YumiNativeAdVideoController{
+        public class FacebookNativeAdVideoController extends YumiNativeAdVideoController {
             private MediaView mMediaView;
-            private FacebookNativeAdVideoController(MediaView mMediaView){
+
+            private FacebookNativeAdVideoController(MediaView mMediaView) {
                 this.mMediaView = mMediaView;
             }
-            public void play(){
+
+            public void play() {
 
             }
 
-            public void pause(){
+            public void pause() {
             }
 
-            public double getAspectRatio(){
+            public double getAspectRatio() {
                 return 0;
             }
 
-            public void setVideoLifecycleCallbacks(final YumiVideoLifecycleCallbacks videoLifecycleCallbacks){
-               if(mMediaView != null){
-                   mMediaView.setListener(new MediaViewListener() {
-                       @Override
-                       public void onPlay(MediaView mediaView) {
-                               if(videoLifecycleCallbacks != null){
-                                   videoLifecycleCallbacks.onVideoPlay();
-                               }
-                       }
+            public void setVideoLifecycleCallbacks(final YumiVideoLifecycleCallbacks videoLifecycleCallbacks) {
+                if (mMediaView != null) {
+                    mMediaView.setListener(new MediaViewListener() {
+                        @Override
+                        public void onPlay(MediaView mediaView) {
+                            if (videoLifecycleCallbacks != null) {
+                                videoLifecycleCallbacks.onVideoPlay();
+                            }
+                        }
 
-                       @Override
-                       public void onVolumeChange(MediaView mediaView, float v) {
+                        @Override
+                        public void onVolumeChange(MediaView mediaView, float v) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onPause(MediaView mediaView) {
-                           if(videoLifecycleCallbacks != null){
-                               videoLifecycleCallbacks.onVideoPlay();
-                           }
-                       }
+                        @Override
+                        public void onPause(MediaView mediaView) {
+                            if (videoLifecycleCallbacks != null) {
+                                videoLifecycleCallbacks.onVideoPlay();
+                            }
+                        }
 
-                       @Override
-                       public void onComplete(MediaView mediaView) {
-                           if(videoLifecycleCallbacks != null){
-                               videoLifecycleCallbacks.onVideoEnd();
-                           }
-                       }
+                        @Override
+                        public void onComplete(MediaView mediaView) {
+                            if (videoLifecycleCallbacks != null) {
+                                videoLifecycleCallbacks.onVideoEnd();
+                            }
+                        }
 
-                       @Override
-                       public void onEnterFullscreen(MediaView mediaView) {
+                        @Override
+                        public void onEnterFullscreen(MediaView mediaView) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onExitFullscreen(MediaView mediaView) {
+                        @Override
+                        public void onExitFullscreen(MediaView mediaView) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onFullscreenBackground(MediaView mediaView) {
+                        @Override
+                        public void onFullscreenBackground(MediaView mediaView) {
 
-                       }
+                        }
 
-                       @Override
-                       public void onFullscreenForeground(MediaView mediaView) {
+                        @Override
+                        public void onFullscreenForeground(MediaView mediaView) {
 
-                       }
-                   });
-               }
+                        }
+                    });
+                }
             }
         }
     }

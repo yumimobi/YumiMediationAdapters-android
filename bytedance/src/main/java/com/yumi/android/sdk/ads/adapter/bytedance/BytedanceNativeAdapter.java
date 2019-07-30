@@ -17,6 +17,7 @@ import com.bytedance.sdk.openadsdk.TTFeedAd;
 import com.bytedance.sdk.openadsdk.TTNativeAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
+import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
@@ -142,11 +143,6 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
@@ -180,15 +176,18 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             setDesc(nativeAdData.getDescription());
             setCallToAction(PhoneInfoGetter.getLanguage().startsWith("zh") ? "查看详情" : "learn more");
             setHasVideoContent(nativeAdData.getImageMode() == 5);
+            setNativeAdVideoController(new YumiNativeAdVideoController());
 
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
-            setProviderName("Bytedance");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
+            setIsExpressAdView(false);
         }
-
+        @Override
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "bytedance native trackView getNativeAdView() is null", onoff);
                 return;
             }
 
@@ -197,7 +196,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
             ImageView adLogo = new ImageView(getNativeAdView().getContext());
             adLogo.setImageBitmap(nativeAdData.getAdLogo());
             getNativeAdView().addView(adLogo);
-            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(getNativeAdView().getContext(), 20), dip2px(getNativeAdView().getContext(), 20));
+            FrameLayout.LayoutParams adLogoParams = new FrameLayout.LayoutParams(dip2px(20), dip2px(20));
             setViewPosition(adLogoParams, YumiNativeAdOptions.POSITION_BOTTOM_RIGHT);
             adLogo.setLayoutParams(adLogoParams);
             getNativeAdView().requestLayout();

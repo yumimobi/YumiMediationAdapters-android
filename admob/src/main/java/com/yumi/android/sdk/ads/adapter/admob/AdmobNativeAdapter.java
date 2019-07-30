@@ -117,11 +117,6 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
@@ -164,9 +159,11 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
-            setProviderName("Admob");
+            setProviderName(getProvider().getProviderName());
+            setSpecifiedProvider(getProvider().getSpecifiedProvider());
+            setIsExpressAdView(false);
         }
-
+        @Override
         public void trackView() {
             if (getNativeAdView() == null) {
                 ZplayDebug.v(TAG, "admob native trackView getNativeAdView() is null", onoff);
@@ -211,6 +208,15 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             unifiedAdView.addView(yumiNativeAdView);
             parent.addView(unifiedAdView);
             unifiedAdView.setNativeAd(unifiedNativeAd);
+        }
+
+
+        @Override
+        public void destroy() {
+            ZplayDebug.v(TAG, "admob native destory", onoff);
+            if(unifiedNativeAd != null){
+                unifiedNativeAd.destroy();
+            }
         }
 
         public class AdmobNativeViewController extends YumiNativeAdVideoController {

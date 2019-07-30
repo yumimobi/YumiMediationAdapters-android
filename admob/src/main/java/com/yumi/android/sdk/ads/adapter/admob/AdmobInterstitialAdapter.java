@@ -14,116 +14,106 @@ import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
-	private static final String TAG = "AdmobInterstitialAdapter";
-	private InterstitialAd instertitial;
-	private AdListener adListener;
-	private boolean isReady;
+    private static final String TAG = "AdmobInterstitialAdapter";
+    private InterstitialAd mInterstitialAd;
+    private AdListener mAdListener;
+    private boolean isReady;
 
-	protected AdmobInterstitialAdapter(Activity activity,
-			YumiProviderBean provider) {
-		super(activity, provider);
-	}
+    protected AdmobInterstitialAdapter(Activity activity,
+                                       YumiProviderBean provider) {
+        super(activity, provider);
+    }
 
-	@Override
-	public void onActivityPause() {
+    @Override
+    public void onActivityPause() {
+    }
 
-	}
+    @Override
+    public void onActivityResume() {
+    }
 
-	@Override
-	public void onActivityResume() {
+    @Override
+    public boolean onActivityBackPressed() {
+        return false;
+    }
 
-	}
+    @Override
+    protected void onPrepareInterstitial() {
+        ZplayDebug.d(TAG, "admob request new interstitial", onoff);
+        if (mInterstitialAd == null) {
+            mInterstitialAd = new InterstitialAd(getActivity());
+            mInterstitialAd.setAdUnitId(getProvider().getKey1());
+            mInterstitialAd.setAdListener(mAdListener);
+        }
+        AdRequest req = getAdRequest(getContext());
+        isReady = false;
+        mInterstitialAd.loadAd(req);
+    }
 
-	@Override
-	protected final void callOnActivityDestroy() {
+    @Override
+    protected void onShowInterstitialLayer(Activity activity) {
+        mInterstitialAd.show();
+    }
 
-	}
+    @Override
+    protected boolean isInterstitialLayerReady() {
+        try {
+            return mInterstitialAd != null && mInterstitialAd.isLoaded();
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "admob interstitial isInterstitialLayerReady error : ", e, onoff);
+            return isReady;
+        }
+    }
 
-	@Override
-	public boolean onActivityBackPressed() {
-		return false;
-	}
+    @Override
+    protected void init() {
+        ZplayDebug.i(TAG, "unitId : " + getProvider().getKey1(), onoff);
+        createAdListener();
+    }
 
-	@Override
-	protected void onPrepareInterstitial() {
-		ZplayDebug.d(TAG, "admob request new interstitial", onoff);
-		if (instertitial == null) {
-			instertitial = new InterstitialAd(getActivity());
-			instertitial.setAdUnitId(getProvider().getKey1());
-			instertitial.setAdListener(adListener);
-		}
-		AdRequest req = getAdRequest(getContext());
-		isReady = false;
-		instertitial.loadAd(req);
-	}
+    private void createAdListener() {
+        mAdListener = new AdListener() {
+            @Override
+            public void onAdClosed() {
+                ZplayDebug.d(TAG, "admob interstitial closed", onoff);
+                layerClosed();
+                isReady = false;
+                super.onAdClosed();
+            }
 
-	@Override
-	protected void onShowInterstitialLayer(Activity activity) {
-		instertitial.show();
-	}
+            @Override
+            public void onAdOpened() {
+                ZplayDebug.d(TAG, "admob interstitial shown", onoff);
+                layerExposure();
+                layerStartPlaying();
+                isReady = false;
+                super.onAdOpened();
+            }
 
-	@Override
-	protected boolean isInterstitialLayerReady() {
-		try{
-			if (instertitial != null && instertitial.isLoaded()) {
-				return true;
-			}
-			return false;
-		}catch (Exception e){
-			ZplayDebug.e(TAG, "admob interstitial isInterstitialLayerReady error : ", e, onoff);
-			return isReady;
-		}
-	}
+            @Override
+            public void onAdLeftApplication() {
+                ZplayDebug.d(TAG, "admob interstitial clicked", onoff);
+                layerClicked(-99f, -99f);
+                isReady = false;
+                super.onAdLeftApplication();
+            }
 
-	@Override
-	protected void init() {
-		ZplayDebug.i(TAG, "unitId : " + getProvider().getKey1(), onoff);
-		createAdListener();
-	}
+            @Override
+            public void onAdLoaded() {
+                ZplayDebug.d(TAG, "admob interstitial prepared", onoff);
+                layerPrepared();
+                isReady = true;
+                super.onAdLoaded();
+            }
 
-	private void createAdListener() {
-		adListener = new AdListener() {
-			@Override
-			public void onAdClosed() {
-				ZplayDebug.d(TAG, "admob interstitial closed", onoff);
-				layerClosed();
-				isReady = false;
-				super.onAdClosed();
-			}
-
-			@Override
-			public void onAdOpened() {
-				ZplayDebug.d(TAG, "admob interstitial shown", onoff);
-				layerExposure();
-				layerStartPlaying();
-				isReady = false;
-				super.onAdOpened();
-			}
-
-			@Override
-			public void onAdLeftApplication() {
-				ZplayDebug.d(TAG, "admob interstitial clicked", onoff);
-				layerClicked(-99f, -99f);
-				isReady = false;
-				super.onAdLeftApplication();
-			}
-
-			@Override
-			public void onAdLoaded() {
-				ZplayDebug.d(TAG, "admob interstitial prepared", onoff);
-				layerPrepared();
-				isReady = true;
-				super.onAdLoaded();
-			}
-
-			@Override
-			public void onAdFailedToLoad(int errorCode) {
-				ZplayDebug.d(TAG, "admob interstitial failed " + errorCode, onoff);
-				layerPreparedFailed(recodeError(errorCode));
-				isReady = false;
-				super.onAdFailedToLoad(errorCode);
-			}
-		};
-	}
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                ZplayDebug.d(TAG, "admob interstitial failed " + errorCode, onoff);
+                layerPreparedFailed(recodeError(errorCode));
+                isReady = false;
+                super.onAdFailedToLoad(errorCode);
+            }
+        };
+    }
 
 }

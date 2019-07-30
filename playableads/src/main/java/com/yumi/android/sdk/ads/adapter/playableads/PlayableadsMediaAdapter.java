@@ -36,7 +36,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "Playable media Video onPrepareMedia: ", onoff);
         if (playable != null && listener != null) {
             ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
-            playable.requestPlayableAds(provoder.getKey2(),listener);
+            playable.requestPlayableAds(provoder.getKey2(), listener);
         }
     }
 
@@ -54,9 +54,9 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
-                ZplayDebug.d(TAG, "Playable media Video Show Error: "+message, onoff);
+                ZplayDebug.d(TAG, "Playable media Video Show Error: " + message, onoff);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                adError.setErrorMessage("Playable errorCoed: "+errorCode+"errorMsg: " + message);
+                adError.setErrorMessage("Playable errorCoed: " + errorCode + "errorMsg: " + message);
                 layerExposureFailed(adError);
             }
 
@@ -93,10 +93,10 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if(playable.canPresentAd(provoder.getKey2())){
+        if (playable.canPresentAd(provoder.getKey2())) {
             ZplayDebug.d(TAG, "Playable media Video isMediaReady true", onoff);
             return true;
-        }else{
+        } else {
             return false;
         }
     }
@@ -111,6 +111,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.d(TAG, "Playable media Ready ", onoff);
                     layerPrepared();
                 }
+
                 @Override
                 public void onLoadFailed(int errorCode, String s) {
                     ZplayDebug.d(TAG, "Playable media onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
@@ -121,22 +122,20 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                     layerPreparedFailed(recodeError(errorCode, s));
                 }
             };
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "Playable media init error ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "Playable media init error ", e, onoff);
         }
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         try {
             if (playable != null) {
                 ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);
                 playable.onDestroy();
             }
-        }catch (Exception e)
-        {
-            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ",e, onoff);
+        } catch (Exception e) {
+            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ", e, onoff);
         }
     }
 

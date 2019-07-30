@@ -36,7 +36,7 @@ public class MRAIDHtmlProcessor {
         if ((!hasHtmlTag && (hasHeadTag || hasBodyTag)) || (hasHtmlTag && !hasBodyTag)) {
             return null;
         }
-        
+
         String ls = System.getProperty("line.separator");
 
         if (!hasHtmlTag) {
@@ -58,8 +58,7 @@ public class MRAIDHtmlProcessor {
         String metaTag =
                 "<meta name='viewport' content='width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no' />";
 
-        String styleTag =
-                "<style>" + ls +
+        String styleTag = "<style>" + ls +
                 "body { margin:0; padding:0;}" + ls +
                 "*:not(input) { -webkit-touch-callout:none; -webkit-user-select:none; -webkit-text-size-adjust:none; }" + ls +
                 "</style>";

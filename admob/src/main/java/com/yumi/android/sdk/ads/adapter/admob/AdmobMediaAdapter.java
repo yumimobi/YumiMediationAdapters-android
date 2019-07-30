@@ -2,10 +2,10 @@ package com.yumi.android.sdk.ads.adapter.admob;
 
 import android.app.Activity;
 
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.reward.RewardItem;
-import com.google.android.gms.ads.reward.RewardedVideoAd;
-import com.google.android.gms.ads.reward.RewardedVideoAdListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdCallback;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
@@ -20,8 +20,7 @@ import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
 public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "AdmobMediaAdapter";
-    private RewardedVideoAd mAd;
-    private RewardedVideoAdListener mediaListener;
+    private RewardedAd mAd;
     private boolean isReady;
     private boolean isRewarded = false;
 
@@ -41,34 +40,70 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        if (mAd != null && !mAd.isLoaded()) {
-            ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
-            isReady = false;
-            mAd.loadAd(getProvider().getKey1(), getAdRequest(getContext()));
-        }
+        ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
+        isReady = false;
+        mAd = new RewardedAd(getContext(), getProvider().getKey1());
+        mAd.loadAd(getAdRequest(getContext()), new RewardedAdLoadCallback() {
+            public void onRewardedAdLoaded() {
+                ZplayDebug.d(TAG, "admob media onRewardedAdLoaded", onoff);
+                isReady = true;
+                layerPrepared();
+            }
+
+            public void onRewardedAdFailedToLoad(int var1) {
+                ZplayDebug.d(TAG, "admob media onRewardedAdFailedToLoad errorCode:" + var1, onoff);
+                isReady = false;
+                layerPreparedFailed(recodeError(var1));
+            }
+        });
     }
 
     @Override
     protected void onShowMedia() {
-        if(mAd!=null) {
-            if (mAd.isLoaded()) {
-                mAd.show();
+        if (mAd != null) {
+            if (isMediaReady()) {
+                mAd.show(getActivity(), new RewardedAdCallback() {
+                    public void onRewardedAdOpened() {
+                        ZplayDebug.d(TAG, "admob media onRewardedAdOpened", onoff);
+                        isRewarded = false;
+                        isReady = false;
+                        layerExposure();
+                        layerStartPlaying();
+                    }
+
+                    public void onRewardedAdClosed() {
+                        ZplayDebug.d(TAG, "admob media onRewardedAdClosed", onoff);
+                        isReady = false;
+                        layerClosed(isRewarded);
+                    }
+
+                    public void onUserEarnedReward(RewardItem reward) {
+                        ZplayDebug.d(TAG, "admob media onUserEarnedReward", onoff);
+                        isReady = false;
+                        isRewarded = true;
+                        layerIncentived();
+                    }
+
+                    public void onRewardedAdFailedToShow(int errorCode) {
+                        layerExposureFailed(recodeError(errorCode));
+                    }
+                });
             }
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-        try{
-        if(mAd!=null) {
-            if (mAd.isLoaded()) {
-                ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
-                return true;
+        try {
+            if (mAd != null) {
+                if (mAd.isLoaded()) {
+                    ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
+                    return true;
+                }
             }
-        }
-        ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
-        return false;
-        }catch (Exception e){
+            ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
+            return false;
+        } catch (Exception e) {
             ZplayDebug.e(TAG, "admob media isMediaReady error : ", e, onoff);
             return isReady;
         }
@@ -76,70 +111,5 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        createMediaListener();
-        mAd = MobileAds.getRewardedVideoAdInstance(getActivity());
-        mAd.setRewardedVideoAdListener(mediaListener);
-    }
-
-    @Override
-    protected void callOnActivityDestroy() {
-    }
-    private void createMediaListener() {
-        mediaListener = new RewardedVideoAdListener() {
-            @Override
-            public void onRewardedVideoAdLoaded() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdLoaded", onoff);
-                isReady = true;
-                layerPrepared();
-            }
-
-            @Override
-            public void onRewardedVideoAdOpened() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdOpened  layerClicked", onoff);
-                isRewarded = false;
-                isReady = false;
-                layerExposure();
-            }
-
-            @Override
-            public void onRewardedVideoStarted() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoStarted", onoff);
-                isReady = false;
-                layerStartPlaying();
-            }
-
-            @Override
-            public void onRewardedVideoAdClosed() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdClosed", onoff);
-                isReady = false;
-                layerClosed(isRewarded);
-            }
-
-            @Override
-            public void onRewarded(RewardItem rewardItem) {
-                ZplayDebug.d(TAG, "admob media onRewarded", onoff);
-                isReady = false;
-                isRewarded = true;
-                layerIncentived();
-            }
-
-            @Override
-            public void onRewardedVideoAdLeftApplication() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdLeftApplication", onoff);
-                layerClicked();
-            }
-
-            @Override
-            public void onRewardedVideoAdFailedToLoad(int errorCode) {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoAdFailedToLoad errorCode:" + errorCode, onoff);
-                isReady = false;
-                layerPreparedFailed(recodeError(errorCode));
-            }
-
-            @Override
-            public void onRewardedVideoCompleted() {
-                ZplayDebug.d(TAG, "admob media onRewardedVideoCompleted", onoff);
-            }
-        };
     }
 }

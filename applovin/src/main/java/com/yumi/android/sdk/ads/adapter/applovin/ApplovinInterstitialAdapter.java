@@ -158,7 +158,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         ApplovinExtraHolder.destroyHolder();
         appLovinSDK = null;
         interstitialAd = null;

@@ -24,6 +24,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
     private static final String TAG = "BaiduSplashAdapter";
 
     private static final int WHAT_TIMEOUT = 0;
+    private boolean hasHitLayerPreparedFailed;
     private Handler mHandler = new Handler(Looper.getMainLooper()) {
         @Override
         public void handleMessage(Message msg) {
@@ -31,8 +32,6 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             hitPreparedFailed("not got any callback from the sdk");
         }
     };
-
-    private boolean hasHitLayerPreparedFailed;
 
     public BaiduSplashAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -76,7 +75,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
         };
         AdView.setAppSid(getActivity(), getProvider().getKey1());
         // canClick参数表示是否接受点击类型的⼴广告，强烈建议设置为 true，否则影响广告填充
-        new SplashAd(getActivity(), getDeveloperCntainer(), listener, getProvider().getKey2(), true);
+        new SplashAd(getActivity(), getDeveloperContainer(), listener, getProvider().getKey2(), true);
     }
 
     private void hitPreparedFailed(String msg) {

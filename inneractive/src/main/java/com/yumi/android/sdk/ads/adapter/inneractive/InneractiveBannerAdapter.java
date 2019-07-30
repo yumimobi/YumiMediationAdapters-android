@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
 
-import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -128,11 +127,6 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
                 layerPreparedFailed(recodeError(errorCode));
             }
         };
-    }
-
-    @Override
-    protected void callOnActivityDestroy() {
-
     }
 
     @Override

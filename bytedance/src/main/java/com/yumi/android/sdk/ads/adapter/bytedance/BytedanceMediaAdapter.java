@@ -161,11 +161,6 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
@@ -190,7 +185,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
     private void calculateMediaSize() {
         try {
-            int[] realSize = WindowSizeUtils.getRealSize(getActivity());
+            int[] realSize = WindowSizeUtils.getRealSize();
             rewardHeight = realSize[1];
             rewardWidth = realSize[0];
         } catch (Exception e) {

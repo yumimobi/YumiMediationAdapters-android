@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.ironsource.mediationsdk.IronSource;
 import com.ironsource.mediationsdk.logger.IronSourceError;
-import com.ironsource.mediationsdk.model.Placement;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyInterstitialListener;
 import com.ironsource.mediationsdk.sdk.ISDemandOnlyRewardedVideoListener;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;

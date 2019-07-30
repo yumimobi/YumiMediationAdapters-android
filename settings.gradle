@@ -13,11 +13,8 @@ include ':adcolony',
         ':ksyun',
         ':mintegral',
         ':mintegral-china',
-        ':mraid',
         ':mobvista',
         ':oneway',
         ':playableads',
         ':unity',
-        ':unity-china',
-        ':vungle',
-        ':vungle-china'
+        ':vungle'

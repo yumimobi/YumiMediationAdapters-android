@@ -38,7 +38,7 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     @Override
-    protected final void callOnActivityDestroy() {
+    protected final void onDestroy() {
         InmobiExtraHolder.onDestroy();
     }
 

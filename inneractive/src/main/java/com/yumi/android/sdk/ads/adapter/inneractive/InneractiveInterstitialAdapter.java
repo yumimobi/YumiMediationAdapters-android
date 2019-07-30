@@ -1,9 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.inneractive;
 
 import android.app.Activity;
-import android.widget.Toast;
 
-import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -12,7 +10,6 @@ import com.fyber.inneractive.sdk.external.InneractiveFullscreenAdEventsListener;
 import com.fyber.inneractive.sdk.external.InneractiveFullscreenUnitController;
 import com.fyber.inneractive.sdk.external.InneractiveFullscreenVideoContentController;
 import com.fyber.inneractive.sdk.external.InneractiveUnitController;
-import com.fyber.inneractive.sdk.external.InneractiveUserConfig;
 import com.fyber.inneractive.sdk.external.VideoContentListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -167,7 +164,7 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (mInterstitialSpot != null) {
             mInterstitialSpot.destroy();
             mInterstitialSpot = null;

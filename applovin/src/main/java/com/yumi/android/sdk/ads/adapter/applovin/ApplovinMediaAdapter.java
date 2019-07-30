@@ -185,7 +185,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         ApplovinExtraHolder.destroyHolder();
         appLovinSDK = null;
         mediaAd = null;

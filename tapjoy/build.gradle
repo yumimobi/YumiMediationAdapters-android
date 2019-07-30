@@ -1,0 +1,43 @@
+apply from: '../shared-build.gradle'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.tapjoy:tapjoy-android-sdk:12.3.1@aar'
+    implementation YUMI_MEDIATION
+}
+
+String version = project.properties['playableads.version']
+
+repositories {
+    maven {
+        name "Tapjoy's maven repo"
+        url "https://tapjoy.bintray.com/maven"
+    }
+}
+
+ext {
+    bintrayRepo = 'ads'
+    bintrayName = project.name
+
+    publishedGroupId = 'com.yumimobi.ads.mediation'
+    artifactId = project.name
+    libraryVersion = version
+    libraryName = project.name
+    libraryDescription = 'Yumi Mediation Playableads Adapter'
+
+    // publish aar to in-house(remember change the value of inHouseVersion):
+    // Call ./gradlew artifactoryPublish to publish
+    inHouseVersion = ""
+
+    siteUrl = ''
+    gitUrl = ''
+}
+
+if (version) {
+    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/master/bintray_upload.gradle'
+//    apply from: 'https://raw.githubusercontent.com/yumimobi/android-scripts/46b0d0d0a818b7e26286b5711f63abbc50aa64de/bintray_upload.gradle'
+}
+
+if (inHouseVersion) {
+    apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
+}

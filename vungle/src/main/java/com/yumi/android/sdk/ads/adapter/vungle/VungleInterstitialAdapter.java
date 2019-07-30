@@ -23,19 +23,14 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "VungleInterstitialAdapter";
+    private static final int RESTART_INIT = 0x001;
     private static LoadAdCallback mLoadAdCallback;
     private static PlayAdCallback mPlayAdCallback;
-
-    private static final int RESTART_INIT = 0x001;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case RESTART_INIT:
-                    ZplayDebug.d(TAG, "vungle Interstitial restart init", onoff);
-                    VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
-                    break;
-                default:
-                    break;
+            if (msg.what == RESTART_INIT) {
+                ZplayDebug.d(TAG, "vungle Interstitial restart init", onoff);
+                VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
             }
         }
     };
@@ -127,7 +122,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (mHandler != null && mHandler.hasMessages(RESTART_INIT)) {
             mHandler.removeMessages(RESTART_INIT);
         }

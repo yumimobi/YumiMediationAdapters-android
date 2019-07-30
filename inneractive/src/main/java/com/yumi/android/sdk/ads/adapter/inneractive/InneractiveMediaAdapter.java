@@ -3,7 +3,6 @@ package com.yumi.android.sdk.ads.adapter.inneractive;
 
 import android.app.Activity;
 
-import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -173,7 +172,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
         if (mVideoSpot != null) {
             mVideoSpot.destroy();
             mVideoSpot = null;

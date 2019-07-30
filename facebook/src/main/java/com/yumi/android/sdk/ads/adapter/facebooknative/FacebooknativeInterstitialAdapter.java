@@ -169,11 +169,6 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     }
 
     @Override
-    protected void callOnActivityDestroy() {
-
-    }
-
-    @Override
     public void onActivityPause() {
 
     }
