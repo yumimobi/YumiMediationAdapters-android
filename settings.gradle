@@ -17,4 +17,5 @@ include ':adcolony',
         ':oneway',
         ':playableads',
         ':unity',
-        ':vungle'
+        ':vungle',
+        ':tapjoy'

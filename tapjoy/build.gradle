@@ -6,7 +6,7 @@ dependencies {
     implementation YUMI_MEDIATION
 }
 
-String version = project.properties['playableads.version']
+String version = project.properties['tapjoy.version']
 
 repositories {
     maven {

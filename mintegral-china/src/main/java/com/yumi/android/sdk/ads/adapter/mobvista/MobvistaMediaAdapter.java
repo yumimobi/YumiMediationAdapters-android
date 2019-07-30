@@ -94,7 +94,8 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected void callOnActivityDestroy() {
+    protected void onDestroy() {
+        super.onDestroy();
         mMvRewardVideoHandler = null;
     }
 
