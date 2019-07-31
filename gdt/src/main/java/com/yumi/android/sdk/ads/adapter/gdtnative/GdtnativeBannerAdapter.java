@@ -52,7 +52,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         ZplayDebug.d(TAG, "GDT nativead banner prepared", onoff);
         this.bannerView = view;
         layerPrepared(view, false);
-        layerExposure();
+//        layerExposure();
         adItem.onExposured(view);
     }
 
