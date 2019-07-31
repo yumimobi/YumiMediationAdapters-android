@@ -121,6 +121,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
                 //html = NativeAdsBuild.getImageTextAdHtml(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity());
                 html = NativeAdsBuild.getTemplateBanner(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity(), getProvider());
                 ZplayDebug.d(TAG, "GDT nativead banner request success!", onoff);
+                ZplayDebug.d(TAG, "html:" + html,onoff);
                 if (html != null && !"".equals(html) && !"null".equals(html)) {
                     calculateWebSize();
                     createWebview(null);
