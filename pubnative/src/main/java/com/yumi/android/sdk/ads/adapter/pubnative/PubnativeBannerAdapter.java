@@ -102,9 +102,9 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onDestroy() {
-//        if (mBanner != null) {
-//            mBanner.destroy();
-//        }
+        if (mBanner != null) {
+            mBanner.destroy();
+        }
     }
 
     private FrameLayout newActivityContentView() {

@@ -15,6 +15,7 @@ import net.pubnative.lite.sdk.PNLite;
 
 public class PubNativeUtil {
 
+    private static boolean isPubNativeNotInited = true;
 
     static AdError recodeError(String errMsg) {
         LayerErrorCode errCode = LayerErrorCode.ERROR_NO_FILL;
@@ -48,9 +49,11 @@ public class PubNativeUtil {
     }
 
     static void initPubNativeSDK(String appToken, Activity activity) {
-        PNLite.initialize(appToken, activity.getApplication());
-        PNLite.setTestMode(YumiDebug.isDebugMode());
-
+        if(isPubNativeNotInited){
+            PNLite.initialize(appToken, activity.getApplication());
+            PNLite.setTestMode(YumiDebug.isDebugMode());
+        }
+        isPubNativeNotInited = false;
     }
 
     static void updateGDPRStatus() {
