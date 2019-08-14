@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.pubnative;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
@@ -20,7 +19,7 @@ public class PubNativeUtil {
     static AdError recodeError(String errMsg) {
         LayerErrorCode errCode = LayerErrorCode.ERROR_NO_FILL;
         AdError result = new AdError(errCode);
-        result.setErrorMessage("Baidu errorMsg: " + errMsg);
+        result.setErrorMessage("Pubnative errorMsg: " + errMsg);
         return result;
     }
 

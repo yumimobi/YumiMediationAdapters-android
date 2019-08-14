@@ -1,18 +1,15 @@
 package com.yumi.android.sdk.ads.adapter.pubnative;
 
 import android.app.Activity;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import net.pubnative.lite.sdk.PNLite;
 import net.pubnative.lite.sdk.models.NativeAd;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
 import com.yumi.android.sdk.ads.publish.NativeContent;
-import com.yumi.android.sdk.ads.publish.YumiDebug;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;

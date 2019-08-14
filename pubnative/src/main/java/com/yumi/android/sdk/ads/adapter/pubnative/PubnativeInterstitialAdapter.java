@@ -3,11 +3,9 @@ package com.yumi.android.sdk.ads.adapter.pubnative;
 import android.app.Activity;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
-import com.yumi.android.sdk.ads.publish.YumiDebug;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import net.pubnative.lite.sdk.PNLite;
 import net.pubnative.lite.sdk.interstitial.PNInterstitialAd;
 
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.initPubNativeSDK;
