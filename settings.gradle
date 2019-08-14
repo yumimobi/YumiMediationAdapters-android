@@ -16,6 +16,7 @@ include ':adcolony',
         ':mobvista',
         ':oneway',
         ':playableads',
+        ':pubnative',
         ':unity',
         ':vungle',
         ':tapjoy'
