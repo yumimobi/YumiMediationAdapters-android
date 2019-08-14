@@ -24,9 +24,7 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.i(TAG, "pubnative request new interstitial key2:" + getProvider().getKey2(), onoff);
-        if (mInterstitial == null) {
-            mInterstitial = new PNInterstitialAd(getActivity(), getProvider().getKey2(), mInterstitialListener);
-        }
+        mInterstitial = new PNInterstitialAd(getActivity(), getProvider().getKey2(), mInterstitialListener);
 
         mInterstitial.load();
     }
