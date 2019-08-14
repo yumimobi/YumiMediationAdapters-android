@@ -1,1 +1,16 @@
-<manifest package="com.yumi.bytedance" />
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+package="com.yumi.android.sdk.ads.adapter.bytedance">
+
+<application>
+    <provider
+        android:name="com.bytedance.sdk.openadsdk.TTFileProvider"
+        android:authorities="${applicationId}.TTFileProvider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/bytedance_file_paths" />
+    </provider>
+</application>
+
+</manifest>
