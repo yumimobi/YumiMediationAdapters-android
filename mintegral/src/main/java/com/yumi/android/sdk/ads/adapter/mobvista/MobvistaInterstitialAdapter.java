@@ -23,7 +23,6 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static final String TAG = "MobvistaInterstitialAdapter";
     private MTGInterstitialHandler mInterstitialHandler;
-    private InterstitialListener mInterstitialListener;
     private boolean isReady = false;
 
     protected MobvistaInterstitialAdapter(Activity activity, YumiProviderBean provider) {
@@ -68,15 +67,10 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
     }
 
     private void initHandler() {
-        createrInterstitialListener();
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put(MIntegralConstans.PROPERTIES_UNIT_ID, getProvider().getKey3());
         mInterstitialHandler = new MTGInterstitialHandler(getContext(), hashMap);
-        mInterstitialHandler.setInterstitialListener(mInterstitialListener);
-    }
-
-    private void createrInterstitialListener() {
-        mInterstitialListener = new InterstitialListener() {
+        mInterstitialHandler.setInterstitialListener(new InterstitialListener() {
 
             @Override
             public void onInterstitialLoadSuccess() {
@@ -121,8 +115,9 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
                 ZplayDebug.d(TAG, "Mobvista Interstitial onClick", onoff);
                 layerClicked(-999f, -999f);
             }
-        };
+        });
     }
+
 
     @Override
     public void onActivityPause() {
