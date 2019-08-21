@@ -41,6 +41,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/mtg_provider_paths" />
         </provider>
+
+        <activity
+            android:name="com.mintegral.msdk.interstitial.view.MTGInterstitialActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
