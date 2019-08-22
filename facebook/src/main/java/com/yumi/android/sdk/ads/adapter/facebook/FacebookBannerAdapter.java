@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.facebook.ads.AdError.NO_FILL;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
@@ -104,5 +105,10 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
             return AdSize.BANNER_HEIGHT_90;
         }
         return AdSize.BANNER_320_50;
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

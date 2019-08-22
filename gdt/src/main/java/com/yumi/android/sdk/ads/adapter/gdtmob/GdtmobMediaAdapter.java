@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 
 public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "GdtmobMediaAdapter";
@@ -149,5 +150,10 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

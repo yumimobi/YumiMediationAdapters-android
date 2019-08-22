@@ -27,6 +27,7 @@ import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.sdkVersion;
 
 /**
  * Created by Administrator on 2017/3/23.
@@ -250,5 +251,10 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
 
         // Assign native ad object to the native view.
         adView.setNativeAd(nativeAppInstallAd);
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

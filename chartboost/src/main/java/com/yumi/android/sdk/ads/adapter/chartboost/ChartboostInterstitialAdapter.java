@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
 public class ChartboostInterstitialAdapter extends
@@ -124,4 +125,8 @@ public class ChartboostInterstitialAdapter extends
         }
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

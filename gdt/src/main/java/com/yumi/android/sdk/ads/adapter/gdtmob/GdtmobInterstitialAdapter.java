@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 
 public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -142,5 +143,10 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 layerClicked(-99f, -99f);
             }
         };
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

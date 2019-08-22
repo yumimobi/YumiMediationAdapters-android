@@ -16,6 +16,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -165,5 +166,8 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
         currentAd = null;
     }
 
-
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

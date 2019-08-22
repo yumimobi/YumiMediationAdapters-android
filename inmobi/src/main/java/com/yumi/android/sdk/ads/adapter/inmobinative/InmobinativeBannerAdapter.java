@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
@@ -136,5 +137,8 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
         }
     }
 
-
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

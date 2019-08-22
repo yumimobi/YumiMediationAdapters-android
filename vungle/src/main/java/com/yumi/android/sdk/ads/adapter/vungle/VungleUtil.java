@@ -33,4 +33,8 @@ class VungleUtil {
         Vungle.Consent consent = isConsent ? OPTED_IN : OPTED_OUT;
         Vungle.updateConsentStatus(consent, "1.0.0");
     }
+
+    static String sdkVersion() {
+        return "6.4.10";
+    }
 }

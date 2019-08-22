@@ -47,4 +47,8 @@ class ApplovinUtil {
         // https://dash.applovin.com/docs/integration#androidPrivacySettings
         AppLovinPrivacySettings.setHasUserConsent(isConsent, context);
     }
+
+    static String sdkVersion(){
+        return "9.7.2";
+    }
 }

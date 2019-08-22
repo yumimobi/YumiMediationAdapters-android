@@ -13,6 +13,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 
 /**
  * Description:
@@ -70,5 +71,10 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
                 // GDT Demo 中没有这个方法，而且测试发现，总是先触发 onADPresent 然后再触发此方法，所以忽略这个方法
             }
         }, getProvider().getOutTime() * 1000);
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -11,6 +11,7 @@ import net.pubnative.lite.sdk.views.PNBannerAdView;
 
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.initPubNativeSDK;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
@@ -86,5 +87,10 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
         if (mBanner != null) {
             mBanner.destroy();
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -62,4 +62,8 @@ public class ChartboostUtil {
             Chartboost.setPIDataUseConsent(context, Chartboost.CBPIDataUseConsent.NO_BEHAVIORAL);
         }
     }
+
+    static String sdkVersion() {
+        return "7.3.1";
+    }
 }

@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 
 public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalAdapter {
     private static final String TAG = "GdtnativeInterstitialAdapter";
@@ -189,5 +190,10 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
         public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
             ZplayDebug.d(TAG, "GDT native Interstitial onADCloseOverlay", onoff);
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

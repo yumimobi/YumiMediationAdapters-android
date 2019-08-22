@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.iqzone.IQZoneUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
@@ -108,5 +109,10 @@ public class IQZoneBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     public void onActivityResume() {
         ZplayDebug.d(TAG, "IQZone Banner onActivityResume", onoff);
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -59,4 +59,8 @@ class BaiduUtil {
         double inch = Math.sqrt(Math.pow(width, 2) + Math.pow(height, 2)) / (160 * density);
         return inch >= 8.0d;
     }
+
+    static String sdkVersion(){
+        return "5.8.0";
+    }
 }

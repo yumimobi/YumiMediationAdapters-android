@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
 
 public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -99,5 +100,10 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

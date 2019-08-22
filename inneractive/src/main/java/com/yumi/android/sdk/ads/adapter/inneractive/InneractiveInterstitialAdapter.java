@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.sdkVersion;
 
 public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -184,5 +185,10 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     @Override
     public boolean onActivityBackPressed() {
         return false;
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

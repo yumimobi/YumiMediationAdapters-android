@@ -10,6 +10,7 @@ import net.pubnative.lite.sdk.interstitial.PNInterstitialAd;
 
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.initPubNativeSDK;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.updateGDPRStatus;
 
 public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -108,5 +109,10 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
         if (mInterstitial != null) {
             mInterstitial.destroy();
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }
