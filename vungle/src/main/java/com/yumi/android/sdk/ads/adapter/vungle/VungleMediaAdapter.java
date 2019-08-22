@@ -16,6 +16,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.vungle.VungleUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
@@ -230,4 +231,8 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
         VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

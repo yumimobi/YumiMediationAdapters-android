@@ -42,4 +42,7 @@ public class PubNativeUtil {
         }
     }
 
+    static String sdkVersion() {
+        return "0.6.1";
+    }
 }

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
 /**
@@ -570,5 +571,10 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             }
 
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

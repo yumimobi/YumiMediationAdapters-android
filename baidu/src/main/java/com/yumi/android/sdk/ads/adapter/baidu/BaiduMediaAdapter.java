@@ -9,6 +9,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.sdkVersion;
 
 public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "BaiduMediaAdapter";
@@ -125,5 +126,10 @@ public class BaiduMediaAdapter extends YumiCustomerMediaAdapter {
         if (rewardVideoAd != null) {
             rewardVideoAd.resume();
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

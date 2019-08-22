@@ -60,4 +60,8 @@ class TapjoyHelper {
             Tapjoy.setUserConsent("0");
         }
     }
+
+    static String sdkVersion() {
+        return "12.3.1";
+    }
 }

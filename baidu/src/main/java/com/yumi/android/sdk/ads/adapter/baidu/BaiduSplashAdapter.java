@@ -14,6 +14,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.sdkVersion;
 
 /**
  * Description:
@@ -83,5 +84,10 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
             hasHitLayerPreparedFailed = true;
         }
         layerPreparedFailed(recodeError(msg));
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

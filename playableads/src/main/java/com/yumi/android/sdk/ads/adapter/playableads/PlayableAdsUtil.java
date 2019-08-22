@@ -19,4 +19,8 @@ class PlayableAdsUtil {
         result.setErrorMessage("PlayableAds errorMsg: " + playableadsErrorMsg);
         return result;
     }
+
+    static String sdkVersion() {
+        return "2.4.1";
+    }
 }

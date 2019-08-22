@@ -18,6 +18,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yumi.android.sdk.ads.adapter.mobvista.Util.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -132,5 +133,10 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
     @Override
     public boolean onActivityBackPressed() {
         return false;
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

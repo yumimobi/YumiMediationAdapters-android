@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.sdkVersion;
 
 public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
@@ -116,4 +117,8 @@ public class AdmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         };
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

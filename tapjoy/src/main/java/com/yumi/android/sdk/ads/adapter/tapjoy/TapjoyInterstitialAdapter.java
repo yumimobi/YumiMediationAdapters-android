@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.connectTapjoy;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.recodeError;
+import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRStatus;
 
 public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -163,5 +164,10 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         });
 
         directPlayPlacement.requestContent();
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

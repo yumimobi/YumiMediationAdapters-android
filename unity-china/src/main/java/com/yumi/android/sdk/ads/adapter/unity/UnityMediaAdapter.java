@@ -10,6 +10,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
+import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
 
 public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
@@ -114,4 +115,8 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
     protected void callOnActivityDestroy() {
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

@@ -31,6 +31,7 @@ import java.util.List;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeNativeAdError;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
@@ -251,5 +252,10 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 }
             }
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

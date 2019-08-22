@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 public class FacebookBiddingInterstitialAdapter extends
         YumiCustomerInterstitialAdapter {
@@ -129,5 +130,10 @@ public class FacebookBiddingInterstitialAdapter extends
 
     public String getBidderToken() {
         return BidderTokenProvider.getBidderToken(getContext());
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

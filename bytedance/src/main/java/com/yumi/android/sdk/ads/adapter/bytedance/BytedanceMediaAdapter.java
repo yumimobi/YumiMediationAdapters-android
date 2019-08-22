@@ -16,6 +16,7 @@ import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 
 
 public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
@@ -197,5 +198,10 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
                 rewardWidth = 1080;
             }
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

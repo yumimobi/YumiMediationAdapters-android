@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 
@@ -147,5 +148,10 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

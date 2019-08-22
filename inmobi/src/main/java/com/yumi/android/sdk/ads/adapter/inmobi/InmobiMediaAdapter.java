@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
 
 public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
@@ -128,4 +129,8 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
         };
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

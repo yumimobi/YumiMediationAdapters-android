@@ -21,6 +21,7 @@ import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.initPubNativeSDK;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawables;
 
@@ -177,5 +178,10 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     public boolean onActivityBackPressed() {
         return false;
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

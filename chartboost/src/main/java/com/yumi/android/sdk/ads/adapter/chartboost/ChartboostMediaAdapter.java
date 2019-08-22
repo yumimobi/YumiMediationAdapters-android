@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
 public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
@@ -122,4 +123,8 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
         }
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

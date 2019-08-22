@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.sdkVersion;
 
 /**
  * Created by Administrator on 2017/4/19.
@@ -111,5 +112,10 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

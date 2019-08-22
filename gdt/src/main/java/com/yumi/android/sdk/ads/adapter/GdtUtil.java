@@ -39,4 +39,8 @@ public class GdtUtil {
         result.setErrorMessage(extraMsg);
         return result;
     }
+
+    public static String sdkVersion() {
+        return "4.40.910";
+    }
 }

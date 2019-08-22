@@ -23,6 +23,7 @@ import com.yumi.android.sdk.ads.utils.device.WindowSizeUtils;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 
 /**
  * Description:
@@ -172,5 +173,10 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
                 getDeveloperContainer().getViewTreeObserver().removeOnWindowFocusChangeListener(mLayoutListener);
             }
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }
