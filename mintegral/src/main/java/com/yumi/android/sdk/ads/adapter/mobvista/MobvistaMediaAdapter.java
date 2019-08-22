@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
 
+import static com.yumi.android.sdk.ads.adapter.mobvista.Util.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
@@ -177,5 +178,10 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista media initHandler error:", e, onoff);
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

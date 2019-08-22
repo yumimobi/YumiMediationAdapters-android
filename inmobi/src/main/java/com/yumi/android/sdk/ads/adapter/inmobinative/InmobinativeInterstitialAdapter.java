@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
 
 public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapter {
@@ -138,5 +139,10 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
             ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
             layerPreparedFailed(recodeError(inMobiAdRequestStatus));
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -19,6 +19,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.sdkVersion;
 
 public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
 
@@ -142,5 +143,10 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     private final int dip2px(Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         return ((int) (dp * scale + 0.5f));
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -31,4 +31,8 @@ public class UnityUtil {
         gdprMetaData.set("gdpr.consent", isConsent);
         gdprMetaData.commit();
     }
+
+    static String sdkVersion() {
+        return "3.1.0";
+    }
 }

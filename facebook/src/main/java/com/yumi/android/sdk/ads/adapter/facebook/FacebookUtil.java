@@ -43,4 +43,8 @@ public class FacebookUtil {
         result.setErrorMessage(extraMsg);
         return result;
     }
+
+    public static String sdkVersion() {
+        return "5.3.1";
+    }
 }

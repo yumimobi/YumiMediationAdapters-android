@@ -41,4 +41,8 @@ class IQZoneUtil {
             imdBannerAd.setGDPRApplies(GDPR.APPLIES, consent);
         }
     }
+
+    static String sdkVersion() {
+        return "2.3.2111";
+    }
 }

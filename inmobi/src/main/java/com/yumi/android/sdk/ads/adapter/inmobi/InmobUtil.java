@@ -59,4 +59,8 @@ public class InmobUtil {
         return result;
     }
 
+    public static String sdkVersion() {
+        return "8.0.9";
+    }
+
 }

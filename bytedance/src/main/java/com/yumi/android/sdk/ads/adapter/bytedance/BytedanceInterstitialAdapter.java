@@ -14,6 +14,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 
 public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -139,4 +140,8 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
         return false;
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

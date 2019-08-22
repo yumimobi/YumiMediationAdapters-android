@@ -21,6 +21,7 @@ import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.dp2px;
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.isTablet;
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeNativeError;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
@@ -162,4 +163,8 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

@@ -16,6 +16,8 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.adcolony.AdcolonyUtil.sdkVersion;
+
 public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "AdcolonyMediaAdapter";
@@ -135,5 +137,10 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
         ZplayDebug.i(TAG, "zoneId : " + getProvider().getKey2(), onoff);
         initAdcolonySDK();
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -28,6 +28,7 @@ import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.sdkVersion;
 
 public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
@@ -282,4 +283,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
         }
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

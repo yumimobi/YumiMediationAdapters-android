@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_FILL;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
@@ -198,5 +199,10 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
     private final int dip2px(Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
         return ((int) (dp * scale + 0.5f));
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

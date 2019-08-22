@@ -10,6 +10,8 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
+
 /**
  * Created by hjl on 2017/12/4.
  */
@@ -146,5 +148,10 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

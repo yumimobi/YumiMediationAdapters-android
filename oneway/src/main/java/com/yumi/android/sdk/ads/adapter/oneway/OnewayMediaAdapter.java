@@ -128,4 +128,9 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     public void onActivityResume() {
 
     }
+
+    @Override
+    public String getProviderVersion() {
+        return "2.3.4";
+    }
 }

@@ -52,4 +52,7 @@ public class InneractiveUtil {
         InneractiveAdManager.initialize(activity, key1);
     }
 
+    static String sdkVersion() {
+        return "7.3.0";
+    }
 }
