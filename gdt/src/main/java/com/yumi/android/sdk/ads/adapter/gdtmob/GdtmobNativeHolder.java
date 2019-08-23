@@ -13,7 +13,7 @@ import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 public class GdtmobNativeHolder {
-    private String TAG = "GdtmobNativeHolder";
+    private static String TAG = "GdtmobNativeHolder";
     private boolean onoff = true;
     private static GdtmobNativeHolder instance;
     private NativeUnifiedAD nativeAD;
@@ -32,14 +32,14 @@ public class GdtmobNativeHolder {
         nativeAD = new NativeUnifiedAD(mActivity, key1, key2, unifiedListener);
     }
 
-    public void loadNativeUnifiedAD(int currentPoolSpace){
+    public void loadNativeUnifiedAD(int currentPoolSpace) {
         if (nativeAD != null) {
             ZplayDebug.v(TAG, "Gdt nativeUnifiedAD onPrepareNative adCount=" + currentPoolSpace, onoff);
             nativeAD.loadData(currentPoolSpace);
         }
     }
 
-    public void initNativeExpressAD(Activity mActivity, String key1, String key2, YumiNativeAdOptions nativeAdOptions, NativeExpressADListener expressADListeners ){
+    public void initNativeExpressAD(Activity mActivity, String key1, String key2, YumiNativeAdOptions nativeAdOptions, NativeExpressADListener expressADListeners) {
         nativeExpressAD = new NativeExpressAD(mActivity, new ADSize(nativeAdOptions.getExpressAdSize().getWidth(), nativeAdOptions.getExpressAdSize().getHeight()), key1, key2, expressADListeners); // 传入Activity
         // 注意：如果您在联盟平台上新建原生模板广告位时，选择了支持视频，那么可以进行个性化设置（可选）
         nativeExpressAD.setVideoOption(new VideoOption.Builder()
@@ -48,7 +48,7 @@ public class GdtmobNativeHolder {
                 .build());
     }
 
-    public void loadNativeExpressAD(int currentPoolSpace){
+    public void loadNativeExpressAD(int currentPoolSpace) {
         if (nativeExpressAD != null) {
             ZplayDebug.v(TAG, "Gdt nativeExpressAD onPrepareNative adCount=" + currentPoolSpace, onoff);
             nativeExpressAD.loadAD(currentPoolSpace);
