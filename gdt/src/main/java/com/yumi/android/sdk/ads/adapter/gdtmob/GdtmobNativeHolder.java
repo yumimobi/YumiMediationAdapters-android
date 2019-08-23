@@ -13,7 +13,7 @@ import com.yumi.android.sdk.ads.formats.YumiNativeAdOptions;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 public class GdtmobNativeHolder {
-    private String TAG = "GdtmobNativeHolder";
+    private static String TAG = "GdtmobNativeHolder";
     private boolean onoff = true;
     private static GdtmobNativeHolder instance;
     private NativeUnifiedAD nativeAD;

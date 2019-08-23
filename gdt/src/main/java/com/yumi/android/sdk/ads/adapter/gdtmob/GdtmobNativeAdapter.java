@@ -39,7 +39,7 @@ import static com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil.loadDrawabl
  * Created by Administrator on 2017/7/3.
  */
 public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
-
+    private static final String TAG = "GdtmobNativeAdapter";
     private List<NativeContent> list = new ArrayList<>();
 
     protected GdtmobNativeAdapter(Activity activity, YumiProviderBean provider) {
@@ -236,6 +236,8 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         private NativeExpressAdContent(NativeExpressADView expressADView){
             this.expressADView = expressADView;
+            setTitle(expressADView.getBoundData().getTitle());
+            setDesc(expressADView.getBoundData().getDesc());
             setExpressAdView(expressADView);
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
