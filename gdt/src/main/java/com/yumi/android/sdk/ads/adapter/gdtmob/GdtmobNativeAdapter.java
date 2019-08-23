@@ -236,8 +236,10 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         private NativeExpressAdContent(NativeExpressADView expressADView) {
             this.expressADView = expressADView;
-            setTitle(expressADView.getBoundData().getTitle());
-            setDesc(expressADView.getBoundData().getDesc());
+            if (expressADView.getBoundData() != null) {
+                setTitle(expressADView.getBoundData().getTitle());
+                setDesc(expressADView.getBoundData().getDesc());
+            }
             setExpressAdView(expressADView);
             setMaterialCreationTime(System.currentTimeMillis());
             setMaterialEtime(getProvider().getMaterialEtime());
