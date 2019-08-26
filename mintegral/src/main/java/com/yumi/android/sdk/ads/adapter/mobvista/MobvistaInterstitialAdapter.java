@@ -1,9 +1,12 @@
 package com.yumi.android.sdk.ads.adapter.mobvista;
 
 import android.app.Activity;
+import android.text.TextUtils;
 
 import com.mintegral.msdk.MIntegralConstans;
 import com.mintegral.msdk.MIntegralSDK;
+import com.mintegral.msdk.interstitialvideo.out.InterstitialVideoListener;
+import com.mintegral.msdk.interstitialvideo.out.MTGInterstitialVideoHandler;
 import com.mintegral.msdk.out.InterstitialListener;
 import com.mintegral.msdk.out.MIntegralSDKFactory;
 import com.mintegral.msdk.out.MTGInterstitialHandler;
@@ -23,7 +26,9 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 
 public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static final String TAG = "MobvistaInterstitialAdapter";
+    private static final String INTERSTITIAL_IMAGE = "2";
     private MTGInterstitialHandler mInterstitialHandler;
+    private MTGInterstitialVideoHandler mInterstitialVideoHandler;
     private boolean isReady = false;
 
     protected MobvistaInterstitialAdapter(Activity activity, YumiProviderBean provider) {
@@ -32,22 +37,41 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onPrepareInterstitial() {
-        if (mInterstitialHandler != null) {
-            isReady = false;
-            mInterstitialHandler.preload();
+        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+            if (mInterstitialHandler != null) {
+                isReady = false;
+                mInterstitialHandler.preload();
+            }
+        } else {
+            if (mInterstitialVideoHandler != null) {
+                mInterstitialVideoHandler.load();
+            }
         }
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        if (mInterstitialHandler != null) {
-            mInterstitialHandler.show();
+        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+            if (mInterstitialHandler != null) {
+                mInterstitialHandler.show();
+            }
+        } else {
+            if (mInterstitialVideoHandler != null) {
+                mInterstitialVideoHandler.show();
+            }
         }
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        return isReady;
+        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+            return isReady;
+        } else {
+            if (mInterstitialVideoHandler != null) {
+                return mInterstitialVideoHandler.isReady();
+            }
+        }
+        return false;
     }
 
     @Override
@@ -61,13 +85,18 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
                 sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
             }
             sdk.init(map, getContext());
-            initHandler();
+
+            if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+                initInterstitialHandler();
+            } else {
+                initInterstitialVideoHandler();
+            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista intertitial init error:", e, onoff);
         }
     }
 
-    private void initHandler() {
+    private void initInterstitialHandler() {
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put(MIntegralConstans.PROPERTIES_UNIT_ID, getProvider().getKey3());
         mInterstitialHandler = new MTGInterstitialHandler(getContext(), hashMap);
@@ -119,6 +148,66 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
         });
     }
 
+    private void initInterstitialVideoHandler() {
+        mInterstitialVideoHandler = new MTGInterstitialVideoHandler(getContext(), getProvider().getKey3());
+        mInterstitialVideoHandler.setInterstitialVideoListener(new InterstitialVideoListener() {
+            @Override
+            public void onLoadSuccess(String s) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial onLoadSuccess", onoff);
+            }
+
+            @Override
+            public void onVideoLoadSuccess(String s) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoLoadSuccess", onoff);
+                layerPrepared();
+            }
+
+            @Override
+            public void onVideoLoadFail(String errorMsg) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoLoadFail errorMsg: " + errorMsg, onoff);
+                AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
+                error.setErrorMessage("minteral errorMsg: " + errorMsg);
+                layerPreparedFailed(error);
+            }
+
+            @Override
+            public void onAdShow() {
+                ZplayDebug.d(TAG, "Mobvista Interstitial video onAdShow", onoff);
+                layerStartPlaying();
+                layerExposure();
+            }
+
+            @Override
+            public void onAdClose(boolean b) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial video onAdClose", onoff);
+                layerClosed();
+            }
+
+            @Override
+            public void onShowFail(String errorMsg) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial video onShowFail", onoff);
+                AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                adError.setErrorMessage("Mobvista errorMsg: " + errorMsg);
+                layerExposureFailed(adError);
+            }
+
+            @Override
+            public void onVideoAdClicked(String s) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoAdClicked", onoff);
+                layerClicked(-999f, -999f);
+            }
+
+            @Override
+            public void onVideoComplete(String s) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoComplete", onoff);
+            }
+
+            @Override
+            public void onEndcardShow(String s) {
+                ZplayDebug.d(TAG, "Mobvista Interstitial video onEndcardShow", onoff);
+            }
+        });
+    }
 
     @Override
     public void onActivityPause() {
