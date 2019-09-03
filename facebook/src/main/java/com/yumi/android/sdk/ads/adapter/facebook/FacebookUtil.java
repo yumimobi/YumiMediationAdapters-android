@@ -45,6 +45,6 @@ public class FacebookUtil {
     }
 
     public static String sdkVersion() {
-        return "5.3.1";
+        return "5.5.0";
     }
 }
