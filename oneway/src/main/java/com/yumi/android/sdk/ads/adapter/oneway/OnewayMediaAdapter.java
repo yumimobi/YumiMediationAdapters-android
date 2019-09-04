@@ -49,7 +49,6 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "Oneway media init: " + getProvider().getKey1(), onoff);
         creatListener();
         OnewaySdk.init(getContext());
-        OnewaySdk.setDebugMode(true);
         OnewaySdk.configure(getActivity(), getProvider().getKey1());
     }
 
