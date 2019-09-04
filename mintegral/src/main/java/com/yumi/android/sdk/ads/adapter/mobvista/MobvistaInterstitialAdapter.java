@@ -37,12 +37,16 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onPrepareInterstitial() {
+        ZplayDebug.d(TAG, "Mobvista request new intertitial", onoff);
+
         if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+            initInterstitialHandler();
             if (mInterstitialHandler != null) {
                 isReady = false;
                 mInterstitialHandler.preload();
             }
         } else {
+            initInterstitialVideoHandler();
             if (mInterstitialVideoHandler != null) {
                 mInterstitialVideoHandler.load();
             }
@@ -85,18 +89,16 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
                 sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
             }
             sdk.init(map, getContext());
-
-            if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
-                initInterstitialHandler();
-            } else {
-                initInterstitialVideoHandler();
-            }
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Mobvista intertitial init error:", e, onoff);
         }
     }
 
     private void initInterstitialHandler() {
+        if (mInterstitialHandler != null) {
+            return;
+        }
+
         HashMap<String, Object> hashMap = new HashMap<String, Object>();
         hashMap.put(MIntegralConstans.PROPERTIES_UNIT_ID, getProvider().getKey3());
         mInterstitialHandler = new MTGInterstitialHandler(getContext(), hashMap);
@@ -149,6 +151,10 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
     }
 
     private void initInterstitialVideoHandler() {
+        if (mInterstitialVideoHandler != null) {
+            return;
+        }
+
         mInterstitialVideoHandler = new MTGInterstitialVideoHandler(getContext(), getProvider().getKey3());
         mInterstitialVideoHandler.setInterstitialVideoListener(new InterstitialVideoListener() {
             @Override
