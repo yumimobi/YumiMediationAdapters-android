@@ -23,6 +23,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private Activity activity;
     private OWRewardedAdListener listener;
     private boolean isRewarded = false;
+    private static boolean isOnewayMediaInit = false;
 
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -31,7 +32,11 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        OWRewardedAd.init(getActivity(), listener);
+        if(!isOnewayMediaInit){
+            OWRewardedAd.init(getActivity(), listener);
+            isOnewayMediaInit = true;
+        }
+        OWRewardedAd.setListener(listener);
     }
 
     @Override
