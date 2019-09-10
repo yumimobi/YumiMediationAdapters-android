@@ -14,6 +14,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.facebook.ads.AdError.NO_FILL;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
@@ -68,6 +69,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload : " + getProvider().getPayload(), onoff);
+        initSDK(getContext());
         createBannerListener();
     }
 
@@ -117,7 +119,7 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
 
 
     public String getBidderToken() {
-        return BidderTokenProvider.getBidderToken(getContext());
+        return BidderTokenProvider.getBidderToken(getActivity());
     }
 
     @Override

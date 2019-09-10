@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
@@ -79,6 +80,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         ZplayDebug.d(TAG, "facebookbid media init payload：" + getProvider().getPayload(), onoff);
+        initSDK(getContext());
         createListener();
     }
 
@@ -158,7 +160,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     public String getBidderToken() {
-        return BidderTokenProvider.getBidderToken(getContext());
+        return BidderTokenProvider.getBidderToken(getActivity());
     }
 
     @Override
