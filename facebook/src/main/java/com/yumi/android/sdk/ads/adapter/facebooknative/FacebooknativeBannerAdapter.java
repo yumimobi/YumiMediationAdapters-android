@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.facebook.ads.AdError.NO_FILL;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
@@ -42,6 +43,7 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "facebook native banner init", onoff);
         try {
+            initSDK(getContext());
             createBannerListener();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Init facebook native banner error", false);

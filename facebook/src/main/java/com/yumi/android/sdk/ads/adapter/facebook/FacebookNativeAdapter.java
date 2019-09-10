@@ -28,6 +28,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 
@@ -62,7 +63,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void init() {
         ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1(), onoff);
-        AudienceNetworkAds.initialize(getActivity());
+        initSDK(getContext());
         createListener();
     }
 
@@ -203,8 +204,9 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                 nativeAd.registerViewForInteraction(overlayView, mMediaView, (ImageView) overlayView.getIconView());
             }
         }
+
         @Override
-        public void destroy(){
+        public void destroy() {
             ZplayDebug.v(TAG, "facebook native destory", onoff);
             if (nativeAd != null) {
                 nativeAd.destroy();

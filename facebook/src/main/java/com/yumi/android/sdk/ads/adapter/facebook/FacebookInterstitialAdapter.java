@@ -10,6 +10,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 public class FacebookInterstitialAdapter extends
@@ -74,6 +75,7 @@ public class FacebookInterstitialAdapter extends
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1(), onoff);
+        initSDK(getContext());
         createListener();
     }
 
