@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.facebook.android:audience-network-sdk:5.5.0'
+    implementation 'com.facebook.android:audience-network-sdk:5.4.1'
     implementation "com.android.support:support-annotations:$SUPOORT_LIBRAY_VERSION"
     implementation YUMI_MEDIATION
 }
