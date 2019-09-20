@@ -534,6 +534,16 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                     public void onVideoError(AdError error) {
                         ZplayDebug.v(TAG, "Gdt native Adapter onVideoError" + error.getErrorMsg(), onoff);
                     }
+
+                    @Override
+                    public void onVideoStop() {
+
+                    }
+
+                    @Override
+                    public void onVideoClicked() {
+
+                    }
                 });
             }
 
