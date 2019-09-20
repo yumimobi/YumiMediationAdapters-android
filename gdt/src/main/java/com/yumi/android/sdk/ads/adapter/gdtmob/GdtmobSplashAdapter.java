@@ -37,7 +37,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
     @Override
     protected void onPrepareSplashLayer() {
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
-        new SplashAD(getActivity(), getDeveloperContainer(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
+        SplashAD splashAD = new SplashAD(getActivity(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
             @Override
             public void onADDismissed() {
                 layerClosed();
@@ -71,6 +71,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
                 // GDT Demo 中没有这个方法，而且测试发现，总是先触发 onADPresent 然后再触发此方法，所以忽略这个方法
             }
         }, getProvider().getOutTime() * 1000);
+        splashAD.fetchAndShowIn(getDeveloperContainer());
     }
 
     @Override
