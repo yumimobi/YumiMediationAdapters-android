@@ -11,7 +11,9 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 public class FacebookBiddingInterstitialAdapter extends
         YumiCustomerInterstitialAdapter {
@@ -80,6 +82,7 @@ public class FacebookBiddingInterstitialAdapter extends
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload:" + getProvider().getPayload(), onoff);
+        initSDK(getContext());
         createListener();
     }
 
@@ -128,6 +131,11 @@ public class FacebookBiddingInterstitialAdapter extends
     }
 
     public String getBidderToken() {
-        return BidderTokenProvider.getBidderToken(getContext());
+        return BidderTokenProvider.getBidderToken(getActivity());
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

@@ -18,6 +18,7 @@ import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.applovin.ApplovinUtil.updateGDPRStatus;
 
 /**
@@ -153,5 +154,10 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     public void onActivityResume() {
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

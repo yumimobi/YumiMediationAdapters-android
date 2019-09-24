@@ -49,4 +49,8 @@ public class AdMobUtil {
         extras.putString("npa", "1");
         return new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
     }
+
+    public static String sdkVersion() {
+        return "17.2.0";
+    }
 }

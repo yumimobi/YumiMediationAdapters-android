@@ -22,6 +22,9 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
+
 public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersititalAdapter {
     private String TAG = "FacebooknativeInterstitialAdapter";
     private NativeAdListener linstener;
@@ -75,6 +78,7 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     protected void init() {
         try {
             ZplayDebug.d(TAG, "facebook native Interstitial init", onoff);
+            initSDK(getContext());
             LayoutInflater inflater = LayoutInflater.from(activity);
             adView = (LinearLayout) inflater.inflate(R.layout.ad_interstitial_layout, null, false);
             createListener();
@@ -181,5 +185,10 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     @Override
     public boolean onActivityBackPressed() {
         return false;
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

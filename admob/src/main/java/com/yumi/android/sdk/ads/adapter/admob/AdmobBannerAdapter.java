@@ -17,6 +17,7 @@ import static com.google.android.gms.ads.AdSize.LEADERBOARD;
 import static com.google.android.gms.ads.AdSize.SMART_BANNER;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.getAdRequest;
 import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.admob.AdMobUtil.sdkVersion;
 
 /**
  * Created by Administrator on 2017/3/23.
@@ -132,5 +133,10 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         int px = Resources.getSystem().getDisplayMetrics().heightPixels;
         float density = Resources.getSystem().getDisplayMetrics().density;
         return (int) ((px / density) + 0.5);
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

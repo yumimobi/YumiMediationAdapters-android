@@ -18,6 +18,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.sdkVersion;
 
 
 public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
@@ -187,5 +188,10 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

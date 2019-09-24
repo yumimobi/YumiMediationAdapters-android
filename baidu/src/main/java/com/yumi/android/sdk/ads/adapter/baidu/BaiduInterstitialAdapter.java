@@ -17,6 +17,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.baidu.BaiduUtil.sdkVersion;
 
 public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static final String TAG = "BaiduInstertitialAdapter";
@@ -179,5 +180,10 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             ZplayDebug.e(TAG, "baidu interstitial removeInterstitialView error: " + e, onoff);
 
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }

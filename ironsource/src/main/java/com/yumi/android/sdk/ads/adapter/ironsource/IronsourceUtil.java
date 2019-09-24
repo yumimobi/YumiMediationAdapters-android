@@ -42,4 +42,8 @@ class IronsourceUtil {
         // https://developers.ironsrc.com/ironsource-mobile/android/advanced-settings/
         IronSource.setConsent(isConsent);
     }
+
+    static String sdkVersion() {
+        return "6.8.4";
+    }
 }

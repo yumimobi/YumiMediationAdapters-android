@@ -4,15 +4,15 @@ import android.app.Activity;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
-import com.yumi.android.sdk.ads.publish.YumiDebug;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import mobi.oneway.sdk.OnewaySdk;
-import mobi.oneway.sdk.OnewaySdkError;
-import mobi.oneway.sdk.OnewaySdkListener;
-import mobi.oneway.sdk.OnewayVideoFinishType;
+import mobi.oneway.export.Ad.OWRewardedAd;
+import mobi.oneway.export.Ad.OnewaySdk;
+import mobi.oneway.export.AdListener.OWRewardedAdListener;
+import mobi.oneway.export.enums.OnewayAdCloseType;
+import mobi.oneway.export.enums.OnewaySdkError;
 
 /**
  * Created by Administrator on 2017/10/27.
@@ -21,8 +21,9 @@ import mobi.oneway.sdk.OnewayVideoFinishType;
 public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private String TAG = "OnewayMediaAdapter";
     private Activity activity;
-    private OnewaySdkListener listener;
+    private OWRewardedAdListener listener;
     private boolean isRewarded = false;
+    private static boolean isOnewayMediaInit = false;
 
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
@@ -31,35 +32,42 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-
+        if(!isOnewayMediaInit){
+            OWRewardedAd.init(getActivity(), listener);
+            isOnewayMediaInit = true;
+        }
+        OWRewardedAd.setListener(listener);
     }
 
     @Override
     protected void onShowMedia() {
-        OnewaySdk.showAdVideo(activity);
+        OWRewardedAd.show(getActivity(), getProvider().getKey1());
     }
 
     @Override
     protected boolean isMediaReady() {
-        return OnewaySdk.isPlacementAdPlayable();
+        return OWRewardedAd.isReady();
     }
 
     @Override
     protected void init() {
+        ZplayDebug.d(TAG, "Oneway media init: " + getProvider().getKey1(), onoff);
         creatListener();
-        OnewaySdk.init(activity, getProvider().getKey1(), listener, YumiDebug.isDebugMode());
+        OnewaySdk.init(getContext());
+        OnewaySdk.configure(getActivity(), getProvider().getKey1());
     }
 
     private void creatListener() {
-        listener = new OnewaySdkListener() {
+        listener = new OWRewardedAdListener() {
+
             @Override
-            public void onAdReady(String placementID) {
+            public void onAdReady() {
                 ZplayDebug.d(TAG, "Oneway media prepared", onoff);
                 layerPrepared();
             }
 
             @Override
-            public void onAdStart(String placementID) {
+            public void onAdShow(String s) {
                 ZplayDebug.d(TAG, "Oneway media shown", onoff);
                 isRewarded = false;
                 layerExposure();
@@ -67,13 +75,24 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
-            public void onAdFinish(String placementID, OnewayVideoFinishType onewayVideoFinishType) {
+            public void onAdClick(String s) {
+                ZplayDebug.d(TAG, "Oneway media onAdClick", onoff);
+                layerClicked();
+            }
+
+            @Override
+            public void onAdClose(String s, OnewayAdCloseType onewayAdCloseType) {
                 ZplayDebug.d(TAG, "Oneway media closed", onoff);
-                if (onewayVideoFinishType == OnewayVideoFinishType.COMPLETED) {
+                layerClosed(isRewarded);
+            }
+
+            @Override
+            public void onAdFinish(String s, OnewayAdCloseType onewayAdCloseType, String s1) {
+                ZplayDebug.d(TAG, "Oneway media onAdFinish", onoff);
+                if (onewayAdCloseType == onewayAdCloseType.COMPLETED) {
                     isRewarded = true;
                     layerIncentived();
                 }
-                layerClosed(isRewarded);
             }
 
             @Override
@@ -82,6 +101,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPreparedFailed(decodeError(onewaySdkError, s));
             }
         };
+
     }
 
     private AdError decodeError(OnewaySdkError onewaySdkError, String msg) {
@@ -111,5 +131,10 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     public void onActivityResume() {
 
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return "2.3.4";
     }
 }

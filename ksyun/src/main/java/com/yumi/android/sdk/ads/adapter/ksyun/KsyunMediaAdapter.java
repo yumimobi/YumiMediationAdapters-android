@@ -173,4 +173,9 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
             }
         };
     }
+
+    @Override
+    public String getProviderVersion() {
+        return "4.0.3";
+    }
 }

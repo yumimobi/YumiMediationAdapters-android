@@ -15,4 +15,8 @@ class AdcolonyUtil {
         result.setErrorMessage("Adconony errorMsg: request not filled.");
         return result;
     }
+
+    static String sdkVersion(){
+        return "3.3.10";
+    }
 }

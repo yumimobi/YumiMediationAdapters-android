@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.inmobi.InmobUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_OVER_RETRY_LIMIT;
 
 public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
@@ -129,4 +130,8 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         };
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }

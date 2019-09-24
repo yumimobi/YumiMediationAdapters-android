@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
@@ -52,7 +53,6 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         ZplayDebug.d(TAG, "GDT nativead banner prepared", onoff);
         this.bannerView = view;
         layerPrepared(view, false);
-        layerExposure();
         adItem.onExposured(view);
     }
 
@@ -138,4 +138,8 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 
     }
 
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
+    }
 }
