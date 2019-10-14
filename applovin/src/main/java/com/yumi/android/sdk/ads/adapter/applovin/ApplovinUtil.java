@@ -49,6 +49,6 @@ class ApplovinUtil {
     }
 
     static String sdkVersion(){
-        return "9.7.2";
+        return "9.9.2";
     }
 }
