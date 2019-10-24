@@ -29,9 +29,9 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static PlayAdCallback mPlayAdCallback;
     private final Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
+            ZplayDebug.d(TAG, "handleMessage: " + msg.what);
             if (msg.what == RESTART_INIT) {
-                ZplayDebug.d(TAG, "vungle Interstitial restart init", onoff);
-                VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
+                VungleInstance.getInstance().initVungle(getActivity(), getProvider().getKey1(), VungleInstance.ADTYPE_INTERSTITIAL);
             }
         }
     };
@@ -57,56 +57,52 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void onPrepareInterstitial() {
         try {
             updateGDPRStatus(getContext());
-            ZplayDebug.d(TAG, "vungle request new Interstitial", onoff);
-            if (Vungle.canPlayAd(getProvider().getKey3())) {
-                ZplayDebug.d(TAG, "vungle Interstitial prapared", onoff);
+            boolean isReady = Vungle.canPlayAd(getProvider().getKey3());
+            ZplayDebug.d(TAG, "onPrepareInterstitial: " + isReady + ", placementId: " + getProvider().getKey3());
+
+            if (isReady) {
                 layerPrepared();
+            } else if (Vungle.isInitialized()) {
+                ZplayDebug.d(TAG, "onPrepareInterstitial: loadAd");
+                Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
             } else {
-                if (Vungle.isInitialized()) {
-                    Vungle.loadAd(getProvider().getKey3(), mLoadAdCallback);
-                } else {
-                    ZplayDebug.d(TAG, "vungle Interstitial init fail", onoff);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            layerPreparedFailed(recodeError(null));
-                        }
-                    });
-                }
-                ZplayDebug.d(TAG, "vungle onPrepareInterstitial loadAd:" + getProvider().getKey3(), onoff);
+                ZplayDebug.d(TAG, "onPrepareInterstitial: notifyFailed");
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        layerPreparedFailed(recodeError(null));
+                    }
+                });
             }
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle onPrepareInterstitial error:", e, onoff);
+            ZplayDebug.i(TAG, "onPrepareInterstitial: error: " + e, onoff);
         }
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
         try {
-            if (Vungle.canPlayAd(getProvider().getKey3())) {
+            final boolean isReady = Vungle.canPlayAd(getProvider().getKey3());
+            ZplayDebug.d(TAG, "onShowInterstitialLayer: " + isReady + ", placementId: " + getProvider().getKey3());
+            if (isReady) {
                 AdConfig adConfig = new AdConfig();
                 adConfig.setAutoRotate(true);
                 adConfig.setMuted(true);
                 Vungle.playAd(getProvider().getKey3(), adConfig, mPlayAdCallback);
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer true placementId:" + getProvider().getKey3(), onoff);
-            } else {
-                ZplayDebug.d(TAG, "vungle Interstitial onShowInterstitialLayer false placementId:" + getProvider().getKey3(), onoff);
             }
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle Interstitial onShowInterstitialLayer error:", e, onoff);
+            ZplayDebug.d(TAG, "onShowInterstitialLayer: error: " + e);
         }
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
         try {
-            if (Vungle.canPlayAd(getProvider().getKey3())) {
-                ZplayDebug.d(TAG, "vungle Interstitial isInterstitialLayerReady true", onoff);
-                return true;
-            }
-            ZplayDebug.d(TAG, "vungle Interstitial isInterstitialLayerReady false", onoff);
+            final boolean isReady = Vungle.canPlayAd(getProvider().getKey3());
+            ZplayDebug.d(TAG, "isInterstitialLayerReady: " + isReady);
+            return isReady;
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle Interstitial isInterstitialLayerReady error:", e, onoff);
+            ZplayDebug.d(TAG, "isInterstitialLayerReady: error: " + e);
         }
         return false;
     }
@@ -114,11 +110,11 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void init() {
         try {
-            ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
+            ZplayDebug.d(TAG, "init: " + getProvider().getKey1());
             createVungleListener();
             initVungleSDK();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle Interstitial init error:", e, onoff);
+            ZplayDebug.d(TAG, "init: error: " + e);
         }
     }
 
@@ -131,11 +127,10 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
 
     private void createVungleListener() {
-
         mLoadAdCallback = new LoadAdCallback() {
             @Override
             public void onAdLoad(String placementReferenceId) {
-                ZplayDebug.d(TAG, "vungle Interstitial LoadAdCallback onAdLoad placementReferenceId:" + placementReferenceId, onoff);
+                ZplayDebug.d(TAG, "onAdLoad: " + placementReferenceId);
                 if (getProvider().getKey3().equals(placementReferenceId)) {
                     layerPrepared();
                 }
@@ -144,7 +139,7 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onError(String placementReferenceId, final Throwable throwable) {
                 try {
-                    ZplayDebug.e(TAG, "vungle Interstitial LoadAdCallback onError  placementReferenceId:" + placementReferenceId + " error:" + throwable.getLocalizedMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + throwable);
                     if (getProvider().getKey3().equals(placementReferenceId)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -153,15 +148,16 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                             }
                         });
                     }
-                } catch (Exception cex) {
-                    ZplayDebug.e(TAG, "vungle Interstitial LoadAdCallback onError try error", cex, onoff);
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onError: error: " + e);
                 }
             }
         };
+
         mPlayAdCallback = new PlayAdCallback() {
             @Override
             public void onAdStart(String placementReferenceId) {
-                ZplayDebug.d(TAG, "vungle Interstitial onAdStart placementReferenceId:" + placementReferenceId, onoff);
+                ZplayDebug.d(TAG, "onAdStart: " + placementReferenceId);
                 if (getProvider().getKey3().equals(placementReferenceId)) {
                     layerExposure();
                     layerStartPlaying();
@@ -170,20 +166,19 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onAdEnd(String placementReferenceId, final boolean completed, final boolean isCTAClicked) {
-                ZplayDebug.d(TAG, "vungle Interstitial onAdEnd placementReferenceId:" + placementReferenceId + "   completed:" + completed + "   isCTAClicked" + isCTAClicked, onoff);
+                ZplayDebug.d(TAG, "onAdEnd: " + placementReferenceId + ", completed: " + completed);
                 if (getProvider().getKey3().equals(placementReferenceId)) {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             try {
+                                ZplayDebug.d(TAG, "onAdEnd: isCTAClicked: " + isCTAClicked);
                                 if (isCTAClicked) {
-                                    ZplayDebug.d(TAG, "vungle Interstitial clicked", onoff);
                                     layerClicked(-99f, -99f);
                                 }
-                                ZplayDebug.d(TAG, "vungle Interstitial closed", onoff);
                                 layerClosed();
                             } catch (Exception e) {
-                                ZplayDebug.e(TAG, "vungle Interstitial onAdEnd error", e, onoff);
+                                ZplayDebug.d(TAG, "onAdEnd: error: " + e);
                             }
                         }
                     });
@@ -194,42 +189,42 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onError(String placementReferenceId, Throwable throwable) {
                 try {
                     VungleException ex = (VungleException) throwable;
-                    ZplayDebug.e(TAG, "vungle Interstitial PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", errorCode: " + ex.getExceptionCode() + ", " + ex.getLocalizedMessage());
                     if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
-                        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
+                        VungleInstance.getInstance().initVungle(getActivity(), getProvider().getKey1(), VungleInstance.ADTYPE_INTERSTITIAL);
                     }
                     if (TextUtils.equals(placementReferenceId, getProvider().getKey3())) {
                         AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                         adError.setErrorMessage("Vungle error: " + throwable);
                         layerExposureFailed(adError);
                     }
-                } catch (Exception cex) {
-                    ZplayDebug.e(TAG, "vungle Interstitial PlayAdCallback onError try error", cex, onoff);
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onError: error: " + e);
                 }
             }
         };
-
     }
 
 
     private void initVungleSDK() {
-        VungleInstantiate.setInterstittalInitCallback(new InitCallback() {
+        VungleInstance.setInterstitialInitCallback(new InitCallback() {
             @Override
             public void onSuccess() {
-                ZplayDebug.d(TAG, "vungle Interstitial init onSuccess", onoff);
+                ZplayDebug.d(TAG, "onSuccess: ");
             }
 
             @Override
             public void onError(Throwable throwable) {
+                ZplayDebug.d(TAG, "onError: " + throwable);
                 mHandler.sendEmptyMessageDelayed(RESTART_INIT, 5 * 1000);
             }
 
             @Override
             public void onAutoCacheAdAvailable(String s) {
-
+                ZplayDebug.d(TAG, "onAutoCacheAdAvailable: " + s);
             }
         });
-        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_INTERSTITIAL);
+        VungleInstance.getInstance().initVungle(getActivity(), getProvider().getKey1(), VungleInstance.ADTYPE_INTERSTITIAL);
     }
 
     @Override
