@@ -62,9 +62,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             return;
         }
 
-        if (!isReady()) {
-            requestAd();
-        }
+        requestAd();
     }
 
     @Override

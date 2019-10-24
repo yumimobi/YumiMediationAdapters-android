@@ -62,9 +62,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
             return;
         }
 
-        if (!isReady()) {
-            requestAd();
-        }
+        requestAd();
     }
 
     @Override
