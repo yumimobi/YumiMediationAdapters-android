@@ -46,7 +46,7 @@ class TapjoyHelper {
         // 接入文档：https://dev.tapjoy.com/zh/sdk-integration/android/getting-started-guide-publishers-android/
         // API 文档：https://ltv.tapjoy.com/sdk/api/java/index.html
         ZplayDebug.d(TAG, "recodeError: " + tjError.code + ", msg: " + tjError.message);
-        return new AdError(LayerErrorCode.ERROR_NO_FILL);
+        return new AdError(LayerErrorCode.ERROR_NO_FILL, "Tapjoy - " + tjError.message);
     }
 
     static void updateGDPRStatus() {
