@@ -74,40 +74,34 @@ public class VungleInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd: " + getProvider().getKey3());
         updateGDPRStatus(getContext());
-        boolean isReady = Vungle.canPlayAd(getProvider().getKey3());
-        ZplayDebug.d(TAG, "loadAd: " + isReady + ", placementId: " + getProvider().getKey3());
+        Vungle.loadAd(getProvider().getKey3(), new LoadAdCallback() {
+            @Override
+            public void onAdLoad(String placementReferenceId) {
+                ZplayDebug.d(TAG, "onAdLoad: " + placementReferenceId);
+                if (getProvider().getKey3().equals(placementReferenceId)) {
+                    layerPrepared();
+                }
+            }
 
-        if (isReady) {
-            layerPrepared();
-        } else {
-            Vungle.loadAd(getProvider().getKey3(), new LoadAdCallback() {
-                @Override
-                public void onAdLoad(String placementReferenceId) {
-                    ZplayDebug.d(TAG, "onAdLoad: " + placementReferenceId);
+            @Override
+            public void onError(String placementReferenceId, final Throwable throwable) {
+                try {
+                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + throwable);
                     if (getProvider().getKey3().equals(placementReferenceId)) {
-                        layerPrepared();
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                layerPreparedFailed(recodeError(throwable));
+                            }
+                        });
                     }
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onError: error: " + e);
                 }
-
-                @Override
-                public void onError(String placementReferenceId, final Throwable throwable) {
-                    try {
-                        ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + throwable);
-                        if (getProvider().getKey3().equals(placementReferenceId)) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    layerPreparedFailed(recodeError(throwable));
-                                }
-                            });
-                        }
-                    } catch (Exception e) {
-                        ZplayDebug.d(TAG, "onError: error: " + e);
-                    }
-                }
-            });
-        }
+            }
+        });
     }
 
     @Override
