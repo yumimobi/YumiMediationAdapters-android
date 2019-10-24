@@ -1,6 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.unity;
 
 import android.app.Activity;
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.UnityAds.FinishState;
@@ -38,6 +40,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
+                try {
+                    if (TextUtils.equals(placementId, getProvider().getKey2())) {
+                        layerPrepared();
+                    }
+                } catch (Exception e) {
+                    Log.d(TAG, "onUnityAdsReady: error: " + e);
+                }
             }
 
             @Override
