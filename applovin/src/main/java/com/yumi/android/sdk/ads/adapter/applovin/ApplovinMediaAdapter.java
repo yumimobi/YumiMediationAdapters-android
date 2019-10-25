@@ -147,7 +147,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         adDisplayListener = new AppLovinAdDisplayListener() {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
-                ZplayDebug.i(TAG, "AppLovin Media adDisplayed ", onoff);
+                ZplayDebug.i(TAG, "AppLovin Media Exposure ", onoff);
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -167,13 +167,13 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         adLoadListener = new AppLovinAdLoadListener() {
             @Override
             public void adReceived(AppLovinAd appLovinAd) {
-                ZplayDebug.i(TAG, "AppLovin Media adReceived ZoneID : " + getProvider().getKey2(), onoff);
+                ZplayDebug.i(TAG, "AppLovin Media prepared ZoneID : " + getProvider().getKey2(), onoff);
                 layerPrepared();
             }
 
             @Override
             public void failedToReceiveAd(int errorCode) {
-                ZplayDebug.i(TAG, "AppLovin Media failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
+                ZplayDebug.i(TAG, "AppLovin Media load failed ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
 
                 layerPreparedFailed(recodeError(errorCode));
             }
