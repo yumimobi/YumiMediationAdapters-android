@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import net.pubnative.lite.sdk.models.NativeAd;
-
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
@@ -14,6 +12,9 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
+import net.pubnative.lite.sdk.HyBid;
+import net.pubnative.lite.sdk.PNLite;
+import net.pubnative.lite.sdk.models.NativeAd;
 import net.pubnative.lite.sdk.nativead.HyBidNativeAdRequest;
 
 import java.util.ArrayList;
@@ -47,8 +48,7 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
             public void onRequestSuccess(NativeAd NativeAd) {
                 List<NativeContent> nativeContentsList = new ArrayList<>();
                 try {
-                    final NativeAd adEntity = NativeAd;
-                    final NativeAdContent nativeAdContent = new NativeAdContent(adEntity);
+                    final NativeAdContent nativeAdContent = new NativeAdContent(NativeAd);
                     if (nativeAdContent.isValid()) {
                         nativeContentsList.add(nativeAdContent);
                     }
@@ -90,8 +90,18 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "pubnative native init key1: " + getProvider().getKey1(), onoff);
-        initPubNativeSDK(getProvider().getKey1(), getActivity());
+        final boolean isInitialized = PNLite.isInitialized();
+        ZplayDebug.d(TAG, "init: " + isInitialized + ", appToken: " + getProvider().getKey1());
+
+        if (!isInitialized) {
+            initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
+                @Override
+                public void onInitialisationFinished(boolean b) {
+                    ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                }
+            });
+        }
+
         updateGDPRStatus();
     }
 
