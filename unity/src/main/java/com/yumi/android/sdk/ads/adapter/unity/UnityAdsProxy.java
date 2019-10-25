@@ -65,12 +65,11 @@ final class UnityAdsProxy {
         }
 
         @Override
-        public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-            ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", " + s);
-            if (!sListeners.containsKey(s)) {
-                sListeners.put(s, new UnityAdsListenerObserver());
+        public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String errorMsg) {
+            ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", " + errorMsg);
+            for (UnityAdsListenerObserver ualo : sListeners.values()) {
+                ualo.onUnityAdsError(unityAdsError, errorMsg);
             }
-            sListeners.get(s).onUnityAdsError(unityAdsError, s);
         }
     };
 
@@ -90,10 +89,6 @@ final class UnityAdsProxy {
 
     static void unregisterUnityAdsListener(String placementId) {
         sListeners.remove(placementId);
-    }
-
-    static boolean isReady(String placementId) {
-        return UnityAds.isReady(placementId);
     }
 
     public static void show(Activity activity, String placementId) {
