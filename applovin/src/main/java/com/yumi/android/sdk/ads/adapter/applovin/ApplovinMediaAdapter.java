@@ -55,6 +55,10 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "AppLovin request new media", onoff);
         updateGDPRStatus(getContext());
         isFirstClick = false;
+        if (mediaAd != null) {
+            ZplayDebug.i(TAG, "AppLovin Media loadAd : " + getProvider().getKey2(), onoff);
+            mediaAd.preload(adLoadListener);
+        }
     }
 
     @Override
@@ -79,18 +83,10 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Media init sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
+        createMediaListener();
         String zoneId = getProvider().getKey2();
         if (appLovinSDK != null && zoneId != null && !"".equals(zoneId)) {
-            createMediaListener();
             mediaAd = AppLovinIncentivizedInterstitial.create(zoneId, appLovinSDK);
-            preloadAd();
-        }
-    }
-
-    private void preloadAd() {
-        if (mediaAd != null) {
-            ZplayDebug.i(TAG, "AppLovin Media preloadAd : " + getProvider().getKey2(), onoff);
-            mediaAd.preload(adLoadListener);
         }
     }
 
@@ -165,7 +161,6 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
                     layerIncentived();
                 }
                 layerClosed(isRewarded);
-                preloadAd();
             }
         };
 
