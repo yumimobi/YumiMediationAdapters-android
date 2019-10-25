@@ -141,6 +141,9 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
             @Override
             public void adHidden(AppLovinAd appLovinAd) {
                 ZplayDebug.d(TAG, "AppLovin ad adHidden", onoff);
+
+                //todo：need reset currentAd = null，if not isInterstitialLayerReady() method will always return true
+                currentAd = null;
                 layerClosed();
 
             }
