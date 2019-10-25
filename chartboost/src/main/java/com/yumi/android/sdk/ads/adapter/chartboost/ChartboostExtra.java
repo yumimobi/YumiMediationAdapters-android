@@ -128,6 +128,10 @@ public class ChartboostExtra {
                 }
             }
 
+            @Override
+            public void didInitialize() {
+              //Do not use the chartboost didInitialize callback, because if the application process is not killed, the second call to the chartboost initialization interface will not return the didInitialize callback
+            }
         };
     }
 
