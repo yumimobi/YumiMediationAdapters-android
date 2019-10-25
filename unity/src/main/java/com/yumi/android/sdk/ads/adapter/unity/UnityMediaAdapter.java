@@ -2,7 +2,6 @@ package com.yumi.android.sdk.ads.adapter.unity;
 
 import android.app.Activity;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.UnityAds.FinishState;
@@ -12,6 +11,7 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.unity.UnityAdsProxy.initUnitySDK;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
@@ -20,10 +20,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "UnityMediaAdapter";
     private IUnityAdsExtendedListener mUnityAdsListener;
+    // Unity 为自轮询平台，只需要监听第一次回调，以后直接判断 isReady 属性
+    private boolean hasHitReadyCallback;
 
     protected UnityMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
-        UnityAdsProxy.initUnitySDK(getActivity(), getProvider().getKey1());
+        ZplayDebug.d(TAG, "UnityMediaAdapter: " + getActivity() + ", gameId: " + getProvider().getKey1());
+        initUnitySDK(getActivity(), getProvider().getKey1());
         mUnityAdsListener = new IUnityAdsExtendedListener() {
             @Override
             public void onUnityAdsClick(String placementId) {
@@ -42,10 +45,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
                 try {
                     if (TextUtils.equals(placementId, getProvider().getKey2())) {
-                        layerPrepared();
+                        if (!hasHitReadyCallback) {
+                            layerPrepared();
+                            hasHitReadyCallback = true;
+                        }
                     }
                 } catch (Exception e) {
-                    Log.d(TAG, "onUnityAdsReady: error: " + e);
+                    ZplayDebug.d(TAG, "onUnityAdsReady: error: " + e);
                 }
             }
 
@@ -70,10 +76,10 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
-            public void onUnityAdsError(UnityAdsError unityAdsError, String placementId) {
-                ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", placementId: " + placementId);
+            public void onUnityAdsError(UnityAdsError unityAdsError, String errorMsg) {
+                ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", errorMsg: " + errorMsg);
 
-                layerPreparedFailed(generateLayerErrorCode(unityAdsError, placementId));
+                layerPreparedFailed(generateLayerErrorCode(unityAdsError, errorMsg));
             }
         };
     }
@@ -88,11 +94,13 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "unity media request new media", onoff);
+        final String placementId = getProvider().getKey2();
+        final boolean isReady = UnityAds.isReady(placementId);
+        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", placementId: " + placementId);
         updateGDPRStatus(getContext());
 
-        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
-        if (UnityAdsProxy.isReady(getProvider().getKey2())) {
+        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
+        if (isReady) {
             layerPrepared();
         }
     }
@@ -104,7 +112,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        return UnityAdsProxy.isReady(getProvider().getKey2());
+        return UnityAds.isReady(getProvider().getKey2());
     }
 
     @Override
