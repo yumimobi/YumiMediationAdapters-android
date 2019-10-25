@@ -6,6 +6,8 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import net.pubnative.lite.sdk.HyBid;
+import net.pubnative.lite.sdk.PNLite;
 import net.pubnative.lite.sdk.views.PNAdView;
 import net.pubnative.lite.sdk.views.PNBannerAdView;
 
@@ -39,8 +41,18 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "pubnative banner init key1:" + getProvider().getKey1(), onoff);
-        initPubNativeSDK(getProvider().getKey1(), getActivity());
+        final boolean isInitialized = PNLite.isInitialized();
+        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isInitialized + ", appToken: " + getProvider().getKey1());
+
+        if (!isInitialized) {
+            initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
+                @Override
+                public void onInitialisationFinished(boolean b) {
+                    ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                }
+            });
+        }
+
         updateGDPRStatus();
         createBannerListener();
     }
