@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.unity;
 
 import android.app.Activity;
-import android.text.TextUtils;
 
 import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.UnityAds.FinishState;
@@ -43,11 +42,11 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
                 try {
-                    if (TextUtils.equals(placementId, getProvider().getKey2())) {
-                        if (!hasHitReadyCallback) {
-                            layerPrepared();
-                            hasHitReadyCallback = true;
-                        }
+                    final String targetPlacementId = getProvider().getKey2();
+                    ZplayDebug.d(TAG, "onUnityAdsReady: {" + placementId + " should equals " + targetPlacementId + "}");
+                    if (!hasHitReadyCallback) {
+                        layerPrepared();
+                        hasHitReadyCallback = true;
                     }
                 } catch (Exception e) {
                     ZplayDebug.d(TAG, "onUnityAdsReady: error: " + e);
@@ -99,6 +98,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         updateGDPRStatus(getContext());
         UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
         if (isReady) {
+            hasHitReadyCallback = true;
             layerPrepared();
         }
     }
