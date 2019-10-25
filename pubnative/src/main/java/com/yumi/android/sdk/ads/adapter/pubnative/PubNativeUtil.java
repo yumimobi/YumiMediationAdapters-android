@@ -8,11 +8,10 @@ import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
+import net.pubnative.lite.sdk.HyBid;
 import net.pubnative.lite.sdk.PNLite;
 
-public class PubNativeUtil {
-
-    private static boolean isPubNativeNotInited = true;
+class PubNativeUtil {
 
     static AdError recodeError(String errMsg) {
         LayerErrorCode errCode = LayerErrorCode.ERROR_NO_FILL;
@@ -21,12 +20,14 @@ public class PubNativeUtil {
         return result;
     }
 
-    static void initPubNativeSDK(String appToken, Activity activity) {
-        if (isPubNativeNotInited) {
-            PNLite.initialize(appToken, activity.getApplication());
-            PNLite.setTestMode(YumiDebug.isDebugMode());
-        }
-        isPubNativeNotInited = false;
+    static void initPubNativeSDK(String appToken, Activity activity, final HyBid.InitialisationListener listener) {
+        PNLite.initialize(appToken, activity.getApplication(), new HyBid.InitialisationListener() {
+            @Override
+            public void onInitialisationFinished(boolean b) {
+                listener.onInitialisationFinished(b);
+            }
+        });
+        PNLite.setTestMode(YumiDebug.isDebugMode());
     }
 
     static void updateGDPRStatus() {
