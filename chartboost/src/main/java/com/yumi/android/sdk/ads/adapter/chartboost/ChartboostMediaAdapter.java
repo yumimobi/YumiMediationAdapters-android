@@ -47,17 +47,17 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         ZplayDebug.d(TAG, "chartboost request new media", onoff);
         updateGDPRStatus(getContext());
-        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
+        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void onShowMedia() {
-        Chartboost.showRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
+        Chartboost.showRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected boolean isMediaReady() {
-        if (Chartboost.hasRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS)) {
+        if (Chartboost.hasRewardedVideo(CBLocation.LOCATION_DEFAULT)) {
             return true;
         }
         return false;
