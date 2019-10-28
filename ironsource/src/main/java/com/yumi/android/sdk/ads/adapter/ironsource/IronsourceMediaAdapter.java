@@ -35,11 +35,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
         final String instanceId = getProvider().getKey2();
         boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(instanceId);
         ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", instanceId: " + instanceId);
-        if (isReady) {
-            layerPrepared();
-        } else {
-            IronSource.loadISDemandOnlyRewardedVideo(instanceId);
-        }
+        IronSource.loadISDemandOnlyRewardedVideo(instanceId);
     }
 
     @Override
