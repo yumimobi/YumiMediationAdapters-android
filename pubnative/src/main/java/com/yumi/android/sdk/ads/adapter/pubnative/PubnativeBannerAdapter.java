@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.pubnative;
 
 import android.app.Activity;
-import android.util.Log;
 
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
@@ -21,7 +20,6 @@ import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART
 public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
     private String TAG = "PubnativeBannerAdapter";
     private PNBannerAdView mBanner;
-    private PNAdView.Listener mBannerListener;
 
     protected PubnativeBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -29,62 +27,69 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        final String zoneId = getProvider().getKey2();
-        ZplayDebug.d(TAG, "onPrepareBannerLayer: " + zoneId + ", bannerSize: " + bannerSize);
+        ZplayDebug.d(TAG, "onPrepareBannerLayer: " + bannerSize);
         if (bannerSize == BANNER_SIZE_SMART) {
             layerPreparedFailed(recodeError("not support smart banner"));
             return;
         }
-        mBanner = new PNBannerAdView(getContext());
 
-        mBanner.load(zoneId, mBannerListener);
-    }
-
-    @Override
-    protected void init() {
         final String appToken = getProvider().getKey1();
         final boolean isInitialized = PNLite.isInitialized();
-        ZplayDebug.d(TAG, "init: " + appToken + ", isInitialized: " + isInitialized);
+        ZplayDebug.d(TAG, "onPrepareBannerLayer: " + appToken + ", isInitialized: " + isInitialized);
         if (!isInitialized) {
             initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
                 @Override
                 public void onInitialisationFinished(boolean b) {
                     ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                    if (b) {
+                        loadAd();
+                    } else {
+                        layerPreparedFailed(recodeError("initialisation failed."));
+                    }
                 }
             });
+            return;
         }
-
-        updateGDPRStatus();
-        createBannerListener();
+        loadAd();
     }
 
-    private void createBannerListener() {
-        mBannerListener = new PNAdView.Listener() {
+    private void loadAd() {
+        final String zoneId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "loadAd: " + zoneId);
+        mBanner = new PNBannerAdView(getContext());
+        mBanner.load(zoneId, new PNAdView.Listener() {
             @Override
             public void onAdLoaded() {
-                Log.d(TAG, "onAdLoaded: ");
+                ZplayDebug.d(TAG, "onAdLoaded: ");
                 layerPrepared(mBanner, true);
             }
 
             @Override
             public void onAdLoadFailed(Throwable throwable) {
-                Log.d(TAG, "onAdLoadFailed: " + throwable);
+                ZplayDebug.d(TAG, "onAdLoadFailed: " + throwable);
                 layerPreparedFailed(recodeError(throwable.toString()));
             }
 
             @Override
             public void onAdImpression() {
-                Log.d(TAG, "onAdImpression: ");
+                ZplayDebug.d(TAG, "onAdImpression: ");
                 ZplayDebug.i(TAG, "pubnative banner onAdImpression", onoff);
             }
 
             @Override
             public void onAdClick() {
-                Log.d(TAG, "onAdClick: ");
+                ZplayDebug.d(TAG, "onAdClick: ");
                 layerClicked(-999f, -999f);
             }
-        };
+        });
     }
+
+    @Override
+    protected void init() {
+        ZplayDebug.d(TAG, "init: ");
+        updateGDPRStatus();
+    }
+
 
     @Override
     public void onActivityPause() {
