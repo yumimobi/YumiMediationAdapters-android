@@ -55,17 +55,17 @@ public class ChartboostInterstitialAdapter extends
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "chartboost request new interstitial", onoff);
         updateGDPRStatus(getContext());
-        Chartboost.cacheInterstitial(CBLocation.LOCATION_LEADERBOARD);
+        Chartboost.cacheInterstitial(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        Chartboost.showInterstitial(CBLocation.LOCATION_LEADERBOARD);
+        Chartboost.showInterstitial(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (Chartboost.hasInterstitial(CBLocation.LOCATION_LEADERBOARD)) {
+        if (Chartboost.hasInterstitial(CBLocation.LOCATION_DEFAULT)) {
             return true;
         }
         return false;

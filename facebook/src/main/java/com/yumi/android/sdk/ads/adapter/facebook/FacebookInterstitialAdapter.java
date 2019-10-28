@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.InterstitialAd;
 import com.facebook.ads.InterstitialAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
@@ -11,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 public class FacebookInterstitialAdapter extends
@@ -49,14 +51,32 @@ public class FacebookInterstitialAdapter extends
     protected void onPrepareInterstitial() {
         try {
             ZplayDebug.d(TAG, "facebook request new interstitial", onoff);
-            if (interstitial == null) {
-                interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
-                interstitial.setAdListener(interstitialListener);
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        }else{
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR,"facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
+                return;
             }
-            interstitial.loadAd();
+
+            loadAd();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook interstitial onPrepareInterstitial error", e, onoff);
         }
+    }
+
+    private void loadAd() {
+        if (interstitial == null) {
+            interstitial = new InterstitialAd(getActivity(), getProvider().getKey1());
+            interstitial.setAdListener(interstitialListener);
+        }
+        interstitial.loadAd();
     }
 
     @Override
@@ -75,7 +95,7 @@ public class FacebookInterstitialAdapter extends
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1(), onoff);
-        initSDK(getContext());
+
         createListener();
     }
 
@@ -87,7 +107,7 @@ public class FacebookInterstitialAdapter extends
                 public void onError(Ad arg0, AdError arg1) {
                     ZplayDebug.d(TAG, "facebook interstitial failed " + arg1.getErrorMessage(), onoff);
 
-                    layerPreparedFailed(FacebookUtil.recodeError(arg1));
+                    layerPreparedFailed(recodeError(arg1));
                 }
 
                 @Override

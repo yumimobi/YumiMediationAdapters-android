@@ -55,6 +55,10 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         ZplayDebug.d(TAG, "AppLovin request new media", onoff);
         updateGDPRStatus(getContext());
         isFirstClick = false;
+        if (mediaAd != null) {
+            ZplayDebug.i(TAG, "AppLovin Media loadAd : " + getProvider().getKey2(), onoff);
+            mediaAd.preload(adLoadListener);
+        }
     }
 
     @Override
@@ -79,18 +83,10 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
     protected void init() {
         ZplayDebug.i(TAG, "AppLovin Media init sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
+        createMediaListener();
         String zoneId = getProvider().getKey2();
         if (appLovinSDK != null && zoneId != null && !"".equals(zoneId)) {
-            createMediaListener();
             mediaAd = AppLovinIncentivizedInterstitial.create(zoneId, appLovinSDK);
-            preloadAd();
-        }
-    }
-
-    private void preloadAd() {
-        if (mediaAd != null) {
-            ZplayDebug.i(TAG, "AppLovin Media preloadAd : " + getProvider().getKey2(), onoff);
-            mediaAd.preload(adLoadListener);
         }
     }
 
@@ -151,7 +147,7 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
         adDisplayListener = new AppLovinAdDisplayListener() {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
-                ZplayDebug.i(TAG, "AppLovin Media adDisplayed ", onoff);
+                ZplayDebug.i(TAG, "AppLovin Media Exposure ", onoff);
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -165,20 +161,19 @@ public class ApplovinMediaAdapter extends YumiCustomerMediaAdapter {
                     layerIncentived();
                 }
                 layerClosed(isRewarded);
-                preloadAd();
             }
         };
 
         adLoadListener = new AppLovinAdLoadListener() {
             @Override
             public void adReceived(AppLovinAd appLovinAd) {
-                ZplayDebug.i(TAG, "AppLovin Media adReceived ZoneID : " + getProvider().getKey2(), onoff);
+                ZplayDebug.i(TAG, "AppLovin Media prepared ZoneID : " + getProvider().getKey2(), onoff);
                 layerPrepared();
             }
 
             @Override
             public void failedToReceiveAd(int errorCode) {
-                ZplayDebug.i(TAG, "AppLovin Media failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
+                ZplayDebug.i(TAG, "AppLovin Media load failed ZoneID : " + getProvider().getKey2() + "  ||  errorCode:" + errorCode, onoff);
 
                 layerPreparedFailed(recodeError(errorCode));
             }
