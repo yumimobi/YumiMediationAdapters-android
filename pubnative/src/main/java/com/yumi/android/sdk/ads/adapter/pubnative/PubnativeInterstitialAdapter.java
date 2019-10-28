@@ -35,6 +35,8 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
                     ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
                     if (b) {
                         loadAd();
+                    } else {
+                        layerPreparedFailed(recodeError("onInitialisationFinished: false"));
                     }
                 }
             });
