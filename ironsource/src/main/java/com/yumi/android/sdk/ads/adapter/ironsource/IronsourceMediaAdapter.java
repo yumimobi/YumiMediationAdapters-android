@@ -32,44 +32,47 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         updateGDPRStatus(getContext());
-        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(getProvider().getKey2());
+        final String instanceId = getProvider().getKey2();
+        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(instanceId);
+        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", instanceId: " + instanceId);
         if (isReady) {
-            ZplayDebug.i(TAG, "IronSource Media onPrepareMedia isReady  instanceId : " + getProvider().getKey2(), onoff);
             layerPrepared();
         } else {
-            IronSource.loadISDemandOnlyRewardedVideo(getProvider().getKey2());
+            IronSource.loadISDemandOnlyRewardedVideo(instanceId);
         }
     }
 
     @Override
     protected void onShowMedia() {
-        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(getProvider().getKey2());
-        ZplayDebug.i(TAG, "IronSource Media onShowMedia instanceId : " + getProvider().getKey2() + " isReady : " + isReady, onoff);
+        final String instanceId = getProvider().getKey2();
+        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(instanceId);
+        ZplayDebug.d(TAG, "onShowMedia: " + isReady + ", instanceId: " + instanceId);
         if (isReady) {
-            IronSource.showISDemandOnlyRewardedVideo(getProvider().getKey2());
+            IronSource.showISDemandOnlyRewardedVideo(instanceId);
         }
     }
 
     @Override
     protected boolean isMediaReady() {
-        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(getProvider().getKey2());
-        ZplayDebug.i(TAG, "IronSource Media isMediaReady instanceId : " + getProvider().getKey2() + " isReady : " + isReady, onoff);
+        final String instanceId = getProvider().getKey2();
+        boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(instanceId);
+        ZplayDebug.d(TAG, "isMediaReady: " + isReady + ", instanceId: " + instanceId);
         return isReady;
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "IronSource Media init Key1 : " + getProvider().getKey1() + "  Key2 : " + getProvider().getKey2(), onoff);
+        final String appKey = getProvider().getKey1();
+        ZplayDebug.d(TAG, "init: " + appKey);
         createMediaListener();
         IronsourceListenerHandler.initIronsourceVideoListener(getActivity(), getProvider().getKey1());
-//        IronSource.setISDemandOnlyRewardedVideoListener(IronsourceListenerHandler.getIronsourceVideoListener());
     }
 
     private void createMediaListener() {
         adListener = new ISDemandOnlyRewardedVideoListener() {
             @Override
             public void onRewardedVideoAdLoadSuccess(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadSuccess instanceId : " + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdLoadSuccess: " + instanceId);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerPrepared();
                 }
@@ -77,7 +80,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdLoadFailed(String instanceId, IronSourceError ironSourceError) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdLoadFailed instanceId : " + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdLoadFailed: " + instanceId + ", error: " + ironSourceError);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerPreparedFailed(generateLayerErrorCode(ironSourceError));
                 }
@@ -86,7 +89,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             // Invoked when the RewardedVideo ad view is about to open.
             @Override
             public void onRewardedVideoAdOpened(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdOpened instanceId : " + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdOpened: " + instanceId);
                 if (instanceId.equals(getProvider().getKey2())) {
                     isRewarded = false;
                     layerExposure();
@@ -98,7 +101,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             //Your activity will now regain its focus.
             @Override
             public void onRewardedVideoAdClosed(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClosed instanceId:" + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdClosed: " + instanceId);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerClosed(isRewarded);
                 }
@@ -108,7 +111,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
             // failed. IronSourceError contains the reason for the failure.
             @Override
             public void onRewardedVideoAdShowFailed(String instanceId, IronSourceError error) {
-                ZplayDebug.e(TAG, "IronSource Media onRewardedVideoAdShowFailed  instanceId : " + instanceId + "  getErrorCode : " + error.getErrorCode() + "   || getErrorMessage : " + error.getErrorMessage(), onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdShowFailed: " + instanceId + ", error: " + error);
                 if (TextUtils.equals(instanceId, getProvider().getKey2())) {
                     AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                     adError.setErrorMessage("IronSource errorMsg: " + error);
@@ -118,7 +121,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdClicked(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdClicked instanceId : " + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdClicked: " + instanceId);
                 if (instanceId.equals(getProvider().getKey2())) {
                     layerClicked();
                 }
@@ -126,7 +129,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoAdRewarded(String instanceId) {
-                ZplayDebug.i(TAG, "IronSource Media onRewardedVideoAdRewarded instanceId : " + instanceId, onoff);
+                ZplayDebug.d(TAG, "onRewardedVideoAdRewarded: " + instanceId);
                 if (instanceId.equals(getProvider().getKey2())) {
                     isRewarded = true;
                     layerIncentived();
