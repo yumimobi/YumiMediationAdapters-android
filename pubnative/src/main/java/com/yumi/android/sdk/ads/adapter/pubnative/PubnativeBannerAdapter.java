@@ -27,8 +27,8 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.d(TAG, "onPrepareBannerLayer: " + bannerSize);
         if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "onPrepareBannerLayer: not support smart banner");
             layerPreparedFailed(recodeError("not support smart banner"));
             return;
         }
