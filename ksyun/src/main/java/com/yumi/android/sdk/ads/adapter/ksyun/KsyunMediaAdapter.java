@@ -16,6 +16,8 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.Map;
 
+import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INTERNAL;
+
 /**
  * Created by hjl on 2018/7/30.
  */
@@ -55,6 +57,9 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                 public void onFailure(int errorCode, String errorMsg) {
                     ZplayDebug.d(TAG, "onFailure: errorCode: " + errorCode + ", errorMsg: " + errorMsg);
                     isInitialized = false;
+                    AdError adError = new AdError(ERROR_INTERNAL);
+                    adError.setErrorMessage("Ksyun errorCode: " + errorCode + ", errorMsg: " + errorMsg);
+                    layerPreparedFailed(adError);
                 }
             });
             return;
@@ -174,7 +179,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
                 if (errorCode == 2001) {
                     error = LayerErrorCode.ERROR_NO_FILL;
                 } else {
-                    error = LayerErrorCode.ERROR_INTERNAL;
+                    error = ERROR_INTERNAL;
                 }
                 AdError adError = new AdError(error);
                 adError.setErrorMessage("Ksyun errorMsg: " + errorMsg);
