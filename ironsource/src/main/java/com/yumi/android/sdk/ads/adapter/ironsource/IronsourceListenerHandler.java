@@ -35,9 +35,6 @@ class IronsourceListenerHandler {
         if (ironsourceInterstitialListener == null) {
             ironsourceInterstitialListener = new ISDemandOnlyInterstitialListener() {
 
-                /**
-                 Invoked when Interstitial Ad is ready to be shown after load function was called.
-                 */
                 @Override
                 public void onInterstitialAdReady(String instanceId) {
                     ZplayDebug.d(TAG, "onInterstitialAdReady: " + instanceId);
@@ -49,9 +46,6 @@ class IronsourceListenerHandler {
                     }
                 }
 
-                /**
-                 invoked when there is no Interstitial Ad available after calling load function.
-                 */
                 @Override
                 public void onInterstitialAdLoadFailed(String instanceId, IronSourceError error) {
                     ZplayDebug.d(TAG, "onInterstitialAdLoadFailed: " + instanceId + ", error: " + error);
@@ -63,9 +57,6 @@ class IronsourceListenerHandler {
                     }
                 }
 
-                /**
-                 Invoked when the Interstitial Ad Unit is opened
-                 */
                 @Override
                 public void onInterstitialAdOpened(String instanceId) {
                     ZplayDebug.d(TAG, "onInterstitialAdOpened: " + instanceId);
@@ -77,9 +68,6 @@ class IronsourceListenerHandler {
                     }
                 }
 
-                /*
-                 * Invoked when the ad is closed and the user is about to return to the application.
-                 */
                 @Override
                 public void onInterstitialAdClosed(String instanceId) {
                     ZplayDebug.d(TAG, "onInterstitialAdClosed: " + instanceId);
@@ -91,10 +79,6 @@ class IronsourceListenerHandler {
                     }
                 }
 
-                /**
-                 * Invoked when Interstitial ad failed to show.
-                 // @param error - An object which represents the reason of showInterstitial failure.
-                 */
                 @Override
                 public void onInterstitialAdShowFailed(String instanceId, IronSourceError error) {
                     ZplayDebug.d(TAG, "onInterstitialAdShowFailed: " + instanceId + ", error: " + error);
@@ -106,9 +90,6 @@ class IronsourceListenerHandler {
                     }
                 }
 
-                /*
-                 * Invoked when the end user clicked on the interstitial ad.
-                 */
                 @Override
                 public void onInterstitialAdClicked(String instanceId) {
                     ZplayDebug.d(TAG, "onInterstitialAdClicked: " + instanceId);
@@ -125,10 +106,6 @@ class IronsourceListenerHandler {
         }
     }
 
-
-    /**
-     * 设置适配器实现的回调
-     */
     static void setMyIronsourceInterstitialListener(String key2, ISDemandOnlyInterstitialListener ml) {
         if (myIronsourceInterstitialListener == null) {
             myIronsourceInterstitialListener = new HashMap<>();
@@ -226,10 +203,6 @@ class IronsourceListenerHandler {
         }
     }
 
-
-    /**
-     * 设置适配器实现的回调
-     */
     static void setMyIronsourceVideoListener(String key2, ISDemandOnlyRewardedVideoListener ml) {
         if (myIronsourceVideoListener == null) {
             myIronsourceVideoListener = new HashMap<>();
