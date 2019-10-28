@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 
@@ -49,21 +50,36 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void onPrepareNative() {
         try {
-            if (mNativeAd == null) {
-                mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
-                mNativeAd.setAdListener(nativeAdListener);
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
+                return;
             }
-            ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
-            mNativeAd.loadAd();
+
+            loadAd();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook native onPrepareNative error", e, onoff);
         }
     }
-
+    private void loadAd(){
+        if (mNativeAd == null) {
+            mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
+            mNativeAd.setAdListener(nativeAdListener);
+        }
+        ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
+        mNativeAd.loadAd();
+    }
     @Override
     protected void init() {
         ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1(), onoff);
-        initSDK(getContext());
         createListener();
     }
 
