@@ -3,7 +3,6 @@ package com.yumi.android.sdk.ads.adapter.facebook;
 import android.content.Context;
 import android.text.TextUtils;
 
-import com.facebook.ads.AdSettings;
 import com.facebook.ads.AudienceNetworkAds;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
