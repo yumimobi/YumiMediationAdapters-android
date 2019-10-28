@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
+import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.RewardedVideoAd;
 import com.facebook.ads.S2SRewardedVideoAdListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
@@ -11,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 /**
@@ -32,18 +34,37 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         try {
             ZplayDebug.i(TAG, "facebook media onPrepareMedia", onoff);
-            if (rewardedVideoAd == null) {
-                rewardedVideoAd = new RewardedVideoAd(getActivity(), getProvider().getKey1());
-                rewardedVideoAd.setAdListener(listener);
-                if (listener == null) {
-                    createListener();
-                }
-//        rewardedVideoAd.setRewardData(new RewardData("YOUR_USER_ID", "YOUR_REWARD"));  //不知道到底有什么用，文档里没有说明
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        ZplayDebug.i(TAG, "facebook media init isSuccess = " + initResult.isSuccess(), onoff);
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        }else{
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR,"facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
+                return;
             }
-            rewardedVideoAd.loadAd(false);
+
+            loadAd();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook media onPrepareMedia error", e, onoff);
         }
+    }
+
+    private void loadAd() {
+        if (rewardedVideoAd == null) {
+            rewardedVideoAd = new RewardedVideoAd(getActivity(), getProvider().getKey1());
+            rewardedVideoAd.setAdListener(listener);
+            if (listener == null) {
+                createListener();
+            }
+//        rewardedVideoAd.setRewardData(new RewardData("YOUR_USER_ID", "YOUR_REWARD"));  //不知道到底有什么用，文档里没有说明
+        }
+        rewardedVideoAd.loadAd(false);
     }
 
     @Override
@@ -72,7 +93,6 @@ public class FacebookMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         ZplayDebug.d(TAG, "facebook media init", onoff);
-        initSDK(getContext());
         createListener();
     }
 

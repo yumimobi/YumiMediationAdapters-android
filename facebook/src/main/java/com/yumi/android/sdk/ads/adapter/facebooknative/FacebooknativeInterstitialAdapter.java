@@ -11,6 +11,7 @@ import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdIconView;
+import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.MediaView;
 import com.facebook.ads.NativeAd;
 import com.facebook.ads.NativeAdListener;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersititalAdapter {
@@ -41,12 +43,30 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     @Override
     protected void onPreparedNativeInterstitial() {
         try {
-            nativeAd = new NativeAd(getContext(), getProvider().getKey1());
-            nativeAd.setAdListener(linstener);
-            nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
+                return;
+            }
+
+            loadAd();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook native Interstitial onPreparedNativeInterstitial error :", e, false);
         }
+    }
+
+    private void loadAd() {
+        nativeAd = new NativeAd(getContext(), getProvider().getKey1());
+        nativeAd.setAdListener(linstener);
+        nativeAd.loadAd(NativeAd.MediaCacheFlag.ALL);
     }
 
     @Override
@@ -78,7 +98,6 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     protected void init() {
         try {
             ZplayDebug.d(TAG, "facebook native Interstitial init", onoff);
-            initSDK(getContext());
             LayoutInflater inflater = LayoutInflater.from(activity);
             adView = (LinearLayout) inflater.inflate(R.layout.ad_interstitial_layout, null, false);
             createListener();
