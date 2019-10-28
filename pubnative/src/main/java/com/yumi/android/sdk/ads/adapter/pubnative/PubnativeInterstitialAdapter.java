@@ -6,6 +6,8 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import net.pubnative.lite.sdk.HyBid;
+import net.pubnative.lite.sdk.PNLite;
 import net.pubnative.lite.sdk.interstitial.PNInterstitialAd;
 
 import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.initPubNativeSDK;
@@ -16,7 +18,6 @@ import static com.yumi.android.sdk.ads.adapter.pubnative.PubNativeUtil.updateGDP
 public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private String TAG = "PubnativeInterstitialAdapter";
     private PNInterstitialAd mInterstitial;
-    private PNInterstitialAd.Listener mInterstitialListener;
 
     protected PubnativeInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -24,14 +25,69 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.i(TAG, "pubnative request new interstitial key2:" + getProvider().getKey2(), onoff);
-        mInterstitial = new PNInterstitialAd(getActivity(), getProvider().getKey2(), mInterstitialListener);
+        final boolean isInitialized = PNLite.isInitialized();
+        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isInitialized + ", appToken: " + getProvider().getKey1());
 
+        if (!isInitialized) {
+            initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
+                @Override
+                public void onInitialisationFinished(boolean b) {
+                    ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                    if (b) {
+                        loadAd();
+                    } else {
+                        layerPreparedFailed(recodeError("onInitialisationFinished: false"));
+                    }
+                }
+            });
+            return;
+        }
+
+        loadAd();
+    }
+
+    private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd: zoneId: " + getProvider().getKey2());
+        updateGDPRStatus();
+        mInterstitial = new PNInterstitialAd(getActivity(), getProvider().getKey2(), new PNInterstitialAd.Listener() {
+
+            @Override
+            public void onInterstitialLoaded() {
+                ZplayDebug.d(TAG, "onInterstitialLoaded: ");
+                layerPrepared();
+            }
+
+            @Override
+            public void onInterstitialLoadFailed(Throwable throwable) {
+                ZplayDebug.d(TAG, "onInterstitialLoadFailed: " + throwable);
+                layerPreparedFailed(recodeError(throwable.toString()));
+            }
+
+            @Override
+            public void onInterstitialImpression() {
+                ZplayDebug.d(TAG, "onInterstitialImpression: ");
+                layerStartPlaying();
+                layerExposure();
+            }
+
+            @Override
+            public void onInterstitialDismissed() {
+                ZplayDebug.d(TAG, "onInterstitialDismissed: ");
+                layerClosed();
+            }
+
+            @Override
+            public void onInterstitialClick() {
+                ZplayDebug.d(TAG, "onInterstitialClick: ");
+                layerClicked(-999f, -999f);
+            }
+        });
         mInterstitial.load();
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
+        ZplayDebug.d(TAG, "onShowInterstitialLayer: " + mInterstitial);
         if (mInterstitial != null) {
             mInterstitial.show();
         }
@@ -47,47 +103,8 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "pubnative interstitial init key1:" + getProvider().getKey1(), onoff);
-        initPubNativeSDK(getProvider().getKey1(), getActivity());
-        updateGDPRStatus();
-        createInterstitialListener();
     }
 
-    private void createInterstitialListener() {
-        mInterstitialListener = new PNInterstitialAd.Listener() {
-
-            @Override
-            public void onInterstitialLoaded() {
-                ZplayDebug.i(TAG, "pubnative interstitial loaded", onoff);
-                layerPrepared();
-            }
-
-            @Override
-            public void onInterstitialLoadFailed(Throwable throwable) {
-                ZplayDebug.i(TAG, "pubnative interstitial loadFailed" + throwable, onoff);
-                layerPreparedFailed(recodeError(throwable.toString()));
-            }
-
-            @Override
-            public void onInterstitialImpression() {
-                ZplayDebug.i(TAG, "pubnative interstitial impression", onoff);
-                layerStartPlaying();
-                layerExposure();
-            }
-
-            @Override
-            public void onInterstitialDismissed() {
-                ZplayDebug.i(TAG, "pubnative interstitial dismissed", onoff);
-                layerClosed();
-            }
-
-            @Override
-            public void onInterstitialClick() {
-                ZplayDebug.i(TAG, "pubnative interstitial click", onoff);
-                layerClicked(-999f, -999f);
-            }
-        };
-    }
 
     @Override
     public void onActivityPause() {

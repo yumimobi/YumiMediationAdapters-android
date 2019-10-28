@@ -1,8 +1,7 @@
 package com.yumi.android.sdk.ads.adapter.vungle;
 
 import android.app.Activity;
-import android.os.Handler;
-import android.os.Message;
+import android.util.Log;
 
 import com.vungle.warren.AdConfig;
 import com.vungle.warren.InitCallback;
@@ -23,17 +22,6 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "VungleMediaAdapter";
-    private static final int RESTART_INIT = 0x001;
-    private static LoadAdCallback mLoadAdCallback;
-    private static PlayAdCallback mPlayAdCallback;
-    private final Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            if (msg.what == RESTART_INIT) {
-                ZplayDebug.d(TAG, "vungle media restart init", onoff);
-                VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-            }
-        }
-    };
 
     protected VungleMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -48,87 +36,44 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     @Override
-    protected final void onDestroy() {
-        if (mHandler != null && mHandler.hasMessages(RESTART_INIT)) {
-            mHandler.removeMessages(RESTART_INIT);
-        }
-    }
-
-    @Override
     protected void onPrepareMedia() {
         try {
-            updateGDPRStatus(getContext());
-            ZplayDebug.d(TAG, "vungle request new media", onoff);
-            if (Vungle.canPlayAd(getProvider().getKey2())) {
-                ZplayDebug.d(TAG, "vungle media prapared", onoff);
-                layerPrepared();
-            } else {
-                if (Vungle.isInitialized()) {
-                    Vungle.loadAd(getProvider().getKey2(), VungleInstantiate.createVungleMediaLoadListener());
-                } else {
-                    ZplayDebug.d(TAG, "vungle media init fail", onoff);
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            layerPreparedFailed(recodeError(null));
-                        }
-                    });
-                }
-                ZplayDebug.d(TAG, "vungle onPrepareMedia loadAd:" + getProvider().getKey2(), onoff);
+            final boolean isInitialized = Vungle.isInitialized();
+            ZplayDebug.d(TAG, "onPrepareMedia: " + isInitialized + ", placementId: " + getProvider().getKey1());
+            if (!isInitialized) {
+                Vungle.init(getProvider().getKey1(), getActivity().getApplicationContext(), new InitCallback() {
+                    @Override
+                    public void onSuccess() {
+                        Log.d(TAG, "onPrepareMedia, init - onSuccess: ");
+                        loadAd();
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        Log.d(TAG, "onPrepareMedia, init - onError: " + throwable);
+                        layerPreparedFailed(recodeError(throwable));
+                    }
+
+                    @Override
+                    public void onAutoCacheAdAvailable(String s) {
+                        Log.d(TAG, "onPrepareMedia, init - onAutoCacheAdAvailable: " + s);
+                    }
+                });
+                return;
             }
+            loadAd();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle onPrepareMedia error:", e, onoff);
+            ZplayDebug.d(TAG, "onPrepareMedia: error: " + e);
         }
     }
 
-    @Override
-    protected void onShowMedia() {
-        try {
-            if (Vungle.canPlayAd(getProvider().getKey2())) {
-                AdConfig adConfig = new AdConfig();
-                adConfig.setAutoRotate(true);
-                adConfig.setMuted(true);
-                Vungle.playAd(getProvider().getKey2(), adConfig, VungleInstantiate.createVungleMediaPlayListener());
-                ZplayDebug.d(TAG, "vungle media onShowMedia true placementId:" + getProvider().getKey2(), onoff);
-            } else {
-                ZplayDebug.d(TAG, "vungle media onShowMedia false placementId:" + getProvider().getKey2(), onoff);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle onShowMedia error:", e, onoff);
-        }
-    }
-
-    @Override
-    protected boolean isMediaReady() {
-        try {
-            if (Vungle.canPlayAd(getProvider().getKey2())) {
-                ZplayDebug.d(TAG, "vungle media isMediaReady true", onoff);
-                return true;
-            }
-            ZplayDebug.d(TAG, "vungle media isMediaReady false", onoff);
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle isMediaReady error:", e, onoff);
-        }
-        return false;
-    }
-
-    @Override
-    protected void init() {
-        try {
-            ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-            createVungleListener();
-            initVungleSDK();
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "vungle media init error:", e, onoff);
-        }
-    }
-
-    private void createVungleListener() {
-
-        mLoadAdCallback = new LoadAdCallback() {
+    private void loadAd() {
+        updateGDPRStatus(getContext());
+        ZplayDebug.d(TAG, "loadAd: " + getProvider().getKey2());
+        Vungle.loadAd(getProvider().getKey2(), new LoadAdCallback() {
             @Override
             public void onAdLoad(String placementReferenceId) {
-                ZplayDebug.d(TAG, "vungle media LoadAdCallback onAdLoad placementReferenceId:" + placementReferenceId, onoff);
+                ZplayDebug.d(TAG, "onAdLoad: " + placementReferenceId);
                 if (getProvider().getKey2().equals(placementReferenceId)) {
                     layerPrepared();
                 }
@@ -137,7 +82,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onError(String placementReferenceId, final Throwable throwable) {
                 try {
-                    ZplayDebug.e(TAG, "vungle media LoadAdCallback onError   placementReferenceId:" + placementReferenceId + "  error:" + throwable.getLocalizedMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + throwable);
                     if (getProvider().getKey2().equals(placementReferenceId)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -146,89 +91,93 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                             }
                         });
                     }
-                } catch (Exception cex) {
-                    ZplayDebug.e(TAG, "vungle media LoadAdCallback onError try error", cex, onoff);
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onError: error: " + e);
                 }
-            }
-        };
-        mPlayAdCallback = new PlayAdCallback() {
-            @Override
-            public void onAdStart(String placementReferenceId) {
-                ZplayDebug.d(TAG, "vungle media onAdStart placementReferenceId:" + placementReferenceId, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
-                    layerExposure();
-                    layerStartPlaying();
-                }
-            }
-
-            @Override
-            public void onAdEnd(String placementReferenceId, final boolean completed, final boolean isCTAClicked) {
-                ZplayDebug.d(TAG, "vungle media onAdEnd placementReferenceId:" + placementReferenceId + "   completed:" + completed + "   isCTAClicked" + isCTAClicked, onoff);
-                if (getProvider().getKey2().equals(placementReferenceId)) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                if (isCTAClicked) {
-                                    ZplayDebug.d(TAG, "vungle media clicked", onoff);
-                                    layerClicked();
-                                }
-                                if (completed) {
-                                    ZplayDebug.d(TAG, "vungle media get reward", onoff);
-                                    layerIncentived();
-                                }
-                                ZplayDebug.d(TAG, "vungle media closed", onoff);
-                                layerClosed(completed);
-                            } catch (Exception e) {
-                                ZplayDebug.e(TAG, "vungle media onAdEnd error", e, onoff);
-                            }
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(String placementReferenceId, Throwable throwable) {
-                try {
-                    VungleException ex = (VungleException) throwable;
-                    ZplayDebug.e(TAG, "vungle media PlayAdCallback onError ExceptionCode : " + ex.getExceptionCode() + "  || LocalizedMessage : " + ex.getLocalizedMessage(), onoff);
-                    if (ex.getExceptionCode() == VungleException.VUNGLE_NOT_INTIALIZED) {
-                        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
-                    }
-                    if (getProvider().getKey2().equals(placementReferenceId)) {
-                        AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                        adError.setErrorMessage("vungle error: " + throwable);
-                        layerExposureFailed(adError);
-                    }
-                } catch (Exception cex) {
-                    ZplayDebug.e(TAG, "vungle media PlayAdCallback onError try error", cex, onoff);
-
-                }
-            }
-        };
-
-        VungleInstantiate.getInstantiate().setMediaLoadAdCallback(getProvider().getKey2(), mLoadAdCallback);
-        VungleInstantiate.getInstantiate().setMediaPlayAdCallback(getProvider().getKey2(), mPlayAdCallback);
-    }
-
-    private void initVungleSDK() {
-        VungleInstantiate.setMeidaInitCallback(new InitCallback() {
-            @Override
-            public void onSuccess() {
-                ZplayDebug.d(TAG, "vungle media init onSuccess", onoff);
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                mHandler.sendEmptyMessageDelayed(RESTART_INIT, 5 * 1000);
-            }
-
-            @Override
-            public void onAutoCacheAdAvailable(String s) {
-                ZplayDebug.d(TAG, "vungle media onAutoCacheAdAvailable : " + s, onoff);
             }
         });
-        VungleInstantiate.getInstantiate().initVungle(getActivity(), getProvider().getKey1(), VungleInstantiate.ADTYPE_MEDIA);
+    }
+
+    @Override
+    protected void onShowMedia() {
+        try {
+            final boolean isReady = Vungle.canPlayAd(getProvider().getKey2());
+            ZplayDebug.d(TAG, "onShowMedia: " + isReady + ", placementId: " + getProvider().getKey2());
+            if (isReady) {
+                AdConfig adConfig = new AdConfig();
+                adConfig.setAutoRotate(true);
+                adConfig.setMuted(true);
+                Vungle.playAd(getProvider().getKey2(), adConfig, new PlayAdCallback() {
+                    @Override
+                    public void onAdStart(String placementReferenceId) {
+                        Log.d(TAG, "onAdStart: " + placementReferenceId);
+                        if (getProvider().getKey2().equals(placementReferenceId)) {
+                            layerExposure();
+                            layerStartPlaying();
+                        }
+                    }
+
+                    @Override
+                    public void onAdEnd(String placementReferenceId, final boolean completed, final boolean isCTAClicked) {
+                        Log.d(TAG, "onAdEnd: " + placementReferenceId + ", completed: " + completed + ", isCTAClicked: " + isCTAClicked);
+                        if (getProvider().getKey2().equals(placementReferenceId)) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        ZplayDebug.d(TAG, "onAdEnd: " + isCTAClicked + ", " + completed);
+                                        if (isCTAClicked) {
+                                            layerClicked();
+                                        }
+                                        if (completed) {
+                                            layerIncentived();
+                                        }
+                                        layerClosed(completed);
+                                    } catch (Exception e) {
+                                        ZplayDebug.d(TAG, "onAdEnd: error: " + e);
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onError(String placementReferenceId, Throwable throwable) {
+                        try {
+                            VungleException ex = (VungleException) throwable;
+                            ZplayDebug.d(TAG, "onError: errorCode: " + ex.getExceptionCode() + ", " + ex);
+                            if (getProvider().getKey2().equals(placementReferenceId)) {
+                                AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
+                                adError.setErrorMessage("vungle error: " + throwable);
+                                layerExposureFailed(adError);
+                            }
+                        } catch (Exception e) {
+                            ZplayDebug.d(TAG, "onError: error: " + e);
+
+                        }
+                    }
+                });
+            }
+        } catch (Exception e) {
+            ZplayDebug.d(TAG, "onShowMedia: error: " + e);
+        }
+    }
+
+    @Override
+    protected boolean isMediaReady() {
+        try {
+            final boolean isReady = Vungle.canPlayAd(getProvider().getKey2());
+            ZplayDebug.d(TAG, "isMediaReady: " + isReady + ", placementId: " + getProvider().getKey2());
+            return isReady;
+        } catch (Exception e) {
+            ZplayDebug.d(TAG, "isMediaReady: error: " + e);
+        }
+        return false;
+    }
+
+    @Override
+    protected void init() {
+        ZplayDebug.d(TAG, "init: " + getProvider().getKey1());
     }
 
     @Override

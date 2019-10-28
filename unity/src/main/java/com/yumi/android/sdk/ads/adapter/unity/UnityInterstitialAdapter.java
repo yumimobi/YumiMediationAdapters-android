@@ -10,6 +10,10 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.unity3d.ads.UnityAds.PlacementState.DISABLED;
+import static com.unity3d.ads.UnityAds.PlacementState.READY;
+import static com.unity3d.ads.UnityAds.PlacementState.WAITING;
+import static com.unity3d.ads.UnityAds.UnityAdsError.INTERNAL_ERROR;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.updateGDPRStatus;
@@ -18,9 +22,12 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "UnityInterstitialAdapter";
     private IUnityAdsExtendedListener mUnityAdsListener;
+    // Unity 为自轮询平台，只需要监听第一次回调，以后直接判断 isReady 属性
+    private boolean hasHitReadyCallback;
 
     protected UnityInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
+        ZplayDebug.d(TAG, "UnityInterstitialAdapter: " + activity + ", gameId: " + getProvider().getKey1());
         UnityAdsProxy.initUnitySDK(getActivity(), getProvider().getKey1());
         mUnityAdsListener = new IUnityAdsExtendedListener() {
             @Override
@@ -31,8 +38,33 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             }
 
             @Override
-            public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
-                ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + placementId + ", placementState: " + placementState + ", placementState1: " + placementState1);
+            public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState state1, UnityAds.PlacementState state2) {
+                ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + placementId + ", state1: " + state1 + ", state2: " + state2);
+                if (hasHitReadyCallback) {
+                    return;
+                }
+
+                try {
+                    final String targetPlacementId = getProvider().getKey2();
+                    ZplayDebug.d(TAG, "onUnityAdsReady: {" + placementId + " should equals " + targetPlacementId + "}");
+
+                    if (state1 == DISABLED) {
+                        hasHitReadyCallback = true;
+                        layerPreparedFailed(generateLayerErrorCode(INTERNAL_ERROR, "placement state is " + DISABLED));
+                        return;
+                    }
+
+                    if (state1 == WAITING) {
+                        hasHitReadyCallback = true;
+                        if (state2 == READY) {
+                            layerPrepared();
+                        } else {
+                            layerPreparedFailed(generateLayerErrorCode(INTERNAL_ERROR, "placement state is " + state2));
+                        }
+                    }
+                } catch (Exception e) {
+                    ZplayDebug.d(TAG, "onUnityAdsReady: error: " + e);
+                }
             }
 
             @Override
@@ -56,10 +88,10 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             }
 
             @Override
-            public void onUnityAdsError(UnityAdsError unityAdsError, String placementId) {
-                ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError);
+            public void onUnityAdsError(UnityAdsError unityAdsError, String errorMsg) {
+                ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", errorMsg: " + errorMsg);
 
-                layerPreparedFailed(generateLayerErrorCode(unityAdsError, placementId));
+                layerPreparedFailed(generateLayerErrorCode(unityAdsError, errorMsg));
             }
         };
     }
@@ -79,13 +111,15 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "unity Interstitial request new", onoff);
+        final String placementId = getProvider().getKey2();
+        final boolean isReady = UnityAds.isReady(placementId);
+        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
         updateGDPRStatus(getContext());
-
-        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
-        if (UnityAdsProxy.isReady(getProvider().getKey2())) {
+        if (isReady) {
+            hasHitReadyCallback = true;
             layerPrepared();
         }
+        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
     }
 
     @Override
@@ -95,7 +129,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        return UnityAdsProxy.isReady(getProvider().getKey2());
+        return UnityAds.isReady(getProvider().getKey2());
     }
 
     @Override
