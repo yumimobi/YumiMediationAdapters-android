@@ -10,6 +10,10 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.unity3d.ads.UnityAds.PlacementState.DISABLED;
+import static com.unity3d.ads.UnityAds.PlacementState.READY;
+import static com.unity3d.ads.UnityAds.PlacementState.WAITING;
+import static com.unity3d.ads.UnityAds.UnityAdsError.INTERNAL_ERROR;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityAdsProxy.initUnitySDK;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
@@ -35,22 +39,38 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
-            public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
-                ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + placementId + ", placementState: " + placementState + ", placementState1: " + placementState1);
-            }
+            public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState state1, UnityAds.PlacementState state2) {
+                ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + placementId + ", state1: " + state1 + ", state2: " + state2);
+                if (hasHitReadyCallback) {
+                    return;
+                }
 
-            @Override
-            public void onUnityAdsReady(String placementId) {
                 try {
                     final String targetPlacementId = getProvider().getKey2();
-                    ZplayDebug.d(TAG, "onUnityAdsReady: {" + placementId + " should equals " + targetPlacementId + "}");
-                    if (!hasHitReadyCallback) {
-                        layerPrepared();
+                    ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: {" + placementId + " should equals " + targetPlacementId + "}");
+
+                    if (state1 == DISABLED) {
                         hasHitReadyCallback = true;
+                        layerPreparedFailed(generateLayerErrorCode(INTERNAL_ERROR, "placement state is " + DISABLED));
+                        return;
+                    }
+
+                    if (state1 == WAITING) {
+                        hasHitReadyCallback = true;
+                        if (state2 == READY) {
+                            layerPrepared();
+                        } else {
+                            layerPreparedFailed(generateLayerErrorCode(INTERNAL_ERROR, "placement state is " + state2));
+                        }
                     }
                 } catch (Exception e) {
                     ZplayDebug.d(TAG, "onUnityAdsReady: error: " + e);
                 }
+            }
+
+            @Override
+            public void onUnityAdsReady(String placementId) {
+                ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
             }
 
             @Override
@@ -94,14 +114,15 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         final String placementId = getProvider().getKey2();
         final boolean isReady = UnityAds.isReady(placementId);
-        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", placementId: " + placementId);
+        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
         updateGDPRStatus(getContext());
 
-        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
         if (isReady) {
             hasHitReadyCallback = true;
             layerPrepared();
         }
+
+        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
     }
 
     @Override

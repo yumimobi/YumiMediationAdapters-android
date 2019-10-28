@@ -5,26 +5,18 @@ import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
 
 import java.lang.ref.WeakReference;
 
-import static com.yumi.android.sdk.ads.adapter.unity.UnityAdsListenerObserver.UnityAdStatus.ERROR;
-import static com.yumi.android.sdk.ads.adapter.unity.UnityAdsListenerObserver.UnityAdStatus.IDLE;
-import static com.yumi.android.sdk.ads.adapter.unity.UnityAdsListenerObserver.UnityAdStatus.READY;
-
 class UnityAdsListenerObserver implements IUnityAdsExtendedListener {
-    private UnityAdStatus mUnityAdStatus = IDLE;
     private String mPlacementId;
-    private UnityAds.UnityAdsError mAdsError;
+    private UnityAds.PlacementState mBefore;
+    private UnityAds.PlacementState mAfter;
 
     private WeakReference<IUnityAdsExtendedListener> mObserverRef = new WeakReference<>(null);
 
     @Override
     public void onUnityAdsReady(String placementId) {
-        mPlacementId = placementId;
-        mUnityAdStatus = READY;
-
-        IUnityAdsExtendedListener observer = mObserverRef.get();
-        if (observer != null) {
-            observer.onUnityAdsReady(placementId);
-        }
+        // 通过 onUnityAdsPlacementStateChanged 来确定广告是否就绪，而不能使用 onUnityAdsReady 原因：
+        // 没有专有回调通知某广告位加载失败，因为加载失败后，unity 会在内部重新加载直到成功后会调用 onUnityAdsReady
+        // 这样就有可能会导致一直在等待状态
     }
 
     @Override
@@ -40,7 +32,6 @@ class UnityAdsListenerObserver implements IUnityAdsExtendedListener {
     @Override
     public void onUnityAdsFinish(String placementId, UnityAds.FinishState finishState) {
         mPlacementId = placementId;
-        mUnityAdStatus = IDLE;
 
         IUnityAdsExtendedListener observer = mObserverRef.get();
         if (observer != null) {
@@ -50,14 +41,7 @@ class UnityAdsListenerObserver implements IUnityAdsExtendedListener {
 
     @Override
     public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String placementId) {
-        mAdsError = unityAdsError;
-        mPlacementId = placementId;
-        mUnityAdStatus = ERROR;
-
-        IUnityAdsExtendedListener observer = mObserverRef.get();
-        if (observer != null) {
-            observer.onUnityAdsError(unityAdsError, placementId);
-        }
+        // Unity 不需要管理 error 状态
     }
 
 
@@ -73,24 +57,20 @@ class UnityAdsListenerObserver implements IUnityAdsExtendedListener {
 
     @Override
     public void onUnityAdsPlacementStateChanged(String placementId, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+        mPlacementId = placementId;
+        mBefore = placementState;
+        mAfter = placementState1;
 
+        IUnityAdsExtendedListener observer = mObserverRef.get();
+        if (observer != null) {
+            observer.onUnityAdsPlacementStateChanged(placementId, mBefore, mAfter);
+        }
     }
 
     void setObserver(IUnityAdsExtendedListener listener) {
         mObserverRef = new WeakReference<>(listener);
-        switch (mUnityAdStatus) {
-            case READY:
-                listener.onUnityAdsReady(mPlacementId);
-                break;
-            case ERROR:
-                listener.onUnityAdsError(mAdsError, mPlacementId);
-                break;
-            default:
-                break;
+        if (mBefore != null) {
+            listener.onUnityAdsPlacementStateChanged(mPlacementId, mBefore, mAfter);
         }
-    }
-
-    enum UnityAdStatus {
-        READY, ERROR, IDLE
     }
 }
