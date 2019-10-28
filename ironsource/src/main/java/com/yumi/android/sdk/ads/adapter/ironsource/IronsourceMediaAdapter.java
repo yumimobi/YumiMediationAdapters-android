@@ -22,7 +22,6 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
 
     private static final String TAG = "IronsourceMediaAdapter";
-    private ISDemandOnlyRewardedVideoListener adListener;
     private boolean isRewarded = false;
 
     protected IronsourceMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
@@ -59,13 +58,9 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         final String appKey = getProvider().getKey1();
-        ZplayDebug.d(TAG, "init: " + appKey);
-        createMediaListener();
-        IronsourceListenerHandler.initIronsourceVideoListener(getActivity(), getProvider().getKey1());
-    }
-
-    private void createMediaListener() {
-        adListener = new ISDemandOnlyRewardedVideoListener() {
+        final String instanceId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "init: " + appKey + ", instanceId: " + instanceId);
+        IronsourceListenerHandler.setMyIronsourceVideoListener(instanceId, new ISDemandOnlyRewardedVideoListener() {
             @Override
             public void onRewardedVideoAdLoadSuccess(String instanceId) {
                 ZplayDebug.d(TAG, "onRewardedVideoAdLoadSuccess: " + instanceId);
@@ -82,7 +77,6 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
 
-            // Invoked when the RewardedVideo ad view is about to open.
             @Override
             public void onRewardedVideoAdOpened(String instanceId) {
                 ZplayDebug.d(TAG, "onRewardedVideoAdOpened: " + instanceId);
@@ -93,8 +87,6 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
 
-            //Invoked when the RewardedVideo ad view is about to be closed.
-            //Your activity will now regain its focus.
             @Override
             public void onRewardedVideoAdClosed(String instanceId) {
                 ZplayDebug.d(TAG, "onRewardedVideoAdClosed: " + instanceId);
@@ -103,8 +95,6 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
 
-            // Invoked when RewardedVideo call to show a rewarded video has
-            // failed. IronSourceError contains the reason for the failure.
             @Override
             public void onRewardedVideoAdShowFailed(String instanceId, IronSourceError error) {
                 ZplayDebug.d(TAG, "onRewardedVideoAdShowFailed: " + instanceId + ", error: " + error);
@@ -132,8 +122,8 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             }
 
-        };
-        IronsourceListenerHandler.setMyIronsourceVideoListener(getProvider().getKey2(), adListener);
+        });
+        IronsourceListenerHandler.initIronsourceVideoListener(getActivity(), appKey);
     }
 
     @Override
