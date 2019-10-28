@@ -7,12 +7,14 @@ import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
 import com.facebook.ads.AdSize;
 import com.facebook.ads.AdView;
+import com.facebook.ads.AudienceNetworkAds;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.facebook.ads.AdError.NO_FILL;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
@@ -44,24 +46,42 @@ public class FacebookBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         try {
-            if (bannerSize == BANNER_SIZE_SMART) {
-                ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
-                layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
+            ZplayDebug.d(TAG, "facebook request new interstitial", onoff);
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
                 return;
             }
-            ZplayDebug.d(TAG, "facebook request new banner", onoff);
-            banner = new AdView(getContext(), getProvider().getKey1(), calculateBannerSize());
-            banner.setAdListener(bannerListener);
-            banner.loadAd();
+
+            loadAd();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "facebook banner onPrepareBanner error", e, onoff);
         }
     }
 
+    private void loadAd() {
+        if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
+            layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
+            return;
+        }
+        ZplayDebug.d(TAG, "facebook request new banner", onoff);
+        banner = new AdView(getContext(), getProvider().getKey1(), calculateBannerSize());
+        banner.setAdListener(bannerListener);
+        banner.loadAd();
+    }
+
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1(), onoff);
-        initSDK(getContext());
         createBannerListener();
     }
 
