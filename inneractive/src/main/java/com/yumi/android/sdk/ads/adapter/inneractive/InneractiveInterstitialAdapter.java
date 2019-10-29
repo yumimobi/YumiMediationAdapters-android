@@ -113,7 +113,7 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
 
             @Override
             public void onInneractiveFailedAdRequest(InneractiveAdSpot adSpot, InneractiveErrorCode errorCode) {
-                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest: " + errorCode.toString());
+                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest: " + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
             }
         };
