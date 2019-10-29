@@ -154,7 +154,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
         @Override
         public void onRenderSuccess(NativeExpressADView adView) {
             ZplayDebug.d(TAG, "onRenderSuccess" + adView.getHeight() + "," + adView.getWidth());
-            loadData(adView, false);
+            loadData(adView);
         }
 
         @Override
