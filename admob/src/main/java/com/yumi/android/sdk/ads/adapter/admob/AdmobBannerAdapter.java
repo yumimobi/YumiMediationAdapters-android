@@ -63,7 +63,7 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.d(TAG, "admob request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner");
         mAdSize = calculateBannerSize();
         adView = new AdView(getActivity());
         adView.setAdSize(mAdSize);
@@ -74,7 +74,7 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "unitId : " + getProvider().getKey1(), onoff);
+        ZplayDebug.i(TAG, "unitId : " + getProvider().getKey1());
         createAdListener();
     }
 
@@ -82,7 +82,7 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
         adListener = new AdListener() {
             @Override
             public void onAdClosed() {
-                ZplayDebug.d(TAG, "admob banner closed", onoff);
+                ZplayDebug.d(TAG, "onAdClosed");
                 layerClosed();
                 super.onAdClosed();
             }
@@ -94,21 +94,21 @@ public class AdmobBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdLeftApplication() {
-                ZplayDebug.d(TAG, "admob banner clicked", onoff);
+                ZplayDebug.d(TAG, "onAdLeftApplication");
                 layerClicked(cx, cy);
                 super.onAdLeftApplication();
             }
 
             @Override
             public void onAdLoaded() {
-                ZplayDebug.d(TAG, "admob banner preapred", onoff);
+                ZplayDebug.d(TAG, "onAdLoaded");
                 layerPrepared(adView, true);
                 super.onAdLoaded();
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                ZplayDebug.d(TAG, "admob banner failed " + errorCode, onoff);
+                ZplayDebug.d(TAG, "onAdFailedToLoad errorCode: " + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
                 super.onAdFailedToLoad(errorCode);
             }

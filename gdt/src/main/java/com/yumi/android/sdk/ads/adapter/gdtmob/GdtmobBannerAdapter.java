@@ -44,11 +44,11 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "gdt not support smart banner", onoff);
+            ZplayDebug.d(TAG, "not support smart banner");
             layerPreparedFailed(recodeError(new AdError(5004, null), "not support smart banner."));
             return;
         }
-        ZplayDebug.d(TAG, "gdt request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner");
         unifiedBanner = new UnifiedBannerView(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedBannerListener);
         //设置广告轮播时间，为0或30~120之间的数字，单位为s,0标识不自动轮播
         unifiedBanner.setRefresh(getProvider().getAutoRefreshInterval());
@@ -57,24 +57,23 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "pId : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + " ,pId : " + getProvider().getKey2());
         unifiedBannerListener = new UnifiedBannerADListener() {
 
             @Override
             public void onNoAD(AdError adError) {
                 if (adError == null) {
-                    ZplayDebug.d(TAG, "gdt banner failed adError = null", onoff);
+                    ZplayDebug.d(TAG, "failed adError = null");
                     layerPreparedFailed(recodeError(null));
                     return;
                 }
-                ZplayDebug.d(TAG, "gdt banner failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                ZplayDebug.d(TAG, "onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
                 layerPreparedFailed(recodeError(adError));
             }
 
             @Override
             public void onADReceive() {
-                ZplayDebug.d(TAG, "gdt banner prepared", onoff);
+                ZplayDebug.d(TAG, "onADReceive");
                 layerPrepared(unifiedBanner, true);
             }
 
@@ -93,12 +92,12 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onADExposure() {
-                ZplayDebug.d(TAG, "gdt banner shown", onoff);
+                ZplayDebug.d(TAG, "onADExposure");
             }
 
             @Override
             public void onADClosed() {
-                ZplayDebug.d(TAG, "gdt banner closed", onoff);
+                ZplayDebug.d(TAG, "onADClosed");
                 layerClosed();
             }
 
@@ -110,7 +109,7 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onADClicked() {
-                ZplayDebug.d(TAG, "gdt banner clicked", onoff);
+                ZplayDebug.d(TAG, "onADClicked");
                 layerClicked(-99f, -99f);
             }
         };

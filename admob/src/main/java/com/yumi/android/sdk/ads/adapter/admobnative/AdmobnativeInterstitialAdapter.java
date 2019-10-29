@@ -61,19 +61,19 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
 
     @Override
     protected void onPreparedNativeInterstitial() {
-        ZplayDebug.d(TAG, "admob navitead interstitial onPreparedNativeInterstitial", onoff);
+        ZplayDebug.d(TAG, "load new navitead interstitial");
         refreshAd(true, true);
     }
 
     @Override
     protected void NativeLayerPrepared(View view) {
-        ZplayDebug.d(TAG, "admob navitead interstitial prapared", onoff);
+        ZplayDebug.d(TAG, "navitead interstitial prapared");
         layerPrepared();
     }
 
     @Override
     protected void NativeLayerOnShow() {
-        ZplayDebug.d(TAG, "admob navitead interstitial layerExposure", onoff);
+        ZplayDebug.d(TAG, "navitead interstitial layerExposure");
         layerExposure();
     }
 
@@ -84,13 +84,13 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
 
     @Override
     protected void NativeLayerDismiss() {
-        ZplayDebug.d(TAG, "admob navitead interstitial layerClosed", onoff);
+        ZplayDebug.d(TAG, "navitead interstitial layerClosed");
         layerClosed();
     }
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "admob navitead interstitial init", onoff);
+        ZplayDebug.d(TAG, "navitead interstitial init");
     }
 
     private void refreshAd(boolean requestAppInstallAds, boolean requestContentAds) {
@@ -107,7 +107,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
                             .inflate(R.layout.ad_app_install, null);
                     populateAppInstallAdView(ad, adView);
                     if (adView != null) {
-                        ZplayDebug.d(TAG, "admob navitead interstitial refreshAd onAppInstallAdLoaded", onoff);
+                        ZplayDebug.d(TAG, "navitead interstitial refreshAd onAppInstallAdLoaded");
                         loadData(adView);
                     }
                 }
@@ -122,7 +122,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
                             .inflate(R.layout.ad_content, null);
                     populateContentAdView(ad, adView);
                     if (adView != null) {
-                        ZplayDebug.d(TAG, "admob navitead interstitial refreshAd onContentAdLoaded", onoff);
+                        ZplayDebug.d(TAG, "navitead interstitial refreshAd onContentAdLoaded");
                         loadData(adView);
                     }
                 }
@@ -137,14 +137,14 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
         AdLoader adLoader = builder.withAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int errorCode) {
-                ZplayDebug.d(TAG, "admob native interstitial failed errorCode=" + errorCode, onoff);
+                ZplayDebug.d(TAG, "native interstitial failed errorCode=" + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
             }
 
             @Override
             public void onAdOpened() {
                 super.onAdOpened();
-                ZplayDebug.d(TAG, "admob native interstitial onClick", onoff);
+                ZplayDebug.d(TAG, "native interstitial onClick");
                 layerClicked(-99f, -99f);
             }
         }).build();
@@ -202,7 +202,7 @@ public class AdmobnativeInterstitialAdapter extends YumiNativeAdvancedIntersitit
             public void onVideoEnd() {
                 // Publishers should allow native ads to complete video playback before refreshing
                 // or replacing them with another ad in the same UI location.
-                ZplayDebug.v(TAG, "admob native Video status: Video playback has ended.", onoff);
+                ZplayDebug.v(TAG, "native Video status: Video playback has ended.");
                 super.onVideoEnd();
             }
         });

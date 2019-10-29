@@ -41,20 +41,20 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "admob media PrepareMedia", onoff);
+        ZplayDebug.d(TAG, "load new media");
         isReady = false;
         mAd = new RewardedAd(getContext(), getProvider().getKey1());
         mAd.loadAd(getAdRequest(getContext()), new RewardedAdLoadCallback() {
             public void onRewardedAdLoaded() {
-                ZplayDebug.d(TAG, "admob media onRewardedAdLoaded", onoff);
+                ZplayDebug.d(TAG, "onRewardedAdLoaded");
                 isReady = true;
                 layerPrepared();
             }
 
-            public void onRewardedAdFailedToLoad(int var1) {
-                ZplayDebug.d(TAG, "admob media onRewardedAdFailedToLoad errorCode:" + var1, onoff);
+            public void onRewardedAdFailedToLoad(int errorCode) {
+                ZplayDebug.d(TAG, "onRewardedAdFailedToLoad errorCode: " + errorCode);
                 isReady = false;
-                layerPreparedFailed(recodeError(var1));
+                layerPreparedFailed(recodeError(errorCode));
             }
         });
     }
@@ -65,7 +65,7 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
             if (isMediaReady()) {
                 mAd.show(getActivity(), new RewardedAdCallback() {
                     public void onRewardedAdOpened() {
-                        ZplayDebug.d(TAG, "admob media onRewardedAdOpened", onoff);
+                        ZplayDebug.d(TAG, "onRewardedAdOpened");
                         isRewarded = false;
                         isReady = false;
                         layerExposure();
@@ -73,13 +73,13 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
                     }
 
                     public void onRewardedAdClosed() {
-                        ZplayDebug.d(TAG, "admob media onRewardedAdClosed", onoff);
+                        ZplayDebug.d(TAG, "onRewardedAdClosed");
                         isReady = false;
                         layerClosed(isRewarded);
                     }
 
                     public void onUserEarnedReward(RewardItem reward) {
-                        ZplayDebug.d(TAG, "admob media onUserEarnedReward", onoff);
+                        ZplayDebug.d(TAG, "onUserEarnedReward");
                         isReady = false;
                         isRewarded = true;
                         layerIncentived();
@@ -98,14 +98,14 @@ public class AdmobMediaAdapter extends YumiCustomerMediaAdapter {
         try {
             if (mAd != null) {
                 if (mAd.isLoaded()) {
-                    ZplayDebug.d(TAG, "admob media isMediaReady true", onoff);
+                    ZplayDebug.d(TAG, "isMediaReady true");
                     return true;
                 }
             }
-            ZplayDebug.d(TAG, "admob media isMediaReady false", onoff);
+            ZplayDebug.d(TAG, "isMediaReady false");
             return false;
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "admob media isMediaReady error : ", e, onoff);
+            ZplayDebug.e(TAG, "isMediaReady error : ", e);
             return isReady;
         }
     }

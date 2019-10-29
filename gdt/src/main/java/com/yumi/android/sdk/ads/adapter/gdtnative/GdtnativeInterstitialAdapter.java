@@ -48,33 +48,32 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
 
     @Override
     protected void onPreparedNativeInterstitial() {
-        ZplayDebug.d(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.d(TAG, "pId : " + getProvider().getKey2(), onoff);
-        ZplayDebug.d(TAG, "GDT nativead Interstitial init", onoff);
+        ZplayDebug.d(TAG, "init appId : " + getProvider().getKey1() + " ,pId : " + getProvider().getKey2());
         nativeExpressAD = new NativeExpressAD(getActivity(), calculateInterstitialSize(),
                 getProvider().getKey1(), getProvider().getKey2(), new MyNativeExpressADListener());
+        ZplayDebug.d(TAG, "load new interstitial");
         nativeExpressAD.loadAD(1);
     }
 
     @Override
     protected void NativeLayerPrepared(View view) {
-        ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerPrepared", onoff);
+        ZplayDebug.d(TAG, "NativeLayerPrepared");
         layerPrepared();
     }
 
     @Override
     protected void NativeLayerOnShow() {
-        ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerOnShow", onoff);
+        ZplayDebug.d(TAG, "NativeLayerOnShow");
     }
 
     @Override
     protected void calculateRequestSize() {
-        ZplayDebug.d(TAG, "gdt native Interstitial calculateRequestSize", onoff);
+        ZplayDebug.d(TAG, "calculateRequestSize");
     }
 
     @Override
     protected void NativeLayerDismiss() {
-        ZplayDebug.d(TAG, "gdt native Interstitial NativeLayerDismiss", onoff);
+        ZplayDebug.d(TAG, "NativeLayerDismiss");
         layerClosed();
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();
@@ -88,7 +87,7 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
 
     @Override
     protected void onDestroy() {
-        ZplayDebug.d(TAG, "gdt native Interstitial callOnActivityDestroy", onoff);
+        ZplayDebug.d(TAG, "callOnActivityDestroy");
         if (nativeExpressADView != null) {
             nativeExpressADView.destroy();
         }
@@ -127,17 +126,17 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
         @Override
         public void onNoAD(AdError adError) {
             if (adError == null) {
-                ZplayDebug.d(TAG, "GDT nativead Interstitial onNoAD adError = null", onoff);
+                ZplayDebug.d(TAG, "onNoAD adError = null");
                 layerPreparedFailed(recodeError(null));
                 return;
             }
-            ZplayDebug.d(TAG, "GDT nativead Interstitial onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+            ZplayDebug.d(TAG, "onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
             layerPreparedFailed(recodeError(adError));
         }
 
         @Override
         public void onADLoaded(List<NativeExpressADView> list) {
-            ZplayDebug.d(TAG, "GDT native Interstitial loaded" + list.size(), onoff);
+            ZplayDebug.d(TAG, "onADLoaded" + list.size());
             if (list.size() > 0) {
                 nativeExpressADView = list.get(0);
                 nativeExpressADView.render();
@@ -148,47 +147,47 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
 
         @Override
         public void onRenderFail(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial render fail", onoff);
+            ZplayDebug.d(TAG, "onRenderFail");
             layerPreparedFailed(recodeError(null));
         }
 
         @Override
         public void onRenderSuccess(NativeExpressADView adView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial renderSuccess" + adView.getHeight() + "," + adView.getWidth(), onoff);
+            ZplayDebug.d(TAG, "onRenderSuccess" + adView.getHeight() + "," + adView.getWidth());
             loadData(adView, false);
         }
 
         @Override
         public void onADExposure(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial shown", onoff);
+            ZplayDebug.d(TAG, "onADExposure");
             layerExposure();
         }
 
         @Override
         public void onADClicked(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial Clicked", onoff);
+            ZplayDebug.d(TAG, "onADClicked");
             layerClicked(-99f, -99f);
         }
 
         @Override
         public void onADClosed(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial closed", onoff);
+            ZplayDebug.d(TAG, "onADClosed");
             closeOnResume();
         }
 
         @Override
         public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial onADLeftApplication", onoff);
+            ZplayDebug.d(TAG, "onADLeftApplication");
         }
 
         @Override
         public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial onADOpenOverlay", onoff);
+            ZplayDebug.d(TAG, "onADOpenOverlay");
         }
 
         @Override
         public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
-            ZplayDebug.d(TAG, "GDT native Interstitial onADCloseOverlay", onoff);
+            ZplayDebug.d(TAG, "onADCloseOverlay");
         }
     }
 

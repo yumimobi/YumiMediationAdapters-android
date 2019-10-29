@@ -43,23 +43,23 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
         try {
             updateGDPRStatus(getContext());
             if (bannerSize == AdSize.BANNER_SIZE_SMART) {
-                ZplayDebug.d(TAG, "AppLovin banner not support smart banner:", onoff);
+                ZplayDebug.d(TAG, "not support smart banner:");
                 layerPreparedFailed(recodeError(-1, "not support smart banner."));
                 return;
             }
-            ZplayDebug.d(TAG, "AppLovin banner onPrepareBannerLayer", onoff);
+            ZplayDebug.d(TAG, "load new banner");
             if (appLovinSdk == null || adView == null) {
                 init();
             }
             appLovinSdk.getAdService().loadNextAdForZoneId(getProvider().getKey2(), adLovinAdLoadListener);
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "AppLovin banner onPrepareBannerLayer error", e, onoff);
+            ZplayDebug.e(TAG, "onPrepareBannerLayer error", e);
         }
     }
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "AppLovin banner init key1: " + getProvider().getKey1() + ", key2:" + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + ", key2:" + getProvider().getKey2());
         try {
             if (appLovinSdk == null || adView == null) {
                 appLovinSdk = AppLovinSdk.getInstance(getProvider().getKey1(), new AppLovinSdkSettings(), getContext());
@@ -70,7 +70,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
             adView.setAdDisplayListener(adDisplayListener);
             adView.setAdViewEventListener(adViewEventListener);
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "AppLovin banner init error", e, onoff);
+            ZplayDebug.e(TAG, "init error", e);
         }
     }
 
@@ -78,14 +78,14 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
         adLovinAdLoadListener = new AppLovinAdLoadListener() {
             @Override
             public void adReceived(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin banner adReceived", onoff);
+                ZplayDebug.d(TAG, "adReceived");
                 adView.renderAd(appLovinAd);
                 layerPrepared(adView, true);
             }
 
             @Override
             public void failedToReceiveAd(final int errorCode) {
-                ZplayDebug.d(TAG, "AppLovin banner failedToReceiveAd  errorCode:" + errorCode, onoff);
+                ZplayDebug.d(TAG, "failedToReceiveAd  errorCode:" + errorCode);
 
                 layerPreparedFailed(recodeError(errorCode));
             }
@@ -94,44 +94,44 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
         adClickListener = new AppLovinAdClickListener() {
             @Override
             public void adClicked(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin banner adClicked", onoff);
+                ZplayDebug.d(TAG, "adClicked");
                 layerClicked(-99f, -99f);
             }
         };
         adDisplayListener = new AppLovinAdDisplayListener() {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin banner adDisplayed", onoff);
+                ZplayDebug.d(TAG, "adDisplayed");
             }
 
             @Override
             public void adHidden(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin banner adHidden", onoff);
+                ZplayDebug.d(TAG, "adHidden");
                 layerClosed();
             }
         };
         adViewEventListener = new AppLovinAdViewEventListener() {
             @Override
             public void adOpenedFullscreen(AppLovinAd appLovinAd, AppLovinAdView appLovinAdView) {
-                ZplayDebug.d(TAG, "AppLovin banner adOpenedFullscreen", onoff);
+                ZplayDebug.d(TAG, "adOpenedFullscreen");
 
             }
 
             @Override
             public void adClosedFullscreen(AppLovinAd appLovinAd, AppLovinAdView appLovinAdView) {
-                ZplayDebug.d(TAG, "AppLovin banner adClosedFullscreen", onoff);
+                ZplayDebug.d(TAG, "adClosedFullscreen");
 
             }
 
             @Override
             public void adLeftApplication(AppLovinAd appLovinAd, AppLovinAdView appLovinAdView) {
-                ZplayDebug.d(TAG, "AppLovin banner adLeftApplication", onoff);
+                ZplayDebug.d(TAG, "adLeftApplication");
 
             }
 
             @Override
             public void adFailedToDisplay(AppLovinAd appLovinAd, AppLovinAdView appLovinAdView, AppLovinAdViewDisplayErrorCode appLovinAdViewDisplayErrorCode) {
-                ZplayDebug.d(TAG, "AppLovin banner adFailedToDisplay", onoff);
+                ZplayDebug.d(TAG, "adFailedToDisplay");
 
             }
         };
@@ -144,7 +144,7 @@ public class ApplovinBannerAdapter extends YumiCustomerBannerAdapter {
                 adView.destroy();
             }
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "AppLovin banner callOnActivityDestroy error ", e, onoff);
+            ZplayDebug.e(TAG, "callOnActivityDestroy error ", e);
         }
     }
 

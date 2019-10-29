@@ -114,7 +114,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         final String placementId = getProvider().getKey2();
         final boolean isReady = UnityAds.isReady(placementId);
-        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
+        ZplayDebug.d(TAG, "load new media isReady: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
         updateGDPRStatus(getContext());
 
         if (isReady) {

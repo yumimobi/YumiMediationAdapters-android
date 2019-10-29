@@ -53,7 +53,7 @@ public class ChartboostInterstitialAdapter extends
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "chartboost request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial");
         updateGDPRStatus(getContext());
         Chartboost.cacheInterstitial(CBLocation.LOCATION_DEFAULT);
     }
@@ -73,8 +73,7 @@ public class ChartboostInterstitialAdapter extends
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "appSignature : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + ", appSignature : " + getProvider().getKey2());
         createDelegate();
         ChartboostExtra.getChartboostExtra().setInstertitialListener(delegate);
         ChartboostExtra.getChartboostExtra().initChartboostSDK(getActivity(),
@@ -86,7 +85,7 @@ public class ChartboostInterstitialAdapter extends
             delegate = new ChartboostDelegate() {
                 @Override
                 public void didCacheInterstitial(String location) {
-                    ZplayDebug.d(TAG, "chartboost interstitial prepared", onoff);
+                    ZplayDebug.d(TAG, "didCacheInterstitial");
                     layerPrepared();
                     super.didCacheInterstitial(location);
                 }
@@ -94,21 +93,21 @@ public class ChartboostInterstitialAdapter extends
                 @Override
                 public void didFailToLoadInterstitial(String location,
                                                       CBImpressionError error) {
-                    ZplayDebug.d(TAG, "chartboost interstitial failed " + error, onoff);
+                    ZplayDebug.d(TAG, "didFailToLoadInterstitial error: " + error);
                     layerPreparedFailed(recodeError(error));
                     super.didFailToLoadInterstitial(location, error);
                 }
 
                 @Override
                 public void didCloseInterstitial(String location) {
-                    ZplayDebug.d(TAG, "chartboost interstitial closed", onoff);
+                    ZplayDebug.d(TAG, "didCloseInterstitial");
                     layerClosed();
                     super.didCloseInterstitial(location);
                 }
 
                 @Override
                 public void didClickInterstitial(String location) {
-                    ZplayDebug.d(TAG, "chartboost interstitial clicked", onoff);
+                    ZplayDebug.d(TAG, "didClickInterstitial");
                     layerClicked(-99f, -99f);
                     layerClosed();
                     super.didClickInterstitial(location);
@@ -116,7 +115,7 @@ public class ChartboostInterstitialAdapter extends
 
                 @Override
                 public void didDisplayInterstitial(String location) {
-                    ZplayDebug.d(TAG, "chartboost interstitial shown", onoff);
+                    ZplayDebug.d(TAG, "didDisplayInterstitial");
                     layerExposure();
                     layerStartPlaying();
                     super.didDisplayInterstitial(location);
