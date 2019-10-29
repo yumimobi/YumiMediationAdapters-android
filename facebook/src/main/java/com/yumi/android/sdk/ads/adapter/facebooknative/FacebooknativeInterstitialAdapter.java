@@ -71,25 +71,25 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
 
     @Override
     protected void NativeLayerPrepared(View view) {
-        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerPrepared", onoff);
+        ZplayDebug.d(TAG, "NativeLayerPrepared");
         layerPrepared();
     }
 
     @Override
     protected void NativeLayerOnShow() {
-        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerOnShow", onoff);
+        ZplayDebug.d(TAG, "NativeLayerOnShow");
         layerExposure();
     }
 
     @Override
     protected void calculateRequestSize() {
-        ZplayDebug.d(TAG, "facebook native Interstitial calculateRequestSize", onoff);
+        ZplayDebug.d(TAG, "calculateRequestSize");
 
     }
 
     @Override
     protected void NativeLayerDismiss() {
-        ZplayDebug.d(TAG, "facebook native Interstitial NativeLayerDismiss", onoff);
+        ZplayDebug.d(TAG, "NativeLayerDismiss");
         layerClosed();
     }
 
@@ -97,12 +97,12 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
     @Override
     protected void init() {
         try {
-            ZplayDebug.d(TAG, "facebook native Interstitial init", onoff);
+            ZplayDebug.d(TAG, "init");
             LayoutInflater inflater = LayoutInflater.from(activity);
             adView = (LinearLayout) inflater.inflate(R.layout.ad_interstitial_layout, null, false);
             createListener();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook native Interstitial init error :", e, false);
+            ZplayDebug.e(TAG, "init error :", e, false);
         }
     }
 
@@ -110,19 +110,19 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
         linstener = new NativeAdListener() {
             @Override
             public void onMediaDownloaded(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native Interstitial onMediaDownloaded", onoff);
+                ZplayDebug.d(TAG, "onMediaDownloaded");
 
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                ZplayDebug.d(TAG, "facebook native Interstitial onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage(), onoff);
+                ZplayDebug.d(TAG, "onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage());
                 layerPreparedFailed(FacebookUtil.recodeError(adError));
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native Interstitial onAdLoaded", onoff);
+                ZplayDebug.d(TAG, "onAdLoaded");
                 if (nativeAd == null || nativeAd != ad) {
                     // Race condition, load() called again before last ad was displayed
                     return;
@@ -135,14 +135,14 @@ public class FacebooknativeInterstitialAdapter extends YumiNativeAdvancedIntersi
 
             @Override
             public void onAdClicked(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native Interstitial onAdClicked", onoff);
+                ZplayDebug.d(TAG, "onAdClicked");
                 //  requestSystemBrowser(nativeAd.getAdChoicesLinkUrl());
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native Interstitial onLoggingImpression", onoff);
+                ZplayDebug.d(TAG, "onLoggingImpression");
                 //Called immediately before an impression is logged.
             }
         };

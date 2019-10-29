@@ -54,7 +54,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "AppLovin request new interstitial ", onoff);
+        ZplayDebug.d(TAG, "load new interstitial ");
         updateGDPRStatus(getContext());
         isFirstClick = false;
         String zoneId = getProvider().getKey2();
@@ -62,11 +62,11 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
             if (isPrepared && currentAd != null) {
                 layerPrepared();
             }
-            ZplayDebug.d(TAG, "AppLovin loadNextAdForZoneId ZoneId : " + zoneId, onoff);
+            ZplayDebug.d(TAG, "loadNextAdForZoneId ZoneId : " + zoneId);
             appLovinSDK.getAdService().loadNextAdForZoneId(zoneId, new AppLovinAdLoadListener() {
                 @Override
                 public void adReceived(AppLovinAd ad) {
-                    ZplayDebug.i(TAG, "AppLovin Interstitial adReceived :" + getProvider().getKey2(), onoff);
+                    ZplayDebug.i(TAG, "adReceived :" + getProvider().getKey2());
                     currentAd = ad;
                     if (!isPrepared) {
                         layerPrepared();
@@ -76,7 +76,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
                 @Override
                 public void failedToReceiveAd(int errorCode) {
-                    ZplayDebug.i(TAG, "AppLovin Interstitial failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  || errorCode : " + errorCode, onoff);
+                    ZplayDebug.i(TAG, "failedToReceiveAd ZoneID : " + getProvider().getKey2() + "  || errorCode : " + errorCode);
                     layerPreparedFailed(recodeError(errorCode));
                 }
             });
@@ -85,13 +85,13 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        ZplayDebug.d(TAG, "onShowInterstitialLayer ", onoff);
+        ZplayDebug.d(TAG, "onShowInterstitialLayer ");
         if (interstitialAd != null) {
             if (currentAd != null) {
                 interstitialAd.showAndRender(currentAd);
-                ZplayDebug.i(TAG, "AppLovin Interstitial Show ZoneId : " + getProvider().getKey2(), onoff);
+                ZplayDebug.i(TAG, "Show ZoneId : " + getProvider().getKey2());
             } else {
-                ZplayDebug.i(TAG, "AppLovin Interstitial Show The currentAd  is null", onoff);
+                ZplayDebug.i(TAG, "Show The currentAd  is null");
             }
         }
         isPrepared = false;
@@ -100,7 +100,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
     @Override
     protected boolean isInterstitialLayerReady() {
         if (currentAd != null) {
-            ZplayDebug.i(TAG, "AppLovin Interstitial  isInterstitialLayerReady true", onoff);
+            ZplayDebug.i(TAG, "isInterstitialLayerReady true");
             return true;
         }
         return false;
@@ -108,7 +108,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "AppLovin Interstitial init  sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init  sdkKey : " + getProvider().getKey1() + "  ZoneId : " + getProvider().getKey2());
         appLovinSDK = ApplovinExtraHolder.getAppLovinSDK(getActivity(), getProvider().getKey1());
         if (appLovinSDK != null) {
             createAppLovinListener();
@@ -124,7 +124,7 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
             @Override
             public void adClicked(AppLovinAd appLovinAd) {
                 if (!isFirstClick) {
-                    ZplayDebug.d(TAG, "AppLovin ad clicked", onoff);
+                    ZplayDebug.d(TAG, "adClicked");
                     layerClicked(-99f, -99f);
                     isFirstClick = true;
                 }
@@ -133,16 +133,16 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
         adDisplayListener = new AppLovinAdDisplayListener() {
             @Override
             public void adDisplayed(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin ad adDisplayed", onoff);
+                ZplayDebug.d(TAG, "adDisplayed");
                 layerExposure();
                 layerStartPlaying();
             }
 
             @Override
             public void adHidden(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin ad adHidden", onoff);
+                ZplayDebug.d(TAG, "adHidden");
 
-                //todo：need reset currentAd = null，if not isInterstitialLayerReady() method will always return true
+                //need reset currentAd = null，if not isInterstitialLayerReady() method will always return true
                 currentAd = null;
                 layerClosed();
 
@@ -151,12 +151,12 @@ public class ApplovinInterstitialAdapter extends YumiCustomerInterstitialAdapter
         adVideoPlaybackListener = new AppLovinAdVideoPlaybackListener() {
             @Override
             public void videoPlaybackBegan(AppLovinAd appLovinAd) {
-                ZplayDebug.d(TAG, "AppLovin ad videoPlaybackBegan", onoff);
+                ZplayDebug.d(TAG, "videoPlaybackBegan");
             }
 
             @Override
             public void videoPlaybackEnded(AppLovinAd appLovinAd, double v, boolean b) {
-                ZplayDebug.d(TAG, "AppLovin ad videoPlaybackEnded", onoff);
+                ZplayDebug.d(TAG, "videoPlaybackEnded");
             }
         };
     }

@@ -35,7 +35,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         try {
-            ZplayDebug.d(TAG, "onPrepareMedia: ");
+            ZplayDebug.d(TAG, "load new media");
             if (mMvRewardVideoHandler != null) {
                 mMvRewardVideoHandler.load();
             } else {

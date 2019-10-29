@@ -50,7 +50,7 @@ public class FacebookBiddingInterstitialAdapter extends
     @Override
     protected void onPrepareInterstitial() {
         try {
-            ZplayDebug.d(TAG, "facebookbid bidding request new interstitial" + getProvider().getErrCode(), onoff);
+            ZplayDebug.d(TAG, "load new interstitial" + getProvider().getErrCode());
             if (getProvider().getErrCode() != 200) {
                 layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
                 return;
@@ -61,7 +61,7 @@ public class FacebookBiddingInterstitialAdapter extends
             }
             interstitial.loadAdFromBid(getProvider().getPayload());
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook bidding interstitial onPrepareInterstitial error", e, onoff);
+            ZplayDebug.e(TAG, "facebook bidding interstitial onPrepareInterstitial error", e);
         }
     }
 
@@ -81,7 +81,7 @@ public class FacebookBiddingInterstitialAdapter extends
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload:" + getProvider().getPayload(), onoff);
+        ZplayDebug.i(TAG, "init placementID : " + getProvider().getKey1() + ",payload:" + getProvider().getPayload());
         initSDK(getContext());
         createListener();
     }
@@ -92,20 +92,20 @@ public class FacebookBiddingInterstitialAdapter extends
 
                 @Override
                 public void onError(Ad arg0, AdError arg1) {
-                    ZplayDebug.d(TAG, "facebookbid bidding interstitial failed " + arg1.getErrorMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError errorMsg: " + arg1.getErrorMessage());
 
                     layerPreparedFailed(recodeError(arg1), arg1.getErrorMessage());
                 }
 
                 @Override
                 public void onAdLoaded(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid bidding interstitial prepared", onoff);
+                    ZplayDebug.d(TAG, "onAdLoaded");
                     layerPrepared();
                 }
 
                 @Override
                 public void onAdClicked(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid interstitial clicked", onoff);
+                    ZplayDebug.d(TAG, "onAdClicked");
                     layerClicked(-99f, -99f);
                 }
 
@@ -116,14 +116,14 @@ public class FacebookBiddingInterstitialAdapter extends
 
                 @Override
                 public void onInterstitialDisplayed(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid bidding interstitial shown", onoff);
+                    ZplayDebug.d(TAG, "onInterstitialDisplayed");
                     layerExposure();
                     layerStartPlaying();
                 }
 
                 @Override
                 public void onInterstitialDismissed(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid bidding interstitial closed", onoff);
+                    ZplayDebug.d(TAG, "onInterstitialDismissed");
                     layerClosed();
                 }
             };

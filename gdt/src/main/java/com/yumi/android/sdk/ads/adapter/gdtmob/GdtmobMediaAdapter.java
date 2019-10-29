@@ -27,7 +27,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         try {
-            ZplayDebug.i(TAG, "gdt media onPrepareMedia", onoff);
+            ZplayDebug.i(TAG, "load new media");
             if (rewardVideoAD == null) {
                 if (rewardVideoADListener == null) {
                     createListener();
@@ -37,7 +37,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
             adLoaded = false;
             rewardVideoAD.loadAD();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "gdt media onPrepareMedia error", e, onoff);
+            ZplayDebug.e(TAG, "onPrepareMedia error", e);
         }
     }
 
@@ -49,13 +49,13 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
                 if (SystemClock.elapsedRealtime() < (rewardVideoAD.getExpireTimestamp() - delta)) {
                     rewardVideoAD.showAD();
                 } else {
-                    ZplayDebug.e(TAG, "gdt media onShowMedia error : MATERIAL ETIME ", onoff);
+                    ZplayDebug.e(TAG, "onShowMedia error : MATERIAL ETIME ");
                 }
             } else {
-                ZplayDebug.e(TAG, "gdt media onShowMedia error : hasShown" + rewardVideoAD.hasShown(), onoff);
+                ZplayDebug.e(TAG, "onShowMedia error : hasShown" + rewardVideoAD.hasShown());
             }
         } else {
-            ZplayDebug.e(TAG, "gdt media onShowMedia error : adloaded" + adLoaded, onoff);
+            ZplayDebug.e(TAG, "onShowMedia error : adloaded" + adLoaded);
         }
     }
 
@@ -63,18 +63,18 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     protected boolean isMediaReady() {
         if (rewardVideoAD != null) {
             if (adLoaded && !rewardVideoAD.hasShown()) {
-                ZplayDebug.i(TAG, "gdt media isMediaReady isAdLoaded true", onoff);
+                ZplayDebug.i(TAG, "isMediaReady isAdLoaded true");
                 return true;
             }
-            ZplayDebug.i(TAG, "gdt media isMediaReady isAdLoaded false", onoff);
+            ZplayDebug.i(TAG, "isMediaReady isAdLoaded false");
         }
-        ZplayDebug.i(TAG, "gdt media isMediaReady false", onoff);
+        ZplayDebug.i(TAG, "isMediaReady false");
         return false;
     }
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "gdt media init", onoff);
+        ZplayDebug.d(TAG, "init");
         createListener();
     }
 
@@ -82,24 +82,24 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
         rewardVideoADListener = new RewardVideoADListener() {
             @Override
             public void onADLoad() {
-                ZplayDebug.i(TAG, "gdt media onADLoad", onoff);
+                ZplayDebug.i(TAG, "onADLoad");
                 adLoaded = true;
                 layerPrepared();
             }
 
             @Override
             public void onVideoCached() {
-                ZplayDebug.i(TAG, "gdt media onVideoCached", onoff);
+                ZplayDebug.i(TAG, "onVideoCached");
             }
 
             @Override
             public void onADShow() {
-                ZplayDebug.i(TAG, "gdt media onADShow", onoff);
+                ZplayDebug.i(TAG, "onADShow");
             }
 
             @Override
             public void onADExpose() {
-                ZplayDebug.i(TAG, "gdt media onADExpose", onoff);
+                ZplayDebug.i(TAG, "onADExpose");
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -107,36 +107,36 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onReward() {
-                ZplayDebug.i(TAG, "gdt media onReward", onoff);
+                ZplayDebug.i(TAG, "onReward");
                 isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onADClick() {
-                ZplayDebug.i(TAG, "gdt media onADClick", onoff);
+                ZplayDebug.i(TAG, "onADClick");
                 layerClicked();
             }
 
             @Override
             public void onVideoComplete() {
-                ZplayDebug.i(TAG, "gdt media onVideoComplete", onoff);
+                ZplayDebug.i(TAG, "onVideoComplete");
             }
 
             @Override
             public void onADClose() {
-                ZplayDebug.i(TAG, "gdt media onADClose", onoff);
+                ZplayDebug.i(TAG, "onADClose");
                 layerClosed(isRewarded);
             }
 
             @Override
             public void onError(AdError adError) {
                 if (adError == null) {
-                    ZplayDebug.d(TAG, "gdt media failed adError = null", onoff);
+                    ZplayDebug.d(TAG, "onError adError = null");
                     layerPreparedFailed(recodeError(null));
                     return;
                 }
-                ZplayDebug.d(TAG, "gdt media failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                ZplayDebug.d(TAG, "onError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
                 layerPreparedFailed(recodeError(adError));
             }
         };

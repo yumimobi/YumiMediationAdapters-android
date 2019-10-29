@@ -53,11 +53,11 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.i(TAG, "baidu not support smart banner", onoff);
+            ZplayDebug.i(TAG, "not support smart banner");
             layerPreparedFailed(recodeNativeError(NativeErrorCode.LOAD_AD_FAILED, "not support smart banner"));
             return;
         }
-        ZplayDebug.d(TAG, "baidu request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner");
         isLoad = true;
         AdView banner = new AdView(getActivity(), AdSize.Banner, getProvider().getKey2());
         banner.setListener(bannerListener);
@@ -70,8 +70,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appSid : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "adPlaceId : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appSid : " + getProvider().getKey1() + ",adPlaceId : " + getProvider().getKey2());
         createBannerListener();
         AdView.setAppSid(getActivity(), getProvider().getKey1());
     }
@@ -86,7 +85,7 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdShow(JSONObject arg0) {
-                ZplayDebug.d(TAG, "baidu banner shown", onoff);
+                ZplayDebug.d(TAG, "onAdShow");
                 if (isLoad) {
                     isLoad = false;
                 }
@@ -94,26 +93,27 @@ public class BaiduBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdReady(AdView arg0) {
-                ZplayDebug.d(TAG, "baidu banner prepared", onoff);
+                ZplayDebug.d(TAG, "onAdReady");
                 removeTempViews();
                 layerPrepared(arg0, true);
             }
 
             @Override
             public void onAdFailed(String arg0) {
-                ZplayDebug.d(TAG, "baidu banner failed " + arg0, onoff);
+                ZplayDebug.d(TAG, "onAdFailed " + arg0);
                 removeTempViews();
                 layerPreparedFailed(recodeError(arg0));
             }
 
             @Override
             public void onAdClick(JSONObject arg0) {
-                ZplayDebug.d(TAG, "baidu banner click", onoff);
+                ZplayDebug.d(TAG, "onAdClick");
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onAdClose(JSONObject arg0) {
+                ZplayDebug.d(TAG, "onAdClose");
                 layerClosed();
             }
         };

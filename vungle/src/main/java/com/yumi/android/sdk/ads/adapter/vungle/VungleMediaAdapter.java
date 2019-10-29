@@ -39,7 +39,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         try {
             final boolean isInitialized = Vungle.isInitialized();
-            ZplayDebug.d(TAG, "onPrepareMedia: " + isInitialized + ", placementId: " + getProvider().getKey1());
+            ZplayDebug.d(TAG, "load new media isInitialized: " + isInitialized + ", placementId: " + getProvider().getKey1());
             if (!isInitialized) {
                 Vungle.init(getProvider().getKey1(), getActivity().getApplicationContext(), new InitCallback() {
                     @Override

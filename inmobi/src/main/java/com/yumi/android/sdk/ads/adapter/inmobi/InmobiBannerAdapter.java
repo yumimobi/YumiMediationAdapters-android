@@ -49,19 +49,19 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "inmobi not support smart banner", onoff);
+            ZplayDebug.d(TAG, "not support smart banner");
             layerPreparedFailed(recodeError(ERROR_NO_FILL, "not support smart banner."));
             return;
         }
         calculateBannerSize();
-        ZplayDebug.d(TAG, "inmobi request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner");
         String key2 = getProvider().getKey2();
         long placementID = 0L;
         if (key2 != null && key2.length() > 0) {
             try {
                 placementID = Long.valueOf(key2);
             } catch (NumberFormatException e) {
-                ZplayDebug.e(TAG, "", e, onoff);
+                ZplayDebug.e(TAG, "", e);
                 layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                 return;
             }
@@ -114,14 +114,13 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "accounID : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init accounID : " + getProvider().getKey1() + " ,placementID : " + getProvider().getKey2());
         InmobiExtraHolder.initInmobiSDK(getActivity(), getProvider().getKey1());
         bannerListener = new InMobiBanner.BannerAdListener() {
 
             @Override
             public void onUserLeftApplication(InMobiBanner arg0) {
-                ZplayDebug.d(TAG, "inmobi banner left application", onoff);
+                ZplayDebug.d(TAG, "onUserLeftApplication");
                 layerClicked(-99f, -99f);
             }
 
@@ -132,13 +131,13 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdLoadSucceeded(InMobiBanner arg0) {
-                ZplayDebug.d(TAG, "inmobi banner load successed", onoff);
+                ZplayDebug.d(TAG, "onAdLoadSucceeded");
                 layerPrepared(container, true);
             }
 
             @Override
             public void onAdLoadFailed(InMobiBanner arg0, InMobiAdRequestStatus arg1) {
-                ZplayDebug.d(TAG, "inmobi banner load failed " + arg1.getStatusCode(), onoff);
+                ZplayDebug.d(TAG, "onAdLoadFailed" + arg1.getStatusCode());
                 layerPreparedFailed(recodeError(arg1));
             }
 
@@ -155,45 +154,6 @@ public class InmobiBannerAdapter extends YumiCustomerBannerAdapter {
             }
         };
 
-
-//		bannerListener = new IMBannerListener() {
-//
-//			@Override
-//			public void onShowBannerScreen(IMBanner arg0) {
-//				ZplayDebug.d(TAG, "inmobi banner shown");
-//				layerExposure();
-//			}
-//
-//			@Override
-//			public void onLeaveApplication(IMBanner arg0) {
-//				ZplayDebug.d(TAG, "inmobi banner clicked");
-//				layerClicked(-99f, -99f);
-//			}
-//
-//			@Override
-//			public void onDismissBannerScreen(IMBanner arg0) {
-//				ZplayDebug.d(TAG, "inmobi banner closed");
-//				layerClosed();
-//			}
-//
-//			@Override
-//			public void onBannerRequestSucceeded(IMBanner arg0) {
-//				ZplayDebug.d(TAG, "inmobi banner prapared");
-//				layerPrepared(arg0, false);
-//			}
-//
-//			@Override
-//			public void onBannerRequestFailed(IMBanner arg0, IMErrorCode arg1) {
-//				ZplayDebug.d(TAG, "inmobi banner failed " + arg1);
-//				layerPreparedFailed(InmobiExtraHolder.decodeErrorCode(arg1));
-//			}
-//
-//			@Override
-//			public void onBannerInteraction(IMBanner arg0,
-//					Map<String, String> arg1) {
-//
-//			}
-//		};
     }
 
     private final int dip2px(Context context, int dp) {

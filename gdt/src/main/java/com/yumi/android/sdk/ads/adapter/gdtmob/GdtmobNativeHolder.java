@@ -34,7 +34,7 @@ public class GdtmobNativeHolder {
 
     public void loadNativeUnifiedAD(int currentPoolSpace) {
         if (nativeAD != null) {
-            ZplayDebug.v(TAG, "Gdt nativeUnifiedAD onPrepareNative adCount=" + currentPoolSpace, onoff);
+            ZplayDebug.v(TAG, "nativeUnifiedAD onPrepareNative adCount=" + currentPoolSpace, onoff);
             nativeAD.loadData(currentPoolSpace);
         }
     }
@@ -50,7 +50,7 @@ public class GdtmobNativeHolder {
 
     public void loadNativeExpressAD(int currentPoolSpace) {
         if (nativeExpressAD != null) {
-            ZplayDebug.v(TAG, "Gdt nativeExpressAD onPrepareNative adCount=" + currentPoolSpace, onoff);
+            ZplayDebug.v(TAG, "nativeExpressAD onPrepareNative adCount=" + currentPoolSpace, onoff);
             nativeExpressAD.loadAD(currentPoolSpace);
         }
     }

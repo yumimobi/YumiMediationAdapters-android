@@ -113,7 +113,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     protected void onPrepareInterstitial() {
         final String placementId = getProvider().getKey2();
         final boolean isReady = UnityAds.isReady(placementId);
-        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
+        ZplayDebug.d(TAG, "load new interstitial isReady: " + isReady + ", placementId: " + placementId + ", state: " + UnityAds.getPlacementState(placementId));
         updateGDPRStatus(getContext());
         if (isReady) {
             hasHitReadyCallback = true;

@@ -33,7 +33,7 @@ public class IronsourceMediaAdapter extends YumiCustomerMediaAdapter {
         updateGDPRStatus(getContext());
         final String instanceId = getProvider().getKey2();
         boolean isReady = IronSource.isISDemandOnlyRewardedVideoAvailable(instanceId);
-        ZplayDebug.d(TAG, "onPrepareMedia: " + isReady + ", instanceId: " + instanceId);
+        ZplayDebug.d(TAG, "load new media isReady: " + isReady + ", instanceId: " + instanceId);
         IronSource.loadISDemandOnlyRewardedVideo(instanceId);
     }
 

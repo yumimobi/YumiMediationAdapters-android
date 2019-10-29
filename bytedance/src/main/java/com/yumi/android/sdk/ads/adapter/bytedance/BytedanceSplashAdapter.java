@@ -76,6 +76,7 @@ public class BytedanceSplashAdapter extends YumiCustomerSplashAdapter {
 
     @Override
     protected void onPrepareSplashLayer() {
+        ZplayDebug.d(TAG, "load new splash");
         //step2:创建TTAdNative对象
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());
         //加载开屏广告

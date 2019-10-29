@@ -42,7 +42,7 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
     protected void onPrepareNative() {
         final boolean isInitialized = PNLite.isInitialized();
         final String appToken = getProvider().getKey1();
-        ZplayDebug.d(TAG, "onPrepareNative: " + isInitialized + ", appToken: " + appToken);
+        ZplayDebug.d(TAG, "load new native: " + isInitialized + ", appToken: " + appToken);
         if (!isInitialized) {
             initPubNativeSDK(appToken, getActivity(), new HyBid.InitialisationListener() {
                 @Override
