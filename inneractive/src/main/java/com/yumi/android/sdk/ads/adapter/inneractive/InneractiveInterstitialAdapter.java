@@ -2,6 +2,7 @@ package com.yumi.android.sdk.ads.adapter.inneractive;
 
 import android.app.Activity;
 
+import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -13,6 +14,7 @@ import com.fyber.inneractive.sdk.external.InneractiveUnitController;
 import com.fyber.inneractive.sdk.external.VideoContentListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
@@ -35,6 +37,24 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     @Override
     protected void onPrepareInterstitial() {
         ZplayDebug.d(TAG, "inneractive request new interstitial", onoff);
+        if (!InneractiveAdManager.wasInitialized()) {
+            initInneractiveSDK(getActivity(), getProvider().getKey1());
+            if (!InneractiveAdManager.wasInitialized()) {
+                layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL));
+                return;
+            }
+        }
+
+        if (mInterstitialSpot == null) {
+            // First create a spot
+            mInterstitialSpot = InneractiveAdSpotManager.get().createSpot();
+        }
+
+        loadAd();
+    }
+
+    private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd");
         if (mInterstitialSpot != null && requestListener != null) {
             // Now create a full screen unit controller
             InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
@@ -80,18 +100,8 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
     protected void init() {
         ZplayDebug.d(TAG, "inneractive interstitial init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
 
-        initInneractiveSDK(getActivity(), getProvider().getKey1());
 
         createListener();
-
-        // Create interstitial spot
-        if (mInterstitialSpot != null) {
-            mInterstitialSpot.destroy();
-            mInterstitialSpot = null;
-        }
-        // First create a spot
-        mInterstitialSpot = InneractiveAdSpotManager.get().createSpot();
-
     }
 
     private void createListener() {
