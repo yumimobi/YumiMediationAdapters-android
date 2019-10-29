@@ -12,7 +12,7 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
 class AdcolonyUtil {
     static AdError recodeError() {
         AdError result = new AdError(ERROR_NO_FILL);
-        result.setErrorMessage("Adconony errorMsg: request not filled.");
+        result.setErrorMessage("Adcolony errorMsg: request not filled.");
         return result;
     }
 
