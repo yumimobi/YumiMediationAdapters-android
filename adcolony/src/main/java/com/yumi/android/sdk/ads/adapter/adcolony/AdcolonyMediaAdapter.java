@@ -65,7 +65,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     public void onActivityPause() {
-        // AdColony.pause();
     }
 
     @Override
@@ -93,12 +92,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if (ad != null && !ad.isExpired()) {
-            return true;
-        } else {
-            AdColony.requestInterstitial(getProvider().getKey2(), listener, ad_options);
-        }
-        return false;
+        return ad != null && !ad.isExpired();
     }
 
     @Override
