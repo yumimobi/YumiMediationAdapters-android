@@ -117,7 +117,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onInneractiveFailedAdRequest(InneractiveAdSpot adSpot, InneractiveErrorCode errorCode) {
-                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest：" + errorCode.toString());
+                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest：" + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
                 isRewarded = false;
             }
