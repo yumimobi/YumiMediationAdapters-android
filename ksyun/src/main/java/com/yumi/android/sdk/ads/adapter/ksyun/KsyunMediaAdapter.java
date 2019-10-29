@@ -43,7 +43,7 @@ public class KsyunMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "onPrepareMedia: ");
+        ZplayDebug.d(TAG, "load new media");
         if (!isInitialized) {
             initKsyun(new IKsyunAdInitResultListener() {
                 @Override

@@ -48,11 +48,11 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
     protected void onPrepareBannerLayer() {
         try {
             if (bannerSize == BANNER_SIZE_SMART) {
-                ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
+                ZplayDebug.d(TAG, "not support smart banner");
                 layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
                 return;
             }
-            ZplayDebug.d(TAG, "facebookbid request new banner", onoff);
+            ZplayDebug.d(TAG, "load new banner");
             if (getProvider().getErrCode() != 200) {
                 layerPreparedFailed(recodeError(null, getProvider().getErrMessage()), getProvider().getErrMessage());
                 return;
@@ -61,14 +61,14 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
             banner.setAdListener(bannerListener);
             banner.loadAdFromBid(getProvider().getPayload());
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook bidding banner onPrepareBanner error", e, onoff);
+            ZplayDebug.e(TAG, "facebook bidding banner onPrepareBanner error", e);
         }
     }
 
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1() + ",payload : " + getProvider().getPayload(), onoff);
+        ZplayDebug.i(TAG, "init placementID : " + getProvider().getKey1() + " ,payload : " + getProvider().getPayload());
         initSDK(getContext());
         createBannerListener();
     }
@@ -79,19 +79,19 @@ public class FacebookBiddingBannerAdapter extends YumiCustomerBannerAdapter {
 
                 @Override
                 public void onError(Ad arg0, AdError arg1) {
-                    ZplayDebug.d(TAG, "facebookbid banner failed " + arg1.getErrorMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError errorMsg: " + arg1.getErrorMessage());
                     layerPreparedFailed(recodeError(arg1), arg1.getErrorMessage());
                 }
 
                 @Override
                 public void onAdLoaded(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid banner prepared", onoff);
+                    ZplayDebug.d(TAG, "onAdLoaded");
                     layerPrepared(banner, true);
                 }
 
                 @Override
                 public void onAdClicked(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebookbid banner clicked", onoff);
+                    ZplayDebug.d(TAG, "onAdClicked");
                     layerClicked(-99f, -99f);
                 }
 

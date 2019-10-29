@@ -48,10 +48,10 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "baidu request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial");
         if (isInterstitialAspectRatio(getProvider().getExtraData("interstitialAspectRatio"))) {
             int[] interstitialAdSize = getInterstitialAdSize();
-            ZplayDebug.d(TAG, "baidu interstitial AdSize，width : " + interstitialAdSize[0] + ",height: " + interstitialAdSize[1], onoff);
+            ZplayDebug.d(TAG, "AdSize，width : " + interstitialAdSize[0] + ",height: " + interstitialAdSize[1]);
             instertitial = BaiduExtra.getBaiduExtra().getBaiduInterstitialForVideoPausePlayAd(getActivity(), getProvider().getKey2(), instertitialListener);
             instertitial.loadAdForVideoApp(interstitialAdSize[0], interstitialAdSize[1]);
         } else {
@@ -93,8 +93,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appSid : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "adPlaceID : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appSid : " + getProvider().getKey1() + " ,adPlaceID : " + getProvider().getKey2());
         createListener();
         AdView.setAppSid(getContext(), getProvider().getKey1());
     }
@@ -105,26 +104,26 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
                 @Override
                 public void onAdReady() {
-                    ZplayDebug.d(TAG, "baidu interstitial prepared", onoff);
+                    ZplayDebug.d(TAG, "onAdReady");
                     layerPrepared();
                 }
 
                 @Override
                 public void onAdPresent() {
-                    ZplayDebug.d(TAG, "baidu interstitial shown", onoff);
+                    ZplayDebug.d(TAG, "onAdPresent");
                     isAdPresent = true;
                     layerExposure();
                 }
 
                 @Override
                 public void onAdFailed(String arg0) {
-                    ZplayDebug.d(TAG, "baidu interstitial failed " + arg0, onoff);
+                    ZplayDebug.d(TAG, "onAdFailed " + arg0);
                     layerPreparedFailed(recodeError(arg0));
                 }
 
                 @Override
                 public void onAdDismissed() {
-                    ZplayDebug.d(TAG, "baidu interstitial closed", onoff);
+                    ZplayDebug.d(TAG, "onAdDismissed");
                     removeInterstitialView();
                     if(isAdPresent){
                         layerClosed();
@@ -134,7 +133,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
                 @Override
                 public void onAdClick(InterstitialAd arg0) {
-                    ZplayDebug.d(TAG, "baidu interstitial clicked", onoff);
+                    ZplayDebug.d(TAG, "onAdClick");
                     layerClicked(-99f, -99f);
                 }
             };
@@ -151,7 +150,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             return new int[]{adWidth, (int) (adWidth / Double.valueOf(getProvider().getExtraData("interstitialAspectRatio")))};
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "baidu interstitial getInterstitialAdSize error: " + e, onoff);
+            ZplayDebug.e(TAG, "getInterstitialAdSize error: " + e);
 
         }
         return new int[]{0, 0};
@@ -165,7 +164,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             Double.valueOf(aspectRatio);
             return true;
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "baidu interstitial isDoubleOrFloat error: " + e, onoff);
+            ZplayDebug.e(TAG, "isDoubleOrFloat error: " + e);
         }
         return false;
     }
@@ -177,7 +176,7 @@ public class BaiduInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 parentLayout = null;
             }
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "baidu interstitial removeInterstitialView error: " + e, onoff);
+            ZplayDebug.e(TAG, "removeInterstitialView error: " + e);
 
         }
     }

@@ -50,7 +50,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onOpened(AdColonyInterstitial ad) {
                 ZplayDebug.d(TAG, "onOpened: " + ad);
-                ZplayDebug.d(TAG, "onOpened", onoff);
                 layerExposure();
                 layerStartPlaying();
             }
@@ -58,7 +57,6 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onExpiring(AdColonyInterstitial ad) {
                 ZplayDebug.d(TAG, "onExpiring: " + ad);
-                ZplayDebug.d(TAG, "onExpiring", onoff);
             }
         };
     }
@@ -79,7 +77,7 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         final String zoneId = getProvider().getKey2();
-        ZplayDebug.d(TAG, "onPrepareMedia: " + zoneId);
+        ZplayDebug.d(TAG, "load new media: " + zoneId);
         AdColony.requestInterstitial(zoneId, listener, ad_options);
     }
 

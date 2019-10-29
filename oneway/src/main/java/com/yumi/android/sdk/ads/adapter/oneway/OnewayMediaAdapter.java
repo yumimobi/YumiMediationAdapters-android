@@ -30,6 +30,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
+        ZplayDebug.d(TAG, "load new media");
         if (!isOnewayMediaInit) {
             OWRewardedAd.init(getActivity(), listener);
             isOnewayMediaInit = true;

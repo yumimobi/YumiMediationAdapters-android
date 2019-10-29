@@ -50,15 +50,15 @@ public class FacebookInterstitialAdapter extends
     @Override
     protected void onPrepareInterstitial() {
         try {
-            ZplayDebug.d(TAG, "facebook request new interstitial", onoff);
+            ZplayDebug.d(TAG, "load new interstitial");
             if (!AudienceNetworkAds.isInitialized(getContext())) {
                 initSDK(getContext(), new AudienceNetworkAds.InitListener() {
                     @Override
                     public void onInitialized(AudienceNetworkAds.InitResult initResult) {
                         if (initResult.isSuccess()) {
                             loadAd();
-                        }else{
-                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR,"facebook init errorMsg: " + initResult.getMessage()));
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
                         }
                     }
                 });
@@ -67,7 +67,7 @@ public class FacebookInterstitialAdapter extends
 
             loadAd();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook interstitial onPrepareInterstitial error", e, onoff);
+            ZplayDebug.e(TAG, "facebook interstitial onPrepareInterstitial error", e);
         }
     }
 
@@ -94,7 +94,7 @@ public class FacebookInterstitialAdapter extends
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey1(), onoff);
+        ZplayDebug.i(TAG, "init placementID : " + getProvider().getKey1());
 
         createListener();
     }
@@ -105,20 +105,20 @@ public class FacebookInterstitialAdapter extends
 
                 @Override
                 public void onError(Ad arg0, AdError arg1) {
-                    ZplayDebug.d(TAG, "facebook interstitial failed " + arg1.getErrorMessage(), onoff);
+                    ZplayDebug.d(TAG, "onError ErrorCode: " + arg1.getErrorMessage());
 
                     layerPreparedFailed(recodeError(arg1));
                 }
 
                 @Override
                 public void onAdLoaded(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebook interstitial prepared", onoff);
+                    ZplayDebug.d(TAG, "onAdLoaded");
                     layerPrepared();
                 }
 
                 @Override
                 public void onAdClicked(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebook interstitial clicked", onoff);
+                    ZplayDebug.d(TAG, "onAdClicked");
                     layerClicked(-99f, -99f);
                 }
 
@@ -129,14 +129,14 @@ public class FacebookInterstitialAdapter extends
 
                 @Override
                 public void onInterstitialDisplayed(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebook interstitial shown", onoff);
+                    ZplayDebug.d(TAG, "onInterstitialDisplayed");
                     layerExposure();
                     layerStartPlaying();
                 }
 
                 @Override
                 public void onInterstitialDismissed(Ad arg0) {
-                    ZplayDebug.d(TAG, "facebook interstitial closed", onoff);
+                    ZplayDebug.d(TAG, "onInterstitialDismissed");
                     layerClosed();
                 }
             };

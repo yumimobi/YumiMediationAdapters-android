@@ -38,7 +38,7 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
     @Override
     protected void onPrepareInterstitial() {
         final boolean isInterstitialImage = isInterstitialImage();
-        ZplayDebug.d(TAG, "onPrepareInterstitial: isInterstitialImage: " + isInterstitialImage);
+        ZplayDebug.d(TAG, "load new ineterstitial isInterstitialImage: " + isInterstitialImage);
 
         if (isInterstitialImage) {
             initInterstitialHandler();

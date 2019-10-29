@@ -34,9 +34,8 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "Playable media Video onPrepareMedia: ", onoff);
         if (playable != null && listener != null) {
-            ZplayDebug.d(TAG, "Playable media Video REQUEST_NEXT_MEDIA ", onoff);
+            ZplayDebug.d(TAG, "load new media", onoff);
             playable.requestPlayableAds(provoder.getKey2(), listener);
         }
     }

@@ -35,7 +35,7 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
         final String appToken = getProvider().getKey1();
         final boolean isInitialized = PNLite.isInitialized();
-        ZplayDebug.d(TAG, "onPrepareBannerLayer: " + appToken + ", isInitialized: " + isInitialized);
+        ZplayDebug.d(TAG, "load new banner appToken: " + appToken + ", isInitialized: " + isInitialized);
         if (!isInitialized) {
             initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
                 @Override

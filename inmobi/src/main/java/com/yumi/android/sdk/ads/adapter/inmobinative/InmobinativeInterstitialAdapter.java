@@ -34,8 +34,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
     protected void init() {
         String key1 = getProvider().getKey1();
         String key2 = getProvider().getKey2();
-        ZplayDebug.d(TAG, "key1:" + key1, onoff);
-        ZplayDebug.d(TAG, "key2:" + key2, onoff);
+        ZplayDebug.d(TAG, "init key1:" + key1 + " ,key2:" + key2);
         if (nativeAd == null) {
             InMobiSdk.init(getActivity(), key1);
             nativeAd = new InMobiNative(getActivity(), Long.valueOf(key2), new MyNativeAdListener());
@@ -46,6 +45,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
     @Override
     protected void onPreparedWebInterstitial() {
         if (nativeAd != null) {
+            ZplayDebug.d(TAG, "load new interstitial");
             nativeAd.load();
         }
     }
@@ -136,7 +136,7 @@ public class InmobinativeInterstitialAdapter extends YumiNativeIntersititalAdapt
 
         @Override
         public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus) {
-            ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
+            ZplayDebug.d(TAG, "onAdLoadFailed: " + inMobiAdRequestStatus.getMessage());
             layerPreparedFailed(recodeError(inMobiAdRequestStatus));
         }
     }
