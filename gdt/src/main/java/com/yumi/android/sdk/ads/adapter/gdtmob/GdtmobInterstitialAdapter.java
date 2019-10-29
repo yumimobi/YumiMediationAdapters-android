@@ -61,7 +61,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "gdt request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial");
         interstitialReady = false;
         if (unifiedInterstitial == null) {
             unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedInterstitialListener);
@@ -86,26 +86,25 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "pId : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + ",pId : " + getProvider().getKey2());
         unifiedInterstitialListener = new UnifiedInterstitialADListener() {
 
             @Override
             public void onNoAD(AdError adError) {
                 interstitialReady = false;
                 if (adError == null) {
-                    ZplayDebug.d(TAG, "gdt interstitial failed adError = null", onoff);
+                    ZplayDebug.d(TAG, "onNoAD adError = null");
                     layerPreparedFailed(recodeError(null));
                     return;
                 }
-                ZplayDebug.d(TAG, "gdt interstitial failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                ZplayDebug.d(TAG, " failed ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
                 layerPreparedFailed(recodeError(adError));
             }
 
             @Override
             public void onADReceive() {
                 interstitialReady = true;
-                ZplayDebug.d(TAG, "gdt interstitial prepared", onoff);
+                ZplayDebug.d(TAG, "onADReceive");
                 layerPrepared();
             }
 
@@ -121,7 +120,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onADExposure() {
-                ZplayDebug.d(TAG, "gdt interstitial shown", onoff);
+                ZplayDebug.d(TAG, "onADExposure");
                 interstitialReady = false;
                 layerExposure();
                 layerStartPlaying();
@@ -132,13 +131,13 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 if (unifiedInterstitial != null) {
                     unifiedInterstitial.destroy();
                 }
-                ZplayDebug.d(TAG, "gdt interstitial closed", onoff);
+                ZplayDebug.d(TAG, "onADClosed");
                 layerClosed();
             }
 
             @Override
             public void onADClicked() {
-                ZplayDebug.d(TAG, "gdt interstitial clicked", onoff);
+                ZplayDebug.d(TAG, "onADClicked");
                 interstitialReady = false;
                 layerClicked(-99f, -99f);
             }

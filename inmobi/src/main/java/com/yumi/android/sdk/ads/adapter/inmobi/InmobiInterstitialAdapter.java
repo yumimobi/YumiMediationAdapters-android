@@ -50,7 +50,7 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "inmobi request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial");
         if (interstitial == null) {
             String key2 = getProvider().getKey2();
             long placementID = 0L;
@@ -58,7 +58,7 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 try {
                     placementID = Long.valueOf(key2);
                 } catch (NumberFormatException e) {
-                    ZplayDebug.e(TAG, "", e, onoff);
+                    ZplayDebug.e(TAG, "", e);
                     layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                     return;
                 }
@@ -91,40 +91,39 @@ public class InmobiInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "accounID : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init accounID : " + getProvider().getKey1() + " ,placementID : " + getProvider().getKey2());
         InmobiExtraHolder.initInmobiSDK(getActivity(), getProvider().getKey1());
         interstitialListener = new InterstitialAdEventListener() {
 
             @Override
             public void onUserLeftApplication(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi interstitial left application", onoff);
+                ZplayDebug.d(TAG, "onUserLeftApplication");
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onAdLoadSucceeded(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi interstitial load successed", onoff);
+                ZplayDebug.d(TAG, "onAdLoadSucceeded");
                 layerPrepared();
             }
 
             @Override
             public void onAdLoadFailed(InMobiInterstitial arg0,
                                        InMobiAdRequestStatus arg1) {
-                ZplayDebug.d(TAG, "inmobi interstitial load failed " + arg1.getStatusCode(), onoff);
+                ZplayDebug.d(TAG, "onAdLoadFailed" + arg1.getStatusCode());
                 layerPreparedFailed(recodeError(arg1));
             }
 
             @Override
             public void onAdDisplayed(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi interstitial exposure", onoff);
+                ZplayDebug.d(TAG, "onAdDisplayed");
                 layerExposure();
                 layerStartPlaying();
             }
 
             @Override
             public void onAdDismissed(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi interstitial closed", onoff);
+                ZplayDebug.d(TAG, "onAdDismissed");
                 layerClosed();
             }
         };

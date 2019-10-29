@@ -44,7 +44,7 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         Tapjoy.setActivity(getActivity());
         final boolean isConnected = Tapjoy.isConnected();
-        ZplayDebug.d(TAG, "onPrepareMedia: " + isConnected);
+        ZplayDebug.d(TAG, "load new media: " + isConnected);
         if (!isConnected) {
             connectTapjoy(getActivity(), getProvider().getKey1(), new TJConnectListener() {
                 @Override

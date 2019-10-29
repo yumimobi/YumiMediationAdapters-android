@@ -36,7 +36,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "Bytedance requese new media", onoff);
+        ZplayDebug.d(TAG, "load new media");
         if (mTTAdNative != null && loadListener != null) {
             calculateMediaSize();
             isReady = false;
@@ -70,8 +70,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "bytedance media init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
-
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + " ,key2: " + getProvider().getKey2());
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
                         .appId(getProvider().getKey1())
@@ -92,20 +91,21 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
         loadListener = new TTAdNative.RewardVideoAdListener() {
             @Override
             public void onError(int code, String message) {
-                ZplayDebug.d(TAG, "Bytedance media Prepared Failed , message ：" + message, onoff);
+                ZplayDebug.d(TAG, "onError：" + message);
                 layerPreparedFailed(recodeError(code, message));
                 isReady = false;
             }
 
             @Override
             public void onRewardVideoCached() {
-                ZplayDebug.d(TAG, "Bytedance media Prepared ", onoff);
+                ZplayDebug.d(TAG, "onRewardVideoCached");
                 isReady = true;
                 layerPrepared();
             }
 
             @Override
             public void onRewardVideoAdLoad(TTRewardVideoAd ad) {
+                ZplayDebug.d(TAG, "onRewardVideoAdLoad");
                 mttRewardVideoAd = ad;
                 setRewardAdInteractionListener(mttRewardVideoAd);
             }
@@ -119,7 +119,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdShow() {
-                ZplayDebug.d(TAG, "Bytedance media show ", onoff);
+                ZplayDebug.d(TAG, "onAdShow");
                 isReady = false;
                 isRewarded = false;
                 layerExposure();
@@ -128,24 +128,26 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdVideoBarClick() {
-                ZplayDebug.d(TAG, "Bytedance media click ", onoff);
+                ZplayDebug.d(TAG, "onAdVideoBarClick");
                 isReady = false;
                 layerClicked();
             }
 
             @Override
             public void onAdClose() {
-                ZplayDebug.d(TAG, "Bytedance media close ", onoff);
+                ZplayDebug.d(TAG, "onAdClose");
                 layerClosed(isRewarded);
             }
 
             @Override
             public void onVideoComplete() {
+                ZplayDebug.d(TAG, "onVideoComplete");
                 isReady = false;
             }
 
             @Override
             public void onVideoError() {
+                ZplayDebug.d(TAG, "onVideoError");
                 isReady = false;
                 isRewarded = false;
             }
@@ -153,7 +155,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
             //视频播放完成后，奖励验证回调，rewardVerify：是否有效，rewardAmount：奖励梳理，rewardName：奖励名称
             @Override
             public void onRewardVerify(boolean rewardVerify, int rewardAmount, String rewardName) {
-                ZplayDebug.d(TAG, "Bytedance media Reward rewardVerify:" + rewardVerify, onoff);
+                ZplayDebug.d(TAG, "onRewardVerify:" + rewardVerify);
                 isReady = false;
                 isRewarded = true;
                 layerIncentived();

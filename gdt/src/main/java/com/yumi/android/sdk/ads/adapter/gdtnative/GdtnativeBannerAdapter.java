@@ -41,7 +41,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 
     @Override
     protected void webLayerClickedAndRequestBrowser(String url) {
-        ZplayDebug.d(TAG, "GDT nativead banner clicked", onoff);
+        ZplayDebug.d(TAG, "banner clicked");
         layerClicked(upPoint[0], upPoint[1]);
         if (adItem != null) {
             adItem.onClicked(this.bannerView);
@@ -50,7 +50,7 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
 
     @Override
     protected void webLayerPrepared(View view) {
-        ZplayDebug.d(TAG, "GDT nativead banner prepared", onoff);
+        ZplayDebug.d(TAG, "banner prepared");
         this.bannerView = view;
         layerPrepared(view, false);
         adItem.onExposured(view);
@@ -64,21 +64,20 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "gdt not support smart banner", onoff);
+            ZplayDebug.d(TAG, "not support smart banner");
             layerPreparedFailed(recodeError(new AdError(5004, null), "not support smart banner."));
             return;
         }
 
         if (nativeAD != null) {
+            ZplayDebug.d(TAG, "load new banner");
             nativeAD.loadAD(1);
         }
     }
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.d(TAG, "pId : " + getProvider().getKey2(), onoff);
-        ZplayDebug.d(TAG, "GDT nativead banner init", onoff);
+        ZplayDebug.d(TAG, "appId : " + getProvider().getKey1() + " ,pId : " + getProvider().getKey2());
         if (nativeAD == null) {
             nativeAD = new NativeAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), new MyNativeAdListener());
         }
@@ -89,28 +88,28 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         @Override
         public void onNoAD(AdError adError) {
             if (adError == null) {
-                ZplayDebug.d(TAG, "GDT nativead banner onNoAD adError = null", onoff);
+                ZplayDebug.d(TAG, "onNoAD adError = null");
                 layerPreparedFailed(recodeError(null));
                 return;
             }
-            ZplayDebug.d(TAG, "GDT nativead banner onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+            ZplayDebug.d(TAG, "onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
             layerPreparedFailed(recodeError(adError));
         }
 
         @Override
         public void onADError(NativeADDataRef nativeADDataRef, AdError adError) {
             if (adError == null) {
-                ZplayDebug.d(TAG, "GDT nativead banner onADError adError = null", onoff);
+                ZplayDebug.d(TAG, "onADError adError = null");
                 layerPreparedFailed(recodeError(null));
                 return;
             }
-            ZplayDebug.d(TAG, "GDT nativead banner onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+            ZplayDebug.d(TAG, "onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
             layerPreparedFailed(recodeError(adError));
         }
 
         @Override
         public void onADStatusChanged(NativeADDataRef arg0) {
-            ZplayDebug.d(TAG, "GDT nativead banner onADStatusChanged", onoff);
+            ZplayDebug.d(TAG, "onADStatusChanged");
         }
 
         @Override
@@ -120,18 +119,18 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
                 adItem = arg0.get(0);
                 //html = NativeAdsBuild.getImageTextAdHtml(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity());
                 html = NativeAdsBuild.getTemplateBanner(adItem.getIconUrl(), adItem.getTitle(), adItem.getDesc(), getaTagUrl(), getActivity(), getProvider());
-                ZplayDebug.d(TAG, "GDT nativead banner request success!", onoff);
+                ZplayDebug.d(TAG, "request success!");
                 if (html != null && !"".equals(html) && !"null".equals(html)) {
                     calculateWebSize();
                     createWebview(null);
                     loadData(html);
                 } else {
                     layerPreparedFailed(recodeError(null));
-                    ZplayDebug.d(TAG, "GDT nativead banner PreparedFailed ERROR_NO_FILL", onoff);
+                    ZplayDebug.d(TAG, "PreparedFailed ERROR_NO_FILL");
                 }
             } else {
                 layerPreparedFailed(recodeError(null));
-                ZplayDebug.d(TAG, "GDT nativead banner PreparedFailed", onoff);
+                ZplayDebug.d(TAG, "PreparedFailed");
             }
         }
 

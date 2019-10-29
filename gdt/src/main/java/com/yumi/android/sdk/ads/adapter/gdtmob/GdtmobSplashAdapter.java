@@ -52,6 +52,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onADPresent() {
+                Log.d(TAG, "onADPresent");
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerExposure();
             }

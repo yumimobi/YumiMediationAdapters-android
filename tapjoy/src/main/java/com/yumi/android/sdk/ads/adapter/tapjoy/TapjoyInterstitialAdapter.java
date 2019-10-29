@@ -43,7 +43,7 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void onPrepareInterstitial() {
         final boolean isConnected = Tapjoy.isConnected();
-        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isConnected);
+        ZplayDebug.d(TAG, "load new interstitial: " + isConnected);
         Tapjoy.setActivity(getActivity());
         if (!isConnected) {
             connectTapjoy(getContext(), getProvider().getKey1(), new TJConnectListener() {
