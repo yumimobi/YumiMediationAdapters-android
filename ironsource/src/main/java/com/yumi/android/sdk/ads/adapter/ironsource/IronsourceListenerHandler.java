@@ -17,7 +17,7 @@ import java.util.Map;
  */
 class IronsourceListenerHandler {
 
-    private static final String TAG = "IronsourceMediaAdapter";
+    private static final String TAG = "IronsourceListenerHandler";
     // 设置给Ironsource SDK setISDemandOnlyRewardedVideoListener 的回调
     private static ISDemandOnlyRewardedVideoListener ironsourceVideoListener;
     // 多层配置后Ironsource 视频适配器实现的回调
