@@ -11,8 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.unity3d.ads.UnityAds.PlacementState.DISABLED;
-import static com.unity3d.ads.UnityAds.PlacementState.READY;
-import static com.unity3d.ads.UnityAds.PlacementState.WAITING;
+import static com.unity3d.ads.UnityAds.PlacementState.NO_FILL;
 import static com.unity3d.ads.UnityAds.UnityAdsError.INTERNAL_ERROR;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.generateLayerErrorCode;
 import static com.yumi.android.sdk.ads.adapter.unity.UnityUtil.sdkVersion;
@@ -54,13 +53,21 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                         return;
                     }
 
-                    if (state1 == WAITING) {
-                        hasHitReadyCallback = true;
-                        if (state2 == READY) {
+                    switch (state2) {
+                        case READY:
+                            hasHitReadyCallback = true;
                             layerPrepared();
-                        } else {
-                            layerPreparedFailed(generateLayerErrorCode(INTERNAL_ERROR, "placement state is " + state2));
-                        }
+                            break;
+                        case NO_FILL:
+                            hasHitReadyCallback = true;
+                            layerPreparedFailed(generateLayerErrorCode(NO_FILL, "placement state is " + state2));
+                            break;
+                        case DISABLED:
+                            hasHitReadyCallback = true;
+                            layerPreparedFailed(generateLayerErrorCode(DISABLED, "placement state is " + state2));
+                            break;
+                        default:
+                            ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: ignore this state.");
                     }
                 } catch (Exception e) {
                     ZplayDebug.d(TAG, "onUnityAdsReady: error: " + e);
