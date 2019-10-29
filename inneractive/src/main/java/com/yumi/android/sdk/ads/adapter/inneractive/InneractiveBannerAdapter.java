@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
 
+import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -35,6 +36,21 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         ZplayDebug.d(TAG, "inneractive request new banner", onoff);
+        if (!InneractiveAdManager.wasInitialized()) {
+            initInneractiveSDK(getActivity(), getProvider().getKey1());
+            if (!InneractiveAdManager.wasInitialized()) {
+                layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL));
+                return;
+            }
+        }
+        if (mBannerSpot == null) {
+            mBannerSpot = InneractiveAdSpotManager.get().createSpot();
+        }
+        loadAd();
+    }
+
+    private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd");
         if (mBannerSpot != null && bannerSize == AdSize.BANNER_SIZE_SMART) {
             ZplayDebug.d(TAG, "inneractive banner not support smart banner:", onoff);
             layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL, "not support smart banner."));
@@ -54,14 +70,7 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "inneractive banner init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
 
-        initInneractiveSDK(getActivity(), getProvider().getKey1());
         createListener();
-        // initialize rectangle spot
-        if (mBannerSpot != null) {
-            mBannerSpot.destroy();
-        }
-
-        mBannerSpot = InneractiveAdSpotManager.get().createSpot();
     }
 
     private void createListener() {
