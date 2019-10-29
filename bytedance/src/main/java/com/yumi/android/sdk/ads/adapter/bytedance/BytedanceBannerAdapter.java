@@ -34,9 +34,9 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.d(TAG, "Bytedance request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner");
         if (bannerSize == AdSize.BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "Bytedance banner not support smart banner:", onoff);
+            ZplayDebug.d(TAG, "not support smart banner:");
             layerPreparedFailed(recodeError(-999, "not support smart banner."));
             return;
         }
@@ -51,7 +51,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "bytedance banner init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + " ,key2: " + getProvider().getKey2());
 
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
@@ -74,7 +74,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onError(int code, String message) {
-                ZplayDebug.d(TAG, "Bytedance banner Prepared Failed，message ：" + message, onoff);
+                ZplayDebug.d(TAG, "onError：" + message);
                 layerPreparedFailed(recodeError(code, message));
 
             }
@@ -82,7 +82,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onBannerAdLoad(final TTBannerAd ad) {
                 if (ad == null) {
-                    layerPreparedFailed(recodeError(-999, "Bytedance banner TTBannerAd is null"));
+                    layerPreparedFailed(recodeError(-999, "TTBannerAd is null"));
                     return;
                 }
                 if (getProvider().getAutoRefreshInterval() > 0) {
@@ -90,22 +90,23 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
                 }
                 View bannerView = ad.getBannerView();
                 if (bannerView == null) {
-                    layerPreparedFailed(recodeError(-999, "Bytedance banner bannerView is null"));
+                    layerPreparedFailed(recodeError(-999, "bannerView is null"));
                     return;
                 }
 
                 ad.setBannerInteractionListener(new TTBannerAd.AdInteractionListener() {
                     @Override
                     public void onAdClicked(View view, int type) {
-                        ZplayDebug.d(TAG, "Bytedance banner Clicked", onoff);
+                        ZplayDebug.d(TAG, "onAdClicked");
                         layerClicked(-99f, -99f);
                     }
 
                     @Override
                     public void onAdShow(View view, int type) {
+                        ZplayDebug.d(TAG, "onAdShow");
                     }
                 });
-                ZplayDebug.d(TAG, "Bytedance banner Prepared", onoff);
+                ZplayDebug.d(TAG, "Prepared");
                 layerPrepared(bannerView, true);
             }
         };

@@ -37,7 +37,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "unity media request new media", onoff);
+        ZplayDebug.d(TAG, "unity media load new media", onoff);
         updateGDPRStatus(getContext());
         UnityAds.setDebugMode(isDebugMode); //测试
         if (UnityAds.isReady(getProvider().getKey2())) {

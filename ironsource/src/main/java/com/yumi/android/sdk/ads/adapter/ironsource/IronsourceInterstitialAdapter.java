@@ -31,7 +31,7 @@ public class IronsourceInterstitialAdapter extends YumiCustomerInterstitialAdapt
     protected void onPrepareInterstitial() {
         final String instanceId = getProvider().getKey2();
         boolean isReady = IronSource.isISDemandOnlyInterstitialReady(instanceId);
-        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isReady + ", instanceId: " + instanceId);
+        ZplayDebug.d(TAG, "load new interstitial isReady: " + isReady + ", instanceId: " + instanceId);
         updateGDPRStatus(getContext());
         IronSource.loadISDemandOnlyInterstitial(instanceId);
     }

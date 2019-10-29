@@ -34,7 +34,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void onPrepareMedia() {
         try {
-            ZplayDebug.i(TAG, "facebookbid media onPrepareMedia", onoff);
+            ZplayDebug.i(TAG, "load new media");
             if (rewardedVideoAd == null) {
                 rewardedVideoAd = new RewardedVideoAd(getActivity(), getProvider().getKey1());
                 rewardedVideoAd.setAdListener(listener);
@@ -49,7 +49,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
             }
             rewardedVideoAd.loadAdFromBid(getProvider().getPayload(), false);
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebookbid media onPrepareMedia error", e, onoff);
+            ZplayDebug.e(TAG, "onPrepareMedia error", e);
         }
     }
 
@@ -57,9 +57,9 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onShowMedia() {
         try {
             boolean isShow = rewardedVideoAd.show();
-            ZplayDebug.i(TAG, "facebookbid media onShowMedia " + isShow, onoff);
+            ZplayDebug.i(TAG, "onShowMedia " + isShow);
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebookbid media onShowMedia error ", e, onoff);
+            ZplayDebug.e(TAG, "onShowMedia error ", e);
         }
     }
 
@@ -67,19 +67,19 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
     protected boolean isMediaReady() {
         if (rewardedVideoAd != null) {
             if (rewardedVideoAd.isAdLoaded()) {
-                ZplayDebug.i(TAG, "facebookbid media isMediaReady isAdLoaded true", onoff);
+                ZplayDebug.i(TAG, "isMediaReady isAdLoaded true");
                 return true;
             }
-            ZplayDebug.i(TAG, "facebookbid media isMediaReady isAdLoaded false", onoff);
+            ZplayDebug.i(TAG, "isMediaReady isAdLoaded false");
         }
-        ZplayDebug.i(TAG, "facebookbid media isMediaReady false", onoff);
+        ZplayDebug.i(TAG, "isMediaReady false");
         return false;
     }
 
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "facebookbid media init payload：" + getProvider().getPayload(), onoff);
+        ZplayDebug.d(TAG, "init payload：" + getProvider().getPayload());
         initSDK(getContext());
         createListener();
     }
@@ -88,24 +88,24 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
         listener = new S2SRewardedVideoAdListener() {
             @Override
             public void onRewardServerFailed() {
-                ZplayDebug.i(TAG, "facebookbid media onRewardServerFailed", onoff);
+                ZplayDebug.i(TAG, "onRewardServerFailed");
             }
 
             @Override
             public void onRewardServerSuccess() {
-                ZplayDebug.i(TAG, "facebookbid media onRewardServerSuccess", onoff);
+                ZplayDebug.i(TAG, "onRewardServerSuccess");
             }
 
             @Override
             public void onRewardedVideoCompleted() {
-                ZplayDebug.i(TAG, "facebookbid media onRewardedVideoCompleted", onoff);
+                ZplayDebug.i(TAG, "onRewardedVideoCompleted");
                 isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-                ZplayDebug.i(TAG, "facebookbid media onLoggingImpression", onoff);
+                ZplayDebug.i(TAG, "onLoggingImpression");
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -113,25 +113,25 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onRewardedVideoClosed() {
-                ZplayDebug.i(TAG, "facebookbid media onRewardedVideoClosed", onoff);
+                ZplayDebug.i(TAG, "onRewardedVideoClosed");
                 layerClosed(isRewarded);
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                ZplayDebug.i(TAG, "facebookbid media onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
+                ZplayDebug.i(TAG, "onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage());
                 layerPreparedFailed(recodeError(adError), adError.getErrorMessage());
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                ZplayDebug.i(TAG, "facebookbid media onAdLoaded PlacementId:" + ad.getPlacementId(), onoff);
+                ZplayDebug.i(TAG, "onAdLoaded PlacementId:" + ad.getPlacementId());
                 layerPrepared();
             }
 
             @Override
             public void onAdClicked(Ad ad) {
-                ZplayDebug.i(TAG, "facebookbid media onAdClicked", onoff);
+                ZplayDebug.i(TAG, "onAdClicked");
                 layerClicked();
             }
         };
@@ -145,7 +145,7 @@ public class FacebookBiddingMediaAdapter extends YumiCustomerMediaAdapter {
                 rewardedVideoAd = null;
             }
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebookbid media callOnActivityDestroy error ", e, onoff);
+            ZplayDebug.e(TAG, "callOnActivityDestroy error ", e);
         }
     }
 

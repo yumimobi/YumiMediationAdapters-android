@@ -54,6 +54,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void onPrepareNative() {
         int currentPoolSpace = getCurrentPoolSpace();
+        ZplayDebug.i(TAG, "load new native");
         if (getProvider().getExtraData("GDTRenderModel").equals("1")) {
             GdtmobNativeHolder.getInstance().loadNativeUnifiedAD(currentPoolSpace);
         } else {
@@ -63,12 +64,12 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.v(TAG, "Gdt native Adapter init key1 = " + getProvider().getKey1() + ", key2 = " + getProvider().getKey2(), onoff);
+        ZplayDebug.v(TAG, "init key1 = " + getProvider().getKey1() + ", key2 = " + getProvider().getKey2());
         if (getProvider().getExtraData("GDTRenderModel").equals("1")) {
             NativeADUnifiedListener nativeADUnifiedListener = new NativeADUnifiedListener() {
                 @Override
                 public void onADLoaded(List<NativeUnifiedADData> adlist) {
-                    ZplayDebug.v(TAG, "onADLoaded", onoff);
+                    ZplayDebug.v(TAG, "onADLoaded");
                     final List<NativeContent> list = new ArrayList<>();
                     for (final NativeUnifiedADData item : adlist) {
                         try {
@@ -77,12 +78,12 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                                 list.add(content);
                             }
                         } catch (Exception e) {
-                            ZplayDebug.e(TAG, "gdt data parse error : " + e, onoff);
+                            ZplayDebug.e(TAG, "data parse error : " + e);
                         }
                     }
                     if (list.isEmpty()) {
-                        ZplayDebug.v(TAG, "gdt data is empty", onoff);
-                        layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but the ad ")));
+                        ZplayDebug.v(TAG, "data is empty");
+                        layerPreparedFailed(recodeError(new AdError(-1, "got native ad, but the ad ")));
                         return;
                     }
 
@@ -99,7 +100,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                         @Override
                         public void onFailed() {
-                            layerPreparedFailed(recodeError(new AdError(-1, "got gdt native ad, but cannot download image data")));
+                            layerPreparedFailed(recodeError(new AdError(-1, "got native ad, but cannot download image data")));
                         }
                     });
                 }
@@ -107,11 +108,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                 @Override
                 public void onNoAD(AdError adError) {
                     if (adError == null) {
-                        ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
+                        ZplayDebug.d(TAG, "onNoAD adError = null");
                         layerPreparedFailed(recodeError(null));
                         return;
                     }
-                    ZplayDebug.d(TAG, "GDT nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                    ZplayDebug.d(TAG, "onNoAD ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
                     layerPreparedFailed(recodeError(adError));
                 }
             };
@@ -121,20 +122,20 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             NativeExpressADListener nativeExpressADListener = new NativeExpressADListener() {
                 @Override
                 public void onADLoaded(List<NativeExpressADView> adlist) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADLoaded", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADLoaded");
 
                     for (final NativeExpressADView item : adlist) {
                         try {
                             final NativeExpressAdContent content = new NativeExpressAdContent(item);
                             list.add(content);
                         } catch (Exception e) {
-                            ZplayDebug.e(TAG, "gdt express data parse error : " + e, onoff);
+                            ZplayDebug.e(TAG, "express data parse error : " + e);
                         }
                     }
 
                     if (list.isEmpty()) {
-                        ZplayDebug.v(TAG, "gdt express data is empty", onoff);
-                        layerPreparedFailed(recodeError(new AdError(-1, "get gdt express native ad, but the ad is empty")));
+                        ZplayDebug.v(TAG, "express data is empty");
+                        layerPreparedFailed(recodeError(new AdError(-1, "get express native ad, but the ad is empty")));
                         return;
                     }
 
@@ -144,17 +145,17 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                 @Override
                 public void onRenderFail(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdRenderFail", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onExpressAdRenderFail");
                     for (NativeContent content : list) {
                         if (content.getExpressAdView() == nativeExpressADView) {
-                            layerExpressAdRenderFail(content, "gdt express nativeAd RenderFail");
+                            layerExpressAdRenderFail(content, "express nativeAd RenderFail");
                         }
                     }
                 }
 
                 @Override
                 public void onRenderSuccess(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdRenderSuccess", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onExpressAdRenderSuccess");
                     for (NativeContent content : list) {
                         if (content.getExpressAdView() == nativeExpressADView) {
                             layerExpressAdRenderSuccess(content);
@@ -164,19 +165,19 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                 @Override
                 public void onADExposure(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADExposure", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADExposure");
                     layerExposure();
                 }
 
                 @Override
                 public void onADClicked(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADClicked", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADClicked");
                     layerClicked(-99f, -99f);
                 }
 
                 @Override
                 public void onADClosed(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onExpressAdClosed", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onExpressAdClosed");
                     for (NativeContent content : list) {
                         if (content.getExpressAdView() == nativeExpressADView) {
                             layerExpressAdClosed(content);
@@ -187,27 +188,27 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                 @Override
                 public void onADLeftApplication(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADLeftApplication", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADLeftApplication");
                 }
 
                 @Override
                 public void onADOpenOverlay(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADOpenOverlay", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADOpenOverlay");
                 }
 
                 @Override
                 public void onADCloseOverlay(NativeExpressADView nativeExpressADView) {
-                    ZplayDebug.v(TAG, "gdt express nativeAd onADCloseOverlay", onoff);
+                    ZplayDebug.v(TAG, "express nativeAd onADCloseOverlay");
                 }
 
                 @Override
                 public void onNoAD(AdError adError) {
                     if (adError == null) {
-                        ZplayDebug.d(TAG, "GDT nativead onADError adError = null", onoff);
+                        ZplayDebug.d(TAG, "onNoAD adError = null");
                         layerPreparedFailed(recodeError(null));
                         return;
                     }
-                    ZplayDebug.d(TAG, "GDT express nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg(), onoff);
+                    ZplayDebug.d(TAG, "express nativead onADError ErrorCode:" + adError.getErrorCode() + " msg:" + adError.getErrorMsg());
                     layerPreparedFailed(recodeError(adError));
                 }
             };
@@ -263,7 +264,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void destroy() {
-            ZplayDebug.v(TAG, "gdt express native destory", onoff);
+            ZplayDebug.v(TAG, "express native destory");
             if (expressADView != null) {
                 expressADView.destroy();
             }
@@ -276,26 +277,26 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             YumiVideoLifecycleCallbacks videoLifecycleCallbacks;
 
             private GdtExpressNativeViewController(NativeExpressADView expressADView) {
-                ZplayDebug.v(TAG, "Gdt express native Adapter ", onoff);
+                ZplayDebug.v(TAG, "express native Adapter ");
                 expressADView.setMediaListener(new NativeExpressMediaListener() {
                     @Override
                     public void onVideoInit(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoInit", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoInit");
                     }
 
                     @Override
                     public void onVideoLoading(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoLoading", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoLoading");
                     }
 
                     @Override
                     public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoReady", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoReady");
                     }
 
                     @Override
                     public void onVideoStart(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoStart", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoStart");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoPlay();
                         }
@@ -303,7 +304,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoPause(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoPause", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoPause");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoPause();
                         }
@@ -311,7 +312,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoComplete(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoComplete", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoComplete");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoEnd();
                         }
@@ -319,17 +320,17 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoError(NativeExpressADView nativeExpressADView, AdError adError) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoError", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoError");
                     }
 
                     @Override
                     public void onVideoPageOpen(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoPageOpen", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoPageOpen");
                     }
 
                     @Override
                     public void onVideoPageClose(NativeExpressADView nativeExpressADView) {
-                        ZplayDebug.v(TAG, "Gdt express ad native Adapter onVideoPageClose", onoff);
+                        ZplayDebug.v(TAG, "express ad native Adapter onVideoPageClose");
                     }
                 });
             }
@@ -383,7 +384,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
         @Override
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "GDT native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "native trackView getNativeAdView() is null");
                 return;
             }
 
@@ -430,28 +431,28 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
             mGdtData.setNativeAdEventListener(new NativeADEventListener() {
                 @Override
                 public void onADExposed() {
-                    ZplayDebug.v(TAG, "Gdt native Adapter onADExposed", onoff);
+                    ZplayDebug.v(TAG, "native Adapter onADExposed");
                     layerExposure();
                 }
 
                 @Override
                 public void onADClicked() {
-                    ZplayDebug.v(TAG, "Gdt native Adapter onADClicked", onoff);
+                    ZplayDebug.v(TAG, "native Adapter onADClicked");
                     layerClicked(-99f, -99f);
 
                 }
 
                 @Override
                 public void onADError(AdError adError) {
-                    ZplayDebug.v(TAG, "Gdt native Adapter onADError" + adError.getErrorMsg(), onoff);
+                    ZplayDebug.v(TAG, "native Adapter onADError" + adError.getErrorMsg());
                 }
 
                 @Override
                 public void onADStatusChanged() {
-                    ZplayDebug.v(TAG, "Gdt native Adapter onADStatusChanged", onoff);
+                    ZplayDebug.v(TAG, "native Adapter onADStatusChanged");
                 }
             });
-            ZplayDebug.v(TAG, "Gdt native Adapter AdPatternType : " + mGdtData.getAdPatternType(), onoff);
+            ZplayDebug.v(TAG, "native Adapter AdPatternType : " + mGdtData.getAdPatternType());
             if (mGdtData.getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
                 if (mediaview != null) {
                     setNativeAdVideoController(new GdtNativeViewController(mGdtData, mediaview));
@@ -462,7 +463,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void onResume() {
-            ZplayDebug.v(TAG, "Gdt native Adapter onResume", onoff);
+            ZplayDebug.v(TAG, "native Adapter onResume");
             if (mGdtData != null) {
                 try {
                     mGdtData.resume();
@@ -474,7 +475,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void destroy() {
-            ZplayDebug.v(TAG, "gdt native destory", onoff);
+            ZplayDebug.v(TAG, "native destory");
             if (mGdtData != null) {
                 mGdtData.destroy();
             }
@@ -486,32 +487,32 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
             private GdtNativeViewController(NativeUnifiedADData gdtData, MediaView mediaview) {
                 this.gdtData = gdtData;
-                ZplayDebug.v(TAG, "Gdt native Adapter AdPatternType : bindMediaView", onoff);
+                ZplayDebug.v(TAG, "native Adapter AdPatternType : bindMediaView");
                 gdtData.bindMediaView(mediaview, new VideoOption.Builder()
                         .setAutoPlayMuted(true).setAutoPlayPolicy(VideoOption.AutoPlayPolicy.WIFI).build(), new NativeADMediaListener() {
                     @Override
                     public void onVideoInit() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoInit", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoInit");
                     }
 
                     @Override
                     public void onVideoLoading() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoLoading", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoLoading");
                     }
 
                     @Override
                     public void onVideoReady() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoReady", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoReady");
                     }
 
                     @Override
                     public void onVideoLoaded(int videoDuration) {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoLoaded", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoLoaded");
                     }
 
                     @Override
                     public void onVideoStart() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoStart", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoStart");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoPlay();
                         }
@@ -519,7 +520,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoPause() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoPause", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoPause");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoPause();
                         }
@@ -527,12 +528,12 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoResume() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoResume", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoResume");
                     }
 
                     @Override
                     public void onVideoCompleted() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoCompleted", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoCompleted");
                         if (videoLifecycleCallbacks != null) {
                             videoLifecycleCallbacks.onVideoEnd();
                         }
@@ -540,17 +541,17 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
 
                     @Override
                     public void onVideoError(AdError error) {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoError" + error.getErrorMsg(), onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoError" + error.getErrorMsg());
                     }
 
                     @Override
                     public void onVideoStop() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoStop", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoStop");
                     }
 
                     @Override
                     public void onVideoClicked() {
-                        ZplayDebug.v(TAG, "Gdt native Adapter onVideoClicked", onoff);
+                        ZplayDebug.v(TAG, "native Adapter onVideoClicked");
                     }
                 });
             }

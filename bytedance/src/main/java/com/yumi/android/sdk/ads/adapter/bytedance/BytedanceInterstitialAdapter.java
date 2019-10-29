@@ -33,7 +33,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Bytedance request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial");
         if (mTTAdNative != null && loadListener != null) {
             isReady = false;
             AdSlot adSlot = new AdSlot.Builder()
@@ -60,7 +60,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "bytedance interstitial init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2());
 
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
@@ -83,14 +83,14 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
         loadListener = new TTAdNative.InteractionAdListener() {
             @Override
             public void onError(int code, String message) {
-                ZplayDebug.d(TAG, "Bytedance interstitial Prepared Failed，message ：" + message, onoff);
+                ZplayDebug.d(TAG, "onError：" + message);
                 layerPreparedFailed(recodeError(code, message));
                 isReady = false;
             }
 
             @Override
             public void onInteractionAdLoad(TTInteractionAd ttInteractionAd) {
-                ZplayDebug.d(TAG, "Bytedance interstitial Prepared", onoff);
+                ZplayDebug.d(TAG, "onInteractionAdLoad");
                 mTTInteractionAd = ttInteractionAd;
                 setAdInteractionListener(mTTInteractionAd);
                 isReady = true;
@@ -104,14 +104,14 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
         ttInteractionAd.setAdInteractionListener(new TTInteractionAd.AdInteractionListener() {
             @Override
             public void onAdClicked() {
-                ZplayDebug.d(TAG, "Bytedance interstitial Clicked", onoff);
+                ZplayDebug.d(TAG, "onAdClicked");
                 isReady = false;
                 layerClicked(-99, -99);
             }
 
             @Override
             public void onAdShow() {
-                ZplayDebug.d(TAG, "Bytedance interstitial Show", onoff);
+                ZplayDebug.d(TAG, "onAdShow");
                 isReady = false;
                 layerExposure();
                 layerStartPlaying();
@@ -119,7 +119,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
             @Override
             public void onAdDismiss() {
-                ZplayDebug.d(TAG, "Bytedance interstitial close", onoff);
+                ZplayDebug.d(TAG, "onAdDismiss");
                 layerClosed();
             }
         });

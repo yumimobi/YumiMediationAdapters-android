@@ -45,7 +45,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "unity Interstitial request new", onoff);
+        ZplayDebug.d(TAG, "unity Interstitial load new", onoff);
         updateGDPRStatus(getContext());
         UnityAds.setDebugMode(isDebugMode); //测试
         if (UnityAds.isReady(getProvider().getKey2())) {

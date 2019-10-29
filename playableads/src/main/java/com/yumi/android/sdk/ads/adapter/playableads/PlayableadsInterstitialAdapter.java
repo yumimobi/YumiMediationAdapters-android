@@ -32,9 +32,8 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Playable Interstitial onPrepareMedia: ", onoff);
         if (playable != null && listener != null) {
-            ZplayDebug.d(TAG, "Playable Interstitial REQUEST_NEXT_MEDIA ", onoff);
+            ZplayDebug.d(TAG, "load new interstitial", onoff);
             playable.requestPlayableAds(provoder.getKey2(), listener);
         }
     }

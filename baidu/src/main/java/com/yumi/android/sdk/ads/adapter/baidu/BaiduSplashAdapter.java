@@ -40,7 +40,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
 
     @Override
     protected void onPrepareSplashLayer() {
-        Log.d(TAG, "onPrepareSplashLayer: ");
+        ZplayDebug.d(TAG, "load new splash");
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
         hasHitLayerPreparedFailed = false;
         SplashLpCloseListener listener = new SplashLpCloseListener() {
@@ -56,7 +56,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onAdFailed(String arg0) {
-                ZplayDebug.e(TAG, "Baidu Splash ad failed: " + arg0);
+                ZplayDebug.e(TAG, "onAdFailed: " + arg0);
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 hitPreparedFailed(arg0);
             }
@@ -70,6 +70,7 @@ public class BaiduSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onAdClick() {
+                ZplayDebug.i(TAG, "onAdClick");
                 // 测试发现，点击广告不会触发这个方法
                 layerClicked(-99f, -99f);
             }
