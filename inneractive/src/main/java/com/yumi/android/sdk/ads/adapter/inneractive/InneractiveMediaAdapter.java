@@ -39,7 +39,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "inneractive request new media", onoff);
+        ZplayDebug.d(TAG, "load new media wasinit =" + InneractiveAdManager.wasInitialized());
         if (!InneractiveAdManager.wasInitialized()) {
             initInneractiveSDK(getActivity(), getProvider().getKey1());
             if (!InneractiveAdManager.wasInitialized()) {
@@ -74,7 +74,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onShowMedia() {
-        ZplayDebug.d(TAG, "inneractive media show", onoff);
+        ZplayDebug.d(TAG, "show");
         if (mVideoSpot != null && mVideoSpot.isReady()) {
             InneractiveFullscreenUnitController fullscreenUnitController = (InneractiveFullscreenUnitController) mVideoSpot.getSelectedUnitController();
             fullscreenUnitController.setEventsListener(fullscreenAdEventsListener);
@@ -101,7 +101,7 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "inneractive media init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2());
 
         createListener();
     }
@@ -110,14 +110,14 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
         requestListener = new InneractiveAdSpot.RequestListener() {
             @Override
             public void onInneractiveSuccessfulAdRequest(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onInneractiveSuccessfulAdRequest", onoff);
+                ZplayDebug.d(TAG, "onInneractiveSuccessfulAdRequest");
                 layerPrepared();
                 isRewarded = false;
             }
 
             @Override
             public void onInneractiveFailedAdRequest(InneractiveAdSpot adSpot, InneractiveErrorCode errorCode) {
-                ZplayDebug.d(TAG, "inneractive media onInneractiveFailedAdRequest：" + errorCode.toString(), onoff);
+                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest：" + errorCode.toString());
                 layerPreparedFailed(recodeError(errorCode));
                 isRewarded = false;
             }
@@ -127,13 +127,13 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
         fullscreenAdEventsListener = new InneractiveFullscreenAdEventsListener() {
             @Override
             public void onAdDismissed(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onAdDismissed", onoff);
+                ZplayDebug.d(TAG, "onAdDismissed");
                 layerClosed(isRewarded);
             }
 
             @Override
             public void onAdImpression(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onAdImpression", onoff);
+                ZplayDebug.d(TAG, "onAdImpression");
                 layerExposure();
                 layerStartPlaying();
                 isRewarded = false;
@@ -141,42 +141,42 @@ public class InneractiveMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdClicked(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onAdClicked", onoff);
+                ZplayDebug.d(TAG, "onAdClicked");
                 layerClicked();
             }
 
             @Override
             public void onAdWillOpenExternalApp(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onAdWillOpenExternalApp", onoff);
+                ZplayDebug.d(TAG, "onAdWillOpenExternalApp");
             }
 
             @Override
             public void onAdEnteredErrorState(InneractiveAdSpot inneractiveAdSpot, InneractiveUnitController.AdDisplayError adDisplayError) {
-                ZplayDebug.d(TAG, "inneractive media onAdEnteredErrorState :" + adDisplayError.getMessage(), onoff);
+                ZplayDebug.d(TAG, "onAdEnteredErrorState :" + adDisplayError.getMessage());
             }
 
             @Override
             public void onAdWillCloseInternalBrowser(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive media onAdWillCloseInternalBrowser", onoff);
+                ZplayDebug.d(TAG, "onAdWillCloseInternalBrowser");
             }
         };
 
         videoContentListener = new VideoContentListener() {
             @Override
             public void onProgress(int totalDurationInMsec, int positionInMsec) {
-                ZplayDebug.d(TAG, "inneractive media onProgress", onoff);
+                ZplayDebug.d(TAG, "onProgress");
             }
 
             @Override
             public void onCompleted() {
-                ZplayDebug.d(TAG, "inneractive media onCompleted", onoff);
+                ZplayDebug.d(TAG, "onCompleted");
                 isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onPlayerError() {
-                ZplayDebug.d(TAG, "inneractive media onPlayerError", onoff);
+                ZplayDebug.d(TAG, "onPlayerError");
                 isRewarded = false;
             }
         };
