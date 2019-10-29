@@ -34,8 +34,7 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
     protected void init() {
         String key1 = getProvider().getKey1();
         String key2 = getProvider().getKey2();
-        ZplayDebug.d(TAG, "key1:" + key1, onoff);
-        ZplayDebug.d(TAG, "key2:" + key2, onoff);
+        ZplayDebug.d(TAG, "init key1:" + key1 + " ,key2:" + key2, onoff);
         if (nativeAd == null) {
             InMobiSdk.init(getActivity(), key1);
             nativeAd = new InMobiNative(getActivity(), Long.valueOf(key2), new MyNativeAdListener());
@@ -45,13 +44,13 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "inmobi not support smart banner", onoff);
+            ZplayDebug.d(TAG, "not support smart banner", onoff);
             layerPreparedFailed(recodeError(ERROR_NO_FILL, "not support smart banner."));
             return;
         }
 
         if (nativeAd != null) {
-            ZplayDebug.d(TAG, "Inmobi native Banner request", onoff);
+            ZplayDebug.d(TAG, "load new banner", onoff);
             nativeAd.load();
         }
     }
@@ -132,7 +131,7 @@ public class InmobinativeBannerAdapter extends YumiNativeBannerAdapter {
 
         @Override
         public void onAdLoadFailed(InMobiNative arg0, InMobiAdRequestStatus inMobiAdRequestStatus) {
-            ZplayDebug.d(TAG, "Inmobi nativead request failed :" + inMobiAdRequestStatus.getMessage(), onoff);
+            ZplayDebug.d(TAG, "onAdLoadFailed :" + inMobiAdRequestStatus.getMessage(), onoff);
             layerPreparedFailed(recodeError(inMobiAdRequestStatus));
         }
     }

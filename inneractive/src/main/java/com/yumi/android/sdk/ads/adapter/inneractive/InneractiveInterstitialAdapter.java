@@ -2,6 +2,7 @@ package com.yumi.android.sdk.ads.adapter.inneractive;
 
 import android.app.Activity;
 
+import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -13,6 +14,7 @@ import com.fyber.inneractive.sdk.external.InneractiveUnitController;
 import com.fyber.inneractive.sdk.external.VideoContentListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
+import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.inneractive.InneractiveUtil.initInneractiveSDK;
@@ -34,7 +36,25 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "inneractive request new interstitial", onoff);
+        ZplayDebug.d(TAG, "load new interstitial wasInit = " + InneractiveAdManager.wasInitialized());
+        if (!InneractiveAdManager.wasInitialized()) {
+            initInneractiveSDK(getActivity(), getProvider().getKey1());
+            if (!InneractiveAdManager.wasInitialized()) {
+                layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL));
+                return;
+            }
+        }
+
+        if (mInterstitialSpot == null) {
+            // First create a spot
+            mInterstitialSpot = InneractiveAdSpotManager.get().createSpot();
+        }
+
+        loadAd();
+    }
+
+    private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd");
         if (mInterstitialSpot != null && requestListener != null) {
             // Now create a full screen unit controller
             InneractiveFullscreenUnitController fullscreenUnitController = new InneractiveFullscreenUnitController();
@@ -78,33 +98,22 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "inneractive interstitial init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
-
-        initInneractiveSDK(getActivity(), getProvider().getKey1());
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2());
 
         createListener();
-
-        // Create interstitial spot
-        if (mInterstitialSpot != null) {
-            mInterstitialSpot.destroy();
-            mInterstitialSpot = null;
-        }
-        // First create a spot
-        mInterstitialSpot = InneractiveAdSpotManager.get().createSpot();
-
     }
 
     private void createListener() {
         requestListener = new InneractiveAdSpot.RequestListener() {
             @Override
             public void onInneractiveSuccessfulAdRequest(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onInneractiveSuccessfulAdRequest", onoff);
+                ZplayDebug.d(TAG, "onInneractiveSuccessfulAdRequest");
                 layerPrepared();
             }
 
             @Override
             public void onInneractiveFailedAdRequest(InneractiveAdSpot adSpot, InneractiveErrorCode errorCode) {
-                ZplayDebug.d(TAG, "inneractive interstitial onInneractiveFailedAdRequest: " + errorCode.toString(), onoff);
+                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest: " + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
             }
         };
@@ -113,53 +122,53 @@ public class InneractiveInterstitialAdapter extends YumiCustomerInterstitialAdap
         fullscreenAdEventsListener = new InneractiveFullscreenAdEventsListener() {
             @Override
             public void onAdDismissed(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdDismissed", onoff);
+                ZplayDebug.d(TAG, "onAdDismissed");
                 layerClosed();
             }
 
             @Override
             public void onAdImpression(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdImpression", onoff);
+                ZplayDebug.d(TAG, "onAdImpression");
                 layerExposure();
                 layerStartPlaying();
             }
 
             @Override
             public void onAdClicked(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdClicked", onoff);
+                ZplayDebug.d(TAG, "onAdClicked");
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onAdWillOpenExternalApp(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdWillOpenExternalApp", onoff);
+                ZplayDebug.d(TAG, "onAdWillOpenExternalApp");
             }
 
             @Override
             public void onAdEnteredErrorState(InneractiveAdSpot inneractiveAdSpot, InneractiveUnitController.AdDisplayError adDisplayError) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdEnteredErrorState :" + adDisplayError.getMessage(), onoff);
+                ZplayDebug.d(TAG, "onAdEnteredErrorState :" + adDisplayError.getMessage());
             }
 
             @Override
             public void onAdWillCloseInternalBrowser(InneractiveAdSpot adSpot) {
-                ZplayDebug.d(TAG, "inneractive interstitial onAdWillCloseInternalBrowser", onoff);
+                ZplayDebug.d(TAG, "onAdWillCloseInternalBrowser");
             }
         };
 
         videoContentListener = new VideoContentListener() {
             @Override
             public void onProgress(int totalDurationInMsec, int positionInMsec) {
-                ZplayDebug.d(TAG, "inneractive interstitial onProgress", onoff);
+                ZplayDebug.d(TAG, "onProgress");
             }
 
             @Override
             public void onCompleted() {
-                ZplayDebug.d(TAG, "inneractive interstitial onCompleted", onoff);
+                ZplayDebug.d(TAG, "onCompleted");
             }
 
             @Override
             public void onPlayerError() {
-                ZplayDebug.d(TAG, "inneractive interstitial onPlayerError", onoff);
+                ZplayDebug.d(TAG, "onPlayerError");
             }
         };
     }

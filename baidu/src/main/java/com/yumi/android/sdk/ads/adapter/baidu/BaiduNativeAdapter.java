@@ -46,15 +46,16 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
+        ZplayDebug.d(TAG, "load new native");
         if (baiduNative != null) {
-            ZplayDebug.v(TAG, "baidu native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
+            ZplayDebug.v(TAG, "onPrepareNative adCount: " + getCurrentPoolSpace());
             baiduNative.makeRequest();
         }
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "baidu native key1 : " + getProvider().getKey1() + ",key2 :" + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "key1 : " + getProvider().getKey1() + ",key2 :" + getProvider().getKey2());
         AdView.setAppSid(getActivity(), getProvider().getKey1());
         createrListener();
     }
@@ -63,13 +64,13 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
         baiduNative = new BaiduNative(getActivity(), getProvider().getKey2(), new BaiduNative.BaiduNativeNetworkListener() {
             @Override
             public void onNativeLoad(List<NativeResponse> list) {
-                ZplayDebug.i(TAG, "baidu native onNativeLoad : " + list.size(), onoff);
+                ZplayDebug.i(TAG, "onNativeLoad : " + list.size());
                 getNativeContentList(list);
             }
 
             @Override
             public void onNativeFail(NativeErrorCode nativeErrorCode) {
-                ZplayDebug.i(TAG, "baidu native onNativeFail : " + nativeErrorCode.toString(), onoff);
+                ZplayDebug.i(TAG, "onNativeFail : " + nativeErrorCode.toString());
                 layerPreparedFailed(recodeNativeError(nativeErrorCode, nativeErrorCode.toString()));
             }
         });
@@ -87,12 +88,12 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                         nativeContentsList.add(nativeAdContent);
                     }
                 } catch (Exception e) {
-                    ZplayDebug.e(TAG, "Baidu data parse error : " + e, onoff);
+                    ZplayDebug.e(TAG, "data parse error : " + e);
                 }
             }
 
             if (nativeContentsList.isEmpty()) {
-                ZplayDebug.v(TAG, "baidu data is empty", onoff);
+                ZplayDebug.v(TAG, "data is empty");
                 layerPreparedFailed(recodeNativeError(NativeErrorCode.LOAD_AD_FAILED, "baidu ad is no fill"));
                 return;
             }
@@ -114,7 +115,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
                 }
             });
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "Baidu getNativeContentList error : " + e, onoff);
+            ZplayDebug.e(TAG, "getNativeContentList error : " + e);
             layerPreparedFailed(recodeNativeError(NativeErrorCode.INTERNAL_ERROR, "get Native Content List error"));
         }
     }
@@ -151,7 +152,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
             xNativeView = new XNativeView(getContext());
             xNativeView.setNativeItem(nativeAdData);
-            ZplayDebug.v(TAG, "baidu native hasVideoContent :" + (nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO), onoff);
+            ZplayDebug.v(TAG, "hasVideoContent :" + (nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO));
             setHasVideoContent(nativeAdData.getMaterialType() == NativeResponse.MaterialType.VIDEO);
             setNativeAdVideoController(new BaiduNativeAdVideoController(xNativeView));
 
@@ -164,7 +165,7 @@ public class BaiduNativeAdapter extends YumiCustomerNativeAdapter {
 
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "baidu native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "trackView getNativeAdView() is null");
                 return;
             }
 

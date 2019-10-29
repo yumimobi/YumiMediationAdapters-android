@@ -38,7 +38,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "inmobi request new media", onoff);
+        ZplayDebug.d(TAG, "load new media");
         isCallbackInExposure = false;
         if (media == null) {
             String key2 = getProvider().getKey2();
@@ -47,7 +47,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
                 try {
                     placementID = Long.valueOf(key2);
                 } catch (NumberFormatException e) {
-                    ZplayDebug.e(TAG, "", e, onoff);
+                    ZplayDebug.e(TAG, "", e);
                     layerPreparedFailed(recodeError(ERROR_OVER_RETRY_LIMIT, "inmobi key2 error"));
                     return;
                 }
@@ -77,21 +77,20 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "accounID : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "placementID : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init accounID : " + getProvider().getKey1() + " ,placementID : " + getProvider().getKey2());
         InmobiExtraHolder.initInmobiSDK(getActivity(), getProvider().getKey1());
         mediaListener = new InterstitialAdEventListener() {
 
             @Override
             public void onUserLeftApplication(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi media left application", onoff);
+                ZplayDebug.d(TAG, "onUserLeftApplication");
                 layerClicked();
             }
 
             @Override
             public void onRewardsUnlocked(InMobiInterstitial inMobiInterstitial, Map<Object, Object> map) {
                 super.onRewardsUnlocked(inMobiInterstitial, map);
-                ZplayDebug.d(TAG, "onRewardsUnlocked ", onoff);
+                ZplayDebug.d(TAG, "onRewardsUnlocked ");
                 isRewarded = true;
                 layerIncentived();
             }
@@ -99,7 +98,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             @Override
             public void onAdLoadSucceeded(InMobiInterstitial arg0) {
                 if (!isCallbackInExposure) {
-                    ZplayDebug.d(TAG, "inmobi media load successed", onoff);
+                    ZplayDebug.d(TAG, "onAdLoadSucceeded");
                     layerPrepared();
                 }
             }
@@ -108,14 +107,14 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdLoadFailed(InMobiInterstitial arg0,
                                        InMobiAdRequestStatus arg1) {
                 if (!isCallbackInExposure) {
-                    ZplayDebug.d(TAG, "inmobi media load failed " + arg1.getStatusCode(), onoff);
+                    ZplayDebug.d(TAG, "onAdLoadFailed: " + arg1.getStatusCode());
                     layerPreparedFailed(recodeError(arg1));
                 }
             }
 
             @Override
             public void onAdDisplayed(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi media exposure", onoff);
+                ZplayDebug.d(TAG, "onAdDisplayed");
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -123,7 +122,7 @@ public class InmobiMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdDismissed(InMobiInterstitial arg0) {
-                ZplayDebug.d(TAG, "inmobi media closed", onoff);
+                ZplayDebug.d(TAG, "onAdDismissed");
                 layerClosed(isRewarded);
             }
         };

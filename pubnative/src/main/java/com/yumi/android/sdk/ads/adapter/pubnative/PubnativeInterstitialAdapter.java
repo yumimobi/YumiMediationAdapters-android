@@ -30,7 +30,7 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
     @Override
     protected void onPrepareInterstitial() {
         final boolean isInitialized = PNLite.isInitialized();
-        ZplayDebug.d(TAG, "onPrepareInterstitial: " + isInitialized + ", appToken: " + getProvider().getKey1());
+        ZplayDebug.d(TAG, "load new interstitial: " + isInitialized + ", appToken: " + getProvider().getKey1());
 
         if (!isInitialized) {
             initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
