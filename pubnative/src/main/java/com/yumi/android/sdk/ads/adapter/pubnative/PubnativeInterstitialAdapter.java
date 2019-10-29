@@ -19,6 +19,10 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
     private String TAG = "PubnativeInterstitialAdapter";
     private PNInterstitialAd mInterstitial;
 
+    // 测试发现，关闭广告后，再次判断 mInterstitial.isReady() 方法，返回值仍为 true，
+    // 但是调用 show() 方法没有任何作用。
+    private boolean isReady;
+
     protected PubnativeInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
@@ -54,6 +58,7 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
             @Override
             public void onInterstitialLoaded() {
                 ZplayDebug.d(TAG, "onInterstitialLoaded: ");
+                isReady = true;
                 layerPrepared();
             }
 
@@ -73,6 +78,7 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
             @Override
             public void onInterstitialDismissed() {
                 ZplayDebug.d(TAG, "onInterstitialDismissed: ");
+                isReady = false;
                 layerClosed();
             }
 
@@ -96,7 +102,7 @@ public class PubnativeInterstitialAdapter extends YumiCustomerInterstitialAdapte
     @Override
     protected boolean isInterstitialLayerReady() {
         if (mInterstitial != null) {
-            return mInterstitial.isReady();
+            return isReady && mInterstitial.isReady();
         }
         return false;
     }

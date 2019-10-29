@@ -24,79 +24,47 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String CLIENT_OPTIONS = "version:1.0,store:google";
     private AdColonyInterstitial ad;
     private AdColonyInterstitialListener listener;
-    private AdColonyRewardListener rewardListennr;
     private AdColonyAdOptions ad_options;
 
     protected AdcolonyMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
 
-    private void initAdcolonySDK() {
-        createListeners();
-        final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
-
-        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
-            // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
-            appOptions
-                    .setGDPRConsentString(YumiSettings.getGDPRStatus().getGDPRValue())
-                    .setGDPRRequired(true);
-        }
-        AdColony.configure(getActivity(), appOptions, getProvider().getKey1(), getProvider().getKey2());
-        /** Ad specific options to be sent with request */
-        ad_options = new AdColonyAdOptions().enableConfirmationDialog(false).enableResultsDialog(false);// 控制dialog
-        AdColony.setRewardListener(rewardListennr);
-    }
-
     private void createListeners() {
 
         listener = new AdColonyInterstitialListener() {
-            /** Ad passed back in request filled callback, ad can now be shown */
             @Override
             public void onRequestFilled(AdColonyInterstitial ad) {
+                ZplayDebug.d(TAG, "onRequestFilled: " + ad);
                 AdcolonyMediaAdapter.this.ad = ad;
                 layerPrepared();
-
-                ZplayDebug.d(TAG, "onRequestFilled", onoff);
             }
 
-            /** Ad request was not filled */
             @Override
             public void onRequestNotFilled(AdColonyZone zone) {
+                ZplayDebug.d(TAG, "onRequestNotFilled: " + zone);
                 layerPreparedFailed(AdcolonyUtil.recodeError());
-                ZplayDebug.d(TAG, "onRequestNotFilled" + zone.getZoneType(), onoff);
 
             }
 
-            /** Ad opened, reset UI to reflect state change */
             @Override
             public void onOpened(AdColonyInterstitial ad) {
+                ZplayDebug.d(TAG, "onOpened: " + ad);
                 ZplayDebug.d(TAG, "onOpened", onoff);
                 layerExposure();
                 layerStartPlaying();
             }
 
-            /** Request a new ad if ad is expiring */
             @Override
             public void onExpiring(AdColonyInterstitial ad) {
+                ZplayDebug.d(TAG, "onExpiring: " + ad);
                 ZplayDebug.d(TAG, "onExpiring", onoff);
             }
         };
-        rewardListennr = new AdColonyRewardListener() {
-
-            @Override
-            public void onReward(AdColonyReward arg0) {
-                ZplayDebug.d(TAG, "adcolony media closed", onoff);
-                ZplayDebug.d(TAG, "adcolony media get reward", onoff);
-                layerIncentived();
-                layerClosed(true);
-            }
-        };
-
     }
 
     @Override
     public void onActivityPause() {
-        // AdColony.pause();
     }
 
     @Override
@@ -110,8 +78,9 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "adcolony request new media", onoff);
-        AdColony.requestInterstitial(getProvider().getKey2(), listener, ad_options);
+        final String zoneId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "onPrepareMedia: " + zoneId);
+        AdColony.requestInterstitial(zoneId, listener, ad_options);
     }
 
     @Override
@@ -123,20 +92,37 @@ public class AdcolonyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if (ad != null && !ad.isExpired()) {
-            return true;
-        } else {
-            AdColony.requestInterstitial(getProvider().getKey2(), listener,
-                    ad_options);
-        }
-        return false;
+        return ad != null && !ad.isExpired();
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "zoneId : " + getProvider().getKey2(), onoff);
-        initAdcolonySDK();
+        final String appId = getProvider().getKey1();
+        final String zoneId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "init: " + appId + ", zoneId: " + zoneId);
+        createListeners();
+        final AdColonyAppOptions appOptions = new AdColonyAppOptions().setUserID(CLIENT_OPTIONS);
+
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
+            // https://github.com/AdColony/AdColony-Android-SDK-3/wiki/GDPR#code-example
+            appOptions
+                    .setGDPRConsentString(YumiSettings.getGDPRStatus().getGDPRValue())
+                    .setGDPRRequired(true);
+        }
+        AdColony.configure(getActivity(), appOptions, appId, zoneId);
+        ad_options =
+                new AdColonyAdOptions()
+                        .enableConfirmationDialog(false)
+                        .enableResultsDialog(false);
+        AdColony.setRewardListener(new AdColonyRewardListener() {
+
+            @Override
+            public void onReward(AdColonyReward arg0) {
+                ZplayDebug.d(TAG, "onReward: " + arg0);
+                layerIncentived();
+                layerClosed(true);
+            }
+        });
     }
 
     @Override
