@@ -11,6 +11,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeFiledToShowError;
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 
 public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
@@ -45,11 +46,11 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onShowMedia() {
         if (adLoaded) {
             if (!rewardVideoAD.hasShown()) {
-                long delta = 1000;
-                if (SystemClock.elapsedRealtime() < (rewardVideoAD.getExpireTimestamp() - delta)) {
+                if (checkMaterialNotExpired()) {
                     rewardVideoAD.showAD();
                 } else {
                     ZplayDebug.e(TAG, "onShowMedia error : MATERIAL ETIME ");
+                    layerExposureFailed(recodeFiledToShowError());
                 }
             } else {
                 ZplayDebug.e(TAG, "onShowMedia error : hasShown" + rewardVideoAD.hasShown());
@@ -64,7 +65,12 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
         if (rewardVideoAD != null) {
             if (adLoaded && !rewardVideoAD.hasShown()) {
                 ZplayDebug.i(TAG, "isMediaReady isAdLoaded true");
-                return true;
+                if(checkMaterialNotExpired()){
+                    return true;
+                }else{
+                    adLoaded = false;
+                    layerExposureFailed(recodeFiledToShowError());
+                }
             }
             ZplayDebug.i(TAG, "isMediaReady isAdLoaded false");
         }
@@ -140,6 +146,11 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPreparedFailed(recodeError(adError));
             }
         };
+    }
+
+    private boolean checkMaterialNotExpired() {
+        long delta = 1000;
+        return SystemClock.elapsedRealtime() < (rewardVideoAD.getExpireTimestamp() - delta);
     }
 
     @Override
