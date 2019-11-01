@@ -45,15 +45,12 @@ public class ChartboostInterstitialAdapter extends
 
     @Override
     public boolean onActivityBackPressed() {
-        if (Chartboost.onBackPressed()) {
-            return true;
-        }
-        return false;
+        return Chartboost.onBackPressed();
     }
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "load new interstitial");
+        ZplayDebug.d(TAG, "onPrepareInterstitial: ");
         updateGDPRStatus(getContext());
         Chartboost.cacheInterstitial(CBLocation.LOCATION_DEFAULT);
     }
@@ -65,17 +62,14 @@ public class ChartboostInterstitialAdapter extends
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (Chartboost.hasInterstitial(CBLocation.LOCATION_DEFAULT)) {
-            return true;
-        }
-        return false;
+        return Chartboost.hasInterstitial(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + ", appSignature : " + getProvider().getKey2());
+        ZplayDebug.i(TAG, "init appId: " + getProvider().getKey1() + ", appSignature: " + getProvider().getKey2());
         createDelegate();
-        ChartboostExtra.getChartboostExtra().setInstertitialListener(delegate);
+        ChartboostExtra.getChartboostExtra().setInterstitialListener(delegate);
         ChartboostExtra.getChartboostExtra().initChartboostSDK(getActivity(),
                 getProvider().getKey1(), getProvider().getKey2());
     }

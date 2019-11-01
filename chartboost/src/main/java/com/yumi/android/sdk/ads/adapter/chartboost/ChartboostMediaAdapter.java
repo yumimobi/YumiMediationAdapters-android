@@ -45,7 +45,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "load new media");
+        ZplayDebug.d(TAG, "onPrepareMedia: ");
         updateGDPRStatus(getContext());
         Chartboost.cacheRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
@@ -57,15 +57,12 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if (Chartboost.hasRewardedVideo(CBLocation.LOCATION_DEFAULT)) {
-            return true;
-        }
-        return false;
+        return Chartboost.hasRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + " ,appSignature : " + getProvider().getKey2());
+        ZplayDebug.i(TAG, "init appId: " + getProvider().getKey1() + ", appSignature: " + getProvider().getKey2());
         createDelegate();
         ChartboostExtra.getChartboostExtra().setMediaListener(delegate);
         ChartboostExtra.getChartboostExtra().initChartboostSDK(getActivity(),
