@@ -21,6 +21,6 @@ class PlayableAdsUtil {
     }
 
     static String sdkVersion() {
-        return "2.4.1";
+        return "2.6.0";
     }
 }
