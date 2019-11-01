@@ -81,8 +81,7 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
                 if (!hasHitReadyCallback) {
                     return;
                 }
-                // unity 准备完成后要上报准备完成, 起统计作用
-                reportPrepared();
+                layerPrepared();
             }
 
             @Override
