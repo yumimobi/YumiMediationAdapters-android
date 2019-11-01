@@ -40,7 +40,7 @@ class ChartboostExtra {
             Chartboost.setDelegate(delegate);
             Chartboost.onCreate(activity);
             Chartboost.onStart(activity);
-            Chartboost.setAutoCacheAds(false);
+            Chartboost.setAutoCacheAds(true);
             updateGDPRStatus(activity);
         }
     }
