@@ -77,6 +77,11 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             @Override
             public void onUnityAdsReady(String placementId) {
                 ZplayDebug.d(TAG, "onUnityAdsReady: " + placementId);
+                if (!hasHitReadyCallback) {
+                    return;
+                }
+                // unity 准备完成后要上报准备完成, 起统计作用
+                reportPrepared();
             }
 
             @Override
