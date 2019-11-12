@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 
@@ -21,40 +22,35 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     private PlayPreloadingListener listener;
     private PlayableAds playable;
-    private Activity activity;
-    private YumiProviderBean provoder;
+    private YumiProviderBean provider;
     private String TAG = "PlayableadsMediaAdapter";
     private boolean isRewarded = false;
 
     protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
-        this.activity = activity;
-        this.provoder = yumiProviderBean;
+        this.provider = yumiProviderBean;
     }
 
     @Override
     protected void onPrepareMedia() {
-        if (playable != null && listener != null) {
-            ZplayDebug.d(TAG, "load new media", onoff);
-            playable.requestPlayableAds(provoder.getKey2(), listener);
-        }
+        updateGDPRStatus();
+        ZplayDebug.d(TAG, "onPrepareMedia: " + provider.getKey2());
+        playable.requestPlayableAds(provider.getKey2(), listener);
     }
 
     @Override
     protected void onShowMedia() {
-        PlayableAds.getInstance().presentPlayableAD(provoder.getKey2(), new SimplePlayLoadingListener() {
+        PlayableAds.getInstance().presentPlayableAD(provider.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
-                // 广告展示完成，回到原页面，此时可以给用户奖励了。
-                ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
+                ZplayDebug.d(TAG, "playableAdsIncentive: ");
                 isRewarded = true;
                 layerIncentived();
             }
 
             @Override
             public void onAdsError(int errorCode, String message) {
-                // 广告展示失败，根据错误码和错误信息定位问题
-                ZplayDebug.d(TAG, "Playable media Video Show Error: " + message, onoff);
+                ZplayDebug.d(TAG, "onAdsError: " + errorCode + ", errorMsg: " + message);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                 adError.setErrorMessage("Playable errorCoed: " + errorCode + "errorMsg: " + message);
                 layerExposureFailed(adError);
@@ -62,14 +58,12 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onVideoFinished() {
-                super.onVideoFinished();
-                ZplayDebug.d(TAG, "Playable media Video Finish: ", onoff);
+                ZplayDebug.d(TAG, "onVideoFinished: ");
             }
 
             @Override
             public void onVideoStart() {
-                super.onVideoStart();
-                ZplayDebug.d(TAG, "Playable media Video Start: ", onoff);
+                ZplayDebug.d(TAG, "onVideoStart: ");
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -77,14 +71,13 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onLandingPageInstallBtnClicked() {
+                ZplayDebug.d(TAG, "onLandingPageInstallBtnClicked: ");
                 layerClicked();
-                super.onLandingPageInstallBtnClicked();
             }
 
             @Override
             public void onAdClosed() {
-                super.onAdClosed();
-                ZplayDebug.d(TAG, "Playable media Video AdClosed: ", onoff);
+                ZplayDebug.d(TAG, "onAdClosed: ");
                 layerClosed(isRewarded);
             }
         });
@@ -93,28 +86,25 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        if (playable.canPresentAd(provoder.getKey2())) {
-            ZplayDebug.d(TAG, "Playable media Video isMediaReady true", onoff);
-            return true;
-        } else {
-            return false;
-        }
+        final boolean isReady = playable.canPresentAd(provider.getKey2());
+        ZplayDebug.d(TAG, "isMediaReady: " + isReady);
+        return isReady;
     }
 
     @Override
     protected void init() {
         try {
-            playable = PlayableAds.init(getActivity(), provoder.getKey1());
+            playable = PlayableAds.init(getActivity(), provider.getKey1());
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
-                    ZplayDebug.d(TAG, "Playable media Ready ", onoff);
+                    ZplayDebug.d(TAG, "onLoadFinished: ");
                     layerPrepared();
                 }
 
                 @Override
                 public void onLoadFailed(int errorCode, String s) {
-                    ZplayDebug.d(TAG, "Playable media onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
+                    ZplayDebug.d(TAG, "onLoadFailed: " + errorCode + ", errorMsg: " + s);
                     if (errorCode == 2004) { //ads has filled
                         layerPrepared();
                         return;
@@ -123,19 +113,15 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
                 }
             };
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "Playable media init error ", e, onoff);
+            ZplayDebug.d(TAG, "init: error: " + e);
         }
     }
 
     @Override
     protected void onDestroy() {
-        try {
-            if (playable != null) {
-                ZplayDebug.d(TAG, "Playable media Video onDestroy ", onoff);
-                playable.onDestroy();
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "Playable media Video callOnActivityDestroy error : ", e, onoff);
+        ZplayDebug.d(TAG, "onDestroy: " + playable);
+        if (playable != null) {
+            playable.destroy();
         }
     }
 
