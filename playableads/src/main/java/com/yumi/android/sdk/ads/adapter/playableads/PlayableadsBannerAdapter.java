@@ -13,6 +13,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import static com.playableads.entity.BannerSize.SMART_BANNER;
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
 
 /**
  * Created by Administrator on 2017/3/23.
@@ -35,7 +36,7 @@ public class PlayableadsBannerAdapter extends YumiCustomerBannerAdapter {
         final String appId = getProvider().getKey1();
         final String unitId = getProvider().getKey2();
         ZplayDebug.d(TAG, "onPrepareBannerLayer: " + appId + ", unitId: " + unitId);
-
+        updateGDPRStatus();
         mBanner = new AtmosplayAdsBanner(getActivity(), appId, unitId);
         mBanner.setBannerSize(getBannerSize());
         mBanner.setBannerListener(new BannerListener() {
