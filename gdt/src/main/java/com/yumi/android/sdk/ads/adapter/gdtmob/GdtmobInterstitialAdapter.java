@@ -69,7 +69,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         interstitialReady = false;
         if (unifiedInterstitial == null) {
             unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedInterstitialListener);
-            setVideoOption();
+            unifiedInterstitial.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO);
         }
         gdtInterstitialHandler.sendEmptyMessageDelayed(REQ_INTERSTITIAL, 1000);
     }
@@ -199,10 +199,6 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 ZplayDebug.d(TAG, "onVideoPageClose");
             }
         };
-    }
-
-    private void setVideoOption() {
-        unifiedInterstitial.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO);
     }
 
     @Override
