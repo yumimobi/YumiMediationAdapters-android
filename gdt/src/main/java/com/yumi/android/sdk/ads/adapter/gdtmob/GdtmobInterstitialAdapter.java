@@ -154,6 +154,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         unifiedInterstitialMediaListener = new UnifiedInterstitialMediaListener() {
             @Override
             public void onVideoInit() {
+                interstitialReady = false;
                 ZplayDebug.d(TAG, "onVideoInit");
             }
 
