@@ -83,10 +83,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (unifiedInterstitial != null && interstitialReady) {
-            return true;
-        }
-        return false;
+        return unifiedInterstitial != null && interstitialReady;
     }
 
     @Override
@@ -138,6 +135,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onADClosed() {
+                interstitialReady = false;
                 if (unifiedInterstitial != null) {
                     unifiedInterstitial.destroy();
                 }
