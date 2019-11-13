@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 
+import com.qq.e.ads.cfg.VideoOption;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
+import com.qq.e.ads.interstitial2.UnifiedInterstitialMediaListener;
+import com.qq.e.comm.constants.AdPatternType;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -20,6 +23,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private static final int REQ_INTERSTITIAL = 0x321;
     protected boolean interstitialReady;
     private UnifiedInterstitialADListener unifiedInterstitialListener;
+    private UnifiedInterstitialMediaListener unifiedInterstitialMediaListener;
     private UnifiedInterstitialAD unifiedInterstitial;
     private final Handler gdtInterstitialHandler = new Handler() {
         public void handleMessage(Message msg) {
@@ -65,6 +69,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         interstitialReady = false;
         if (unifiedInterstitial == null) {
             unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedInterstitialListener);
+            setVideoOption();
         }
         gdtInterstitialHandler.sendEmptyMessageDelayed(REQ_INTERSTITIAL, 1000);
     }
@@ -103,9 +108,14 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
             @Override
             public void onADReceive() {
-                interstitialReady = true;
                 ZplayDebug.d(TAG, "onADReceive");
+                if (unifiedInterstitial.getAdPatternType() == AdPatternType.NATIVE_VIDEO) {
+                    unifiedInterstitial.setMediaListener(unifiedInterstitialMediaListener);
+                }
+
+                interstitialReady = true;
                 layerPrepared();
+
             }
 
             @Override
@@ -142,6 +152,61 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 layerClicked(-99f, -99f);
             }
         };
+
+        unifiedInterstitialMediaListener = new UnifiedInterstitialMediaListener() {
+            @Override
+            public void onVideoInit() {
+                ZplayDebug.d(TAG, "onVideoInit");
+            }
+
+            @Override
+            public void onVideoLoading() {
+                ZplayDebug.d(TAG, "onVideoLoading");
+            }
+
+            @Override
+            public void onVideoReady(long l) {
+                ZplayDebug.d(TAG, "onVideoReady");
+            }
+
+            @Override
+            public void onVideoStart() {
+                ZplayDebug.d(TAG, "onVideoStart");
+            }
+
+            @Override
+            public void onVideoPause() {
+                ZplayDebug.d(TAG, "onVideoPause");
+            }
+
+            @Override
+            public void onVideoComplete() {
+                ZplayDebug.d(TAG, "onVideoComplete");
+            }
+
+            @Override
+            public void onVideoError(AdError adError) {
+                ZplayDebug.d(TAG, "onVideoError：" + adError.toString());
+            }
+
+            @Override
+            public void onVideoPageOpen() {
+                ZplayDebug.d(TAG, "onVideoPageOpen");
+            }
+
+            @Override
+            public void onVideoPageClose() {
+                ZplayDebug.d(TAG, "onVideoPageClose");
+            }
+        };
+    }
+
+    private void setVideoOption() {
+        VideoOption.Builder builder = new VideoOption.Builder();
+        VideoOption option = builder.setAutoPlayMuted(false)
+                .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS).build();
+        unifiedInterstitial.setVideoOption(option);
+        unifiedInterstitial.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO);
     }
 
     @Override
