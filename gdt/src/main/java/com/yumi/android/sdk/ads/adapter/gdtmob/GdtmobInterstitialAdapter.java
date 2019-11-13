@@ -202,10 +202,6 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     private void setVideoOption() {
-        VideoOption.Builder builder = new VideoOption.Builder();
-        VideoOption option = builder.setAutoPlayMuted(false)
-                .setAutoPlayPolicy(VideoOption.AutoPlayPolicy.ALWAYS).build();
-        unifiedInterstitial.setVideoOption(option);
         unifiedInterstitial.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO);
     }
 
