@@ -12,6 +12,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
@@ -20,39 +21,34 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAI
 public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     private PlayPreloadingListener listener;
     private PlayableInterstitial playable;
-    private Activity activity;
-    private YumiProviderBean provoder;
+    private YumiProviderBean provider;
     private String TAG = "PlayableadsInterstitialAdapter";
 
     protected PlayableadsInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
-        this.activity = activity;
-        this.provoder = yumiProviderBean;
+        this.provider = yumiProviderBean;
     }
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Playable Interstitial onPrepareMedia: ", onoff);
-        if (playable != null && listener != null) {
-            ZplayDebug.d(TAG, "Playable Interstitial REQUEST_NEXT_MEDIA ", onoff);
-            playable.requestPlayableAds(provoder.getKey2(), listener);
-        }
+        updateGDPRStatus();
+        ZplayDebug.d(TAG, "onPrepareInterstitial: " + provider.getKey2());
+        playable.requestPlayableAds(provider.getKey2(), listener);
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        playable.presentPlayableAd(provoder.getKey2(), new SimplePlayLoadingListener() {
+        playable.presentPlayableAd(provider.getKey2(), new SimplePlayLoadingListener() {
             @Override
             public void playableAdsIncentive() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
-                ZplayDebug.d(TAG, "Playable media Video playableAdsIncentive: ", onoff);
-//                layerIncentived();
+                ZplayDebug.d(TAG, "playableAdsIncentive: ");
             }
 
             @Override
             public void onAdsError(int errorCode, String message) {
                 // 广告展示失败，根据错误码和错误信息定位问题
-                ZplayDebug.d(TAG, "Playable media Video Show Error: " + message, onoff);
+                ZplayDebug.d(TAG, "onAdsError: " + errorCode + ", errorMsg: " + message);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                 adError.setErrorMessage("Playable error: " + message);
                 layerExposureFailed(adError);
@@ -60,28 +56,25 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
             @Override
             public void onVideoFinished() {
-                super.onVideoFinished();
-                ZplayDebug.d(TAG, "Playable Interstitial Finish: ", onoff);
+                ZplayDebug.d(TAG, "onVideoFinished: ");
             }
 
             @Override
             public void onVideoStart() {
-                super.onVideoStart();
-                ZplayDebug.d(TAG, "Playable Interstitial Start: ", onoff);
+                ZplayDebug.d(TAG, "onVideoStart: ");
                 layerExposure();
                 layerStartPlaying();
             }
 
             @Override
             public void onLandingPageInstallBtnClicked() {
+                ZplayDebug.d(TAG, "onLandingPageInstallBtnClicked: ");
                 layerClicked(-99f, -99f);
-                super.onLandingPageInstallBtnClicked();
             }
 
             @Override
             public void onAdClosed() {
-                super.onAdClosed();
-                ZplayDebug.d(TAG, "Playable Interstitial AdClosed: ", onoff);
+                ZplayDebug.d(TAG, "onAdClosed: ");
                 layerClosed();
             }
         });
@@ -89,30 +82,27 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (playable.canPresentAd(provoder.getKey2())) {
-            ZplayDebug.d(TAG, "Playable Interstitial isMediaReady true", onoff);
-            return true;
-        } else {
-            return false;
-        }
+        final boolean isReady = playable.canPresentAd(provider.getKey2());
+        ZplayDebug.d(TAG, "isInterstitialLayerReady: " + isReady);
+        return isReady;
     }
 
 
     @Override
     protected void init() {
         try {
-            playable = PlayableInterstitial.init(getActivity(), provoder.getKey1());
+            playable = PlayableInterstitial.init(getActivity(), provider.getKey1());
             playable.setAutoload(false);
             listener = new PlayPreloadingListener() {
                 @Override
                 public void onLoadFinished() {
-                    ZplayDebug.d(TAG, "Playable Interstitial Ready ", onoff);
+                    ZplayDebug.d(TAG, "onLoadFinished: ");
                     layerPrepared();
                 }
 
                 @Override
                 public void onLoadFailed(int errorCode, String s) {
-                    ZplayDebug.d(TAG, "Playable Interstitial onLoadFailed errorCode：" + errorCode + "   s:" + s, onoff);
+                    ZplayDebug.d(TAG, "onLoadFailed: " + errorCode + ", errorMsg: " + s);
 
                     if (errorCode == 2004) { //ads has filled
                         layerPrepared();
@@ -123,18 +113,15 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                 }
             };
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "Playable Interstitial init error ", e, onoff);
+            ZplayDebug.d(TAG, "init: error: " + e);
         }
     }
 
     @Override
     protected void onDestroy() {
-        try {
-            if (playable != null) {
-                ZplayDebug.d(TAG, "Playable Interstitial onDestroy ", onoff);
-            }
-        } catch (Exception e) {
-            ZplayDebug.e(TAG, "Playable Interstitial callOnActivityDestroy error : ", e, onoff);
+        ZplayDebug.d(TAG, "onDestroy: " + playable);
+        if (playable != null) {
+            playable.destroy();
         }
     }
 

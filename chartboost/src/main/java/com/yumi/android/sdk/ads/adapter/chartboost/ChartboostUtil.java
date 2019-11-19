@@ -16,7 +16,7 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_INT
  * <p>
  * Created by lgd on 2019/1/23.
  */
-public class ChartboostUtil {
+class ChartboostUtil {
     static AdError recodeError(CBError.CBImpressionError chartBoostError) {
         AdError result;
         if (chartBoostError == null) {
@@ -27,9 +27,6 @@ public class ChartboostUtil {
 
         LayerErrorCode errCode;
         switch (chartBoostError) {
-            case INTERNAL:
-                errCode = ERROR_INTERNAL;
-                break;
             case NO_AD_FOUND:
                 errCode = LayerErrorCode.ERROR_NO_FILL;
                 break;

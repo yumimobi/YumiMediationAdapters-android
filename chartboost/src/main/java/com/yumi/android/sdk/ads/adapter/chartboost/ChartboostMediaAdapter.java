@@ -45,28 +45,24 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        ZplayDebug.d(TAG, "chartboost request new media", onoff);
+        ZplayDebug.d(TAG, "onPrepareMedia: ");
         updateGDPRStatus(getContext());
-        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
+        Chartboost.cacheRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void onShowMedia() {
-        Chartboost.showRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS);
+        Chartboost.showRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected boolean isMediaReady() {
-        if (Chartboost.hasRewardedVideo(CBLocation.LOCATION_ACHIEVEMENTS)) {
-            return true;
-        }
-        return false;
+        return Chartboost.hasRewardedVideo(CBLocation.LOCATION_DEFAULT);
     }
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "appId : " + getProvider().getKey1(), onoff);
-        ZplayDebug.i(TAG, "appSignature : " + getProvider().getKey2(), onoff);
+        ZplayDebug.i(TAG, "init appId: " + getProvider().getKey1() + ", appSignature: " + getProvider().getKey2());
         createDelegate();
         ChartboostExtra.getChartboostExtra().setMediaListener(delegate);
         ChartboostExtra.getChartboostExtra().initChartboostSDK(getActivity(),
@@ -78,35 +74,35 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
             delegate = new ChartboostDelegate() {
                 @Override
                 public void didCacheRewardedVideo(String location) {
-                    ZplayDebug.d(TAG, "chartboost media prepared", onoff);
+                    ZplayDebug.d(TAG, "didCacheRewardedVideo");
                     layerPrepared();
                 }
 
                 @Override
                 public void didFailToLoadRewardedVideo(String location,
                                                        CBImpressionError error) {
-                    ZplayDebug.d(TAG, "chartboost media failed " + error, onoff);
+                    ZplayDebug.d(TAG, "didFailToLoadRewardedVideo error: " + error);
                     layerPreparedFailed(recodeError(error));
                     super.didFailToLoadRewardedVideo(location, error);
                 }
 
                 @Override
                 public void didCloseRewardedVideo(String location) {
-                    ZplayDebug.d(TAG, "chartboost media closed", onoff);
+                    ZplayDebug.d(TAG, "didCloseRewardedVideo");
                     layerClosed(isRewarded);
                     super.didCloseRewardedVideo(location);
                 }
 
                 @Override
                 public void didClickRewardedVideo(String location) {
-                    ZplayDebug.d(TAG, "chartboost media clicked", onoff);
+                    ZplayDebug.d(TAG, "didClickRewardedVideo");
                     layerClicked();
                     super.didClickRewardedVideo(location);
                 }
 
                 @Override
                 public void didDismissRewardedVideo(String location) {
-                    ZplayDebug.d(TAG, "chartboost media shown", onoff);
+                    ZplayDebug.d(TAG, "didDismissRewardedVideo");
                     isRewarded = false;
                     layerExposure();
                     layerStartPlaying();
@@ -115,7 +111,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
 
                 @Override
                 public void didCompleteRewardedVideo(String location, int reward) {
-                    ZplayDebug.d(TAG, "chartboost media get rewarded", onoff);
+                    ZplayDebug.d(TAG, "didCompleteRewardedVideo");
                     isRewarded = true;
                     layerIncentived();
                 }

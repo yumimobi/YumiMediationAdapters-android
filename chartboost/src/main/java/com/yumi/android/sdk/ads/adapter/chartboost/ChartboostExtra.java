@@ -9,11 +9,11 @@ import com.chartboost.sdk.Model.CBError.CBImpressionError;
 
 import static com.yumi.android.sdk.ads.adapter.chartboost.ChartboostUtil.updateGDPRStatus;
 
-public class ChartboostExtra {
+class ChartboostExtra {
 
     private boolean hasInitCharboost = false;
     private ChartboostDelegate mediaDelegate;
-    private ChartboostDelegate instertitialDelegate;
+    private ChartboostDelegate interstitialDelegate;
     private ChartboostDelegate delegate;
 
     private ChartboostExtra() {
@@ -23,10 +23,8 @@ public class ChartboostExtra {
         return ChartboostExtraHolder.INSTANCE;
     }
 
-    ;
-
-    void setInstertitialListener(ChartboostDelegate instertitialDelegate) {
-        this.instertitialDelegate = instertitialDelegate;
+    void setInterstitialListener(ChartboostDelegate interstitialDelegate) {
+        this.interstitialDelegate = interstitialDelegate;
     }
 
     void setMediaListener(ChartboostDelegate mediaDelegate) {
@@ -42,7 +40,7 @@ public class ChartboostExtra {
             Chartboost.setDelegate(delegate);
             Chartboost.onCreate(activity);
             Chartboost.onStart(activity);
-            Chartboost.setAutoCacheAds(false);
+            Chartboost.setAutoCacheAds(true);
             updateGDPRStatus(activity);
         }
     }
@@ -51,37 +49,37 @@ public class ChartboostExtra {
         delegate = new ChartboostDelegate() {
             @Override
             public void didCacheInterstitial(String location) {
-                if (instertitialDelegate != null) {
-                    instertitialDelegate.didCacheInterstitial(location);
+                if (interstitialDelegate != null) {
+                    interstitialDelegate.didCacheInterstitial(location);
                 }
             }
 
             @Override
             public void didFailToLoadInterstitial(String location,
                                                   CBImpressionError error) {
-                if (instertitialDelegate != null) {
-                    instertitialDelegate.didFailToLoadInterstitial(location, error);
+                if (interstitialDelegate != null) {
+                    interstitialDelegate.didFailToLoadInterstitial(location, error);
                 }
             }
 
             @Override
             public void didCloseInterstitial(String location) {
-                if (instertitialDelegate != null) {
-                    instertitialDelegate.didCloseInterstitial(location);
+                if (interstitialDelegate != null) {
+                    interstitialDelegate.didCloseInterstitial(location);
                 }
             }
 
             @Override
             public void didClickInterstitial(String location) {
-                if (instertitialDelegate != null) {
-                    instertitialDelegate.didClickInterstitial(location);
+                if (interstitialDelegate != null) {
+                    interstitialDelegate.didClickInterstitial(location);
                 }
             }
 
             @Override
             public void didDisplayInterstitial(String location) {
-                if (instertitialDelegate != null) {
-                    instertitialDelegate.didDisplayInterstitial(location);
+                if (interstitialDelegate != null) {
+                    interstitialDelegate.didDisplayInterstitial(location);
                 }
             }
 
@@ -128,6 +126,10 @@ public class ChartboostExtra {
                 }
             }
 
+            @Override
+            public void didInitialize() {
+                //Do not use the chartboost didInitialize callback, because if the application process is not killed, the second call to the chartboost initialization interface will not return the didInitialize callback
+            }
         };
     }
 

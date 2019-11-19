@@ -6,6 +6,8 @@ import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import net.pubnative.lite.sdk.HyBid;
+import net.pubnative.lite.sdk.PNLite;
 import net.pubnative.lite.sdk.views.PNAdView;
 import net.pubnative.lite.sdk.views.PNBannerAdView;
 
@@ -18,7 +20,6 @@ import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART
 public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
     private String TAG = "PubnativeBannerAdapter";
     private PNBannerAdView mBanner;
-    private PNAdView.Listener mBannerListener;
 
     protected PubnativeBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -26,51 +27,69 @@ public class PubnativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.i(TAG, "pubnative request new banner key2:" + getProvider().getKey2(), onoff);
         if (bannerSize == BANNER_SIZE_SMART) {
-            ZplayDebug.i(TAG, "pubnative not support smart banner", onoff);
+            ZplayDebug.d(TAG, "onPrepareBannerLayer: not support smart banner");
             layerPreparedFailed(recodeError("not support smart banner"));
             return;
         }
+
+        final String appToken = getProvider().getKey1();
+        final boolean isInitialized = PNLite.isInitialized();
+        ZplayDebug.d(TAG, "load new banner appToken: " + appToken + ", isInitialized: " + isInitialized);
+        if (!isInitialized) {
+            initPubNativeSDK(getProvider().getKey1(), getActivity(), new HyBid.InitialisationListener() {
+                @Override
+                public void onInitialisationFinished(boolean b) {
+                    ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                    if (b) {
+                        loadAd();
+                    } else {
+                        layerPreparedFailed(recodeError("initialisation failed."));
+                    }
+                }
+            });
+            return;
+        }
+        loadAd();
+    }
+
+    private void loadAd() {
+        final String zoneId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "loadAd: " + zoneId);
         mBanner = new PNBannerAdView(getContext());
-
-        mBanner.load(getProvider().getKey2(), mBannerListener);
-    }
-
-    @Override
-    protected void init() {
-        ZplayDebug.i(TAG, "pubnative banner init key1:" + getProvider().getKey1(), onoff);
-        initPubNativeSDK(getProvider().getKey1(), getActivity());
-        updateGDPRStatus();
-        createBannerListener();
-    }
-
-    private void createBannerListener() {
-        mBannerListener = new PNAdView.Listener() {
+        mBanner.load(zoneId, new PNAdView.Listener() {
             @Override
             public void onAdLoaded() {
-                ZplayDebug.i(TAG, "pubnative banner onAdLoaded", onoff);
+                ZplayDebug.d(TAG, "onAdLoaded: ");
                 layerPrepared(mBanner, true);
             }
 
             @Override
             public void onAdLoadFailed(Throwable throwable) {
-                ZplayDebug.i(TAG, "pubnative banner onAdLoadFailed", onoff);
+                ZplayDebug.d(TAG, "onAdLoadFailed: " + throwable);
                 layerPreparedFailed(recodeError(throwable.toString()));
             }
 
             @Override
             public void onAdImpression() {
+                ZplayDebug.d(TAG, "onAdImpression: ");
                 ZplayDebug.i(TAG, "pubnative banner onAdImpression", onoff);
             }
 
             @Override
             public void onAdClick() {
-                ZplayDebug.i(TAG, "pubnative banner onAdClick", onoff);
+                ZplayDebug.d(TAG, "onAdClick: ");
                 layerClicked(-999f, -999f);
             }
-        };
+        });
     }
+
+    @Override
+    protected void init() {
+        ZplayDebug.d(TAG, "init: ");
+        updateGDPRStatus();
+    }
+
 
     @Override
     public void onActivityPause() {

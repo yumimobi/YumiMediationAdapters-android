@@ -37,9 +37,10 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onPrepareInterstitial() {
-        ZplayDebug.d(TAG, "Mobvista request new intertitial", onoff);
+        final boolean isInterstitialImage = isInterstitialImage();
+        ZplayDebug.d(TAG, "load new ineterstitial isInterstitialImage: " + isInterstitialImage);
 
-        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+        if (isInterstitialImage) {
             initInterstitialHandler();
             if (mInterstitialHandler != null) {
                 isReady = false;
@@ -55,7 +56,7 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+        if (isInterstitialImage()) {
             if (mInterstitialHandler != null) {
                 mInterstitialHandler.show();
             }
@@ -66,9 +67,13 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
         }
     }
 
+    private boolean isInterstitialImage() {
+        return TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim());
+    }
+
     @Override
     protected boolean isInterstitialLayerReady() {
-        if (TextUtils.equals(INTERSTITIAL_IMAGE, getProvider().getExtraData("inventory").trim())) {
+        if (isInterstitialImage()) {
             return isReady;
         } else {
             if (mInterstitialVideoHandler != null) {
@@ -81,16 +86,18 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
     @Override
     protected void init() {
         try {
-            ZplayDebug.d(TAG, "Mobvista intertitial init appId : " + getProvider().getKey1() + "   || appKey : " + getProvider().getKey2(), onoff);
+            final String appId = getProvider().getKey1();
+            final String appKey = getProvider().getKey2();
+            ZplayDebug.d(TAG, "init: appId: " + appId + ", appKey: " + appKey);
             MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
-            Map<String, String> map = sdk.getMTGConfigurationMap(getProvider().getKey1(), getProvider().getKey2()); //appId, appKey
+            Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey); //appId, appKey
             if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
                 int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ? MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
                 sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
             }
             sdk.init(map, getContext());
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "Mobvista intertitial init error:", e, onoff);
+            ZplayDebug.e(TAG, "init: exception", e);
         }
     }
 
@@ -99,21 +106,21 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
             return;
         }
 
-        HashMap<String, Object> hashMap = new HashMap<String, Object>();
+        HashMap<String, Object> hashMap = new HashMap<>();
         hashMap.put(MIntegralConstans.PROPERTIES_UNIT_ID, getProvider().getKey3());
         mInterstitialHandler = new MTGInterstitialHandler(getContext(), hashMap);
         mInterstitialHandler.setInterstitialListener(new InterstitialListener() {
 
             @Override
             public void onInterstitialLoadSuccess() {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onLoadSuccess", onoff);
+                ZplayDebug.d(TAG, "onInterstitialLoadSuccess: ");
                 isReady = true;
                 layerPrepared();
             }
 
             @Override
             public void onInterstitialLoadFail(String errorMsg) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onLoadFail errorMsg:" + errorMsg, onoff);
+                ZplayDebug.i(TAG, "onInterstitialLoadFail: " + errorMsg);
                 isReady = false;
                 AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
                 error.setErrorMessage("minteral errorMsg: " + errorMsg);
@@ -122,7 +129,7 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
             @Override
             public void onInterstitialShowSuccess() {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onShowSuccess", onoff);
+                ZplayDebug.d(TAG, "onInterstitialShowSuccess: ");
                 isReady = false;
                 layerStartPlaying();
                 layerExposure();
@@ -130,7 +137,7 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
             @Override
             public void onInterstitialShowFail(String errorMsg) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onShowFail errorMsg:" + errorMsg, onoff);
+                ZplayDebug.i(TAG, "onInterstitialShowFail: " + errorMsg);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                 adError.setErrorMessage("Mobvista errorMsg: " + errorMsg);
                 layerExposureFailed(adError);
@@ -138,13 +145,13 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
             @Override
             public void onInterstitialClosed() {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onClosed", onoff);
+                ZplayDebug.d(TAG, "onInterstitialClosed: ");
                 layerClosed();
             }
 
             @Override
             public void onInterstitialAdClick() {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onClick", onoff);
+                ZplayDebug.d(TAG, "onInterstitialAdClick: ");
                 layerClicked(-999f, -999f);
             }
         });
@@ -159,18 +166,18 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
         mInterstitialVideoHandler.setInterstitialVideoListener(new InterstitialVideoListener() {
             @Override
             public void onLoadSuccess(String s) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onLoadSuccess", onoff);
+                ZplayDebug.d(TAG, "onLoadSuccess: " + s);
             }
 
             @Override
             public void onVideoLoadSuccess(String s) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoLoadSuccess", onoff);
+                ZplayDebug.d(TAG, "onVideoLoadSuccess: " + s);
                 layerPrepared();
             }
 
             @Override
             public void onVideoLoadFail(String errorMsg) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoLoadFail errorMsg: " + errorMsg, onoff);
+                ZplayDebug.d(TAG, "onVideoLoadFail: " + errorMsg);
                 AdError error = new AdError(LayerErrorCode.ERROR_NO_FILL);
                 error.setErrorMessage("minteral errorMsg: " + errorMsg);
                 layerPreparedFailed(error);
@@ -178,20 +185,20 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
             @Override
             public void onAdShow() {
-                ZplayDebug.d(TAG, "Mobvista Interstitial video onAdShow", onoff);
+                ZplayDebug.d(TAG, "onAdShow: ");
                 layerStartPlaying();
                 layerExposure();
             }
 
             @Override
             public void onAdClose(boolean b) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial video onAdClose", onoff);
+                ZplayDebug.d(TAG, "onAdClose: ");
                 layerClosed();
             }
 
             @Override
             public void onShowFail(String errorMsg) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial video onShowFail", onoff);
+                ZplayDebug.d(TAG, "onShowFail: " + errorMsg);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
                 adError.setErrorMessage("Mobvista errorMsg: " + errorMsg);
                 layerExposureFailed(adError);
@@ -199,18 +206,18 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
 
             @Override
             public void onVideoAdClicked(String s) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoAdClicked", onoff);
+                ZplayDebug.d(TAG, "onVideoAdClicked: " + s);
                 layerClicked(-999f, -999f);
             }
 
             @Override
             public void onVideoComplete(String s) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial onVideoComplete", onoff);
+                ZplayDebug.d(TAG, "onVideoComplete: " + s);
             }
 
             @Override
             public void onEndcardShow(String s) {
-                ZplayDebug.d(TAG, "Mobvista Interstitial video onEndcardShow", onoff);
+                ZplayDebug.d(TAG, "onEndcardShow: " + s);
             }
         });
     }

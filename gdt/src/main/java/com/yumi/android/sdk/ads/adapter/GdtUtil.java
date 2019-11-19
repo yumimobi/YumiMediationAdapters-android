@@ -40,7 +40,14 @@ public class GdtUtil {
         return result;
     }
 
+    public static AdError recodeFiledToShowError() {
+        AdError result;
+        result = new AdError(LayerErrorCode.ERROR_FAILED_TO_SHOW);
+        result.setErrorMessage("GDT failed to show : material expired");
+        return result;
+    }
+
     public static String sdkVersion() {
-        return "4.90.960";
+        return "4.100.970";
     }
 }

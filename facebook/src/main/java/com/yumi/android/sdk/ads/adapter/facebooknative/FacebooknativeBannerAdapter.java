@@ -12,6 +12,7 @@ import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdIconView;
+import com.facebook.ads.AudienceNetworkAds;
 import com.facebook.ads.NativeAdListener;
 import com.facebook.ads.NativeBannerAd;
 import com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil;
@@ -24,6 +25,7 @@ import java.util.List;
 
 import static com.facebook.ads.AdError.NO_FILL;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
@@ -41,9 +43,8 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "facebook native banner init", onoff);
+        ZplayDebug.d(TAG, "native banner init");
         try {
-            initSDK(getContext());
             createBannerListener();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "Init facebook native banner error", false);
@@ -54,19 +55,19 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
         adListener = new NativeAdListener() {
             @Override
             public void onMediaDownloaded(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native banner onMediaDownloaded", onoff);
+                ZplayDebug.d(TAG, "onMediaDownloaded");
 
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                ZplayDebug.d(TAG, "facebook native banner onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage(), onoff);
+                ZplayDebug.d(TAG, "onError ErrorCode : " + adError.getErrorCode() + "   ErrorMessage : " + adError.getErrorMessage());
                 layerPreparedFailed(FacebookUtil.recodeError(adError));
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native banner onAdLoaded", onoff);
+                ZplayDebug.d(TAG, "onAdLoaded");
                 // Race condition, load() called again before last ad was displayed
                 if (nativeBannerAd == null || nativeBannerAd != ad) {
                     return;
@@ -77,13 +78,13 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
 
             @Override
             public void onAdClicked(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native banner clicked", onoff);
+                ZplayDebug.d(TAG, "onAdClicked");
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-                ZplayDebug.d(TAG, "facebook native banner onLoggingImpression", onoff);
+                ZplayDebug.d(TAG, "onLoggingImpression");
                 //Called immediately before an impression is logged.
             }
         };
@@ -134,17 +135,36 @@ public class FacebooknativeBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void onPrepareBannerLayer() {
         try {
-            if (bannerSize == BANNER_SIZE_SMART) {
-                ZplayDebug.d(TAG, "facebook not support smart banner", onoff);
-                layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
                 return;
             }
-            nativeBannerAd = new NativeBannerAd(getActivity(), getProvider().getKey1());
-            nativeBannerAd.loadAd();
-            nativeBannerAd.setAdListener(adListener);
+
+            loadAd();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook native banner onPrepareBannerLayer error : ", e, onoff);
+            ZplayDebug.e(TAG, "facebook native banner onPrepareBannerLayer error : ", e);
         }
+    }
+
+    private void loadAd(){
+        ZplayDebug.i(TAG, "load new banner");
+        if (bannerSize == BANNER_SIZE_SMART) {
+            ZplayDebug.d(TAG, "not support smart banner");
+            layerPreparedFailed(FacebookUtil.recodeError(NO_FILL, "not support smart banner."));
+            return;
+        }
+        nativeBannerAd = new NativeBannerAd(getActivity(), getProvider().getKey1());
+        nativeBannerAd.loadAd();
+        nativeBannerAd.setAdListener(adListener);
     }
 
     @Override

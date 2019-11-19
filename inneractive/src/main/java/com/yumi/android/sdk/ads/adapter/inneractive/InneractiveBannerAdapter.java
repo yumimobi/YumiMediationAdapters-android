@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.widget.FrameLayout;
 
+import com.fyber.inneractive.sdk.external.InneractiveAdManager;
 import com.fyber.inneractive.sdk.external.InneractiveAdRequest;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpot;
 import com.fyber.inneractive.sdk.external.InneractiveAdSpotManager;
@@ -34,9 +35,24 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void onPrepareBannerLayer() {
-        ZplayDebug.d(TAG, "inneractive request new banner", onoff);
+        ZplayDebug.d(TAG, "load new banner wasInit = " + InneractiveAdManager.wasInitialized());
+        if (!InneractiveAdManager.wasInitialized()) {
+            initInneractiveSDK(getActivity(), getProvider().getKey1());
+            if (!InneractiveAdManager.wasInitialized()) {
+                layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL));
+                return;
+            }
+        }
+        if (mBannerSpot == null) {
+            mBannerSpot = InneractiveAdSpotManager.get().createSpot();
+        }
+        loadAd();
+    }
+
+    private void loadAd() {
+        ZplayDebug.d(TAG, "loadAd");
         if (mBannerSpot != null && bannerSize == AdSize.BANNER_SIZE_SMART) {
-            ZplayDebug.d(TAG, "inneractive banner not support smart banner:", onoff);
+            ZplayDebug.d(TAG, "not support smart banner:");
             layerPreparedFailed(recodeError(LayerErrorCode.ERROR_INTERNAL, "not support smart banner."));
             return;
         }
@@ -52,16 +68,9 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "inneractive banner init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2());
 
-        initInneractiveSDK(getActivity(), getProvider().getKey1());
         createListener();
-        // initialize rectangle spot
-        if (mBannerSpot != null) {
-            mBannerSpot.destroy();
-        }
-
-        mBannerSpot = InneractiveAdSpotManager.get().createSpot();
     }
 
     private void createListener() {
@@ -77,54 +86,54 @@ public class InneractiveBannerAdapter extends YumiCustomerBannerAdapter {
                 controller.setEventsListener(new InneractiveAdViewEventsListener() {
                     @Override
                     public void onAdImpression(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdImpression", onoff);
+                        ZplayDebug.d(TAG, "onAdImpression");
                     }
 
                     @Override
                     public void onAdClicked(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdClicked", onoff);
+                        ZplayDebug.d(TAG, "onAdClicked");
                         layerClicked(-99f, -99f);
                     }
 
                     @Override
                     public void onAdWillCloseInternalBrowser(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdWillCloseInternalBrowser", onoff);
+                        ZplayDebug.d(TAG, "onAdWillCloseInternalBrowser");
                     }
 
                     @Override
                     public void onAdWillOpenExternalApp(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdWillOpenExternalApp", onoff);
+                        ZplayDebug.d(TAG, "onAdWillOpenExternalApp");
                     }
 
                     @Override
                     public void onAdEnteredErrorState(InneractiveAdSpot inneractiveAdSpot, InneractiveUnitController.AdDisplayError adDisplayError) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdEnteredErrorState", onoff);
+                        ZplayDebug.d(TAG, "onAdEnteredErrorState");
                     }
 
                     @Override
                     public void onAdExpanded(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdExpanded", onoff);
+                        ZplayDebug.d(TAG, "onAdExpanded");
                     }
 
                     @Override
                     public void onAdResized(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdResized", onoff);
+                        ZplayDebug.d(TAG, "onAdResized");
                     }
 
                     @Override
                     public void onAdCollapsed(InneractiveAdSpot adSpot) {
-                        ZplayDebug.d(TAG, "inneractive banner onAdCollapsed", onoff);
+                        ZplayDebug.d(TAG, "onAdCollapsed");
                     }
                 });
 
                 controller.bindView(container);
-                ZplayDebug.d(TAG, "inneractive banner load successed", onoff);
+                ZplayDebug.d(TAG, "onInneractiveSuccessfulAdRequest");
                 layerPrepared(container, true);
             }
 
             @Override
             public void onInneractiveFailedAdRequest(InneractiveAdSpot adSpot, InneractiveErrorCode errorCode) {
-                ZplayDebug.d(TAG, "inneractive banner load Failed: " + errorCode.toString(), onoff);
+                ZplayDebug.d(TAG, "onInneractiveFailedAdRequest: " + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
             }
         };

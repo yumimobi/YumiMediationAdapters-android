@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.initSDK;
+import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.facebook.FacebookUtil.sdkVersion;
 
 
@@ -49,21 +50,36 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void onPrepareNative() {
         try {
-            if (mNativeAd == null) {
-                mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
-                mNativeAd.setAdListener(nativeAdListener);
+            if (!AudienceNetworkAds.isInitialized(getContext())) {
+                initSDK(getContext(), new AudienceNetworkAds.InitListener() {
+                    @Override
+                    public void onInitialized(AudienceNetworkAds.InitResult initResult) {
+                        if (initResult.isSuccess()) {
+                            loadAd();
+                        } else {
+                            layerPreparedFailed(recodeError(AdError.INTERNAL_ERROR, "facebook init errorMsg: " + initResult.getMessage()));
+                        }
+                    }
+                });
+                return;
             }
-            ZplayDebug.v(TAG, "facebook native onPrepareNative adCount: " + getCurrentPoolSpace(), onoff);
-            mNativeAd.loadAd();
+
+            loadAd();
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "facebook native onPrepareNative error", e, onoff);
+            ZplayDebug.e(TAG, "onPrepareNative error", e);
         }
     }
-
+    private void loadAd(){
+        if (mNativeAd == null) {
+            mNativeAd = new NativeAd(getActivity(), getProvider().getKey1());
+            mNativeAd.setAdListener(nativeAdListener);
+        }
+        ZplayDebug.v(TAG, "load new native adCount: " + getCurrentPoolSpace());
+        mNativeAd.loadAd();
+    }
     @Override
     protected void init() {
-        ZplayDebug.v(TAG, "facebook native Adapter init key1 = " + getProvider().getKey1(), onoff);
-        initSDK(getContext());
+        ZplayDebug.v(TAG, "init key1 = " + getProvider().getKey1());
         createListener();
     }
 
@@ -71,18 +87,18 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
         nativeAdListener = new NativeAdListener() {
             @Override
             public void onMediaDownloaded(Ad ad) {
-                ZplayDebug.i(TAG, "facebook native onMediaDownloaded", onoff);
+                ZplayDebug.i(TAG, "onMediaDownloaded");
             }
 
             @Override
             public void onError(Ad ad, AdError adError) {
-                ZplayDebug.i(TAG, "facebook native onError ErrorCode : " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage(), onoff);
+                ZplayDebug.i(TAG, "onError ErrorCode: " + adError.getErrorCode() + "  || ErrorMessage : " + adError.getErrorMessage());
                 layerPreparedFailed(FacebookUtil.recodeError(adError));
             }
 
             @Override
             public void onAdLoaded(Ad ad) {
-                ZplayDebug.i(TAG, "facebook native onAdLoaded PlacementId:" + ad.getPlacementId(), onoff);
+                ZplayDebug.i(TAG, "onAdLoaded:" + ad.getPlacementId());
                 try {
                     // Race condition, load() called again before last ad was displayed
                     if (mNativeAd == null || mNativeAd != ad) {
@@ -93,14 +109,14 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                     nativeContentsList.add(nativeAdContent);
 
                     if (nativeContentsList.isEmpty()) {
-                        ZplayDebug.v(TAG, "facebook data is empty", onoff);
+                        ZplayDebug.v(TAG, "facebook data is empty");
                         AdError adError = new AdError(AdError.NO_FILL_ERROR_CODE, "facebook ad is no fill");
                         layerPreparedFailed(FacebookUtil.recodeError(adError));
                         return;
                     }
                     layerPrepared(nativeContentsList);
                 } catch (Exception e) {
-                    ZplayDebug.e(TAG, "facebook getNativeContentList error : " + e, onoff);
+                    ZplayDebug.e(TAG, "facebook getNativeContentList error : " + e);
                     AdError adError = new AdError(AdError.NO_FILL_ERROR_CODE, "download image data failed");
                     layerPreparedFailed(FacebookUtil.recodeError(adError));
                 }
@@ -108,13 +124,13 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
             @Override
             public void onAdClicked(Ad ad) {
-                ZplayDebug.i(TAG, "facebook native onAdClicked", onoff);
+                ZplayDebug.i(TAG, "onAdClicked");
                 layerClicked(-99f, -99f);
             }
 
             @Override
             public void onLoggingImpression(Ad ad) {
-                ZplayDebug.i(TAG, "facebook native onLoggingImpression", onoff);
+                ZplayDebug.i(TAG, "onLoggingImpression");
                 layerExposure();
             }
         };
@@ -164,7 +180,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
                 mMediaView = new MediaView(getActivity());
             }
 
-            ZplayDebug.i(TAG, "facebook native hasVideoContent:" + (mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO), onoff);
+            ZplayDebug.i(TAG, "hasVideoContent:" + (mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO));
             setHasVideoContent(mNativeAd.getAdCreativeType() == NativeAd.AdCreativeType.VIDEO);
             setNativeAdVideoController(new FacebookNativeAdVideoController(mMediaView));
         }
@@ -207,7 +223,7 @@ public class FacebookNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void destroy() {
-            ZplayDebug.v(TAG, "facebook native destory", onoff);
+            ZplayDebug.v(TAG, "destory");
             if (nativeAd != null) {
                 nativeAd.destroy();
             }

@@ -27,7 +27,6 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
     private static final String TAG = "TapjoyMediaAdapter";
     private TJPlacement directPlayPlacement;
     private boolean isRewarded;
-    private boolean isConnectSuccess;
 
     protected TapjoyMediaAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -43,28 +42,27 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onPrepareMedia() {
-        updateGDPRStatus();
         Tapjoy.setActivity(getActivity());
-        if (isConnectSuccess) {
-            if (!isReady()) {
-                directPlayPlacement.requestContent();
-            }
-        } else {
-            connectTapjoy(getContext(), getProvider().getKey1(), new TJConnectListener() {
+        final boolean isConnected = Tapjoy.isConnected();
+        ZplayDebug.d(TAG, "load new media: " + isConnected);
+        if (!isConnected) {
+            connectTapjoy(getActivity(), getProvider().getKey1(), new TJConnectListener() {
                 @Override
                 public void onConnectSuccess() {
-                    ZplayDebug.d(TAG, "onConnectSuccess");
-                    isConnectSuccess = true;
+                    ZplayDebug.d(TAG, "onConnectSuccess: ");
                     requestAd();
                 }
 
                 @Override
                 public void onConnectFailure() {
-                    ZplayDebug.d(TAG, "onConnectFailure");
-                    isConnectSuccess = false;
+                    ZplayDebug.d(TAG, "onConnectFailure: ");
+                    layerPreparedFailed(recodeError(new TJError(0, "onConnectFailure")));
                 }
             });
+            return;
         }
+
+        requestAd();
     }
 
     @Override
@@ -92,6 +90,8 @@ public class TapjoyMediaAdapter extends YumiCustomerMediaAdapter {
     }
 
     private void requestAd() {
+        ZplayDebug.d(TAG, "requestAd: " + getProvider().getKey2());
+        updateGDPRStatus();
         directPlayPlacement = Tapjoy.getPlacement(getProvider().getKey2(), new TJPlacementListener() {
             @Override
             public void onRequestSuccess(TJPlacement tjPlacement) {

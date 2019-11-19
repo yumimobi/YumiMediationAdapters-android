@@ -50,7 +50,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
         if (adLoader != null) {
             int currentPoolSpace = getCurrentPoolSpace();
             adCount = currentPoolSpace >= 5 ? 5 : currentPoolSpace;
-            ZplayDebug.v(TAG, "admob native onPrepareNative adCount: " + adCount, onoff);
+            ZplayDebug.v(TAG, "load nativeAd adCount: " + adCount);
             if (adCount <= 0) {
                 // 如果 adCount <= 0，adLoader.loadAds(new AdRequest.Builder().build(), adCount) 在无 google service 设备上会崩溃
                 // 理论上 adCount 不应该为 0，暂时这样处理
@@ -63,7 +63,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void init() {
         list = new ArrayList<>();
-        ZplayDebug.v(TAG, "admob native init getProvider().getKey1() : " + getProvider().getKey1(), onoff);
+        ZplayDebug.v(TAG, "init getProvider().getKey1() : " + getProvider().getKey1());
         VideoOptions videoOptions = new VideoOptions.Builder().setStartMuted(true).build();
         NativeAdOptions adOptions = new NativeAdOptions.Builder().setVideoOptions(videoOptions)
                 .setAdChoicesPlacement(getProvider().getNativeAdOptions().getAdChoicesPosition())
@@ -73,7 +73,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                 new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
                     @Override
                     public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
-                        ZplayDebug.v(TAG, "admob native onUnifiedNativeAdLoaded isLoading" + adLoader.isLoading(), onoff);
+                        ZplayDebug.v(TAG, "onUnifiedNativeAdLoaded isLoading" + adLoader.isLoading());
                         try {
                             adCount--;
                             final NativeAdContent nativeAdContent = new NativeAdContent(unifiedNativeAd);
@@ -82,21 +82,21 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
                                 return;
                             }
                             if (list.size() > 0) {
-                                ZplayDebug.v(TAG, "admob native Adapter onSuccess", onoff);
+                                ZplayDebug.v(TAG, "loadAd onSuccess");
                                 layerPrepared(list);
                             } else {
-                                ZplayDebug.v(TAG, "admob native Adapter onFailed", onoff);
+                                ZplayDebug.v(TAG, "loadAd onFailed");
                                 layerPreparedFailed(recodeError(AdRequest.ERROR_CODE_NO_FILL));
                             }
 
                         } catch (Exception e) {
-                            ZplayDebug.e(TAG, "admob getNativeContentList error : " + e, onoff);
+                            ZplayDebug.e(TAG, "getNativeContentList error : " + e);
                         }
                     }
                 }).withAdListener(new AdListener() {
             @Override
             public void onAdClicked() {
-                ZplayDebug.d(TAG, "admob native onClick", onoff);
+                ZplayDebug.d(TAG, "onClick");
                 super.onAdClicked();
                 layerClicked(-99f, -99f);
             }
@@ -111,7 +111,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             public void onAdFailedToLoad(int errorCode) {
                 super.onAdFailedToLoad(errorCode);
                 adCount--;
-                ZplayDebug.v(TAG, "admob native Adapter onAdFailedToLoad isLoading()" + adLoader.isLoading() + ", errorCode=" + errorCode, onoff);
+                ZplayDebug.v(TAG, "onAdFailedToLoad isLoading()" + adLoader.isLoading() + " , errorCode=" + errorCode);
                 layerPreparedFailed(recodeError(errorCode));
             }
         }).withNativeAdOptions(adOptions).build();
@@ -155,7 +155,7 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             setDesc(unifiedNativeAd.getBody());
             setStarRating(unifiedNativeAd.getStarRating());
             setHasVideoContent(unifiedNativeAd.getVideoController().hasVideoContent());
-            ZplayDebug.v(TAG, "admob native hasVideoContent() =" + unifiedNativeAd.getVideoController().hasVideoContent(), onoff);
+            ZplayDebug.v(TAG, "hasVideoContent() =" + unifiedNativeAd.getVideoController().hasVideoContent());
             setNativeAdVideoController(new AdmobNativeViewController(unifiedNativeAd.getVideoController()));
 
             setMaterialCreationTime(System.currentTimeMillis());
@@ -164,10 +164,11 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
             setSpecifiedProvider(getProvider().getSpecifiedProvider());
             setIsExpressAdView(false);
         }
+
         @Override
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "admob native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "trackView getNativeAdView() is null");
                 return;
             }
             YumiNativeAdView yumiNativeAdView = getNativeAdView();
@@ -214,8 +215,8 @@ public class AdmobNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void destroy() {
-            ZplayDebug.v(TAG, "admob native destory", onoff);
-            if(unifiedNativeAd != null){
+            ZplayDebug.v(TAG, "destory");
+            if (unifiedNativeAd != null) {
                 unifiedNativeAd.destroy();
             }
         }

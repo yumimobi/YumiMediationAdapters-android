@@ -20,19 +20,18 @@ import mobi.oneway.export.enums.OnewaySdkError;
 
 public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
     private String TAG = "OnewayMediaAdapter";
-    private Activity activity;
     private OWRewardedAdListener listener;
     private boolean isRewarded = false;
     private static boolean isOnewayMediaInit = false;
 
     protected OnewayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
-        this.activity = activity;
     }
 
     @Override
     protected void onPrepareMedia() {
-        if(!isOnewayMediaInit){
+        ZplayDebug.d(TAG, "load new media");
+        if (!isOnewayMediaInit) {
             OWRewardedAd.init(getActivity(), listener);
             isOnewayMediaInit = true;
         }
@@ -51,24 +50,24 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "Oneway media init: " + getProvider().getKey1(), onoff);
-        creatListener();
+        ZplayDebug.d(TAG, "init: publishId: " + getProvider().getKey1());
+        createListener();
         OnewaySdk.init(getContext());
         OnewaySdk.configure(getActivity(), getProvider().getKey1());
     }
 
-    private void creatListener() {
+    private void createListener() {
         listener = new OWRewardedAdListener() {
 
             @Override
             public void onAdReady() {
-                ZplayDebug.d(TAG, "Oneway media prepared", onoff);
+                ZplayDebug.d(TAG, "onAdReady: ");
                 layerPrepared();
             }
 
             @Override
             public void onAdShow(String s) {
-                ZplayDebug.d(TAG, "Oneway media shown", onoff);
+                ZplayDebug.d(TAG, "onAdShow: " + s);
                 isRewarded = false;
                 layerExposure();
                 layerStartPlaying();
@@ -76,20 +75,20 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onAdClick(String s) {
-                ZplayDebug.d(TAG, "Oneway media onAdClick", onoff);
+                ZplayDebug.d(TAG, "onAdClick: " + s);
                 layerClicked();
             }
 
             @Override
             public void onAdClose(String s, OnewayAdCloseType onewayAdCloseType) {
-                ZplayDebug.d(TAG, "Oneway media closed", onoff);
+                ZplayDebug.d(TAG, "onAdClose: " + s + ", close type: " + onewayAdCloseType);
                 layerClosed(isRewarded);
             }
 
             @Override
             public void onAdFinish(String s, OnewayAdCloseType onewayAdCloseType, String s1) {
-                ZplayDebug.d(TAG, "Oneway media onAdFinish", onoff);
-                if (onewayAdCloseType == onewayAdCloseType.COMPLETED) {
+                ZplayDebug.d(TAG, "onAdFinish: " + s + ", close type: " + onewayAdCloseType + ", " + s1);
+                if (onewayAdCloseType == OnewayAdCloseType.COMPLETED) {
                     isRewarded = true;
                     layerIncentived();
                 }
@@ -97,7 +96,7 @@ public class OnewayMediaAdapter extends YumiCustomerMediaAdapter {
 
             @Override
             public void onSdkError(OnewaySdkError onewaySdkError, String s) {
-                ZplayDebug.d(TAG, "Oneway media onSdkError onewaySdkError : " + onewaySdkError + "    s : " + s, onoff);
+                ZplayDebug.d(TAG, "onSdkError: " + onewaySdkError + ", " + s);
                 layerPreparedFailed(decodeError(onewaySdkError, s));
             }
         };

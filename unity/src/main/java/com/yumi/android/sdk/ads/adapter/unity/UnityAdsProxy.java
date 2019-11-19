@@ -5,11 +5,14 @@ import android.app.Activity;
 import com.unity3d.ads.IUnityAdsListener;
 import com.unity3d.ads.UnityAds;
 import com.unity3d.ads.mediation.IUnityAdsExtendedListener;
+import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.HashMap;
 import java.util.Map;
 
 final class UnityAdsProxy {
+    private static final String TAG = "UnityAdsProxy";
+
     private UnityAdsProxy() {
     }
 
@@ -18,6 +21,7 @@ final class UnityAdsProxy {
     private static IUnityAdsListener unityAdsListener = new IUnityAdsExtendedListener() {
         @Override
         public void onUnityAdsClick(String s) {
+            ZplayDebug.d(TAG, "onUnityAdsClick: " + s);
             if (!sListeners.containsKey(s)) {
                 sListeners.put(s, new UnityAdsListenerObserver());
             }
@@ -26,6 +30,7 @@ final class UnityAdsProxy {
 
         @Override
         public void onUnityAdsPlacementStateChanged(String s, UnityAds.PlacementState placementState, UnityAds.PlacementState placementState1) {
+            ZplayDebug.d(TAG, "onUnityAdsPlacementStateChanged: " + s + ", state1: " + placementState + ", state2: " + placementState1);
             if (!sListeners.containsKey(s)) {
                 sListeners.put(s, new UnityAdsListenerObserver());
             }
@@ -34,6 +39,7 @@ final class UnityAdsProxy {
 
         @Override
         public void onUnityAdsReady(String s) {
+            ZplayDebug.d(TAG, "onUnityAdsReady: " + s);
             if (!sListeners.containsKey(s)) {
                 sListeners.put(s, new UnityAdsListenerObserver());
             }
@@ -42,6 +48,7 @@ final class UnityAdsProxy {
 
         @Override
         public void onUnityAdsStart(String s) {
+            ZplayDebug.d(TAG, "onUnityAdsStart: " + s);
             if (!sListeners.containsKey(s)) {
                 sListeners.put(s, new UnityAdsListenerObserver());
             }
@@ -50,6 +57,7 @@ final class UnityAdsProxy {
 
         @Override
         public void onUnityAdsFinish(String s, UnityAds.FinishState finishState) {
+            ZplayDebug.d(TAG, "onUnityAdsFinish: " + s + ", finishState: " + finishState);
             if (!sListeners.containsKey(s)) {
                 sListeners.put(s, new UnityAdsListenerObserver());
             }
@@ -57,11 +65,11 @@ final class UnityAdsProxy {
         }
 
         @Override
-        public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String s) {
-            if (!sListeners.containsKey(s)) {
-                sListeners.put(s, new UnityAdsListenerObserver());
+        public void onUnityAdsError(UnityAds.UnityAdsError unityAdsError, String errorMsg) {
+            ZplayDebug.d(TAG, "onUnityAdsError: " + unityAdsError + ", " + errorMsg);
+            for (UnityAdsListenerObserver ualo : sListeners.values()) {
+                ualo.onUnityAdsError(unityAdsError, errorMsg);
             }
-            sListeners.get(s).onUnityAdsError(unityAdsError, s);
         }
     };
 
@@ -81,10 +89,6 @@ final class UnityAdsProxy {
 
     static void unregisterUnityAdsListener(String placementId) {
         sListeners.remove(placementId);
-    }
-
-    static boolean isReady(String placementId) {
-        return UnityAds.isReady(placementId);
     }
 
     public static void show(Activity activity, String placementId) {

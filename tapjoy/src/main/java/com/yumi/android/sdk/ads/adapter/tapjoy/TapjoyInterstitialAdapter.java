@@ -20,9 +20,8 @@ import static com.yumi.android.sdk.ads.adapter.tapjoy.TapjoyHelper.updateGDPRSta
 
 public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
-    private static final String TAG = "TapjoyInterstitial";
+    private static final String TAG = "TapjoyInterstitialAdapter";
     private TJPlacement directPlayPlacement;
-    private boolean isConnectSuccess;
 
     protected TapjoyInterstitialAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -43,28 +42,27 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     @Override
     protected void onPrepareInterstitial() {
-        updateGDPRStatus();
+        final boolean isConnected = Tapjoy.isConnected();
+        ZplayDebug.d(TAG, "load new interstitial: " + isConnected);
         Tapjoy.setActivity(getActivity());
-        if (isConnectSuccess) {
-            if (!isReady()) {
-                directPlayPlacement.requestContent();
-            }
-        } else {
+        if (!isConnected) {
             connectTapjoy(getContext(), getProvider().getKey1(), new TJConnectListener() {
                 @Override
                 public void onConnectSuccess() {
                     ZplayDebug.d(TAG, "onConnectSuccess");
-                    isConnectSuccess = true;
                     requestAd();
                 }
 
                 @Override
                 public void onConnectFailure() {
                     ZplayDebug.d(TAG, "onConnectFailure");
-                    isConnectSuccess = false;
+                    layerPreparedFailed(recodeError(new TJError(0, "onConnectFailure")));
                 }
             });
+            return;
         }
+
+        requestAd();
     }
 
     @Override
@@ -92,6 +90,8 @@ public class TapjoyInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     }
 
     private void requestAd() {
+        ZplayDebug.d(TAG, "requestAd: " + getProvider().getKey2());
+        updateGDPRStatus();
         directPlayPlacement = Tapjoy.getPlacement(getProvider().getKey2(), new TJPlacementListener() {
             @Override
             public void onRequestSuccess(TJPlacement tjPlacement) {

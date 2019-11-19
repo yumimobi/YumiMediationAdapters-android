@@ -4,13 +4,13 @@ import android.app.Activity;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.util.Log;
 
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
+import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
@@ -45,25 +45,27 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onNoAD(AdError adError) {
-                Log.d(TAG, "onNoAD: " + adError.getErrorMsg());
+                ZplayDebug.d(TAG, "onNoAD: " + adError.getErrorMsg());
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerPreparedFailed(recodeError(adError));
             }
 
             @Override
             public void onADPresent() {
+                ZplayDebug.d(TAG, "onADPresent");
                 mHandler.removeMessages(WHAT_TIMEOUT);
                 layerExposure();
             }
 
             @Override
             public void onADClicked() {
+                ZplayDebug.d(TAG, "onADClicked");
                 layerClicked(0, 0);
             }
 
             @Override
             public void onADTick(long l) {
-                Log.d(TAG, "onADTick: " + l);
+                ZplayDebug.d(TAG, "onADTick: " + l);
             }
 
             @Override

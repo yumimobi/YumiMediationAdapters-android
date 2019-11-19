@@ -51,7 +51,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
-        ZplayDebug.d(TAG, "Bytedance request new native", onoff);
+        ZplayDebug.d(TAG, "load new native");
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
@@ -63,7 +63,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.d(TAG, "bytedance native init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2(), onoff);
+        ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + " ,key2: " + getProvider().getKey2());
 
         TTAdSdk.init(getActivity(),
                 new TTAdConfig.Builder()
@@ -85,7 +85,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
         loadAdListener = new TTAdNative.FeedAdListener() {
             @Override
             public void onError(int code, String message) {
-                ZplayDebug.d(TAG, "Bytedance native onError" + message, onoff);
+                ZplayDebug.d(TAG, "onRewardVideoAdLoad: " + message);
                 layerPreparedFailed(recodeError(code, message));
             }
 
@@ -94,7 +94,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 if (ads == null || ads.isEmpty()) {
                     return;
                 }
-                ZplayDebug.d(TAG, "Bytedance native onFeedAdLoad", onoff);
+                ZplayDebug.d(TAG, "onFeedAdLoad");
                 getNativeContentList(ads);
 
             }
@@ -112,12 +112,12 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                         nativeContentsList.add(nativeAdContent);
                     }
                 } catch (Exception e) {
-                    ZplayDebug.e(TAG, "bytedance data parse error : " + e, onoff);
+                    ZplayDebug.e(TAG, "bytedance data parse error : " + e);
                 }
             }
 
             if (nativeContentsList.isEmpty()) {
-                ZplayDebug.v(TAG, "bytedance data is empty", onoff);
+                ZplayDebug.v(TAG, "bytedance data is empty");
                 layerPreparedFailed(recodeNativeAdError(0, "bytedance ad is no fill"));
                 return;
             }
@@ -139,7 +139,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 }
             });
         } catch (Exception e) {
-            ZplayDebug.e(TAG, "bytedance getNativeContentList error : " + e, onoff);
+            ZplayDebug.e(TAG, "bytedance getNativeContentList error : " + e);
         }
     }
 
@@ -188,7 +188,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
         @Override
         public void trackView() {
             if (getNativeAdView() == null) {
-                ZplayDebug.v(TAG, "bytedance native trackView getNativeAdView() is null", onoff);
+                ZplayDebug.v(TAG, "trackView getNativeAdView() is null");
                 return;
             }
 

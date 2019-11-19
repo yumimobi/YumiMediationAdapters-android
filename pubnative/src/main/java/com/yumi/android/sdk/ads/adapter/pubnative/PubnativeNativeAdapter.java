@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import net.pubnative.lite.sdk.models.NativeAd;
-
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdView;
@@ -14,6 +12,9 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerNativeAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import com.yumi.android.sdk.ads.utils.file.BitmapDownloadUtil;
 
+import net.pubnative.lite.sdk.HyBid;
+import net.pubnative.lite.sdk.PNLite;
+import net.pubnative.lite.sdk.models.NativeAd;
 import net.pubnative.lite.sdk.nativead.HyBidNativeAdRequest;
 
 import java.util.ArrayList;
@@ -39,25 +40,48 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void onPrepareNative() {
-        ZplayDebug.i(TAG, "pubnative request new native key2:" + getProvider().getKey2(), onoff);
+        final boolean isInitialized = PNLite.isInitialized();
+        final String appToken = getProvider().getKey1();
+        ZplayDebug.d(TAG, "load new native: " + isInitialized + ", appToken: " + appToken);
+        if (!isInitialized) {
+            initPubNativeSDK(appToken, getActivity(), new HyBid.InitialisationListener() {
+                @Override
+                public void onInitialisationFinished(boolean b) {
+                    ZplayDebug.d(TAG, "onInitialisationFinished: " + b);
+                    if (b) {
+                        loadAd();
+                    } else {
+                        layerPreparedFailed(recodeError("sdk initialization failed."));
+                    }
+                }
+            });
+            return;
+        }
+
+        loadAd();
+    }
+
+    private void loadAd() {
+        final String zoneId = getProvider().getKey2();
+        ZplayDebug.d(TAG, "loadAd: " + zoneId);
         HyBidNativeAdRequest nativeAdRequest = new HyBidNativeAdRequest();
-        nativeAdRequest.load(getProvider().getKey2(), new HyBidNativeAdRequest.RequestListener() {
+        nativeAdRequest.load(zoneId, new HyBidNativeAdRequest.RequestListener() {
 
             @Override
             public void onRequestSuccess(NativeAd NativeAd) {
                 List<NativeContent> nativeContentsList = new ArrayList<>();
                 try {
-                    final NativeAd adEntity = NativeAd;
-                    final NativeAdContent nativeAdContent = new NativeAdContent(adEntity);
+                    final NativeAdContent nativeAdContent = new NativeAdContent(NativeAd);
                     if (nativeAdContent.isValid()) {
                         nativeContentsList.add(nativeAdContent);
                     }
                 } catch (Exception e) {
-                    ZplayDebug.e(TAG, "pubnative data parse error : " + e, onoff);
+                    ZplayDebug.d(TAG, "onRequestSuccess: exception: " + e);
                 }
 
+                ZplayDebug.d(TAG, "onRequestSuccess: " + nativeContentsList);
+
                 if (nativeContentsList.isEmpty()) {
-                    ZplayDebug.v(TAG, "pubnative data is empty", onoff);
                     layerPreparedFailed(recodeError("pubnative ad is no fill"));
                     return;
                 }
@@ -70,11 +94,13 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
                 loadDrawables(getActivity(), nativeContentsList, new BitmapDownloadUtil.DownloadDrawableListener() {
                     @Override
                     public void onLoaded(List<NativeContent> data) {
+                        ZplayDebug.d(TAG, "onLoaded: " + data);
                         layerPrepared(data);
                     }
 
                     @Override
                     public void onFailed() {
+                        ZplayDebug.d(TAG, "onFailed: ");
                         layerPreparedFailed(recodeError("download image data failed"));
                     }
                 });
@@ -82,7 +108,7 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
 
             @Override
             public void onRequestFail(Throwable throwable) {
-                ZplayDebug.i(TAG, "pubnative native onRequestFail : " + throwable.toString(), onoff);
+                ZplayDebug.d(TAG, "onRequestFail: " + throwable);
                 layerPreparedFailed(recodeError(throwable.toString()));
             }
         });
@@ -90,8 +116,7 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
 
     @Override
     protected void init() {
-        ZplayDebug.i(TAG, "pubnative native init key1: " + getProvider().getKey1(), onoff);
-        initPubNativeSDK(getProvider().getKey1(), getActivity());
+        ZplayDebug.d(TAG, "init: ");
         updateGDPRStatus();
     }
 
@@ -103,7 +128,7 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
             setTitle(nativeAd.getTitle());
             setDesc(nativeAd.getDescription());
             setCallToAction(nativeAd.getCallToActionText());
-            setStarRating(Double.valueOf(nativeAd.getRating()));
+            setStarRating((double) nativeAd.getRating());
             setCoverImage(new Image(nativeAd.getBannerUrl()));
             setIcon(new Image(nativeAd.getIconUrl()));
             setNativeAdVideoController(new YumiNativeAdVideoController());
@@ -145,13 +170,13 @@ public class PubnativeNativeAdapter extends YumiCustomerNativeAdapter {
             nativeAd.startTracking(nativeAdView, new NativeAd.Listener() {
                 @Override
                 public void onAdImpression(NativeAd ad, View view) {
-                    ZplayDebug.v(TAG, "pubnative native impression", onoff);
+                    ZplayDebug.d(TAG, "onAdImpression: ");
                     layerExposure();
                 }
 
                 @Override
                 public void onAdClick(NativeAd ad, View view) {
-                    ZplayDebug.v(TAG, "pubnative native click", onoff);
+                    ZplayDebug.d(TAG, "onAdClick: ");
                     layerClicked(-999f, -999f);
                 }
             });
