@@ -79,13 +79,7 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
             final String appId = getProvider().getKey1();
             final String appKey = getProvider().getKey2();
             ZplayDebug.d(TAG, "init: appId: " + appId + ", appKey: " + appKey);
-            MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
-            Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey); //appId, appKey
-            if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
-                int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ? MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
-                sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
-            }
-            sdk.init(map, getContext());
+            Util.initSDK(getContext(), appId, appKey);
             initHandler();
         } catch (Exception e) {
             ZplayDebug.e(TAG, "init: exception.", e);
