@@ -3,4 +3,33 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application>
+        <!-- ZPLAYAds manifest start -->
+        <activity
+            android:name="com.playableads.presenter.PlayableADActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name="com.playableads.presenter.NativeAdLandingPageActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name="com.playableads.presenter.WebActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <receiver android:name="com.playableads.PlayableReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
+        <!-- ZPLAYAds manifest end -->
+    </application>
 </manifest>
