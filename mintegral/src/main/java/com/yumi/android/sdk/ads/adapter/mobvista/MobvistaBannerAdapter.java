@@ -19,7 +19,6 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
     private static final String TAG = "MobvistaBannerAdapter";
     private MTGBannerView mBannerView;
     private BannerAdListener mBannerAdListener;
-    private boolean isBannerClick = false;
 
     protected MobvistaBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -83,13 +82,7 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
                 @Override
                 public void onClick() {
                     ZplayDebug.d(TAG, "onClick");
-                    if(!isBannerClick){
-                        layerClicked(-999f, -999f);
-                        isBannerClick = true;
-                        return;
-                    }
-
-                    isBannerClick = false;
+                    layerClicked(-999f, -999f);
                 }
 
                 @Override
@@ -141,7 +134,7 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected final void onDestroy() {
         if (mBannerView != null) {
-            mBannerView.release();
+//            mBannerView.release();
             mBannerView = null;
             mBannerAdListener = null;
         }

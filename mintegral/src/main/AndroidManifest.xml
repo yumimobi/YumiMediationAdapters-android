@@ -32,15 +32,15 @@
             </intent-filter>
         </receiver>
 
-<!--        <provider-->
-<!--            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"-->
-<!--            android:authorities="${applicationId}.mtgFileProvider"-->
-<!--            android:exported="false"-->
-<!--            android:grantUriPermissions="true">-->
-<!--            <meta-data-->
-<!--                android:name="android.support.FILE_PROVIDER_PATHS"-->
-<!--                android:resource="@xml/mtg_provider_paths" />-->
-<!--        </provider>-->
+        <provider
+            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
+            android:authorities="${applicationId}.mtgFileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/mtg_provider_paths" />
+        </provider>
 
         <activity
             android:name="com.mintegral.msdk.interstitial.view.MTGInterstitialActivity"
