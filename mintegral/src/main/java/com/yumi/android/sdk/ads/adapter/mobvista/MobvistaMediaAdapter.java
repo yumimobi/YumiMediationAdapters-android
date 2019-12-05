@@ -2,20 +2,13 @@ package com.yumi.android.sdk.ads.adapter.mobvista;
 
 import android.app.Activity;
 
-import com.mintegral.msdk.MIntegralConstans;
-import com.mintegral.msdk.MIntegralSDK;
-import com.mintegral.msdk.out.MIntegralSDKFactory;
 import com.mintegral.msdk.out.MTGRewardVideoHandler;
 import com.mintegral.msdk.out.RewardVideoListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
-import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
-import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-
-import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.mobvista.Util.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;

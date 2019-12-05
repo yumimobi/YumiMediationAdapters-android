@@ -1,7 +1,6 @@
 package com.yumi.android.sdk.ads.adapter.mobvista;
 
 import android.app.Activity;
-import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.mintegral.msdk.out.BannerAdListener;
@@ -13,6 +12,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
+import static com.yumi.android.sdk.ads.adapter.mobvista.Util.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
 public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
@@ -138,5 +138,10 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
             mBannerView = null;
             mBannerAdListener = null;
         }
+    }
+
+    @Override
+    public String getProviderVersion() {
+        return sdkVersion();
     }
 }
