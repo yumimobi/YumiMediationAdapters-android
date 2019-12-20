@@ -4,22 +4,17 @@ import android.app.Activity;
 import android.text.TextUtils;
 
 import com.mintegral.msdk.MIntegralConstans;
-import com.mintegral.msdk.MIntegralSDK;
 import com.mintegral.msdk.interstitialvideo.out.InterstitialVideoListener;
 import com.mintegral.msdk.interstitialvideo.out.MTGInterstitialVideoHandler;
 import com.mintegral.msdk.out.InterstitialListener;
-import com.mintegral.msdk.out.MIntegralSDKFactory;
 import com.mintegral.msdk.out.MTGInterstitialHandler;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
-import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
-import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import static com.yumi.android.sdk.ads.adapter.mobvista.Util.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
@@ -89,13 +84,7 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
             final String appId = getProvider().getKey1();
             final String appKey = getProvider().getKey2();
             ZplayDebug.d(TAG, "init: appId: " + appId + ", appKey: " + appKey);
-            MIntegralSDK sdk = MIntegralSDKFactory.getMIntegralSDK();
-            Map<String, String> map = sdk.getMTGConfigurationMap(appId, appKey); //appId, appKey
-            if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.UNKNOWN) {
-                int isConsent = YumiSettings.getGDPRStatus() == YumiGDPRStatus.PERSONALIZED ? MIntegralConstans.IS_SWITCH_ON : MIntegralConstans.IS_SWITCH_OFF;
-                sdk.setUserPrivateInfoType(getActivity(), MIntegralConstans.AUTHORITY_ALL_INFO, isConsent);
-            }
-            sdk.init(map, getContext());
+            Util.initSDK(getContext(), appId, appKey);
         } catch (Exception e) {
             ZplayDebug.e(TAG, "init: exception", e);
         }

@@ -2,7 +2,19 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.yumimobi.ads.thirdparty:mobvista-china:9.13.3.1"
+
+    implementation 'com.mintegral.msdk:videojs:10.1.71'
+    implementation 'com.mintegral.msdk:mtgjscommon:10.1.71'
+    implementation 'com.mintegral.msdk:playercommon:10.1.71'
+    implementation 'com.mintegral.msdk:reward:10.1.71'
+    implementation 'com.mintegral.msdk:videocommon:10.1.71'
+    implementation 'com.mintegral.msdk:interstitialvideo:10.1.71'
+    implementation 'com.mintegral.msdk:interstitial:10.1.71'
+    implementation 'com.mintegral.msdk:mtgbanner:10.1.71'
+    implementation 'com.mintegral.msdk:optimizedata:10.1.71'
+    implementation 'com.mintegral.msdk:common:10.1.71'
+
+    implementation 'com.mintegral.msdk:mtgdownloads:10.1.71'
     implementation YUMI_MEDIATION
 }
 
