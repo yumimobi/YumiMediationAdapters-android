@@ -116,6 +116,11 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             }
 
             @Override
+            public void onVideoCached() {
+
+            }
+
+            @Override
             public void onADOpened() {
 
             }
