@@ -1,32 +1,32 @@
-package com.yumi.android.sdk.ads.adapter.playableads;
+package com.yumi.android.sdk.ads.adapter.atmosplay;
 
 import android.app.Activity;
 
-import com.playableads.PlayPreloadingListener;
-import com.playableads.PlayableAds;
-import com.playableads.SimplePlayLoadingListener;
+import com.atmosplayads.AtmosplayRewardVideo;
+import com.atmosplayads.listener.AtmosplayAdListener;
+import com.atmosplayads.listener.AtmosplayAdLoadListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 
 /**
  * Created by syj on 2017/10/12.
  */
-public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
-    private PlayPreloadingListener listener;
-    private PlayableAds playable;
+public class AtmosplayMediaAdapter extends YumiCustomerMediaAdapter {
+    private AtmosplayAdLoadListener loadListener;
+    private AtmosplayRewardVideo mAtmosplayReward;
     private YumiProviderBean provider;
-    private String TAG = "PlayableadsMediaAdapter";
+    private String TAG = "AtmosplayMediaAdapter";
     private boolean isRewarded = false;
 
-    protected PlayableadsMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
+    protected AtmosplayMediaAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.provider = yumiProviderBean;
     }
@@ -35,15 +35,15 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     protected void onPrepareMedia() {
         updateGDPRStatus();
         ZplayDebug.d(TAG, "onPrepareMedia: " + provider.getKey2());
-        playable.requestPlayableAds(provider.getKey2(), listener);
+        mAtmosplayReward.loadAd(provider.getKey2(), loadListener);
     }
 
     @Override
     protected void onShowMedia() {
-        PlayableAds.getInstance().presentPlayableAD(provider.getKey2(), new SimplePlayLoadingListener() {
+        AtmosplayRewardVideo.getInstance().show(provider.getKey2(), new AtmosplayAdListener() {
             @Override
-            public void playableAdsIncentive() {
-                ZplayDebug.d(TAG, "playableAdsIncentive: ");
+            public void onUserEarnedReward() {
+                ZplayDebug.d(TAG, "onUserEarnedReward: ");
                 isRewarded = true;
                 layerIncentived();
             }
@@ -52,7 +52,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onAdsError(int errorCode, String message) {
                 ZplayDebug.d(TAG, "onAdsError: " + errorCode + ", errorMsg: " + message);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                adError.setErrorMessage("Playable errorCoed: " + errorCode + "errorMsg: " + message);
+                adError.setErrorMessage("Atmosplay errorCoed: " + errorCode + "errorMsg: " + message);
                 layerExposureFailed(adError);
             }
 
@@ -60,6 +60,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
             public void onVideoFinished() {
                 ZplayDebug.d(TAG, "onVideoFinished: ");
             }
+
 
             @Override
             public void onVideoStart() {
@@ -86,7 +87,7 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected boolean isMediaReady() {
-        final boolean isReady = playable.canPresentAd(provider.getKey2());
+        final boolean isReady = mAtmosplayReward.isReady(provider.getKey2());
         ZplayDebug.d(TAG, "isMediaReady: " + isReady);
         return isReady;
     }
@@ -94,8 +95,8 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         try {
-            playable = PlayableAds.init(getActivity(), provider.getKey1());
-            listener = new PlayPreloadingListener() {
+            mAtmosplayReward = AtmosplayRewardVideo.init(getActivity(), provider.getKey1());
+            loadListener = new AtmosplayAdLoadListener() {
                 @Override
                 public void onLoadFinished() {
                     ZplayDebug.d(TAG, "onLoadFinished: ");
@@ -119,9 +120,9 @@ public class PlayableadsMediaAdapter extends YumiCustomerMediaAdapter {
 
     @Override
     protected void onDestroy() {
-        ZplayDebug.d(TAG, "onDestroy: " + playable);
-        if (playable != null) {
-            playable.destroy();
+        ZplayDebug.d(TAG, "onDestroy: " + mAtmosplayReward);
+        if (mAtmosplayReward != null) {
+            mAtmosplayReward.destroy();
         }
     }
 

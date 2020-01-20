@@ -2,12 +2,12 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.playableads:playableads:2.6.0'
+    implementation 'com.atmosplayads:atmosplayads:3.0.0'
     implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
     implementation YUMI_MEDIATION
 }
 
-String version = project.properties['playableads.version']
+String version = project.properties['atmosplay.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -17,7 +17,7 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation Playableads Adapter'
+    libraryDescription = 'Yumi Mediation Atmosplay Adapter'
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish

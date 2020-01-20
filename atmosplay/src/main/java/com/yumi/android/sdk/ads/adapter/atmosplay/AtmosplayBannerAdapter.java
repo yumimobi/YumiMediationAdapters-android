@@ -1,32 +1,32 @@
-package com.yumi.android.sdk.ads.adapter.playableads;
+package com.yumi.android.sdk.ads.adapter.atmosplay;
 
 import android.app.Activity;
 
-import com.playableads.AtmosplayAdsBanner;
-import com.playableads.BannerListener;
-import com.playableads.entity.BannerSize;
-import com.playableads.presenter.widget.AtmosBannerView;
+import com.atmosplayads.AtmosplayBanner;
+import com.atmosplayads.entity.BannerSize;
+import com.atmosplayads.listener.BannerListener;
+import com.atmosplayads.presenter.widget.AtmosBannerView;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.playableads.entity.BannerSize.SMART_BANNER;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
+import static com.atmosplayads.entity.BannerSize.SMART_BANNER;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.updateGDPRStatus;
 
 /**
  * Created by Administrator on 2017/3/23.
  */
 
-public class PlayableadsBannerAdapter extends YumiCustomerBannerAdapter {
+public class AtmosplayBannerAdapter extends YumiCustomerBannerAdapter {
 
-    private static final String TAG = "AdmobBannerAdapter";
+    private static final String TAG = "AtmosplayBannerAdapter";
     private static final float DEFAULT_CLICK_CX = -99f;
     private static final float DEFAULT_CLICK_CY = -99f;
-    private AtmosplayAdsBanner mBanner;
+    private AtmosplayBanner mAtmosplayBanner;
 
-    protected PlayableadsBannerAdapter(Activity activity, YumiProviderBean provider) {
+    protected AtmosplayBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
     }
 
@@ -37,9 +37,9 @@ public class PlayableadsBannerAdapter extends YumiCustomerBannerAdapter {
         final String unitId = getProvider().getKey2();
         ZplayDebug.d(TAG, "onPrepareBannerLayer: " + appId + ", unitId: " + unitId);
         updateGDPRStatus();
-        mBanner = new AtmosplayAdsBanner(getActivity(), appId, unitId);
-        mBanner.setBannerSize(getBannerSize());
-        mBanner.setBannerListener(new BannerListener() {
+        mAtmosplayBanner = new AtmosplayBanner(getActivity(), appId, unitId);
+        mAtmosplayBanner.setBannerSize(getBannerSize());
+        mAtmosplayBanner.setBannerListener(new BannerListener() {
             @Override
             public void onBannerPrepared(AtmosBannerView view) {
                 ZplayDebug.d(TAG, "onBannerPrepared: " + view);
@@ -58,7 +58,7 @@ public class PlayableadsBannerAdapter extends YumiCustomerBannerAdapter {
                 layerClicked(DEFAULT_CLICK_CX, DEFAULT_CLICK_CY);
             }
         });
-        mBanner.loadAd();
+        mAtmosplayBanner.loadAd();
     }
 
     @Override
@@ -91,8 +91,8 @@ public class PlayableadsBannerAdapter extends YumiCustomerBannerAdapter {
 
     @Override
     protected final void onDestroy() {
-        if (mBanner != null) {
-            mBanner.destroy();
+        if (mAtmosplayBanner != null) {
+            mAtmosplayBanner.destroy();
         }
     }
 }
