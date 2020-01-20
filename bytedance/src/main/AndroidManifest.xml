@@ -11,6 +11,11 @@ package="com.yumi.android.sdk.ads.adapter.bytedance">
             android:name="android.support.FILE_PROVIDER_PATHS"
             android:resource="@xml/bytedance_file_paths" />
     </provider>
+
+    <provider
+        android:name="com.bytedance.sdk.openadsdk.multipro.TTMultiProvider"
+        android:authorities="${applicationId}.TTMultiProvider"
+        android:exported="false" />
 </application>
 
 </manifest>

@@ -3,7 +3,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.yumimobi.ads.thirdparty:bytedance:1.9.9.5.3"
+    implementation "com.yumimobi.ads.thirdparty:bytedance:2.7.5.2"
     implementation YUMI_MEDIATION
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
     implementation 'com.yumimobi.ads.thirdparty:androidquery:0.26.7.1'

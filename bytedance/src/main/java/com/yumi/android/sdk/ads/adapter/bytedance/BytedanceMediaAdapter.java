@@ -160,6 +160,11 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
                 isRewarded = true;
                 layerIncentived();
             }
+
+            @Override
+            public void onSkippedVideo() {
+
+            }
         });
     }
 
