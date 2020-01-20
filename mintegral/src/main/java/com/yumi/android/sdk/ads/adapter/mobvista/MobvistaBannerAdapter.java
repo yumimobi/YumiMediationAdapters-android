@@ -102,6 +102,12 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
                 }
 
                 @Override
+                public void onCloseBanner() {
+                    ZplayDebug.d(TAG, "onCloseBanner");
+                    layerClosed();
+                }
+
+                @Override
                 public void onLogImpression() {
                     ZplayDebug.d(TAG, "onLogImpression");
                 }
