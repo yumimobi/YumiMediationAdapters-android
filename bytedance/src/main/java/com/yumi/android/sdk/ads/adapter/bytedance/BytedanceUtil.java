@@ -45,6 +45,6 @@ public class BytedanceUtil {
     }
 
     static String sdkVersion() {
-        return "1.9.9.5";
+        return "2.7.5.2";
     }
 }

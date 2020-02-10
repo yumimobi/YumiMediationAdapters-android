@@ -20,7 +20,7 @@ public class Util {
     private static final String TAG = "MobvistaUtil";
 
     static String sdkVersion() {
-        return "10.1.71";
+        return "10.2.11";
     }
 
     public static void initSDK(Context mContext,String appId, String appKey){
