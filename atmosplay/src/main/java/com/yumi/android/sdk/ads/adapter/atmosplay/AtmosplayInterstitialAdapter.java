@@ -1,30 +1,30 @@
-package com.yumi.android.sdk.ads.adapter.playableads;
+package com.yumi.android.sdk.ads.adapter.atmosplay;
 
 import android.app.Activity;
 
-import com.playableads.PlayPreloadingListener;
-import com.playableads.PlayableInterstitial;
-import com.playableads.SimplePlayLoadingListener;
+import com.atmosplayads.AtmosplayInterstitial;
+import com.atmosplayads.listener.AtmosplayAdListener;
+import com.atmosplayads.listener.AtmosplayAdLoadListener;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.AdError;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.recodeError;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.sdkVersion;
-import static com.yumi.android.sdk.ads.adapter.playableads.PlayableAdsUtil.updateGDPRStatus;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.recodeError;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.sdkVersion;
+import static com.yumi.android.sdk.ads.adapter.atmosplay.AtmosplayAdsUtil.updateGDPRStatus;
 import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_FAILED_TO_SHOW;
 
 /**
  * Created by syj on 2017/10/12.
  */
-public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdapter {
-    private PlayPreloadingListener listener;
-    private PlayableInterstitial playable;
+public class AtmosplayInterstitialAdapter extends YumiCustomerInterstitialAdapter {
+    private AtmosplayAdLoadListener loadListener;
+    private AtmosplayInterstitial mAtmosplayInterstitial;
     private YumiProviderBean provider;
-    private String TAG = "PlayableadsInterstitialAdapter";
+    private String TAG = "AtmosplayInterstitialAdapter";
 
-    protected PlayableadsInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
+    protected AtmosplayInterstitialAdapter(Activity activity, YumiProviderBean yumiProviderBean) {
         super(activity, yumiProviderBean);
         this.provider = yumiProviderBean;
     }
@@ -33,16 +33,16 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     protected void onPrepareInterstitial() {
         updateGDPRStatus();
         ZplayDebug.d(TAG, "onPrepareInterstitial: " + provider.getKey2());
-        playable.requestPlayableAds(provider.getKey2(), listener);
+        mAtmosplayInterstitial.loadAd(provider.getKey2(), loadListener);
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        playable.presentPlayableAd(provider.getKey2(), new SimplePlayLoadingListener() {
+        mAtmosplayInterstitial.show(provider.getKey2(), new AtmosplayAdListener() {
             @Override
-            public void playableAdsIncentive() {
+            public void onUserEarnedReward() {
                 // 广告展示完成，回到原页面，此时可以给用户奖励了。
-                ZplayDebug.d(TAG, "playableAdsIncentive: ");
+                ZplayDebug.d(TAG, "onUserEarnedReward: ");
             }
 
             @Override
@@ -50,7 +50,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
                 // 广告展示失败，根据错误码和错误信息定位问题
                 ZplayDebug.d(TAG, "onAdsError: " + errorCode + ", errorMsg: " + message);
                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                adError.setErrorMessage("Playable error: " + message);
+                adError.setErrorMessage("Atmosplay error: " + message);
                 layerExposureFailed(adError);
             }
 
@@ -82,7 +82,7 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected boolean isInterstitialLayerReady() {
-        final boolean isReady = playable.canPresentAd(provider.getKey2());
+        final boolean isReady = mAtmosplayInterstitial.isReady(provider.getKey2());
         ZplayDebug.d(TAG, "isInterstitialLayerReady: " + isReady);
         return isReady;
     }
@@ -91,9 +91,9 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
     @Override
     protected void init() {
         try {
-            playable = PlayableInterstitial.init(getActivity(), provider.getKey1());
-            playable.setAutoload(false);
-            listener = new PlayPreloadingListener() {
+            mAtmosplayInterstitial = AtmosplayInterstitial.init(getActivity(), provider.getKey1());
+            mAtmosplayInterstitial.setAutoLoadAd(false);
+            loadListener = new AtmosplayAdLoadListener() {
                 @Override
                 public void onLoadFinished() {
                     ZplayDebug.d(TAG, "onLoadFinished: ");
@@ -119,9 +119,9 @@ public class PlayableadsInterstitialAdapter extends YumiCustomerInterstitialAdap
 
     @Override
     protected void onDestroy() {
-        ZplayDebug.d(TAG, "onDestroy: " + playable);
-        if (playable != null) {
-            playable.destroy();
+        ZplayDebug.d(TAG, "onDestroy: " + mAtmosplayInterstitial);
+        if (mAtmosplayInterstitial != null) {
+            mAtmosplayInterstitial.destroy();
         }
     }
 

@@ -290,6 +290,11 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                     }
 
                     @Override
+                    public void onVideoCached(NativeExpressADView nativeExpressADView) {
+
+                    }
+
+                    @Override
                     public void onVideoReady(NativeExpressADView nativeExpressADView, long l) {
                         ZplayDebug.v(TAG, "express ad native Adapter onVideoReady");
                     }

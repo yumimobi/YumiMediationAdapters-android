@@ -1,35 +1,34 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.yumi.android.sdk.ads.adapter.playableads">
+    package="com.yumi.android.sdk.ads.adapter.atmosplay">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application>
-        <!-- ZPLAYAds manifest start -->
+        <!-- AtmosplayAds manifest start -->
         <activity
-            android:name="com.playableads.presenter.PlayableADActivity"
+            android:name="com.atmosplayads.presenter.AtmosplayAdActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:hardwareAccelerated="true"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name="com.atmosplayads.presenter.NativeAdLandingPageActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:hardwareAccelerated="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
         <activity
-            android:name="com.playableads.presenter.NativeAdLandingPageActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:hardwareAccelerated="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
-
-        <activity
-            android:name="com.playableads.presenter.WebActivity"
+            android:name="com.atmosplayads.presenter.WebActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:hardwareAccelerated="true"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 
-        <receiver android:name="com.playableads.PlayableReceiver">
+        <receiver android:name="com.atmosplayads.AtmosplayAdsReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
             </intent-filter>
         </receiver>
-        <!-- ZPLAYAds manifest end -->
+        <!-- AtmosplayAds manifest end -->
     </application>
 </manifest>
