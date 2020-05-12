@@ -18,6 +18,7 @@ import com.qq.e.ads.nativ.NativeExpressMediaListener;
 import com.qq.e.ads.nativ.NativeUnifiedADData;
 import com.qq.e.ads.nativ.widget.NativeAdContainer;
 import com.qq.e.comm.constants.AdPatternType;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.formats.YumiNativeAdVideoController;
@@ -65,6 +66,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
     @Override
     protected void init() {
         ZplayDebug.v(TAG, "init key1 = " + getProvider().getKey1() + ", key2 = " + getProvider().getKey2());
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
         if (getProvider().getExtraData("GDTRenderModel").equals("1")) {
             NativeADUnifiedListener nativeADUnifiedListener = new NativeADUnifiedListener() {
                 @Override
@@ -116,7 +118,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                     layerPreparedFailed(recodeError(adError));
                 }
             };
-            GdtmobNativeHolder.getInstance().initNativeUnifiedAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), nativeADUnifiedListener);
+            GdtmobNativeHolder.getInstance().initNativeUnifiedAD(getActivity(), getProvider().getKey2(), nativeADUnifiedListener);
 
         } else {
             NativeExpressADListener nativeExpressADListener = new NativeExpressADListener() {
@@ -212,7 +214,7 @@ public class GdtmobNativeAdapter extends YumiCustomerNativeAdapter {
                     layerPreparedFailed(recodeError(adError));
                 }
             };
-            GdtmobNativeHolder.getInstance().initNativeExpressAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), getProvider().getNativeAdOptions(), nativeExpressADListener);
+            GdtmobNativeHolder.getInstance().initNativeExpressAD(getActivity(), getProvider().getKey2(), getProvider().getNativeAdOptions(), nativeExpressADListener);
         }
 
     }

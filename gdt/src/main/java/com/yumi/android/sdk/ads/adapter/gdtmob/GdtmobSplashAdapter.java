@@ -7,6 +7,7 @@ import android.os.Message;
 
 import com.qq.e.ads.splash.SplashAD;
 import com.qq.e.ads.splash.SplashADListener;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerSplashAdapter;
@@ -37,7 +38,8 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
     @Override
     protected void onPrepareSplashLayer() {
         mHandler.sendEmptyMessageDelayed(WHAT_TIMEOUT, getProvider().getOutTime() * 1000);
-        SplashAD splashAD = new SplashAD(getActivity(), null, getProvider().getKey1(), getProvider().getKey2(), new SplashADListener() {
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
+        SplashAD splashAD = new SplashAD(getActivity(),  getProvider().getKey2(), new SplashADListener() {
             @Override
             public void onADDismissed() {
                 layerClosed();
@@ -71,6 +73,11 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
             @Override
             public void onADExposure() {
                 // GDT Demo 中没有这个方法，而且测试发现，总是先触发 onADPresent 然后再触发此方法，所以忽略这个方法
+            }
+
+            @Override
+            public void onADLoaded(long l) {
+
             }
         }, getProvider().getOutTime() * 1000);
         splashAD.fetchAndShowIn(getDeveloperContainer());

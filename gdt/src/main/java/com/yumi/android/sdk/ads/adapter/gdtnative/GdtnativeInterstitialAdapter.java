@@ -9,6 +9,7 @@ import android.view.View;
 import com.qq.e.ads.nativ.ADSize;
 import com.qq.e.ads.nativ.NativeExpressAD;
 import com.qq.e.ads.nativ.NativeExpressADView;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.nativead.YumiNativeExpressIntersititalAdapter;
@@ -49,8 +50,8 @@ public class GdtnativeInterstitialAdapter extends YumiNativeExpressIntersititalA
     @Override
     protected void onPreparedNativeInterstitial() {
         ZplayDebug.d(TAG, "init appId : " + getProvider().getKey1() + " ,pId : " + getProvider().getKey2());
-        nativeExpressAD = new NativeExpressAD(getActivity(), calculateInterstitialSize(),
-                getProvider().getKey1(), getProvider().getKey2(), new MyNativeExpressADListener());
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
+        nativeExpressAD = new NativeExpressAD(getActivity(), calculateInterstitialSize(), getProvider().getKey2(), new MyNativeExpressADListener());
         ZplayDebug.d(TAG, "load new interstitial");
         nativeExpressAD.loadAD(1);
     }
