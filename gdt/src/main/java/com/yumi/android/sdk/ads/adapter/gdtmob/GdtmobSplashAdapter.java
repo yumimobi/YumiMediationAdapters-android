@@ -77,7 +77,7 @@ public class GdtmobSplashAdapter extends YumiCustomerSplashAdapter {
 
             @Override
             public void onADLoaded(long l) {
-
+                ZplayDebug.d(TAG, "onADLoaded：" + l);
             }
         }, getProvider().getOutTime() * 1000);
         splashAD.fetchAndShowIn(getDeveloperContainer());
