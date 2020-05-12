@@ -5,6 +5,7 @@ import android.os.SystemClock;
 
 import com.qq.e.ads.rewardvideo.RewardVideoAD;
 import com.qq.e.ads.rewardvideo.RewardVideoADListener;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerMediaAdapter;
@@ -33,7 +34,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
                 if (rewardVideoADListener == null) {
                     createListener();
                 }
-                rewardVideoAD = new RewardVideoAD(getContext(), getProvider().getKey1(), getProvider().getKey2(), rewardVideoADListener);
+                rewardVideoAD = new RewardVideoAD(getContext(), getProvider().getKey2(), rewardVideoADListener);
             }
             adLoaded = false;
             rewardVideoAD.loadAD();
@@ -81,6 +82,7 @@ public class GdtmobMediaAdapter extends YumiCustomerMediaAdapter {
     @Override
     protected void init() {
         ZplayDebug.d(TAG, "init");
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
         createListener();
     }
 
