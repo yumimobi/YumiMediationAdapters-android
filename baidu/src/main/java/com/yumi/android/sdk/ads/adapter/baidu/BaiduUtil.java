@@ -61,6 +61,6 @@ class BaiduUtil {
     }
 
     static String sdkVersion(){
-        return "5.8.0";
+        return "5.85";
     }
 }

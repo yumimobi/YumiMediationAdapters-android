@@ -48,6 +48,6 @@ public class GdtUtil {
     }
 
     public static String sdkVersion() {
-        return "4.150.1020";
+        return "4.210.1080";
     }
 }
