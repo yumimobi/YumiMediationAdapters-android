@@ -31,7 +31,7 @@ ext {
     MOBVISTA = '9.13.3.1'
     UNITY = '3.1.0.0'
     VUNGLE = '6.4.10.3'
-    APPLOVIN = '9.9.2'
+    APPLOVIN = '9.12.6'
     PLAY_SERVICES_ADS = '17.2.0'
 
     // innerativeAdSDK
