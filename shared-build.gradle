@@ -29,7 +29,7 @@ ext {
     INMOBI = '8.0.9'
     IRONSOURCE = '6.16.1.0'
     MOBVISTA = '9.13.3.1'
-    UNITY = '3.1.0.0'
+    UNITY = '3.4.2.0'
     VUNGLE = '6.4.10.3'
     APPLOVIN = '9.12.6'
     PLAY_SERVICES_ADS = '17.2.0'
