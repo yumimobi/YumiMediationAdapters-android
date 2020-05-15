@@ -2,7 +2,15 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "com.yumimobi.ads.thirdparty:vungle:$VUNGLE"
+    // Vungle SDK
+    implementation 'com.vungle:publisher-sdk-android:6.5.3'
+
+    implementation "androidx.core:core:1.1.0"
+    implementation "androidx.localbroadcastmanager:localbroadcastmanager:1.0.0"
+
+    // Recommended for SDK to be able to get Android Advertising ID
+    implementation 'com.google.android.gms:play-services-basement:16.0.0'
+    implementation 'com.google.android.gms:play-services-ads-identifier:16.0.0'
     implementation YUMI_MEDIATION
 }
 

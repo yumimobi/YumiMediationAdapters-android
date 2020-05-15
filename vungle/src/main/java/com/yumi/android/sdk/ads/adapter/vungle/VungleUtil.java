@@ -17,7 +17,7 @@ import static com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode.ERROR_NO_
  * Created by lgd on 2019/1/23.
  */
 class VungleUtil {
-    static AdError recodeError(Throwable extra) {
+    static AdError recodeError(String extra) {
         AdError result = new AdError(ERROR_NO_FILL);
         result.setErrorMessage("Vungle error: " + extra);
         return result;
@@ -35,6 +35,6 @@ class VungleUtil {
     }
 
     static String sdkVersion() {
-        return "6.4.10";
+        return "6.5.3";
     }
 }
