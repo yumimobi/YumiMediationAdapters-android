@@ -44,6 +44,6 @@ class IronsourceUtil {
     }
 
     static String sdkVersion() {
-        return "6.8.4";
+        return "6.16.1";
     }
 }
