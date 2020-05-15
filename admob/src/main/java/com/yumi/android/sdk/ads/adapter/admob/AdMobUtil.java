@@ -51,6 +51,6 @@ public class AdMobUtil {
     }
 
     public static String sdkVersion() {
-        return "17.2.0";
+        return "19.1.0";
     }
 }
