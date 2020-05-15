@@ -98,17 +98,17 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
     private void initHandler() {
         try {
             ZplayDebug.d(TAG, "initHandler: ");
-            mMvRewardVideoHandler = new MTGRewardVideoHandler(getActivity(), getProvider().getKey3()); //UnitId
+            mMvRewardVideoHandler = new MTGRewardVideoHandler(getActivity(), getProvider().getKey4(),getProvider().getKey3()); //UnitId
             mMvRewardVideoHandler.setRewardVideoListener(new RewardVideoListener() {
 
                 @Override
-                public void onVideoLoadSuccess(String unitId) {
+                public void onVideoLoadSuccess(String unitId, String s1) {
                     ZplayDebug.d(TAG, "onVideoLoadSuccess: " + unitId);
                     layerPrepared();
                 }
 
                 @Override
-                public void onLoadSuccess(String unitId) {
+                public void onLoadSuccess(String s, String s1) {
                     ZplayDebug.d(TAG, "onLoadSuccess: ");
                 }
 
@@ -129,6 +129,12 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 }
 
                 @Override
+                public void onVideoAdClicked(String s, String s1) {
+                    ZplayDebug.d(TAG, "onVideoAdClicked: " + s);
+                    layerClicked();
+                }
+
+                @Override
                 public void onAdShow() {
                     ZplayDebug.d(TAG, "onAdShow: ");
                     layerExposure();
@@ -146,18 +152,12 @@ public class MobvistaMediaAdapter extends YumiCustomerMediaAdapter {
                 }
 
                 @Override
-                public void onVideoAdClicked(String unitId) {
-                    ZplayDebug.d(TAG, "onVideoAdClicked: " + unitId);
-                    layerClicked();
-                }
-
-                @Override
-                public void onVideoComplete(String s) {
+                public void onVideoComplete(String s, String s1) {
 
                 }
 
                 @Override
-                public void onEndcardShow(String s) {
+                public void onEndcardShow(String s, String s1) {
 
                 }
 
