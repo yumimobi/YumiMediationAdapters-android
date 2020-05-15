@@ -2,7 +2,7 @@ apply from: '../shared-build.gradle'
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.atmosplayads:atmosplayads:3.0.0'
+    implementation 'com.atmosplayads:atmosplayads:3.1.0'
     implementation "com.android.support:appcompat-v7:$SUPOORT_LIBRAY_VERSION"
     implementation YUMI_MEDIATION
 }
