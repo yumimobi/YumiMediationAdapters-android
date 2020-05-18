@@ -12,7 +12,7 @@ import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.adapter.gdtmob.GdtmobNativeHolder;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.NativeAdsBuild;
-import com.yumi.android.sdk.ads.publish.nativead.YumiNativeBannerAdapter;
+import com.yumi.android.sdk.ads.publish.nativead.YumiGdtNativeBannerAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import java.util.ArrayList;
@@ -22,12 +22,11 @@ import static com.yumi.android.sdk.ads.adapter.GdtUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.GdtUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.publish.enumbean.AdSize.BANNER_SIZE_SMART;
 
-public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
+public class GdtnativeBannerAdapter extends YumiGdtNativeBannerAdapter {
 
     private static final String TAG = "GdtnativeBannerAdapter";
     private NativeUnifiedADData adItem;
     private String html;
-    private View bannerView;
 
     protected GdtnativeBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -56,10 +55,8 @@ public class GdtnativeBannerAdapter extends YumiNativeBannerAdapter {
         nativeAdContainer.removeAllViews();
         nativeAdContainer.addView(view);
 
-        this.bannerView = nativeAdContainer;
-
         List<View> clickableViews = new ArrayList<>();
-        clickableViews.add(view);
+        clickableViews.add(getClickView());
         adItem.bindAdToView(getActivity(), nativeAdContainer, null, clickableViews);
 
         adItem.setNativeAdEventListener(new NativeADEventListener() {
