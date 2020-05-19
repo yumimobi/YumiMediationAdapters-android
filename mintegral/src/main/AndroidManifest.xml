@@ -28,22 +28,6 @@
                 <action android:name="com.mintegral.msdk.download.action" />
             </intent-filter>
         </service>
-        <receiver android:name="com.mintegral.msdk.click.AppReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <data android:scheme="package" />
-            </intent-filter>
-        </receiver>
-
-        <provider
-            android:name="com.mintegral.msdk.base.utils.MTGFileProvider"
-            android:authorities="${applicationId}.mtgFileProvider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/mtg_provider_paths"/>
-        </provider>
 
         <activity
             android:name="com.mintegral.msdk.interstitial.view.MTGInterstitialActivity"
