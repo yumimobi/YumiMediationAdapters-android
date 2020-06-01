@@ -61,7 +61,7 @@ public class MobvistaBannerAdapter extends YumiCustomerBannerAdapter {
         try {
             mBannerView = new MTGBannerView(getContext());
             mBannerView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-            mBannerView.init(calculateBannerSize(), getProvider().getKey3());
+            mBannerView.init(calculateBannerSize(), getProvider().getKey4(), getProvider().getKey3());
 
             mBannerAdListener = new BannerAdListener() {
                 @Override

@@ -111,6 +111,8 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
                 layerPreparedFailed(generateLayerErrorCode(unityAdsError, errorMsg));
             }
         };
+
+        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 
     @Override
@@ -133,7 +135,6 @@ public class UnityMediaAdapter extends YumiCustomerMediaAdapter {
             layerPrepared();
         }
 
-        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
     }
 
     @Override

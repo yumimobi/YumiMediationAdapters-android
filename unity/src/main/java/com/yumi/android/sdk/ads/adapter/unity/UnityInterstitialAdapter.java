@@ -105,6 +105,7 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
                 layerPreparedFailed(generateLayerErrorCode(unityAdsError, errorMsg));
             }
         };
+        UnityAdsProxy.registerUnityAdsListener(getProvider().getKey2(), mUnityAdsListener);
     }
 
     @Override
@@ -130,7 +131,6 @@ public class UnityInterstitialAdapter extends YumiCustomerInterstitialAdapter {
             hasHitReadyCallback = true;
             layerPrepared();
         }
-        UnityAdsProxy.registerUnityAdsListener(placementId, mUnityAdsListener);
     }
 
     @Override

@@ -8,10 +8,32 @@
     <application>
         <activity
             android:name="com.applovin.adview.AppLovinInterstitialActivity"
-            android:configChanges="orientation|screenSize" />
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout"
+            android:hardwareAccelerated="true"
+            android:screenOrientation="behind" />
         <activity
-            android:name="com.applovin.adview.AppLovinConfirmationActivity"
-            android:configChanges="orientation|screenSize" />
+            android:name="com.applovin.adview.AppLovinFullscreenActivity"
+            android:configChanges="keyboard|keyboardHidden|locale|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:exported="false"
+            android:hardwareAccelerated="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="behind" />
+        <activity
+            android:name="com.applovin.sdk.AppLovinWebViewActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name="com.applovin.mediation.MaxDebuggerActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/com.applovin.mediation.MaxDebuggerActivity.Theme" />
+        <activity
+            android:name="com.applovin.mediation.MaxDebuggerDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/com.applovin.mediation.MaxDebuggerActivity.Theme" />
+
+        <service
+            android:name="com.applovin.impl.sdk.utils.AppKilledService"
+            android:exported="false"
+            android:stopWithTask="false" />
     </application>
 
 </manifest>

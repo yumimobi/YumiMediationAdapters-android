@@ -151,15 +151,16 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
             return;
         }
 
-        mInterstitialVideoHandler = new MTGInterstitialVideoHandler(getContext(), getProvider().getKey3());
+        mInterstitialVideoHandler = new MTGInterstitialVideoHandler(getContext(), getProvider().getKey4(), getProvider().getKey3());
         mInterstitialVideoHandler.setInterstitialVideoListener(new InterstitialVideoListener() {
+
             @Override
-            public void onLoadSuccess(String s) {
+            public void onLoadSuccess(String s, String s1) {
                 ZplayDebug.d(TAG, "onLoadSuccess: " + s);
             }
 
             @Override
-            public void onVideoLoadSuccess(String s) {
+            public void onVideoLoadSuccess(String s, String s1) {
                 ZplayDebug.d(TAG, "onVideoLoadSuccess: " + s);
                 layerPrepared();
             }
@@ -194,20 +195,26 @@ public class MobvistaInterstitialAdapter extends YumiCustomerInterstitialAdapter
             }
 
             @Override
-            public void onVideoAdClicked(String s) {
+            public void onVideoAdClicked(String s, String s1) {
                 ZplayDebug.d(TAG, "onVideoAdClicked: " + s);
                 layerClicked(-999f, -999f);
             }
 
             @Override
-            public void onVideoComplete(String s) {
+            public void onVideoComplete(String s, String s1) {
                 ZplayDebug.d(TAG, "onVideoComplete: " + s);
             }
 
             @Override
-            public void onEndcardShow(String s) {
+            public void onAdCloseWithIVReward(boolean b, int i) {
+                ZplayDebug.d(TAG, "onAdCloseWithIVReward: " + b);
+            }
+
+            @Override
+            public void onEndcardShow(String s, String s1) {
                 ZplayDebug.d(TAG, "onEndcardShow: " + s);
             }
+
         });
     }
 

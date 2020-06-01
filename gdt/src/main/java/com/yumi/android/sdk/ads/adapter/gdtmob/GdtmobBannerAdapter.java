@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.qq.e.ads.banner2.UnifiedBannerADListener;
 import com.qq.e.ads.banner2.UnifiedBannerView;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
@@ -49,7 +50,7 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
             return;
         }
         ZplayDebug.d(TAG, "load new banner");
-        unifiedBanner = new UnifiedBannerView(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedBannerListener);
+        unifiedBanner = new UnifiedBannerView(getActivity(), getProvider().getKey2(), unifiedBannerListener);
         //设置广告轮播时间，为0或30~120之间的数字，单位为s,0标识不自动轮播
         unifiedBanner.setRefresh(getProvider().getAutoRefreshInterval());
         unifiedBanner.loadAD();
@@ -58,6 +59,7 @@ public class GdtmobBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + " ,pId : " + getProvider().getKey2());
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
         unifiedBannerListener = new UnifiedBannerADListener() {
 
             @Override

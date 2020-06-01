@@ -49,9 +49,9 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     }
 
                     @Override
-                    public void onError(Throwable throwable) {
-                        Log.d(TAG, "onPrepareMedia, init - onError: " + throwable);
-                        layerPreparedFailed(recodeError(throwable));
+                    public void onError(VungleException exception) {
+                        Log.d(TAG, "onPrepareMedia, init - onError: " + exception.getMessage());
+                        layerPreparedFailed(recodeError(exception.getMessage()));
                     }
 
                     @Override
@@ -80,14 +80,14 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             }
 
             @Override
-            public void onError(String placementReferenceId, final Throwable throwable) {
+            public void onError(String placementReferenceId, final VungleException exception) {
                 try {
-                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + throwable);
+                    ZplayDebug.d(TAG, "onError: " + placementReferenceId + ", error: " + exception.getMessage());
                     if (getProvider().getKey2().equals(placementReferenceId)) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                layerPreparedFailed(recodeError(throwable));
+                                layerPreparedFailed(recodeError(exception.getMessage()));
                             }
                         });
                     }
@@ -95,6 +95,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     ZplayDebug.d(TAG, "onError: error: " + e);
                 }
             }
+
         });
     }
 
@@ -105,7 +106,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
             ZplayDebug.d(TAG, "onShowMedia: " + isReady + ", placementId: " + getProvider().getKey2());
             if (isReady) {
                 AdConfig adConfig = new AdConfig();
-                adConfig.setAutoRotate(true);
+//                adConfig.setsetAutoRotate(true);
                 adConfig.setMuted(true);
                 Vungle.playAd(getProvider().getKey2(), adConfig, new PlayAdCallback() {
                     @Override
@@ -142,13 +143,12 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
                     }
 
                     @Override
-                    public void onError(String placementReferenceId, Throwable throwable) {
+                    public void onError(String placementReferenceId, VungleException exception) {
                         try {
-                            VungleException ex = (VungleException) throwable;
-                            ZplayDebug.d(TAG, "onError: errorCode: " + ex.getExceptionCode() + ", " + ex);
+                            ZplayDebug.d(TAG, "onError: errorCode: " + exception.getExceptionCode() + ", " + exception);
                             if (getProvider().getKey2().equals(placementReferenceId)) {
                                 AdError adError = new AdError(ERROR_FAILED_TO_SHOW);
-                                adError.setErrorMessage("vungle error: " + throwable);
+                                adError.setErrorMessage("vungle error: " + exception.getMessage());
                                 layerExposureFailed(adError);
                             }
                         } catch (Exception e) {
@@ -156,6 +156,7 @@ public class VungleMediaAdapter extends YumiCustomerMediaAdapter {
 
                         }
                     }
+
                 });
             }
         } catch (Exception e) {

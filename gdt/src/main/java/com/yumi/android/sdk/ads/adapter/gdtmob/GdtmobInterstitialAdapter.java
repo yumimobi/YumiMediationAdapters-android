@@ -9,6 +9,7 @@ import com.qq.e.ads.interstitial2.UnifiedInterstitialAD;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialADListener;
 import com.qq.e.ads.interstitial2.UnifiedInterstitialMediaListener;
 import com.qq.e.comm.constants.AdPatternType;
+import com.qq.e.comm.managers.GDTADManager;
 import com.qq.e.comm.util.AdError;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
@@ -68,7 +69,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
         ZplayDebug.d(TAG, "load new interstitial");
         interstitialReady = false;
         if (unifiedInterstitial == null) {
-            unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey1(), getProvider().getKey2(), unifiedInterstitialListener);
+            unifiedInterstitial = new UnifiedInterstitialAD(getActivity(), getProvider().getKey2(), unifiedInterstitialListener);
             unifiedInterstitial.setVideoPlayPolicy(VideoOption.VideoPlayPolicy.AUTO);
         }
         gdtInterstitialHandler.sendEmptyMessageDelayed(REQ_INTERSTITIAL, 1000);
@@ -89,6 +90,7 @@ public class GdtmobInterstitialAdapter extends YumiCustomerInterstitialAdapter {
     @Override
     protected void init() {
         ZplayDebug.i(TAG, "init appId : " + getProvider().getKey1() + ",pId : " + getProvider().getKey2());
+        GDTADManager.getInstance().initWith(getContext(), getProvider().getKey1());
         unifiedInterstitialListener = new UnifiedInterstitialADListener() {
 
             @Override

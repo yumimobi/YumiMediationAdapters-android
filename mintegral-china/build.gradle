@@ -3,18 +3,22 @@ apply from: '../shared-build.gradle'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.mintegral.msdk:videojs:10.2.11'
-    implementation 'com.mintegral.msdk:mtgjscommon:10.2.11'
-    implementation 'com.mintegral.msdk:playercommon:10.2.11'
-    implementation 'com.mintegral.msdk:reward:10.2.11'
-    implementation 'com.mintegral.msdk:videocommon:10.2.11'
-    implementation 'com.mintegral.msdk:interstitialvideo:10.2.11'
-    implementation 'com.mintegral.msdk:interstitial:10.2.11'
-    implementation 'com.mintegral.msdk:mtgbanner:10.2.11'
-    implementation 'com.mintegral.msdk:optimizedata:10.2.11'
-    implementation 'com.mintegral.msdk:common:10.2.11'
+    // 请将下方代码添加到项目的build.gradle中
 
-    implementation 'com.mintegral.msdk:mtgdownloads:10.2.11'
+    implementation 'com.mintegral.msdk:videojs:13.1.11'
+    implementation 'com.mintegral.msdk:mtgjscommon:13.1.11'
+    implementation 'com.mintegral.msdk:playercommon:13.1.11'
+    implementation 'com.mintegral.msdk:reward:13.1.11'
+    implementation 'com.mintegral.msdk:videocommon:13.1.11'
+    implementation 'com.mintegral.msdk:optimizedata:13.1.11'
+    implementation 'com.mintegral.msdk:common:13.1.11'
+    implementation 'com.mintegral.msdk:alphab:13.1.11'
+    implementation 'com.mintegral.msdk:interstitialvideo:13.1.11'
+    implementation 'com.mintegral.msdk:mtgbanner:13.1.11'
+    implementation 'com.mintegral.msdk:interstitial:13.1.11'
+
+// 开发者后台创建App勾选APK为YES则加上mtgdownloads依赖
+    implementation 'com.mintegral.msdk:mtgdownloads:13.1.11'
     implementation YUMI_MEDIATION
 }
 
