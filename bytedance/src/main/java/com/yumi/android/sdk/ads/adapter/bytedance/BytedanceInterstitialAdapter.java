@@ -7,23 +7,22 @@ import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
-import com.bytedance.sdk.openadsdk.TTInteractionAd;
+import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
-import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
 
 public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
     private static final String TAG = "BytedanceInterstitialAdapter";
     private TTAdNative mTTAdNative;
-    private TTInteractionAd.AdInteractionListener interactionListener;
-    private TTInteractionAd mTTInteractionAd;
-    private TTAdNative.InteractionAdListener loadListener;
+    private TTFullScreenVideoAd mTTFullScreenVideoAd;
+    private TTAdNative.FullScreenVideoAdListener loadListener;
     private boolean isReady = false;
 
     protected BytedanceInterstitialAdapter(Activity activity, YumiProviderBean provider) {
@@ -36,20 +35,24 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
         ZplayDebug.d(TAG, "load new interstitial");
         if (mTTAdNative != null && loadListener != null) {
             isReady = false;
+            //设置广告参数
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
-                    .setImageAcceptedSize(dip2px(600), dip2px(600))
+                    //个性化模板广告需要设置期望个性化模板广告的大小,单位dp,全屏视频场景，只要设置的值大于0即可
+                    .setExpressViewAcceptedSize(0, 0)
+                    .setImageAcceptedSize(1080, 1920)
+                    .setOrientation(getOrientation())
                     .build();
 
-            mTTAdNative.loadInteractionAd(adSlot, loadListener);
+            mTTAdNative.loadFullScreenVideoAd(adSlot, loadListener);
         }
     }
 
     @Override
     protected void onShowInterstitialLayer(Activity activity) {
-        if (mTTInteractionAd != null && isReady) {
-            mTTInteractionAd.showInteractionAd(getActivity());
+        if (mTTFullScreenVideoAd != null && isReady) {
+            mTTFullScreenVideoAd.showFullScreenVideoAd(getActivity());
         }
     }
 
@@ -80,7 +83,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
     private void createrListener() {
 
-        loadListener = new TTAdNative.InteractionAdListener() {
+        loadListener = new TTAdNative.FullScreenVideoAdListener() {
             @Override
             public void onError(int code, String message) {
                 ZplayDebug.d(TAG, "onError：" + message);
@@ -89,25 +92,26 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             }
 
             @Override
-            public void onInteractionAdLoad(TTInteractionAd ttInteractionAd) {
-                ZplayDebug.d(TAG, "onInteractionAdLoad");
-                mTTInteractionAd = ttInteractionAd;
-                setAdInteractionListener(mTTInteractionAd);
+            public void onFullScreenVideoAdLoad(TTFullScreenVideoAd ttFullScreenVideoAd) {
+                ZplayDebug.d(TAG, "onFullScreenVideoAdLoad");
+                mTTFullScreenVideoAd = ttFullScreenVideoAd;
+                setAdInteractionListener(mTTFullScreenVideoAd);
                 isReady = true;
                 layerPrepared();
             }
+
+            @Override
+            public void onFullScreenVideoCached() {
+                ZplayDebug.d(TAG, "onFullScreenVideoAdLoad");
+                isReady = true;
+            }
+
         };
 
     }
 
-    private void setAdInteractionListener(TTInteractionAd ttInteractionAd) {
-        ttInteractionAd.setAdInteractionListener(new TTInteractionAd.AdInteractionListener() {
-            @Override
-            public void onAdClicked() {
-                ZplayDebug.d(TAG, "onAdClicked");
-                isReady = false;
-                layerClicked(-99, -99);
-            }
+    private void setAdInteractionListener(TTFullScreenVideoAd mTTFullScreenVideoAd) {
+        mTTFullScreenVideoAd.setFullScreenVideoAdInteractionListener(new TTFullScreenVideoAd.FullScreenVideoAdInteractionListener() {
 
             @Override
             public void onAdShow() {
@@ -118,11 +122,37 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             }
 
             @Override
-            public void onAdDismiss() {
+            public void onAdVideoBarClick() {
+                ZplayDebug.d(TAG, "onAdClicked");
+                isReady = false;
+                layerClicked(-99, -99);
+            }
+
+            @Override
+            public void onAdClose() {
                 ZplayDebug.d(TAG, "onAdDismiss");
                 layerClosed();
             }
+
+            @Override
+            public void onVideoComplete() {
+
+            }
+
+            @Override
+            public void onSkippedVideo() {
+
+            }
+
         });
+    }
+
+    private int getOrientation() {
+        if (PhoneInfoGetter.getScreenMode(getContext()) == 0) {
+            return TTAdConstant.HORIZONTAL;
+        } else {
+            return TTAdConstant.VERTICAL;
+        }
     }
 
     @Override

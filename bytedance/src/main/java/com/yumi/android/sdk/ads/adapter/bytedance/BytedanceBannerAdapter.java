@@ -8,11 +8,13 @@ import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
-import com.bytedance.sdk.openadsdk.TTBannerAd;
+import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerBannerAdapter;
 import com.yumi.android.sdk.ads.publish.enumbean.AdSize;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
+
+import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
@@ -26,7 +28,8 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     private TTAdNative mTTAdNative;
     private int bannerHeight = 50;
     private int bannerWidth = 320;
-    private TTAdNative.BannerAdListener bannerAdListener;
+    private TTAdNative.NativeExpressAdListener bannerAdListener;
+    private TTNativeExpressAd mTTAd;
 
     protected BytedanceBannerAdapter(Activity activity, YumiProviderBean provider) {
         super(activity, provider);
@@ -44,9 +47,11 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
+                .setAdCount(1)
+                .setExpressViewAcceptedSize(dip2px(bannerWidth), 0)
                 .setImageAcceptedSize(bannerWidth, bannerHeight)
                 .build();
-        mTTAdNative.loadBannerAd(adSlot, bannerAdListener);
+        mTTAdNative.loadBannerExpressAd(adSlot, bannerAdListener);
     }
 
     @Override
@@ -70,7 +75,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
     private void createListener() {
-        bannerAdListener = new TTAdNative.BannerAdListener() {
+        bannerAdListener = new TTAdNative.NativeExpressAdListener() {
 
             @Override
             public void onError(int code, String message) {
@@ -80,36 +85,65 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             }
 
             @Override
-            public void onBannerAdLoad(final TTBannerAd ad) {
-                if (ad == null) {
+            public void onNativeExpressAdLoad(List<TTNativeExpressAd> ads) {
+                ZplayDebug.d(TAG, "onNativeExpressAdLoad");
+                if (ads == null || ads.size() == 0) {
                     layerPreparedFailed(recodeError(-999, "TTBannerAd is null"));
                     return;
                 }
-                if (getProvider().getAutoRefreshInterval() > 0) {
-                    ad.setSlideIntervalTime(getProvider().getAutoRefreshInterval());
-                }
-                View bannerView = ad.getBannerView();
-                if (bannerView == null) {
+                mTTAd = ads.get(0);
+                if (mTTAd == null) {
                     layerPreparedFailed(recodeError(-999, "bannerView is null"));
                     return;
                 }
+                if (getProvider().getAutoRefreshInterval() > 0) {
+                    mTTAd.setSlideIntervalTime(getProvider().getAutoRefreshInterval());
+                }
 
-                ad.setBannerInteractionListener(new TTBannerAd.AdInteractionListener() {
-                    @Override
-                    public void onAdClicked(View view, int type) {
-                        ZplayDebug.d(TAG, "onAdClicked");
-                        layerClicked(-99f, -99f);
-                    }
-
-                    @Override
-                    public void onAdShow(View view, int type) {
-                        ZplayDebug.d(TAG, "onAdShow");
-                    }
-                });
-                ZplayDebug.d(TAG, "Prepared");
-                layerPrepared(bannerView, true);
+                bindAdListener(mTTAd);
+                mTTAd.render();
             }
         };
+    }
+
+    private void bindAdListener(TTNativeExpressAd ad) {
+        ad.setExpressInteractionListener(new TTNativeExpressAd.ExpressAdInteractionListener() {
+            @Override
+            public void onAdClicked(View view, int type) {
+                ZplayDebug.d(TAG, "onAdClicked");
+                layerClicked(-99f, -99f);
+            }
+
+            @Override
+            public void onAdShow(View view, int type) {
+                ZplayDebug.d(TAG, "onAdShow");
+            }
+
+            @Override
+            public void onRenderFail(View view, String msg, int code) {
+                ZplayDebug.d(TAG, "onAdRenderFail");
+                layerPreparedFailed(recodeError(code, "render fail:" + msg));
+            }
+
+            @Override
+            public void onRenderSuccess(View view, float width, float height) {
+                ZplayDebug.d(TAG, "onAdRenderSuccess");
+                //返回view的宽高 单位 dp
+                layerPrepared(view, true);
+            }
+        });
+
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ZplayDebug.d(TAG, "onDestroy");
+        if (mTTAd != null) {
+            mTTAd.destroy();
+        }
     }
 
     @Override
