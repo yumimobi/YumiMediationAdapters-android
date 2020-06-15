@@ -43,12 +43,11 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             layerPreparedFailed(recodeError(-999, "not support smart banner."));
             return;
         }
-        calculateBannerSize();
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
                 .setAdCount(1)
-                .setExpressViewAcceptedSize(dip2px(bannerWidth), 0)
+                .setExpressViewAcceptedSize(bannerWidth, bannerHeight)
                 .setImageAcceptedSize(bannerWidth, bannerHeight)
                 .build();
         mTTAdNative.loadBannerExpressAd(adSlot, bannerAdListener);
@@ -136,7 +135,6 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     }
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -156,35 +154,6 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
 
     }
 
-    private void calculateBannerSize() {
-        if (isMatchWindowWidth && calculateLayerSize != null) {
-            if (calculateLayerSize[0] > 0 && calculateLayerSize[1] > 0) {
-                bannerWidth = calculateLayerSize[0];
-                bannerHeight = calculateLayerSize[1];
-                return;
-            } else {
-                if (bannerSize == AdSize.BANNER_SIZE_728X90) {
-                    bannerWidth = 728;
-                    bannerHeight = 90;
-                } else {
-                    bannerWidth = 320;
-                    bannerHeight = 50;
-                }
-                bannerWidth = dip2px(bannerWidth);
-                bannerHeight = dip2px(bannerHeight);
-            }
-        } else {
-            if (bannerSize == AdSize.BANNER_SIZE_728X90) {
-                bannerWidth = 728;
-                bannerHeight = 90;
-            } else {
-                bannerWidth = 320;
-                bannerHeight = 50;
-            }
-            bannerWidth = dip2px(bannerWidth);
-            bannerHeight = dip2px(bannerHeight);
-        }
-    }
 
     @Override
     public String getProviderVersion() {
