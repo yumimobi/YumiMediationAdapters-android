@@ -1,6 +1,8 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.res.Configuration;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConfig;
@@ -11,7 +13,6 @@ import com.bytedance.sdk.openadsdk.TTFullScreenVideoAd;
 import com.yumi.android.sdk.ads.beans.YumiProviderBean;
 import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
-import com.yumi.android.sdk.ads.utils.device.PhoneInfoGetter;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
@@ -148,10 +149,21 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
     }
 
     private int getOrientation() {
-        if (PhoneInfoGetter.getScreenMode(getContext()) == 0) {
+        if (getScreenMode(getContext()) == 0) {
             return TTAdConstant.HORIZONTAL;
         } else {
             return TTAdConstant.VERTICAL;
+        }
+    }
+
+    /**
+     * 获取横竖屏的标示，约定1：竖屏 0：横屏
+     */
+    public static int getScreenMode(Context context) {
+        if (context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            return 0;
+        } else {
+            return 1;
         }
     }
 
