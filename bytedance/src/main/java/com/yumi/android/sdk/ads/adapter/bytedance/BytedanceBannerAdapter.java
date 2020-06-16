@@ -1,7 +1,11 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
 import android.app.Activity;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
 import com.bytedance.sdk.openadsdk.TTAdConfig;
@@ -19,7 +23,7 @@ import java.util.List;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
-import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.dip2px;
+import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.isTablet;
 
 
 public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
@@ -43,6 +47,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             layerPreparedFailed(recodeError(-999, "not support smart banner."));
             return;
         }
+        calculateBannerSize();
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
@@ -127,11 +132,29 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
             @Override
             public void onRenderSuccess(View view, float width, float height) {
                 ZplayDebug.d(TAG, "onAdRenderSuccess");
+                FrameLayout bannerView = new FrameLayout(getContext());
+                FrameLayout.LayoutParams parentParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                parentParams.gravity = Gravity.CENTER_HORIZONTAL;
+                bannerView.setLayoutParams(parentParams);
+                bannerView.addView(view);
                 //返回view的宽高 单位 dp
-                layerPrepared(view, true);
+                layerPrepared(bannerView, true);
             }
         });
 
+    }
+
+    private void calculateBannerSize() {
+        if (bannerSize == AdSize.BANNER_SIZE_728X90) {
+            bannerWidth = 576;
+            bannerHeight = 90;
+        } else if (bannerSize == AdSize.BANNER_SIZE_AUTO && isTablet()) {
+            bannerWidth = 576;
+            bannerHeight = 90;
+        } else {
+            bannerWidth = 320;
+            bannerHeight = 50;
+        }
     }
 
 
