@@ -103,7 +103,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
 
             @Override
             public void onFullScreenVideoCached() {
-                ZplayDebug.d(TAG, "onFullScreenVideoAdLoad");
+                ZplayDebug.d(TAG, "onFullScreenVideoCached");
                 isReady = true;
             }
 
@@ -132,17 +132,20 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             @Override
             public void onAdClose() {
                 ZplayDebug.d(TAG, "onAdDismiss");
+                isReady = false;
                 layerClosed();
             }
 
             @Override
             public void onVideoComplete() {
-
+                ZplayDebug.d(TAG, "onVideoComplete");
+                isReady = false;
             }
 
             @Override
             public void onSkippedVideo() {
-
+                ZplayDebug.d(TAG, "onSkippedVideo");
+                isReady = false;
             }
 
         });
