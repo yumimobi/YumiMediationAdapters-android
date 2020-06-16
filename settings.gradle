@@ -1,5 +1,6 @@
 include ':adcolony',
         ':bytedance',
+        ':bytedance-overseas',
         ':admob',
         ':applovin',
         ':baidu',
