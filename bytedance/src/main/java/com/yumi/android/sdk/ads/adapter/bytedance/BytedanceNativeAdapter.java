@@ -45,7 +45,6 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
                 .setExpressViewAcceptedSize(1080, 0)
-                .setImageAcceptedSize(640, 320)
                 .setAdCount(getCurrentPoolSpace()) //请求广告数量为1到3条
                 .build();
         mTTAdNative.loadNativeExpressAd(adSlot, loadAdListener);
