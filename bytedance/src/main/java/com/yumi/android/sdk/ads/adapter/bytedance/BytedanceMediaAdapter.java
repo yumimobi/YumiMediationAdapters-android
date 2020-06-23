@@ -197,7 +197,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
             rewardHeight = realSize[1];
             rewardWidth = realSize[0];
         } catch (Exception e) {
-            if (isLandscaps() == 2) {
+            if (isLandscaps() == 1) {
                 rewardHeight = 1080;
                 rewardWidth = 1920;
             } else {
