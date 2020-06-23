@@ -43,6 +43,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
+                    .isExpressAd(true)
                     .setImageAcceptedSize(rewardWidth, rewardHeight)
                     .setUserID("")
                     .setMediaExtra("")
