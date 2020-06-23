@@ -20,7 +20,7 @@ import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersio
 
 public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapter {
 
-    private static final String TAG = "BytedanceInterstitialAdapter";
+    private static final String TAG = "OBytedanceInterstitialAdapter";
     private TTAdNative mTTAdNative;
     private TTFullScreenVideoAd mTTFullScreenVideoAd;
     private TTAdNative.FullScreenVideoAdListener loadListener;
@@ -40,8 +40,8 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
+                    .isExpressAd(true)
                     //个性化模板广告需要设置期望个性化模板广告的大小,单位dp,全屏视频场景，只要设置的值大于0即可
-                    .setExpressViewAcceptedSize(0, 0)
                     .setImageAcceptedSize(1080, 1920)
                     .setOrientation(getOrientation())
                     .build();
