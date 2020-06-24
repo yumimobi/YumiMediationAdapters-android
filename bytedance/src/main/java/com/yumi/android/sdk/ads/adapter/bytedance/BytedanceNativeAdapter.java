@@ -44,7 +44,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
         AdSlot adSlot = new AdSlot.Builder()
                 .setCodeId(getProvider().getKey2())
                 .setSupportDeepLink(true)
-                .setExpressViewAcceptedSize(1080, 0)
+                .setExpressViewAcceptedSize(getProvider().getNativeAdOptions().getExpressAdSize().getWidth(), getProvider().getNativeAdOptions().getExpressAdSize().getHeight())
                 .setAdCount(getCurrentPoolSpace()) //请求广告数量为1到3条
                 .build();
         mTTAdNative.loadNativeExpressAd(adSlot, loadAdListener);
