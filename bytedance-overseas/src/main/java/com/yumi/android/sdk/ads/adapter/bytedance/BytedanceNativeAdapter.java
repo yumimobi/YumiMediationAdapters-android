@@ -180,7 +180,7 @@ public class BytedanceNativeAdapter extends YumiCustomerNativeAdapter {
 
         @Override
         public void trackView() {
-
+            layerExpressAdRenderSuccess(this);
         }
 
         @Override
