@@ -21,6 +21,7 @@ import com.yumi.android.sdk.ads.utils.ZplayDebug;
 import java.util.List;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 import static com.yumi.android.sdk.ads.utils.device.WindowSizeUtils.isTablet;
@@ -62,18 +63,7 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     protected void init() {
         ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + " ,key2: " + getProvider().getKey2());
 
-        TTAdSdk.init(getActivity(),
-                new TTAdConfig.Builder()
-                        .appId(getProvider().getKey1())
-                        .useTextureView(false)
-                        .appName(getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
-                        .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
-                        .allowShowNotify(false)
-                        .allowShowPageWhenScreenLock(false)
-                        .debug(false)
-                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
-                        .supportMultiProcess(false)
-                        .build());
+        initSDK(getActivity(), getProvider().getKey1(), getAppName(getActivity().getPackageManager(), getActivity().getPackageName()));
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());//baseContext建议为activity
         createListener();
     }
