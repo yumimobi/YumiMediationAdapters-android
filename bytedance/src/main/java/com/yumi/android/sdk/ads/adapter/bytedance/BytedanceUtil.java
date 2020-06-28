@@ -1,10 +1,16 @@
 package com.yumi.android.sdk.ads.adapter.bytedance;
 
+import android.app.Activity;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
+import com.bytedance.sdk.openadsdk.TTAdConfig;
+import com.bytedance.sdk.openadsdk.TTAdConstant;
+import com.bytedance.sdk.openadsdk.TTAdSdk;
 import com.yumi.android.sdk.ads.publish.AdError;
+import com.yumi.android.sdk.ads.publish.YumiSettings;
 import com.yumi.android.sdk.ads.publish.enumbean.LayerErrorCode;
+import com.yumi.android.sdk.ads.publish.enumbean.YumiGDPRStatus;
 
 /**
  * Description:
@@ -44,7 +50,22 @@ public class BytedanceUtil {
         }
     }
 
+    public static void initSDK(Activity activity, String appid, String appName){
+        TTAdSdk.init(activity,
+                new TTAdConfig.Builder()
+                        .appId(appid)
+                        .useTextureView(true)
+                        .appName(appName)
+                        .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
+                        .allowShowNotify(false)
+                        .allowShowPageWhenScreenLock(false)
+                        .debug(false)
+                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
+                        .supportMultiProcess(false)
+                        .build());
+    }
+
     static String sdkVersion() {
-        return "2.9.5.5";
+        return "3.0.0.4";
     }
 }
