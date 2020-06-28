@@ -15,6 +15,7 @@ import com.yumi.android.sdk.ads.publish.adapter.YumiCustomerInterstitialAdapter;
 import com.yumi.android.sdk.ads.utils.ZplayDebug;
 
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.getAppName;
+import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.initSDK;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.recodeError;
 import static com.yumi.android.sdk.ads.adapter.bytedance.BytedanceUtil.sdkVersion;
 
@@ -66,18 +67,7 @@ public class BytedanceInterstitialAdapter extends YumiCustomerInterstitialAdapte
     protected void init() {
         ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + "key2: " + getProvider().getKey2());
 
-        TTAdSdk.init(getActivity(),
-                new TTAdConfig.Builder()
-                        .appId(getProvider().getKey1())
-                        .useTextureView(false)
-                        .appName(getAppName(getActivity().getPackageManager(), getActivity().getPackageName()))
-                        .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
-                        .allowShowNotify(false)
-                        .allowShowPageWhenScreenLock(false)
-                        .debug(false)
-                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
-                        .supportMultiProcess(false)
-                        .build());
+        initSDK(getActivity(), getProvider().getKey1(), getAppName(getActivity().getPackageManager(), getActivity().getPackageName()));
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());//baseContext建议为activity
         createrListener();
     }
