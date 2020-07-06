@@ -1,14 +1,15 @@
 apply from: '../shared-build.gradle'
 
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.yumimobi.ads.thirdparty:androidquery:0.26.7.1'
-    implementation 'com.yumimobi.ads.thirdparty:gdt:4.232.1102.0'
-    implementation "com.android.support:support-v4:$SUPOORT_LIBRAY_VERSION"
+    implementation "com.yumimobi.ads.thirdparty:bytedance:2.9.0.3.0"
     implementation YUMI_MEDIATION
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.6'
+    implementation 'com.yumimobi.ads.thirdparty:androidquery:0.26.7.1'
 }
 
-String version = project.properties['gdt.version']
+String version = project.properties['bytedance-overseas.version']
 
 ext {
     bintrayRepo = 'ads'
@@ -18,7 +19,7 @@ ext {
     artifactId = project.name
     libraryVersion = version
     libraryName = project.name
-    libraryDescription = 'Yumi Mediation GDT Adapter'
+    libraryDescription = 'Yumi Mediation Bytedance Adapter'
 
     // publish aar to in-house(remember change the value of inHouseVersion):
     // Call ./gradlew artifactoryPublish to publish
@@ -35,3 +36,4 @@ if (version) {
 if (inHouseVersion) {
     apply from: "https://raw.githubusercontent.com/yumimobi/android-scripts/master/artifactory_dev_upload.gradle"
 }
+

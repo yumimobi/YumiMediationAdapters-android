@@ -8,8 +8,6 @@ import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConfig;
-import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
 import com.bytedance.sdk.openadsdk.TTNativeExpressAd;
@@ -62,7 +60,6 @@ public class BytedanceBannerAdapter extends YumiCustomerBannerAdapter {
     @Override
     protected void init() {
         ZplayDebug.d(TAG, "init key1: " + getProvider().getKey1() + " ,key2: " + getProvider().getKey2());
-
         initSDK(getActivity(), getProvider().getKey1(), getAppName(getActivity().getPackageManager(), getActivity().getPackageName()));
         mTTAdNative = TTAdSdk.getAdManager().createAdNative(getActivity());//baseContext建议为activity
         createListener();

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 
 import com.bytedance.sdk.openadsdk.AdSlot;
-import com.bytedance.sdk.openadsdk.TTAdConfig;
 import com.bytedance.sdk.openadsdk.TTAdConstant;
 import com.bytedance.sdk.openadsdk.TTAdNative;
 import com.bytedance.sdk.openadsdk.TTAdSdk;
@@ -44,6 +43,7 @@ public class BytedanceMediaAdapter extends YumiCustomerMediaAdapter {
             AdSlot adSlot = new AdSlot.Builder()
                     .setCodeId(getProvider().getKey2())
                     .setSupportDeepLink(true)
+                    .isExpressAd(true)
                     .setImageAcceptedSize(rewardWidth, rewardHeight)
                     .setUserID("")
                     .setMediaExtra("")

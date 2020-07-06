@@ -50,22 +50,27 @@ public class BytedanceUtil {
         }
     }
 
-    public static void initSDK(Activity activity, String appid, String appName){
+    public static void initSDK(Activity activity,String appid, String appName){
+        int gdpr = 0;
+        if (YumiSettings.getGDPRStatus() != YumiGDPRStatus.NON_PERSONALIZED) {
+            gdpr = 1;
+        }
+
         TTAdSdk.init(activity,
                 new TTAdConfig.Builder()
                         .appId(appid)
-                        .useTextureView(true)
+                        .useTextureView(false)
                         .appName(appName)
                         .titleBarTheme(TTAdConstant.TITLE_BAR_THEME_DARK)
-                        .allowShowNotify(false)
                         .allowShowPageWhenScreenLock(false)
                         .debug(false)
-                        .directDownloadNetworkType(TTAdConstant.NETWORK_STATE_WIFI, TTAdConstant.NETWORK_STATE_3G)
                         .supportMultiProcess(false)
+                        .coppa(0)
+                        .setGDPR(gdpr)
                         .build());
     }
 
     static String sdkVersion() {
-        return "3.0.0.4";
+        return "2.9.0.3";
     }
 }
