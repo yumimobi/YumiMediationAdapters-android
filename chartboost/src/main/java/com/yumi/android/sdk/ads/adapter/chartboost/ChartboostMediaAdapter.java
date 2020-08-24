@@ -101,7 +101,7 @@ public class ChartboostMediaAdapter extends YumiCustomerMediaAdapter {
                 }
 
                 @Override
-                public void didDismissRewardedVideo(String location) {
+                public void didDisplayRewardedVideo(String location) {
                     ZplayDebug.d(TAG, "didDismissRewardedVideo");
                     isRewarded = false;
                     layerExposure();
