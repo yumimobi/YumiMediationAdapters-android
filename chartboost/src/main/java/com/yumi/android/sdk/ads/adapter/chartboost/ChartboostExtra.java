@@ -113,9 +113,9 @@ class ChartboostExtra {
             }
 
             @Override
-            public void didDismissRewardedVideo(String location) {
+            public void didDisplayRewardedVideo(String location) {
                 if (mediaDelegate != null) {
-                    mediaDelegate.didDismissRewardedVideo(location);
+                    mediaDelegate.didDisplayRewardedVideo(location);
                 }
             }
 
